@@ -19,8 +19,8 @@
       "slug": "horizontal-vs-vertical-scaling-guide",
       "draft": false,
       "path": "/blogs/system-design/fundamentals/horizontal-vs-vertical-scaling",
-      "readingTime": "7 min",
-      "featured": true
+      "readingTime": "5 min",
+      "featured": false
     }
   ]
 }

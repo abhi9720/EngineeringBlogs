@@ -1,1 +1,17 @@
-
+[
+  {
+    "title": "Size Matters (But So Does Quantity): Horizontal vs. Vertical Scaling",
+    "description": "Confused about whether to buy a bigger server or just more of them? Dive into the trade-offs between Scaling Up and Scaling Out.",
+    "slug": "horizontal-vs-vertical-scaling-guide",
+    "tags": [
+      "System Design",
+      "Cloud Computing",
+      "Architecture"
+    ],
+    "category": "Infrastructure",
+    "subcategory": "Cloud Strategy",
+    "path": "/blogs/system-design/fundamentals/horizontal-vs-vertical-scaling",
+    "author": "Abhishek Tiwari",
+    "coverImage": "/images/scaling-comparison.png"
+  }
+]
