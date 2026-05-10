@@ -118,48 +118,26 @@ async function updateSearchIndex(meta, currentSearchIndex) {
 
 /* ---------------- LOCAL INDEXES ---------------- */
 
-async function updateLocalIndexes(meta) {
-  /**
-   * Creates/updates:
-   *
-   * blogs/backend/index.json
-   * blogs/backend/springboot/index.json
-   * blogs/backend/springboot/spring-data-jpa/index.json
-   */
+async function updateLocalIndexes(meta, filePath) {
+  const normalized = filePath.replace(/\\/g, "/");
+  const dir = path.dirname(normalized);
 
-  const folders = [];
+  const dirPath = path.join(process.cwd(), dir);
 
-  // category level
-  folders.push([meta.category]);
+  const indexPath = path.join(dirPath, "index.json");
 
-  // nested levels
-  for (let i = 0; i < meta.hierarchy.length; i++) {
-    folders.push([
-      meta.category,
-      ...meta.hierarchy.slice(0, i + 1)
-    ]);
-  }
+  await fs.mkdir(dirPath, { recursive: true });
 
-  for (const folderParts of folders) {
-    const dirPath = path.join(BLOGS_DIR, ...folderParts);
+  const existing = await readJson(indexPath, {
+    name: formatLabel(path.basename(dir)),
+    path: `/${dir}`,
+    blogs: []
+  });
 
-    await fs.mkdir(dirPath, { recursive: true });
+  existing.blogs = upsert(existing.blogs || [], meta);
 
-    const indexPath = path.join(dirPath, "index.json");
-
-    const existing = await readJson(indexPath, {
-      name: formatLabel(folderParts[folderParts.length - 1]),
-      slug: folderParts[folderParts.length - 1],
-      path: `/${dirPath.replace(/\\/g, "/")}`,
-      blogs: []
-    });
-
-    existing.blogs = upsert(existing.blogs || [], meta);
-
-    await writeJson(indexPath, existing);
-  }
+  await writeJson(indexPath, existing);
 }
-
 /* ---------------- CATEGORY TREE ---------------- */
 
 function insertIntoTree(tree, parts) {
@@ -231,7 +209,7 @@ async function run() {
 
     /* ---------------- LOCAL INDEXES ---------------- */
 
-    await updateLocalIndexes(meta);
+    await updateLocalIndexes(meta, file);
 
     /* ---------------- CATEGORY TREE ---------------- */
 
