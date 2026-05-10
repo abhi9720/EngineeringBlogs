@@ -76,6 +76,8 @@ function buildBlogMetadata(frontmatter, filePath) {
   const folderCategory = parts[1];
   const folderSubcategory = parts[2];
 
+  const slug = path.basename(filePath, ".md");
+
   return {
     title: frontmatter.title,
     description: frontmatter.description,
@@ -85,7 +87,7 @@ function buildBlogMetadata(frontmatter, filePath) {
     category: formatLabel(folderCategory),
     subcategory: formatLabel(folderSubcategory),
     coverImage: frontmatter.coverImage,
-    slug: frontmatter.slug,
+    slug: slug,
     draft: frontmatter.draft || false,
     path: `/${normalizedPath}`,
     readingTime: frontmatter.readingTime || "5 min",
@@ -154,7 +156,7 @@ async function updateCategoryIndex(blogMeta) {
   });
 
   indexJson.blogs = indexJson.blogs.filter(
-    blog => blog.slug !== blogMeta.slug
+     blog => blog.path !== blogMeta.path
   );
 
   indexJson.blogs.unshift(blogMeta);
@@ -171,7 +173,7 @@ async function updateSearchIndex(blogMeta) {
   let searchIndex = await readJson(SEARCH_INDEX_PATH, []);
 
   searchIndex = searchIndex.filter(
-    blog => blog.slug !== blogMeta.slug
+    blog => blog.path !== blogMeta.path
   );
 
   searchIndex.unshift({
