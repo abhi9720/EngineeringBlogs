@@ -1,0 +1,30 @@
+{
+  "category": "System Design",
+  "subcategory": "Fundamentals",
+  "slug": "fundamentals",
+  "blogs": [
+    {
+      "title": "Size Matters (But So Does Quantity): Horizontal vs. Vertical Scaling",
+      "description": "Should you buy a bigger server or add more servers? Learn the real-world trade-offs between Vertical Scaling (Scale Up) and Horizontal Scaling (Scale Out) with practical examples, architecture diagrams, and production insights.",
+      "date": "2026-05-10",
+      "author": "Abhishek",
+      "tags": [
+        "System Design",
+        "Scalability",
+        "Cloud Computing",
+        "Distributed Systems",
+        "Infrastructure"
+      ],
+      "category": "System Design",
+      "subcategory": "Fundamentals",
+      "coverImage": "",
+      "slug": "horizontal-vs-vertical-scaling",
+      "draft": false,
+      "path": "/blogs/system-design/fundamentals/horizontal-vs-vertical-scaling",
+      "readingTime": "5 min",
+      "featured": false,
+      "__folderCategory": "system-design",
+      "__folderSubcategory": "fundamentals"
+    }
+  ]
+}

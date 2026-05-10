@@ -1,31 +1,20 @@
 [
   {
     "title": "Size Matters (But So Does Quantity): Horizontal vs. Vertical Scaling",
-    "description": "Confused about whether to buy a bigger server or just more of them? Dive into the trade-offs between Scaling Up and Scaling Out.",
-    "slug": "",
+    "description": "Should you buy a bigger server or add more servers? Learn the real-world trade-offs between Vertical Scaling (Scale Up) and Horizontal Scaling (Scale Out) with practical examples, architecture diagrams, and production insights.",
+    "slug": "horizontal-vs-vertical-scaling",
     "tags": [
       "System Design",
-      "Cloud Computing"
+      "Scalability",
+      "Cloud Computing",
+      "Distributed Systems",
+      "Infrastructure"
     ],
     "category": "System Design",
     "subcategory": "Fundamentals",
     "path": "/blogs/system-design/fundamentals/horizontal-vs-vertical-scaling",
-    "author": "Abhishek Tiwari",
-    "coverImage": "/images/scaling-comparison.png"
-  },
-  {
-    "title": "Size Matters (But So Does Quantity): Horizontal vs. Vertical Scaling",
-    "description": "Confused about whether to buy a bigger server or just more of them? Dive into the trade-offs between Scaling Up and Scaling Out.",
-    "slug": "horizontal-vs-vertical-scaling-guide",
-    "tags": [
-      "System Design",
-      "Cloud Computing"
-    ],
-    "category": "System Design",
-    "subcategory": "Fundamentals",
-    "path": "/blogs/system-design/fundamentals/horizontal-vs-vertical-scaling",
-    "author": "Abhishek Tiwari",
-    "coverImage": "/images/scaling-comparison.png"
+    "author": "Abhishek",
+    "coverImage": ""
   },
   {
     "title": "Redis Caching in Spring Boot",
