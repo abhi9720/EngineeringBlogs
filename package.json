@@ -1,0 +1,12 @@
+{
+  "name": "engineering-blogs",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "update-indexes": "node scripts/update-indexes.js"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3"
+  }
+}
