@@ -1,5 +1,20 @@
 [
   {
+    "title": "Scalable URL Shortener System Design (Like Bitly)",
+    "description": "A deep dive into designing a scalable URL shortener system covering architecture, database design, caching, and scalability strategies.",
+    "slug": "URL-Shortner",
+    "tags": [
+      "system-design",
+      "scalability",
+      "backend"
+    ],
+    "category": "System Design",
+    "subcategory": "Fundamentals",
+    "path": "/blogs/system-design/fundamentals/URL-Shortner",
+    "author": "Abhishek",
+    "coverImage": "/images/url-shortener-system-design.png"
+  },
+  {
     "title": "Size Matters (But So Does Quantity): Horizontal vs. Vertical Scaling",
     "description": "Should you buy a bigger server or add more servers? Learn the real-world trade-offs between Vertical Scaling (Scale Up) and Horizontal Scaling (Scale Out) with practical examples, architecture diagrams, and production insights.",
     "slug": "horizontal-vs-vertical-scaling",
