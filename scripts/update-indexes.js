@@ -111,9 +111,10 @@ async function updateLocalIndex(meta) {
 }
 
 /* ---------------- CATEGORY TREE (FIXED) ---------------- */
+function insertIntoTree(tree = [], pathParts = [], meta) {
+  if (!Array.isArray(tree)) return;
 
-function insertIntoTree(tree, pathParts, meta) {
-  if (!pathParts.length) return;
+  if (pathParts.length === 0) return;
 
   const [current, ...rest] = pathParts;
 
@@ -129,8 +130,13 @@ function insertIntoTree(tree, pathParts, meta) {
     tree.push(node);
   }
 
+  // safety: always ensure children exists
+  if (!node.children) {
+    node.children = [];
+  }
+
   if (rest.length === 0) {
-    node.blogCount += 1;
+    node.blogCount += (node.blogCount || 0) + 1;;
     return;
   }
 
