@@ -1,5 +1,24 @@
 [
   {
+    "title": "Spring Data JPA Deep Dive: From Basics to Production Design",
+    "description": "A practical guide to Spring Data JPA covering entities, repositories, queries, relationships, and best practices for building production-ready backend systems.",
+    "tags": [
+      "spring-boot",
+      "spring-data-jpa",
+      "database"
+    ],
+    "author": "Abhishek Tiwari",
+    "coverImage": "",
+    "date": "2026-05-10",
+    "category": "backend",
+    "hierarchy": [
+      "springboot",
+      "spring-data-jpa"
+    ],
+    "slug": "Spring-Data-JPA-Deep-Dive",
+    "path": "/blogs/backend/springboot/spring-data-jpa/Spring-Data-JPA-Deep-Dive"
+  },
+  {
     "title": "Backend Scaling: From 1 to 1M Users",
     "description": "A practical guide to scaling backend systems from a single user to one million users with real-world architecture patterns and trade-offs.",
     "tags": [
@@ -16,22 +35,6 @@
     "subcategory": null,
     "slug": "backend-scale-1-to-1M-User",
     "path": "/blogs/backend/backend-scale-1-to-1M-User"
-  },
-  {
-    "title": "Spring Data JPA Deep Dive: From Basics to Production Design",
-    "description": "A practical guide to Spring Data JPA covering entities, repositories, queries, relationships, and best practices for building production-ready backend systems.",
-    "tags": [
-      "spring-boot",
-      "spring-data-jpa",
-      "database"
-    ],
-    "author": "Abhi",
-    "coverImage": "",
-    "date": "2026-05-10",
-    "category": "backend",
-    "subcategory": "springboot",
-    "slug": "Spring-Data-JPA-Deep-Dive",
-    "path": "/blogs/backend/springboot/spring-data-jpa/Spring-Data-JPA-Deep-Dive"
   },
   {
     "title": "Size Matters (But So Does Quantity): Horizontal vs. Vertical Scaling",

@@ -14,6 +14,21 @@
           "indexFile": "backend-springboot-index.json",
           "blogCount": 2
         }
+      ],
+      "children": [
+        {
+          "name": "Springboot",
+          "slug": "springboot",
+          "children": [
+            {
+              "name": "Spring Data Jpa",
+              "slug": "spring-data-jpa",
+              "children": [],
+              "blogCount": 1
+            }
+          ],
+          "blogCount": 0
+        }
       ]
     },
     {
