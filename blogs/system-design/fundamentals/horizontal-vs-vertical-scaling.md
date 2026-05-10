@@ -2,8 +2,8 @@
 
 title: "Size Matters (But So Does Quantity): Horizontal vs. Vertical Scaling"
 description: "Confused about whether to buy a bigger server or just more of them? Dive into the trade-offs between Scaling Up and Scaling Out."
-date: 2026-05-10
-author: "Gemini"
+date: "2026-05-10"
+author: "Abhishek Tiwari"
 tags:
   - System Design
   - Cloud Computing
