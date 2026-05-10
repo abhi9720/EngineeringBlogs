@@ -1,5 +1,19 @@
 [
   {
+    "title": "Size Matters (But So Does Quantity): Horizontal vs. Vertical Scaling",
+    "description": "Confused about whether to buy a bigger server or just more of them? Dive into the trade-offs between Scaling Up and Scaling Out.",
+    "slug": "horizontal-vs-vertical-scaling-guide",
+    "tags": [
+      "System Design",
+      "Cloud Computing"
+    ],
+    "category": "System Design",
+    "subcategory": "Fundamentals",
+    "path": "/blogs/system-design/fundamentals/horizontal-vs-vertical-scaling",
+    "author": "Abhishek Tiwari",
+    "coverImage": "/images/scaling-comparison.png"
+  },
+  {
     "title": "Redis Caching in Spring Boot",
     "description": "Learn how to integrate Redis caching with Spring Boot for high-performance applications",
     "slug": "redis-caching-spring-boot",
@@ -30,20 +44,5 @@
     "path": "/blogs/backend/springboot/jwt-authentication-with-spring-security",
     "author": "Gemini",
     "coverImage": "https://www.baeldung.com/wp-content/uploads/2019/07/bael-1239-image-simple-1-1024x858.png"
-  },
-  {
-    "title": "Size Matters (But So Does Quantity): Horizontal vs. Vertical Scaling",
-    "description": "Confused about whether to buy a bigger server or just more of them? Dive into the trade-offs between Scaling Up and Scaling Out.",
-    "slug": "horizontal-vs-vertical-scaling-guide",
-    "tags": [
-      "System Design",
-      "Cloud Computing",
-      "Architecture"
-    ],
-    "category": "Infrastructure",
-    "subcategory": "Cloud Strategy",
-    "path": "/blogs/system-design/fundamentals/horizontal-vs-vertical-scaling",
-    "author": "Abhishek Tiwari",
-    "coverImage": ""
   }
 ]
