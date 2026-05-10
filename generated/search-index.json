@@ -39,7 +39,7 @@
     "title": "Advanced Spring MVC: Mastering Request Flow, Validation, and Error Handling",
     "description": "A deep dive into building robust REST APIs with Spring MVC, covering dynamic request mapping, JSR-380 validation, and global exception management.",
     "date": "2026-05-11",
-    "author": "Abhishek",
+    "author": "Abhishek Tiwari",
     "tags": [
       "Spring Boot",
       "Spring MVC",
