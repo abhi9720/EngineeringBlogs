@@ -7,7 +7,6 @@ author: "Abhishek Tiwari"
 tags:
   - System Design
   - Cloud Computing
-  - Architecture
 category: "Infrastructure"
 subcategory: "Cloud Strategy"
 coverImage: "/images/scaling-comparison.png"
