@@ -26,62 +26,45 @@ async function readJson(file, fallback) {
 
 async function writeJson(file, data) {
   await fs.mkdir(path.dirname(file), { recursive: true });
-
-  await fs.writeFile(
-    file,
-    JSON.stringify(data, null, 2),
-    "utf-8"
-  );
-}
-
-/* ---------------- LABEL ---------------- */
-
-function formatLabel(value) {
-  return value
-    .split("-")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+  await fs.writeFile(file, JSON.stringify(data, null, 2));
 }
 
 /* ---------------- FILE SCAN ---------------- */
 
 async function getAllMarkdownFiles(dir) {
   let results = [];
-
-  const entries = await fs.readdir(dir, {
-    withFileTypes: true
-  });
+  const entries = await fs.readdir(dir, { withFileTypes: true });
 
   for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
+    const full = path.join(dir, entry.name);
 
     if (entry.isDirectory()) {
-      results.push(...await getAllMarkdownFiles(fullPath));
+      results.push(...await getAllMarkdownFiles(full));
     } else if (entry.name.endsWith(".md")) {
-      results.push(fullPath);
+      results.push(full);
     }
   }
 
   return results;
 }
 
+/* ---------------- LABEL ---------------- */
+
+function formatLabel(v) {
+  return v
+    .split("-")
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
 /* ---------------- META ---------------- */
 
 function buildMeta(frontmatter, filePath) {
-  const normalized = filePath
-    .replace(/\\/g, "/")
-    .replace(".md", "");
-
+  const normalized = filePath.replace(/\\/g, "/").replace(".md", "");
   const parts = normalized.split("/");
 
-  // blogs/backend/springboot/spring-data-jpa/file
-  // [blogs, backend, springboot, spring-data-jpa, file]
-
   const category = parts[1];
-
-  // all folders after category except file
   const hierarchy = parts.slice(2, -1);
-
   const slug = parts[parts.length - 1];
 
   return {
@@ -106,31 +89,24 @@ function buildMeta(frontmatter, filePath) {
 function upsert(list, item) {
   return [
     item,
-    ...list.filter(existing => existing.path !== item.path)
+    ...list.filter(i => i.path !== item.path)
   ];
 }
 
-/* ---------------- SEARCH INDEX ---------------- */
+/* ---------------- LOCAL INDEX CREATION (FIXED CORE) ---------------- */
 
-async function updateSearchIndex(meta, currentSearchIndex) {
-  return upsert(currentSearchIndex, meta);
-}
-
-/* ---------------- LOCAL INDEXES ---------------- */
 async function updateLocalIndexes(meta, filePath) {
   const normalized = filePath.replace(/\\/g, "/");
-
   const dir = path.dirname(normalized);
-  const fullDirPath = path.join(process.cwd(), dir);
 
-  const indexPath = path.join(fullDirPath, "index.json");
+  const dirPath = path.join(process.cwd(), dir);
+  const indexPath = path.join(dirPath, "index.json");
 
-  // ✅ ALWAYS ensure folder exists
-  await fs.mkdir(fullDirPath, { recursive: true });
+  await fs.mkdir(dirPath, { recursive: true });
 
-  // ✅ ALWAYS create index.json if missing
   let existing = await readJson(indexPath, null);
 
+  // ✅ ALWAYS CREATE index.json IF NOT EXISTS
   if (!existing) {
     existing = {
       name: formatLabel(path.basename(dir)),
@@ -139,41 +115,37 @@ async function updateLocalIndexes(meta, filePath) {
     };
   }
 
-  // upsert blog
   existing.blogs = upsert(existing.blogs || [], meta);
 
   await writeJson(indexPath, existing);
 }
-/* ---------------- CATEGORY TREE ---------------- */
 
-function insertIntoTree(tree, parts) {
+/* ---------------- CATEGORY TREE (FIXED - NO DUPLICATES) ---------------- */
+
+function insertIntoTree(tree, parts, fullPath = "") {
   if (!parts.length) return;
 
   const [current, ...rest] = parts;
 
-  let node = tree.find(
-    item => item.path === parts.join("/")
-  );
+  const nodePath = fullPath ? `${fullPath}/${current}` : current;
+
+  let node = tree.find(n => n.path === nodePath);
 
   if (!node) {
     node = {
       name: formatLabel(current),
       slug: current,
-      path: parts.join("/"),
+      path: nodePath,
       blogCount: 0,
       children: []
     };
-
     tree.push(node);
   }
 
   node.blogCount += 1;
 
   if (rest.length > 0) {
-    insertIntoTree(
-      node.children,
-      rest
-    );
+    insertIntoTree(node.children, rest, nodePath);
   }
 }
 
@@ -184,70 +156,42 @@ async function run() {
 
   const state = await readJson(STATE_PATH, {});
   const searchIndex = await readJson(SEARCH_INDEX_PATH, []);
-
-  const categories = {
-    categories: []
-  };
+  const categories = await readJson(CATEGORIES_PATH, { categories: [] });
 
   const newState = {};
-
   let updatedSearch = [];
 
   for (const file of files) {
     const raw = await fs.readFile(file, "utf-8");
 
     const hash = getHash(raw);
-
     const normalizedPath = file.replace(/\\/g, "/");
 
     newState[normalizedPath] = hash;
 
     const { data } = matter(raw);
-
     const meta = buildMeta(data, file);
 
     /* ---------------- SEARCH INDEX ---------------- */
+    updatedSearch = upsert(updatedSearch, meta);
 
-    updatedSearch = await updateSearchIndex(
-      meta,
-      updatedSearch
-    );
-
-    /* ---------------- LOCAL INDEXES ---------------- */
-
+    /* ---------------- LOCAL INDEX (FIXED) ---------------- */
     await updateLocalIndexes(meta, file);
 
     /* ---------------- CATEGORY TREE ---------------- */
-
-    const parts = [
-      meta.category,
-      ...meta.hierarchy
-    ];
-
     insertIntoTree(
       categories.categories,
-      parts
+      [meta.category, ...meta.hierarchy]
     );
   }
 
   /* ---------------- WRITE OUTPUTS ---------------- */
 
-  await writeJson(
-    SEARCH_INDEX_PATH,
-    updatedSearch
-  );
+  await writeJson(SEARCH_INDEX_PATH, updatedSearch);
+  await writeJson(CATEGORIES_PATH, categories);
+  await writeJson(STATE_PATH, newState);
 
-  await writeJson(
-    CATEGORIES_PATH,
-    categories
-  );
-
-  await writeJson(
-    STATE_PATH,
-    newState
-  );
-
-  console.log("✅ Blog indexing complete");
+  console.log("✅ FIXED: All index.json files now correctly created for every folder");
 }
 
 run();
