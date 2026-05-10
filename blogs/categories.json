@@ -1,0 +1,42 @@
+{
+  "categories": [
+    {
+      "name": "Backend",
+      "slug": "backend",
+      "description": "Spring Boot, Java, APIs, Databases, Redis, Kafka",
+      "icon": "server",
+      "coverImage": "/images/categories/backend.webp",
+      "blogCount": 24,
+      "subcategories": [
+        {
+          "name": "Spring Boot",
+          "slug": "springboot",
+          "indexFile": "backend-springboot-index.json",
+          "blogCount": 12
+        },
+        {
+          "name": "Java",
+          "slug": "java",
+          "indexFile": "backend-java-index.json",
+          "blogCount": 8
+        }
+      ]
+    },
+    {
+      "name": "System Design",
+      "slug": "system-design",
+      "description": "Scalability, architecture, distributed systems",
+      "icon": "network",
+      "coverImage": "/images/categories/system-design.webp",
+      "blogCount": 18,
+      "subcategories": [
+        {
+          "name": "Fundamentals",
+          "slug": "fundamentals",
+          "indexFile": "system-design-fundamentals-index.json",
+          "blogCount": 7
+        }
+      ]
+    }
+  ]
+}
