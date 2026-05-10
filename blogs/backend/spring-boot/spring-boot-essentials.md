@@ -5,10 +5,9 @@ description: "A comprehensive guide to getting started with Spring Boot, coverin
 date: "2026-05-11"
 author: "Abhishek"
 tags:
-
-* Java
-* Spring Boot
-* Microservices
+    - Java
+    - Spring Boot
+    - Microservices
 coverImage: "/images/spring-boot-guide.png"
 draft: false
 
