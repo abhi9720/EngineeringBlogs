@@ -4,6 +4,28 @@
   "slug": "springboot",
   "blogs": [
     {
+      "title": "Redis Caching in Spring Boot",
+      "description": "Learn how to integrate Redis caching with Spring Boot for high-performance applications",
+      "date": "2026-05-10",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "springboot",
+        "redis",
+        "caching",
+        "Api Optimization"
+      ],
+      "category": "Backend",
+      "subcategory": "Springboot",
+      "coverImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2YmtCbcQ7rlCs33R3bg8ogF9CqjhaIuC7Gw&s",
+      "slug": "redis-caching-spring-boot",
+      "draft": false,
+      "path": "/blogs/backend/springboot/redis-caching",
+      "readingTime": "5 min",
+      "featured": false,
+      "__folderCategory": "backend",
+      "__folderSubcategory": "springboot"
+    },
+    {
       "title": "Mastering JWT Authentication with Spring Security 6",
       "description": "A comprehensive guide to implementing stateless JSON Web Token (JWT) authentication in Spring Boot applications.",
       "date": "2026-05-10",
