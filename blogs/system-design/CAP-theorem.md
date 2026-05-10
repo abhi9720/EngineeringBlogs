@@ -3,12 +3,12 @@
 title: "The CAP Theorem: Navigating the Trade-offs of Distributed Systems"
 description: "An essential guide to understanding Consistency, Availability, and Partition Tolerance in distributed database architecture."
 date: "2026-05-11"
-author: "Abhishek"
+author: "Abhishek Tiwari"
 tags:
   -   System Design
   -   Distributed Systems
   -   Backend
-coverImage: "/images/cap-theorem-explained.png"
+coverImage: ""
 draft: false
 
 ---
