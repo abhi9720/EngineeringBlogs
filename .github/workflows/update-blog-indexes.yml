@@ -3,35 +3,44 @@ name: Update Blog Indexes
 on:
   push:
     paths:
-      - 'blogs/**/*.md'
+      - "blogs/**/*.md"
+
+permissions:
+  contents: write
 
 jobs:
   update-indexes:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: "npm"
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Update Indexes
-        run: node scripts/update-indexes.js
+      - name: Update Blog Indexes
+        run: npm run update-indexes
 
-      - name: Commit Updated JSON
+      - name: Commit Updated JSON Files
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           git add blogs/**/index.json
           git add generated/search-index.json
 
-          git diff --cached --quiet || git commit -m "auto-update blog indexes"
-
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes detected."
+          else
+            git commit -m "chore: auto-update blog indexes"
+            git push
+          fi
