@@ -10,10 +10,10 @@
       "caching"
     ],
     "author": "Abhishek Tiwari",
-    "coverImage": "/images/backend-scale-1m-users.png",
+    "coverImage": "",
     "date": "2026-05-10",
     "category": "backend",
-    "subcategory": "backend-scale-1-to-1M-User",
+    "subcategory": null,
     "slug": "backend-scale-1-to-1M-User",
     "path": "/blogs/backend/backend-scale-1-to-1M-User"
   },

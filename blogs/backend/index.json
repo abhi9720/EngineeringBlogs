@@ -1,0 +1,24 @@
+{
+  "category": "backend",
+  "subcategory": null,
+  "blogs": [
+    {
+      "title": "Backend Scaling: From 1 to 1M Users",
+      "description": "A practical guide to scaling backend systems from a single user to one million users with real-world architecture patterns and trade-offs.",
+      "tags": [
+        "backend",
+        "system-design",
+        "scalability",
+        "performance",
+        "caching"
+      ],
+      "author": "Abhishek Tiwari",
+      "coverImage": "",
+      "date": "2026-05-10",
+      "category": "backend",
+      "subcategory": null,
+      "slug": "backend-scale-1-to-1M-User",
+      "path": "/blogs/backend/backend-scale-1-to-1M-User"
+    }
+  ]
+}
