@@ -1,5 +1,35 @@
 [
   {
+    "title": "Mastering JWT Authentication with Spring Security 6",
+    "description": "A comprehensive guide to implementing stateless JSON Web Token (JWT) authentication in Spring Boot applications.",
+    "slug": "jwt-authentication-spring-security-guide",
+    "tags": [
+      "Spring Security",
+      "JWT",
+      "Java"
+    ],
+    "category": "Backend Development",
+    "subcategory": "Security",
+    "path": "/blogs/backend/springboot/jwt-authentication-with-spring-security",
+    "author": "Gemini",
+    "coverImage": "https://www.baeldung.com/wp-content/uploads/2019/07/bael-1239-image-simple-1-1024x858.png"
+  },
+  {
+    "title": "Redis Caching in Spring Boot",
+    "description": "Learn how to integrate Redis caching with Spring Boot for high-performance applications",
+    "slug": "redis-caching-spring-boot",
+    "tags": [
+      "springboot",
+      "redis",
+      "caching"
+    ],
+    "category": "backend",
+    "subcategory": "springboot",
+    "path": "/blogs/backend/springboot/redis-caching",
+    "author": "Abhishek Tiwari",
+    "coverImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2YmtCbcQ7rlCs33R3bg8ogF9CqjhaIuC7Gw&s"
+  },
+  {
     "title": "Size Matters (But So Does Quantity): Horizontal vs. Vertical Scaling",
     "description": "Confused about whether to buy a bigger server or just more of them? Dive into the trade-offs between Scaling Up and Scaling Out.",
     "slug": "horizontal-vs-vertical-scaling-guide",
@@ -12,6 +42,6 @@
     "subcategory": "Cloud Strategy",
     "path": "/blogs/system-design/fundamentals/horizontal-vs-vertical-scaling",
     "author": "Abhishek Tiwari",
-    "coverImage": "/images/scaling-comparison.png"
+    "coverImage": ""
   }
 ]
