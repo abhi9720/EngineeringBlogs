@@ -10,7 +10,7 @@ tags:
 category: "Infrastructure"
 subcategory: "Cloud Strategy"
 coverImage: "/images/scaling-comparison.png"
-slug: "horizontal-vs-vertical-scaling-guide"
+slug: ""
 draft: false
 
 ---
