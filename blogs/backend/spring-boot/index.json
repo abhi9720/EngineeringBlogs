@@ -1,0 +1,25 @@
+{
+  "name": "Spring Boot",
+  "path": "/blogs/backend/spring-boot",
+  "blogs": [
+    {
+      "title": "Mastering the Essentials of Spring Boot: From Concept to Microservice",
+      "description": "A comprehensive guide to getting started with Spring Boot, covering auto-configuration, starter dependencies, and building your first REST API.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Java",
+        "Spring Boot",
+        "Microservices"
+      ],
+      "coverImage": "/images/spring-boot-guide.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "spring-boot-essentials",
+      "path": "/blogs/backend/spring-boot/spring-boot-essentials"
+    }
+  ]
+}
