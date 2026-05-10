@@ -1,25 +1,32 @@
-title: Redis Caching in Spring Boot
-description: Learn how to integrate Redis caching with Spring Boot for high-performance applications
+---
+title: "Redis Caching in Spring Boot"
+description: "Learn how to integrate Redis caching with Spring Boot for high-performance applications"
 date: 2026-05-10
+author: "Abhishek Tiwari"
 tags:
   - springboot
   - redis
   - caching
-author: Abhishek Tiwari
-coverImage: /images/redis-caching.png
+category: "backend"
+subcategory: "springboot"
+coverImage: "/images/redis-caching.png"
+slug: "redis-caching-spring-boot"
+draft: false
 ---
 
 # Redis Caching in Spring Boot 🚀
 
-Redis is an in-memory data structure store that is widely used as a caching layer to improve application performance.
+## Overview
 
-In this blog, we will understand how Redis works with Spring Boot and how to set it up in a simple way.
+Redis is an in-memory data structure store widely used as a caching layer to improve application performance.
+
+In this blog, we will understand how Redis works with Spring Boot and how to integrate it step by step.
 
 ---
 
 ## Why Use Redis?
 
-Using Redis helps in:
+Redis helps in improving system performance by:
 
 - Reducing database load
 - Improving API response time
@@ -32,7 +39,7 @@ Using Redis helps in:
 
 Add the following dependency in your `pom.xml`:
 
-```xml
+```xml id="dep-redis-001"
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-data-redis</artifactId>
@@ -43,22 +50,23 @@ Add the following dependency in your `pom.xml`:
 
 ## Configure Redis
 
-Add configuration in `application.properties`:
+Configure Redis connection in `application.properties`:
 
-```properties
+```properties id="redis-config-001"
 spring.redis.host=localhost
 spring.redis.port=6379
 ```
 
 ---
 
-## Enable Caching
+## Enable Caching in Spring Boot
 
-Enable caching in your Spring Boot application:
+Enable caching support in your application:
 
-```java
-import org.springframework.cache.annotation.EnableCaching;
+```java id="cache-enable-001"
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
 @EnableCaching
@@ -73,7 +81,7 @@ public class App {
 
 ## Example Service with Cache
 
-```java
+```java id="cache-service-001"
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -90,7 +98,7 @@ public class UserService {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 }
@@ -98,16 +106,25 @@ public class UserService {
 
 ---
 
-## How It Works
+## How Redis Caching Works
 
 1. First request → data fetched from method (slow)
-2. Data stored in Redis cache
-3. Next request → data served from Redis (fast ⚡)
+2. Result stored in Redis cache
+3. Next request → data served directly from Redis (fast ⚡)
+
+---
+
+## Key Benefits
+
+* Faster API responses
+* Reduced database pressure
+* Scalable microservice architecture
+* Better user experience
 
 ---
 
 ## Conclusion
 
-Redis caching significantly improves performance in Spring Boot applications by reducing redundant processing and database calls.
+Redis caching is a powerful technique for optimizing Spring Boot applications.
 
-It is especially useful in microservices and high-traffic systems.
+It is essential for building high-performance, scalable backend systems, especially in microservices architectures.
