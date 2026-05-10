@@ -5,16 +5,15 @@ description: "A practical guide to Spring Data JPA covering entities, repositori
 date: "2026-05-10"
 author: "Abhi"
 tags:
-
-* spring-boot
-* spring-data-jpa
-* backend
-* database
-  category: "Backend"
-  subcategory: "Spring Boot"
-  coverImage: "/images/spring-data-jpa-guide.png"
-  slug: "spring-data-jpa-deep-dive"
-  draft: false
+  - spring-boot
+  - spring-data-jpa
+  - backend
+  - database
+category: "Backend"
+subcategory: "Spring Boot"
+coverImage: "/images/spring-data-jpa-guide.png"
+slug: "spring-data-jpa-deep-dive"
+draft: false
 
 ---
 
