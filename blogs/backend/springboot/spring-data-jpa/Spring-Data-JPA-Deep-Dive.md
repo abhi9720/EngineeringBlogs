@@ -7,7 +7,6 @@ author: "Abhi"
 tags:
   - spring-boot
   - spring-data-jpa
-  - backend
   - database
 category: "Backend"
 subcategory: "Spring Boot"
