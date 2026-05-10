@@ -37,9 +37,8 @@ async function getAllMarkdownFiles(dir) {
 
   for (const entry of entries) {
     const full = path.join(dir, entry.name);
-
     if (entry.isDirectory()) {
-      results.push(...await getAllMarkdownFiles(full));
+      results.push(...(await getAllMarkdownFiles(full)));
     } else if (entry.name.endsWith(".md")) {
       results.push(full);
     }
@@ -53,16 +52,18 @@ async function getAllMarkdownFiles(dir) {
 function formatLabel(v) {
   return v
     .split("-")
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
 }
 
 /* ---------------- META ---------------- */
 
 function buildMeta(frontmatter, filePath) {
-  const normalized = filePath.replace(/\\/g, "/").replace(".md", "");
+  // Normalize to: blogs/category/[...hierarchy]/slug
+  const normalized = filePath.replace(/\\/g, "/").replace(/\.md$/, "");
   const parts = normalized.split("/");
 
+  // parts[0] = "blogs", parts[1] = category, parts[2..n-1] = hierarchy, parts[n] = slug
   const category = parts[1];
   const hierarchy = parts.slice(2, -1);
   const slug = parts[parts.length - 1];
@@ -80,72 +81,86 @@ function buildMeta(frontmatter, filePath) {
     hierarchy,
     slug,
 
-    path: `/${normalized}`
+    path: `/${normalized}`,
   };
 }
 
 /* ---------------- UPSERT ---------------- */
 
 function upsert(list, item) {
-  return [
-    item,
-    ...list.filter(i => i.path !== item.path)
-  ];
+  return [item, ...list.filter((i) => i.path !== item.path)];
 }
 
-/* ---------------- LOCAL INDEX CREATION (FIXED CORE) ---------------- */
-
+/* ---------------- LOCAL INDEX CREATION ---------------- */
+/*
+ * For a file at blogs/backend/spring-boot/Web-Services-and-API-Design/my-post.md
+ * we create index.json at EVERY ancestor dir (excluding the root "blogs/"):
+ *   blogs/backend/index.json
+ *   blogs/backend/spring-boot/index.json
+ *   blogs/backend/spring-boot/Web-Services-and-API-Design/index.json
+ */
 async function updateLocalIndexes(meta, filePath) {
-  const normalized = filePath.replace(/\\/g, "/");
-  const dir = path.dirname(normalized);
+  const normalized = filePath.replace(/\\/g, "/"); // e.g. blogs/backend/spring-boot/post.md
+  const parts = normalized.split("/");
+  // parts = ["blogs", "backend", "spring-boot", "Web-Services-...", "post.md"]
+  // We want dirs at depth 1 through parts.length-2 (everything except root and the file itself)
 
-  const dirPath = path.join(process.cwd(), dir);
-  const indexPath = path.join(dirPath, "index.json");
+  for (let depth = 1; depth <= parts.length - 2; depth++) {
+    const dirParts = parts.slice(0, depth + 1); // e.g. ["blogs","backend"]
+    const dir = dirParts.join("/"); // e.g. "blogs/backend"
+    const indexPath = path.join(process.cwd(), dir, "index.json");
 
-  await fs.mkdir(dirPath, { recursive: true });
+    let existing = await readJson(indexPath, null);
 
-  let existing = await readJson(indexPath, null);
+    if (!existing) {
+      existing = {
+        name: formatLabel(dirParts[dirParts.length - 1]),
+        path: `/${dir}`,
+        blogs: [],
+      };
+    }
 
-  // ✅ ALWAYS CREATE index.json IF NOT EXISTS
-  if (!existing) {
-    existing = {
-      name: formatLabel(path.basename(dir)),
-      path: `/${dir}`,
-      blogs: []
-    };
+    existing.blogs = upsert(existing.blogs || [], meta);
+
+    await writeJson(indexPath, existing);
   }
-
-  existing.blogs = upsert(existing.blogs || [], meta);
-
-  await writeJson(indexPath, existing);
 }
 
-/* ---------------- CATEGORY TREE (FIXED - NO DUPLICATES) ---------------- */
+/* ---------------- CATEGORY TREE ---------------- */
+/*
+ * Each node uses its FULL absolute path from root so there are never duplicate roots.
+ *
+ * e.g. for ["backend", "spring-boot", "Web-Services-and-API-Design"]:
+ *   root node  → path: "backend"
+ *   child node → path: "backend/spring-boot"
+ *   grandchild → path: "backend/spring-boot/Web-Services-and-API-Design"
+ *
+ * `insertIntoTree` is called with the full segments array and builds the path
+ * incrementally so every `find()` always matches on an absolute key.
+ */
+function insertIntoTree(tree, segments, currentPath = "") {
+  if (!segments.length) return;
 
-function insertIntoTree(tree, parts, fullPath = "") {
-  if (!parts.length) return;
+  const [head, ...tail] = segments;
+  const nodePath = currentPath ? `${currentPath}/${head}` : head;
 
-  const [current, ...rest] = parts;
-
-  const nodePath = fullPath ? `${fullPath}/${current}` : current;
-
-  let node = tree.find(n => n.path === nodePath);
+  let node = tree.find((n) => n.path === nodePath);
 
   if (!node) {
     node = {
-      name: formatLabel(current),
-      slug: current,
+      name: formatLabel(head),
+      slug: head,
       path: nodePath,
       blogCount: 0,
-      children: []
+      children: [],
     };
     tree.push(node);
   }
 
   node.blogCount += 1;
 
-  if (rest.length > 0) {
-    insertIntoTree(node.children, rest, nodePath);
+  if (tail.length > 0) {
+    insertIntoTree(node.children, tail, nodePath);
   }
 }
 
@@ -154,16 +169,16 @@ function insertIntoTree(tree, parts, fullPath = "") {
 async function run() {
   const files = await getAllMarkdownFiles(BLOGS_DIR);
 
+  // State is preserved for incremental awareness (not used for categories/search rebuild)
   const state = await readJson(STATE_PATH, {});
-  const searchIndex = await readJson(SEARCH_INDEX_PATH, []);
-  const categories = await readJson(CATEGORIES_PATH, { categories: [] });
 
-  const newState = {};
+  // ✅ Always start fresh so no stale/duplicate data survives across runs
   let updatedSearch = [];
+  const categories = { categories: [] };
+  const newState = {};
 
   for (const file of files) {
     const raw = await fs.readFile(file, "utf-8");
-
     const hash = getHash(raw);
     const normalizedPath = file.replace(/\\/g, "/");
 
@@ -172,17 +187,15 @@ async function run() {
     const { data } = matter(raw);
     const meta = buildMeta(data, file);
 
-    /* ---------------- SEARCH INDEX ---------------- */
+    // ── Search index ──────────────────────────────────────────────────────────
     updatedSearch = upsert(updatedSearch, meta);
 
-    /* ---------------- LOCAL INDEX (FIXED) ---------------- */
+    // ── Local index.json at every ancestor dir ────────────────────────────────
     await updateLocalIndexes(meta, file);
 
-    /* ---------------- CATEGORY TREE ---------------- */
-    insertIntoTree(
-      categories.categories,
-      [meta.category, ...meta.hierarchy]
-    );
+    // ── Category tree ─────────────────────────────────────────────────────────
+    // Full segment path: [category, ...hierarchy]
+    insertIntoTree(categories.categories, [meta.category, ...meta.hierarchy]);
   }
 
   /* ---------------- WRITE OUTPUTS ---------------- */
@@ -191,7 +204,10 @@ async function run() {
   await writeJson(CATEGORIES_PATH, categories);
   await writeJson(STATE_PATH, newState);
 
-  console.log("✅ FIXED: All index.json files now correctly created for every folder");
+  console.log(`✅ Indexed ${files.length} blog(s)`);
+  console.log(`   search-index  → ${SEARCH_INDEX_PATH}`);
+  console.log(`   categories    → ${CATEGORIES_PATH}`);
+  console.log(`   state         → ${STATE_PATH}`);
 }
 
 run();
