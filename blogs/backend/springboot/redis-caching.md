@@ -7,6 +7,7 @@ tags:
   - springboot
   - redis
   - caching
+  - Api Optimization
 category: "backend"
 subcategory: "springboot"
 coverImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2YmtCbcQ7rlCs33R3bg8ogF9CqjhaIuC7Gw&s"
