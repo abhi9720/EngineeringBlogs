@@ -1,0 +1,19 @@
+{
+  "categories": [
+    {
+      "name": "Backend",
+      "slug": "backend",
+      "path": "backend/spring-boot",
+      "blogCount": 1,
+      "children": [
+        {
+          "name": "Spring Boot",
+          "slug": "spring-boot",
+          "path": "spring-boot",
+          "blogCount": 1,
+          "children": []
+        }
+      ]
+    }
+  ]
+}
