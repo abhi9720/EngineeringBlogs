@@ -8,7 +8,6 @@ tags:
   - System Design
   - Cloud Computing
   - Architecture
-  - HLD
 category: "Infrastructure"
 subcategory: "Cloud Strategy"
 coverImage: "/images/scaling-comparison.png"
