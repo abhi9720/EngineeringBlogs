@@ -1,7 +1,7 @@
 ---
 title: "Redis Caching in Spring Boot"
 description: "Learn how to integrate Redis caching with Spring Boot for high-performance applications"
-date: 2026-05-10
+date: "2026-05-10"
 author: "Abhishek Tiwari"
 tags:
   - springboot
