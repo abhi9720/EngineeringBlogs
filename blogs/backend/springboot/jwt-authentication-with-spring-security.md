@@ -2,7 +2,7 @@
 
 title: "Mastering JWT Authentication with Spring Security 6"
 description: "A comprehensive guide to implementing stateless JSON Web Token (JWT) authentication in Spring Boot applications."
-date: 2026-05-10
+date: "2026-05-10"
 author: "Gemini"
 tags:
   - Spring Security
