@@ -1,0 +1,29 @@
+{
+  "category": "Backend",
+  "subcategory": "Springboot",
+  "slug": "springboot",
+  "blogs": [
+    {
+      "title": "Mastering JWT Authentication with Spring Security 6",
+      "description": "A comprehensive guide to implementing stateless JSON Web Token (JWT) authentication in Spring Boot applications.",
+      "date": "2026-05-10",
+      "author": "Gemini",
+      "tags": [
+        "Spring Security",
+        "JWT",
+        "Java",
+        "Spring"
+      ],
+      "category": "Backend",
+      "subcategory": "Springboot",
+      "coverImage": "https://www.baeldung.com/wp-content/uploads/2019/07/bael-1239-image-simple-1-1024x858.png",
+      "slug": "jwt-authentication-spring-security-guide",
+      "draft": false,
+      "path": "/blogs/backend/springboot/jwt-authentication-with-spring-security",
+      "readingTime": "5 min",
+      "featured": false,
+      "__folderCategory": "backend",
+      "__folderSubcategory": "springboot"
+    }
+  ]
+}
