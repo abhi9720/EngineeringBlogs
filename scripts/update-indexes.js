@@ -73,10 +73,32 @@ function buildMeta(frontmatter, filePath) {
   };
 }
 
-/* ---------------- INDEX UPDATERS ---------------- */
+/* ---------------- UPSERT ---------------- */
 
 function upsert(list, item) {
   return [item, ...list.filter(i => i.path !== item.path)];
+}
+
+/* ---------------- LOCAL INDEX (FIX ADDED) ---------------- */
+
+async function updateLocalIndex(meta) {
+  const indexPath = path.join(
+    BLOGS_DIR,
+    meta.category,
+    meta.subcategory,
+    "index.json"
+  );
+
+  const data = await readJson(indexPath, {
+    category: meta.category,
+    subcategory: meta.subcategory,
+    blogs: []
+  });
+
+  data.blogs = data.blogs.filter(b => b.path !== meta.path);
+  data.blogs.unshift(meta);
+
+  await writeJson(indexPath, data);
 }
 
 /* ---------------- MAIN ---------------- */
@@ -89,7 +111,6 @@ async function run() {
   const categories = await readJson(CATEGORIES_PATH, { categories: [] });
 
   const newState = { ...state };
-
   let updatedSearch = [...searchIndex];
 
   for (const file of files) {
@@ -98,10 +119,8 @@ async function run() {
 
     const normalizedPath = file.replace(/\\/g, "/");
 
-    // SKIP if unchanged
-    if (state[normalizedPath] === hash) {
-      continue;
-    }
+    // skip unchanged
+    if (state[normalizedPath] === hash) continue;
 
     const { data } = matter(raw);
     const meta = buildMeta(data, file);
@@ -109,11 +128,18 @@ async function run() {
     /* ---------------- SEARCH INDEX ---------------- */
     updatedSearch = upsert(updatedSearch, meta);
 
-    /* ---------------- CATEGORY UPDATE ---------------- */
+    /* ---------------- LOCAL INDEX (NEW FIX) ---------------- */
+    await updateLocalIndex(meta);
+
+    /* ---------------- CATEGORY TREE ---------------- */
     let cat = categories.categories.find(c => c.slug === meta.category);
 
     if (!cat) {
-      cat = { name: meta.category, slug: meta.category, subcategories: [] };
+      cat = {
+        name: meta.category,
+        slug: meta.category,
+        subcategories: []
+      };
       categories.categories.push(cat);
     }
 
@@ -127,17 +153,17 @@ async function run() {
       });
     }
 
-    /* ---------------- UPDATE STATE ---------------- */
+    /* ---------------- STATE UPDATE ---------------- */
     newState[normalizedPath] = hash;
   }
 
-  /* ---------------- WRITE FILES ---------------- */
+  /* ---------------- WRITE OUTPUTS ---------------- */
 
   await writeJson(SEARCH_INDEX_PATH, updatedSearch);
   await writeJson(CATEGORIES_PATH, categories);
   await writeJson(STATE_PATH, newState);
 
-  console.log("✅ Incremental update complete");
+  console.log("✅ Incremental indexing complete (with local index fix)");
 }
 
 run();
