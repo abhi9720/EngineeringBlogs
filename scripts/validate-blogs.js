@@ -1,60 +1,52 @@
-const fs = require("fs");
-const path = require("path");
-const matter = require("gray-matter");
-const Ajv = require("ajv");
+name: Update Blog Indexes
 
-const ajv = new Ajv();
+on:
+  push:
+    paths:
+      - "blogs/**/*.md"
 
-// Load schema
-const schema = JSON.parse(
-  fs.readFileSync("blog-schema.json", "utf-8")
-);
+permissions:
+  contents: write
 
-const validate = ajv.compile(schema);
+jobs:
+  validate-and-update:
+    runs-on: ubuntu-latest
 
-// Get all markdown files
-function getAllMarkdownFiles(dir) {
-  let results = [];
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
-  const list = fs.readdirSync(dir);
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-  list.forEach((file) => {
-    const filePath = path.join(dir, file);
-    const stat = fs.statSync(filePath);
+      - name: Install Dependencies
+        run: npm install
 
-    if (stat && stat.isDirectory()) {
-      results = results.concat(getAllMarkdownFiles(filePath));
-    } else if (file.endsWith(".md")) {
-      results.push(filePath);
-    }
-  });
+      # STEP 1
+      - name: Validate Blogs
+        run: node scripts/validate-blogs.js
 
-  return results;
-}
+      # STEP 2 (runs ONLY if validation passes)
+      - name: Update Blog Indexes
+        run: node scripts/update-indexes.js
 
-const files = getAllMarkdownFiles("blogs");
+      # STEP 3
+      - name: Commit Updated JSON Files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-let hasError = false;
+          git add blogs/**/index.json
+          git add blogs/categories.json
+          git add generated/search-index.json
 
-files.forEach((file) => {
-  const content = fs.readFileSync(file, "utf-8");
-  const parsed = matter(content);
-
-  const data = parsed.data;
-
-  const valid = validate(data);
-
-  if (!valid) {
-    console.log(`❌ Validation failed in: ${file}`);
-    console.log(validate.errors);
-    hasError = true;
-  } else {
-    console.log(`✅ Valid: ${file}`);
-  }
-});
-
-if (hasError) {
-  process.exit(1);
-}
-
-console.log("🎉 All blogs are valid!");
+          if git diff --cached --quiet; then
+            echo "No changes detected."
+          else
+            git commit -m "chore: auto-update blog indexes"
+            git push
+          fi
