@@ -34,5 +34,26 @@
     ],
     "slug": "spring-boot-essentials",
     "path": "/blogs/backend/spring-boot/spring-boot-essentials"
+  },
+  {
+    "title": "Advanced Spring MVC: Mastering Request Flow, Validation, and Error Handling",
+    "description": "A deep dive into building robust REST APIs with Spring MVC, covering dynamic request mapping, JSR-380 validation, and global exception management.",
+    "date": "2026-05-11",
+    "author": "Abhishek",
+    "tags": [
+      "Spring Boot",
+      "Spring MVC",
+      "REST API",
+      "Java"
+    ],
+    "coverImage": "/images/spring-mvc-advanced.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "spring-boot",
+      "Web Services & API Design"
+    ],
+    "slug": "Spring-Web-MVC",
+    "path": "/blogs/backend/spring-boot/Web Services & API Design/Spring-Web-MVC"
   }
 ]
