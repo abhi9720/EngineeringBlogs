@@ -1,5 +1,4 @@
 ---
-
 title: "Spring Data JPA Deep Dive: From Basics to Production Design"
 description: "A practical guide to Spring Data JPA covering entities, repositories, queries, relationships, and best practices for building production-ready backend systems."
 date: "2026-05-10"
@@ -8,12 +7,8 @@ tags:
   - spring-boot
   - spring-data-jpa
   - database
-category: "Backend"
-subcategory: "Spring Boot"
 coverImage: ""
-slug: "spring-data-jpa-deep-dive"
 draft: false
-
 ---
 
 # Spring Data JPA Deep Dive: From Basics to Production Design
