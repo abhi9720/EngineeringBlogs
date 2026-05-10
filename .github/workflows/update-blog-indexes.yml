@@ -26,15 +26,15 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      # STEP 1
+      # STEP 1 - Validate
       - name: Validate Blogs
         run: node scripts/validate-blogs.js
 
-      # STEP 2 (runs ONLY if validation passes)
+      # STEP 2 - Update Indexes
       - name: Update Blog Indexes
         run: node scripts/update-indexes.js
 
-      # STEP 3
+      # STEP 3 - Commit Changes
       - name: Commit Updated JSON Files
         run: |
           git config user.name "github-actions[bot]"
@@ -43,10 +43,11 @@ jobs:
           git add blogs/**/index.json
           git add blogs/categories.json
           git add generated/search-index.json
+          git add .generated/blog-state.json
 
           if git diff --cached --quiet; then
             echo "No changes detected."
           else
-            git commit -m "chore: auto-update blog indexes"
+            git commit -m "chore: auto-update blog indexes [skip ci]"
             git push
           fi
