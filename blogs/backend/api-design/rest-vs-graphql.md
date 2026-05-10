@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "REST vs GraphQL"
+description: "Comparing REST and GraphQL API design paradigms"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - rest-api
+  - graphql
+  - api-design
+  - comparison
+coverImage: "/images/rest-vs-graphql.png"
 draft: false
 ---
 
-# <Blog Title>
+# REST vs GraphQL
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "Spring Data JPA Basics"
+description: "Getting started with Spring Data JPA for simplified database access"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - spring-boot
+  - jpa
+  - database
+  - hibernate
+coverImage: "/images/spring-data-jpa-basics.png"
 draft: false
 ---
 
-# <Blog Title>
+# Spring Data JPA Basics
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

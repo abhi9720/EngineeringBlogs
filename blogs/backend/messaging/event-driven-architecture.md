@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "Event-Driven Architecture"
+description: "Building applications using event-driven architecture patterns"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - event-driven
+  - architecture
+  - messaging
+  - patterns
+coverImage: "/images/event-driven-architecture.png"
 draft: false
 ---
 
-# <Blog Title>
+# Event-Driven Architecture
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

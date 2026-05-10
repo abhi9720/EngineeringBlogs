@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "Kafka Introduction"
+description: "Getting started with Apache Kafka for event streaming"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - kafka
+  - event-streaming
+  - messaging
+  - apache
+coverImage: "/images/kafka-introduction.png"
 draft: false
 ---
 
-# <Blog Title>
+# Kafka Introduction
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

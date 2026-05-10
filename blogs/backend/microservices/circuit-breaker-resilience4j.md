@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "Circuit Breaker with Resilience4j"
+description: "Implementing circuit breaker pattern using Resilience4j for fault tolerance"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - microservices
+  - resilience4j
+  - circuit-breaker
+  - fault-tolerance
+coverImage: "/images/circuit-breaker-resilience4j.png"
 draft: false
 ---
 
-# <Blog Title>
+# Circuit Breaker with Resilience4j
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

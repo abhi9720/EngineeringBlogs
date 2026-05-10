@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "Inter-Service Communication"
+description: "Effective strategies for communication between microservices"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - microservices
+  - communication
+  - rest
+  - grpc
+coverImage: "/images/inter-service-communication.png"
 draft: false
 ---
 
-# <Blog Title>
+# Inter-Service Communication
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

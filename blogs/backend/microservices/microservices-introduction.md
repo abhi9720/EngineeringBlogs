@@ -1,17 +1,17 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "Microservices Introduction"
+description: "An introduction to microservices architecture and its core principles"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - microservices
+  - architecture
+  - distributed-systems
+coverImage: "/images/microservices-introduction.png"
 draft: false
 ---
 
-# <Blog Title>
+# Microservices Introduction
 
 ## Overview
 
@@ -31,9 +31,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

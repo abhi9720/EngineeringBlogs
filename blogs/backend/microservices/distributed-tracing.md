@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "Distributed Tracing"
+description: "Implementing distributed tracing to monitor and debug microservices"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - microservices
+  - distributed-tracing
+  - observability
+  - monitoring
+coverImage: "/images/distributed-tracing.png"
 draft: false
 ---
 
-# <Blog Title>
+# Distributed Tracing
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

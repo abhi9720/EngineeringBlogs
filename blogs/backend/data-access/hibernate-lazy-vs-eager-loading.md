@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "Hibernate Lazy vs Eager Loading"
+description: "Understanding lazy and eager loading strategies in Hibernate"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - hibernate
+  - jpa
+  - lazy-loading
+  - eager-loading
+coverImage: "/images/hibernate-lazy-vs-eager-loading.png"
 draft: false
 ---
 
-# <Blog Title>
+# Hibernate Lazy vs Eager Loading
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

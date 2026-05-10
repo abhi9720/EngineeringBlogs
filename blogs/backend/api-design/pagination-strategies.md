@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "Pagination Strategies"
+description: "Implementing efficient pagination strategies for large datasets"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - pagination
+  - api-design
+  - database
+  - performance
+coverImage: "/images/pagination-strategies.png"
 draft: false
 ---
 
-# <Blog Title>
+# Pagination Strategies
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

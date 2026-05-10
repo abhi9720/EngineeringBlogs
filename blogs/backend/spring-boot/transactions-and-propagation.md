@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "Transactions and Propagation"
+description: "Mastering Spring transaction management with different propagation behaviors"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - spring-boot
+  - transactions
+  - database
+  - propagation
+coverImage: "/images/transactions-and-propagation.png"
 draft: false
 ---
 
-# <Blog Title>
+# Transactions and Propagation
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

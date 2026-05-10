@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "Caching with Redis"
+description: "Implementing efficient caching strategies using Redis in Spring Boot applications"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - spring-boot
+  - redis
+  - caching
+  - performance
+coverImage: "/images/caching-with-redis.png"
 draft: false
 ---
 
-# <Blog Title>
+# Caching with Redis
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

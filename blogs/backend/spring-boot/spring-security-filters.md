@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "Spring Security Filters"
+description: "Understanding and implementing custom security filters in Spring Security"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - spring-boot
+  - security
+  - filters
+  - spring-security
+coverImage: "/images/spring-security-filters.png"
 draft: false
 ---
 
-# <Blog Title>
+# Spring Security Filters
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

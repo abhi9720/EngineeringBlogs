@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "Versioning APIs"
+description: "Strategies for versioning REST APIs while maintaining backward compatibility"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - api-design
+  - versioning
+  - rest-api
+  - best-practices
+coverImage: "/images/versioning-apis.png"
 draft: false
 ---
 
-# <Blog Title>
+# Versioning APIs
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

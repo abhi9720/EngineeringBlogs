@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "N+1 Problem"
+description: "Identifying and solving the N+1 query problem in JPA and Hibernate"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - jpa
+  - hibernate
+  - n-plus-one
+  - performance
+coverImage: "/images/n-plus-one-problem.png"
 draft: false
 ---
 
-# <Blog Title>
+# N+1 Problem
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

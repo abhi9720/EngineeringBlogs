@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
-author: "Abhishek Tiwari"
+title: "Function Calling"
+description: "Mastering function calling with large language models"
+date: "2026-05-11"
+author: "<Author Name>"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - AI
+  - Function Calling
+  - LLM
+  - API
+coverImage: "/images/function-calling.png"
 draft: false
 ---
 
-# <Blog Title>
+# Function Calling
 
 ## Overview
 
@@ -29,12 +30,6 @@ Explain the problem you are solving or topic context.
 
 Explain concept step-by-step.
 
-### Example
-
-```code language
-// code example here
-````
-
 ---
 
 ## Main Content Section 2
@@ -43,18 +38,13 @@ Break content into logical sections:
 
 * bullet points
 * explanations
-* diagrams (if any)
 
 ---
 
 ## Code Example
 
-```java
-public class Example {
-    public static void main(String[] args) {
-        System.out.println("Hello Blog");
-    }
-}
+```python
+# example code
 ```
 
 ---
@@ -63,7 +53,6 @@ public class Example {
 
 * Point 1
 * Point 2
-* Point 3
 
 ---
 
@@ -76,11 +65,10 @@ public class Example {
 
 ## Summary
 
-Short conclusion of the blog.
+Short conclusion.
 
 ---
 
 ## References
 
 * [https://example.com](https://example.com)
-* official docs link

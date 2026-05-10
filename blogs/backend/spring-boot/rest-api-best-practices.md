@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "REST API Best Practices"
+description: "Industry best practices for designing robust and scalable REST APIs"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - rest-api
+  - best-practices
+  - api-design
+  - spring-boot
+coverImage: "/images/rest-api-best-practices.png"
 draft: false
 ---
 
-# <Blog Title>
+# REST API Best Practices
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 

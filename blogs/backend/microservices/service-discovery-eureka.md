@@ -1,17 +1,18 @@
 ---
-title: "<Blog Title>"
-description: "<Short SEO-friendly description of the blog>"
-date: "YYYY-MM-DD"
+title: "Service Discovery with Eureka"
+description: "Setting up and using Netflix Eureka for service discovery in microservices"
+date: "2026-05-11"
 author: "Abhishek Tiwari"
 tags:
-  - tag1
-  - tag2
-  - tag3
-coverImage: "/images/<image-name>.png"
+  - microservices
+  - eureka
+  - service-discovery
+  - spring-cloud
+coverImage: "/images/service-discovery-eureka.png"
 draft: false
 ---
 
-# <Blog Title>
+# Service Discovery with Eureka
 
 ## Overview
 
@@ -31,9 +32,9 @@ Explain concept step-by-step.
 
 ### Example
 
-```code language
+```java
 // code example here
-````
+```
 
 ---
 
