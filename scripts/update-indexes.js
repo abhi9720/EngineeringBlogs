@@ -26,57 +26,77 @@ async function readJson(file, fallback) {
 
 async function writeJson(file, data) {
   await fs.mkdir(path.dirname(file), { recursive: true });
-  await fs.writeFile(file, JSON.stringify(data, null, 2));
+
+  await fs.writeFile(
+    file,
+    JSON.stringify(data, null, 2),
+    "utf-8"
+  );
 }
 
-/* ---------------- SCAN ---------------- */
+/* ---------------- LABEL ---------------- */
+
+function formatLabel(value) {
+  return value
+    .split("-")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+/* ---------------- FILE SCAN ---------------- */
 
 async function getAllMarkdownFiles(dir) {
   let results = [];
-  const entries = await fs.readdir(dir, { withFileTypes: true });
+
+  const entries = await fs.readdir(dir, {
+    withFileTypes: true
+  });
 
   for (const entry of entries) {
-    const full = path.join(dir, entry.name);
+    const fullPath = path.join(dir, entry.name);
 
     if (entry.isDirectory()) {
-      results.push(...await getAllMarkdownFiles(full));
+      results.push(...await getAllMarkdownFiles(fullPath));
     } else if (entry.name.endsWith(".md")) {
-      results.push(full);
+      results.push(fullPath);
     }
   }
 
   return results;
 }
 
-/* ---------------- LABEL ---------------- */
-
-function formatLabel(v) {
-  return v.split("-")
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-}
-
 /* ---------------- META ---------------- */
 
 function buildMeta(frontmatter, filePath) {
-  const normalized = filePath.replace(/\\/g, "/").replace(".md", "");
+  const normalized = filePath
+    .replace(/\\/g, "/")
+    .replace(".md", "");
+
   const parts = normalized.split("/");
 
+  // blogs/backend/springboot/spring-data-jpa/file
+  // [blogs, backend, springboot, spring-data-jpa, file]
+
   const category = parts[1];
-  const hierarchy = parts.slice(2, -1); // ALL nested folders
+
+  // all folders after category except file
+  const hierarchy = parts.slice(2, -1);
+
   const slug = parts[parts.length - 1];
 
   return {
     title: frontmatter.title,
     description: frontmatter.description,
-    tags: frontmatter.tags || [],
-    author: frontmatter.author,
-    coverImage: frontmatter.coverImage,
     date: frontmatter.date,
+    author: frontmatter.author,
+    tags: frontmatter.tags || [],
+    coverImage: frontmatter.coverImage || "",
+    draft: frontmatter.draft || false,
 
     category,
     hierarchy,
     slug,
+
     path: `/${normalized}`
   };
 }
@@ -84,58 +104,93 @@ function buildMeta(frontmatter, filePath) {
 /* ---------------- UPSERT ---------------- */
 
 function upsert(list, item) {
-  return [item, ...list.filter(i => i.path !== item.path)];
+  return [
+    item,
+    ...list.filter(existing => existing.path !== item.path)
+  ];
 }
 
-/* ---------------- LOCAL INDEX (FIXED) ---------------- */
+/* ---------------- SEARCH INDEX ---------------- */
 
-async function updateLocalIndex(meta) {
-  const indexDir = path.join(BLOGS_DIR, meta.category, ...meta.hierarchy);
-
-  await fs.mkdir(indexDir, { recursive: true });
-
-  const indexPath = path.join(indexDir, "index.json");
-
-  const data = await readJson(indexPath, {
-    category: meta.category,
-    hierarchy: meta.hierarchy,
-    blogs: []
-  });
-
-  data.blogs = data.blogs.filter(b => b.path !== meta.path);
-  data.blogs.unshift(meta);
-
-  await writeJson(indexPath, data);
+async function updateSearchIndex(meta, currentSearchIndex) {
+  return upsert(currentSearchIndex, meta);
 }
 
-/* ---------------- CATEGORY TREE (SAFE) ---------------- */
+/* ---------------- LOCAL INDEXES ---------------- */
 
-function insertIntoTree(tree, parts, meta) {
-  if (!Array.isArray(tree)) return;
+async function updateLocalIndexes(meta) {
+  /**
+   * Creates/updates:
+   *
+   * blogs/backend/index.json
+   * blogs/backend/springboot/index.json
+   * blogs/backend/springboot/spring-data-jpa/index.json
+   */
+
+  const folders = [];
+
+  // category level
+  folders.push([meta.category]);
+
+  // nested levels
+  for (let i = 0; i < meta.hierarchy.length; i++) {
+    folders.push([
+      meta.category,
+      ...meta.hierarchy.slice(0, i + 1)
+    ]);
+  }
+
+  for (const folderParts of folders) {
+    const dirPath = path.join(BLOGS_DIR, ...folderParts);
+
+    await fs.mkdir(dirPath, { recursive: true });
+
+    const indexPath = path.join(dirPath, "index.json");
+
+    const existing = await readJson(indexPath, {
+      name: formatLabel(folderParts[folderParts.length - 1]),
+      slug: folderParts[folderParts.length - 1],
+      path: `/${dirPath.replace(/\\/g, "/")}`,
+      blogs: []
+    });
+
+    existing.blogs = upsert(existing.blogs || [], meta);
+
+    await writeJson(indexPath, existing);
+  }
+}
+
+/* ---------------- CATEGORY TREE ---------------- */
+
+function insertIntoTree(tree, parts) {
   if (!parts.length) return;
 
   const [current, ...rest] = parts;
 
-  let node = tree.find(n => n.slug === current);
+  let node = tree.find(
+    item => item.path === parts.join("/")
+  );
 
   if (!node) {
     node = {
       name: formatLabel(current),
       slug: current,
-      children: [],
-      blogCount: 0
+      path: parts.join("/"),
+      blogCount: 0,
+      children: []
     };
+
     tree.push(node);
   }
 
-  if (!Array.isArray(node.children)) node.children = [];
+  node.blogCount += 1;
 
-  if (rest.length === 0) {
-    node.blogCount = (node.blogCount || 0) + 1;
-    return;
+  if (rest.length > 0) {
+    insertIntoTree(
+      node.children,
+      rest
+    );
   }
-
-  insertIntoTree(node.children, rest, meta);
 }
 
 /* ---------------- MAIN ---------------- */
@@ -145,43 +200,70 @@ async function run() {
 
   const state = await readJson(STATE_PATH, {});
   const searchIndex = await readJson(SEARCH_INDEX_PATH, []);
-  const categories = await readJson(CATEGORIES_PATH, { categories: [] });
 
-  const newState = { ...state };
-  let updatedSearch = [...searchIndex];
+  const categories = {
+    categories: []
+  };
+
+  const newState = {};
+
+  let updatedSearch = [];
 
   for (const file of files) {
     const raw = await fs.readFile(file, "utf-8");
+
     const hash = getHash(raw);
 
     const normalizedPath = file.replace(/\\/g, "/");
 
-    if (state[normalizedPath] === hash) continue;
+    newState[normalizedPath] = hash;
 
     const { data } = matter(raw);
+
     const meta = buildMeta(data, file);
 
     /* ---------------- SEARCH INDEX ---------------- */
-    updatedSearch = upsert(updatedSearch, meta);
 
-    /* ---------------- LOCAL INDEX ---------------- */
-    await updateLocalIndex(meta);
+    updatedSearch = await updateSearchIndex(
+      meta,
+      updatedSearch
+    );
+
+    /* ---------------- LOCAL INDEXES ---------------- */
+
+    await updateLocalIndexes(meta);
 
     /* ---------------- CATEGORY TREE ---------------- */
-    const pathParts = [meta.category, ...meta.hierarchy];
-    insertIntoTree(categories.categories, pathParts, meta);
 
-    /* ---------------- STATE ---------------- */
-    newState[normalizedPath] = hash;
+    const parts = [
+      meta.category,
+      ...meta.hierarchy
+    ];
+
+    insertIntoTree(
+      categories.categories,
+      parts
+    );
   }
 
   /* ---------------- WRITE OUTPUTS ---------------- */
 
-  await writeJson(SEARCH_INDEX_PATH, updatedSearch);
-  await writeJson(CATEGORIES_PATH, categories);
-  await writeJson(STATE_PATH, newState);
+  await writeJson(
+    SEARCH_INDEX_PATH,
+    updatedSearch
+  );
 
-  console.log("✅ Fully fixed: nested blog indexing + index.json creation stable");
+  await writeJson(
+    CATEGORIES_PATH,
+    categories
+  );
+
+  await writeJson(
+    STATE_PATH,
+    newState
+  );
+
+  console.log("✅ Blog indexing complete");
 }
 
 run();
