@@ -1,7 +1,7 @@
 ---
 title: "<Blog Title>"
 description: "<Short SEO-friendly description of the blog>"
-date: YYYY-MM-DD
+date: "YYYY-MM-DD"
 author: "<Author Name>"
 tags:
   - tag1
