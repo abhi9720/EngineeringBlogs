@@ -8,7 +8,6 @@ tags:
   - Spring Security
   - JWT
   - Java
-  - Spring
 category: "Backend Development"
 subcategory: "Security"
 coverImage: "https://www.baeldung.com/wp-content/uploads/2019/07/bael-1239-image-simple-1-1024x858.png"
