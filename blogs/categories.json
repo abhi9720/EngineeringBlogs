@@ -3,19 +3,19 @@
     {
       "name": "Backend",
       "slug": "backend",
-      "path": "backend/spring-boot/Web Services & API Design",
+      "path": "backend/spring-boot/Web-Services-and-API-Design",
       "blogCount": 1,
       "children": [
         {
           "name": "Spring Boot",
           "slug": "spring-boot",
-          "path": "spring-boot/Web Services & API Design",
+          "path": "spring-boot/Web-Services-and-API-Design",
           "blogCount": 1,
           "children": [
             {
-              "name": "Web Services & API Design",
-              "slug": "Web Services & API Design",
-              "path": "Web Services & API Design",
+              "name": "Web Services And API Design",
+              "slug": "Web-Services-and-API-Design",
+              "path": "Web-Services-and-API-Design",
               "blogCount": 1,
               "children": []
             }
