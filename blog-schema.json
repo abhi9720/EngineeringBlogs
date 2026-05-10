@@ -1,4 +1,28 @@
 {
-  "required": ["title", "description", "date", "tags", "category", "subcategory"],
-  "optional": ["coverImage", "slug", "author", "draft", "updatedAt"]
+  "type": "object",
+  "required": [
+    "title",
+    "description",
+    "date",
+    "tags",
+    "category",
+    "subcategory"
+  ],
+  "properties": {
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "date": { "type": "string" },
+    "author": { "type": "string" },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "category": { "type": "string" },
+    "subcategory": { "type": "string" },
+    "coverImage": { "type": "string" },
+    "slug": { "type": "string" },
+    "draft": { "type": "boolean" },
+    "updatedAt": { "type": "string" }
+  },
+  "additionalProperties": true
 }
