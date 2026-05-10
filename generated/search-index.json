@@ -55,5 +55,25 @@
     ],
     "slug": "Spring-Web-MVC",
     "path": "/blogs/backend/spring-boot/Web-Services-and-API-Design/Spring-Web-MVC"
+  },
+  {
+    "title": "Decoupling Your Code: A Deep Dive into Dependency Injection and IoC Containers",
+    "description": "Learn how Dependency Injection and IoC Containers transform rigid code into flexible, testable architectures with real-world examples.",
+    "date": "2026-05-11",
+    "author": "Gemini",
+    "tags": [
+      "Software Architecture",
+      "Dependency Injection",
+      "Clean Code"
+    ],
+    "coverImage": "",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "spring-boot",
+      "Spring Boot Internals & Development"
+    ],
+    "slug": "Dependency Injection (IoC Container)",
+    "path": "/blogs/backend/spring-boot/Spring Boot Internals & Development/Dependency Injection (IoC Container)"
   }
 ]

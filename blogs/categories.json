@@ -4,14 +4,21 @@
       "name": "Backend",
       "slug": "backend",
       "path": "backend",
-      "blogCount": 2,
+      "blogCount": 3,
       "children": [
         {
           "name": "Spring Boot",
           "slug": "spring-boot",
           "path": "backend/spring-boot",
-          "blogCount": 2,
+          "blogCount": 3,
           "children": [
+            {
+              "name": "Spring Boot Internals & Development",
+              "slug": "Spring Boot Internals & Development",
+              "path": "backend/spring-boot/Spring Boot Internals & Development",
+              "blogCount": 1,
+              "children": []
+            },
             {
               "name": "Web Services And API Design",
               "slug": "Web-Services-and-API-Design",
