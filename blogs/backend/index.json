@@ -3,8 +3,71 @@
   "subcategory": null,
   "blogs": [
     {
+      "title": "Spring Data JPA Deep Dive: From Basics to Production Design",
+      "description": "A practical guide to Spring Data JPA covering entities, repositories, queries, relationships, and best practices for building production-ready backend systems.",
+      "date": "2026-05-10",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-data-jpa",
+        "database",
+        "ORM"
+      ],
+      "coverImage": "",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "springboot",
+        "spring-data-jpa"
+      ],
+      "slug": "Spring-Data-JPA-Deep-Dive",
+      "path": "/blogs/backend/springboot/spring-data-jpa/Spring-Data-JPA-Deep-Dive"
+    },
+    {
+      "title": "Redis Caching in Spring Boot",
+      "description": "Learn how to integrate Redis caching with Spring Boot for high-performance applications",
+      "date": "2026-05-10",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "springboot",
+        "redis",
+        "caching",
+        "Api Optimization"
+      ],
+      "coverImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2YmtCbcQ7rlCs33R3bg8ogF9CqjhaIuC7Gw&s",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "springboot"
+      ],
+      "slug": "redis-caching",
+      "path": "/blogs/backend/springboot/redis-caching"
+    },
+    {
+      "title": "Mastering JWT Authentication with Spring Security 6",
+      "description": "A comprehensive guide to implementing stateless JSON Web Token (JWT) authentication in Spring Boot applications.",
+      "date": "2026-05-10",
+      "author": "Gemini",
+      "tags": [
+        "Spring Security",
+        "JWT",
+        "Java",
+        "Spring"
+      ],
+      "coverImage": "https://www.baeldung.com/wp-content/uploads/2019/07/bael-1239-image-simple-1-1024x858.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "springboot"
+      ],
+      "slug": "jwt-authentication-with-spring-security",
+      "path": "/blogs/backend/springboot/jwt-authentication-with-spring-security"
+    },
+    {
       "title": "Backend Scaling: From 1 to 1M Users",
       "description": "A practical guide to scaling backend systems from a single user to one million users with real-world architecture patterns and trade-offs.",
+      "date": "2026-05-10",
+      "author": "Abhishek Tiwari",
       "tags": [
         "backend",
         "system-design",
@@ -12,11 +75,10 @@
         "performance",
         "caching"
       ],
-      "author": "Abhishek Tiwari",
       "coverImage": "",
-      "date": "2026-05-10",
+      "draft": false,
       "category": "backend",
-      "subcategory": null,
+      "hierarchy": [],
       "slug": "backend-scale-1-to-1M-User",
       "path": "/blogs/backend/backend-scale-1-to-1M-User"
     }

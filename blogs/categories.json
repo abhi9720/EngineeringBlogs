@@ -3,47 +3,60 @@
     {
       "name": "Backend",
       "slug": "backend",
-      "description": "Spring Boot, Java, APIs, Databases, Redis, Kafka",
-      "icon": "server",
-      "coverImage": "/images/categories/backend.webp",
+      "path": "backend",
+      "blogCount": 1,
+      "children": []
+    },
+    {
+      "name": "Backend",
+      "slug": "backend",
+      "path": "backend/springboot",
       "blogCount": 2,
-      "subcategories": [
-        {
-          "name": "Spring Boot",
-          "slug": "springboot",
-          "indexFile": "backend-springboot-index.json",
-          "blogCount": 2
-        }
-      ],
       "children": [
         {
           "name": "Springboot",
           "slug": "springboot",
+          "path": "springboot",
+          "blogCount": 2,
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Backend",
+      "slug": "backend",
+      "path": "backend/springboot/spring-data-jpa",
+      "blogCount": 1,
+      "children": [
+        {
+          "name": "Springboot",
+          "slug": "springboot",
+          "path": "springboot/spring-data-jpa",
+          "blogCount": 1,
           "children": [
             {
               "name": "Spring Data Jpa",
               "slug": "spring-data-jpa",
-              "children": [],
-              "blogCount": 1
+              "path": "spring-data-jpa",
+              "blogCount": 1,
+              "children": []
             }
-          ],
-          "blogCount": 0
+          ]
         }
       ]
     },
     {
       "name": "System Design",
       "slug": "system-design",
-      "description": "Scalability, architecture, distributed systems",
-      "icon": "network",
-      "coverImage": "/images/categories/system-design.webp",
-      "blogCount": 1,
-      "subcategories": [
+      "path": "system-design/fundamentals",
+      "blogCount": 2,
+      "children": [
         {
           "name": "Fundamentals",
           "slug": "fundamentals",
-          "indexFile": "system-design-fundamentals-index.json",
-          "blogCount": 1
+          "path": "fundamentals",
+          "blogCount": 2,
+          "children": []
         }
       ]
     }
