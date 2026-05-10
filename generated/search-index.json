@@ -1,5 +1,22 @@
 [
   {
+    "title": "The CAP Theorem: Navigating the Trade-offs of Distributed Systems",
+    "description": "An essential guide to understanding Consistency, Availability, and Partition Tolerance in distributed database architecture.",
+    "date": "2026-05-11",
+    "author": "Abhishek",
+    "tags": [
+      "System Design",
+      "Distributed Systems",
+      "Backend"
+    ],
+    "coverImage": "/images/cap-theorem-explained.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [],
+    "slug": "CAP-theorem",
+    "path": "/blogs/system-design/CAP-theorem"
+  },
+  {
     "title": "Mastering the Essentials of Spring Boot: From Concept to Microservice",
     "description": "A comprehensive guide to getting started with Spring Boot, covering auto-configuration, starter dependencies, and building your first REST API.",
     "date": "2026-05-11",
