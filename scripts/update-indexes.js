@@ -5,30 +5,42 @@ import { execSync } from "child_process";
 
 const BLOGS_DIR = "blogs";
 const SEARCH_INDEX_PATH = "generated/search-index.json";
+const CATEGORIES_PATH = "blogs/categories.json";
+
+function formatLabel(value) {
+  return value
+    .split("-")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
 
 /**
- * Get changed markdown files from latest commit
+ * Get changed markdown files
  */
 function getChangedMarkdownFiles() {
   try {
     const output = execSync(
-      `git diff --name-only HEAD~1 HEAD -- "blogs/**/*.md"`,
+      `git diff --name-status HEAD~1 HEAD -- "blogs/**/*.md"`,
       { encoding: "utf-8" }
     );
 
     return output
       .split("\n")
-      .map((file) => file.trim())
-      .filter((file) => file.endsWith(".md"));
+      .filter(Boolean)
+      .map(line => {
+        const [status, file] = line.trim().split("\t");
+
+        return {
+          status,
+          file,
+        };
+      });
   } catch (error) {
-    console.error("Failed to get changed files:", error);
+    console.error("Failed to detect changes:", error);
     return [];
   }
 }
 
-/**
- * Read JSON safely
- */
 async function readJson(filePath, fallback = {}) {
   try {
     const data = await fs.readFile(filePath, "utf-8");
@@ -38,9 +50,6 @@ async function readJson(filePath, fallback = {}) {
   }
 }
 
-/**
- * Write JSON prettified
- */
 async function writeJson(filePath, data) {
   await fs.mkdir(path.dirname(filePath), { recursive: true });
 
@@ -51,20 +60,12 @@ async function writeJson(filePath, data) {
   );
 }
 
-/**
- * Parse markdown frontmatter
- */
 async function parseMarkdown(filePath) {
   const raw = await fs.readFile(filePath, "utf-8");
-
   const { data } = matter(raw);
-
   return data;
 }
 
-/**
- * Build blog metadata object
- */
 function buildBlogMetadata(frontmatter, filePath) {
   const normalizedPath = filePath
     .replace(".md", "")
@@ -72,8 +73,8 @@ function buildBlogMetadata(frontmatter, filePath) {
 
   const parts = normalizedPath.split("/");
 
-  const category = parts[1];
-  const subcategory = parts[2];
+  const folderCategory = parts[1];
+  const folderSubcategory = parts[2];
 
   return {
     title: frontmatter.title,
@@ -81,8 +82,8 @@ function buildBlogMetadata(frontmatter, filePath) {
     date: frontmatter.date,
     author: frontmatter.author,
     tags: frontmatter.tags || [],
-    category: frontmatter.category,
-    subcategory: frontmatter.subcategory,
+    category: formatLabel(folderCategory),
+    subcategory: formatLabel(folderSubcategory),
     coverImage: frontmatter.coverImage,
     slug: frontmatter.slug,
     draft: frontmatter.draft || false,
@@ -90,13 +91,52 @@ function buildBlogMetadata(frontmatter, filePath) {
     readingTime: frontmatter.readingTime || "5 min",
     featured: frontmatter.featured || false,
 
-    __folderCategory: category,
-    __folderSubcategory: subcategory,
+    __folderCategory: folderCategory,
+    __folderSubcategory: folderSubcategory,
   };
 }
 
 /**
- * Update category index.json
+ * Update categories.json
+ */
+async function updateCategoriesJson(blogMeta) {
+  let categoriesJson = await readJson(CATEGORIES_PATH, {
+    categories: [],
+  });
+
+  let category = categoriesJson.categories.find(
+    c => c.slug === blogMeta.__folderCategory
+  );
+
+  if (!category) {
+    category = {
+      name: blogMeta.category,
+      slug: blogMeta.__folderCategory,
+      subcategories: [],
+    };
+
+    categoriesJson.categories.push(category);
+  }
+
+  let subcategory = category.subcategories.find(
+    s => s.slug === blogMeta.__folderSubcategory
+  );
+
+  if (!subcategory) {
+    category.subcategories.push({
+      name: blogMeta.subcategory,
+      slug: blogMeta.__folderSubcategory,
+      path: `/blogs/${blogMeta.__folderCategory}/${blogMeta.__folderSubcategory}/index.json`,
+    });
+  }
+
+  await writeJson(CATEGORIES_PATH, categoriesJson);
+
+  console.log("Updated categories.json");
+}
+
+/**
+ * Update local index.json
  */
 async function updateCategoryIndex(blogMeta) {
   const indexPath = path.join(
@@ -107,31 +147,17 @@ async function updateCategoryIndex(blogMeta) {
   );
 
   let indexJson = await readJson(indexPath, {
-    category: blogMeta.__folderCategory,
-    subcategory: blogMeta.__folderSubcategory,
+    category: blogMeta.category,
+    subcategory: blogMeta.subcategory,
     slug: blogMeta.__folderSubcategory,
     blogs: [],
   });
 
   indexJson.blogs = indexJson.blogs.filter(
-    (blog) => blog.slug !== blogMeta.slug
+    blog => blog.slug !== blogMeta.slug
   );
 
-  indexJson.blogs.unshift({
-    title: blogMeta.title,
-    description: blogMeta.description,
-    date: blogMeta.date,
-    author: blogMeta.author,
-    tags: blogMeta.tags,
-    category: blogMeta.category,
-    subcategory: blogMeta.subcategory,
-    coverImage: blogMeta.coverImage,
-    slug: blogMeta.slug,
-    draft: blogMeta.draft,
-    path: blogMeta.path,
-    readingTime: blogMeta.readingTime,
-    featured: blogMeta.featured,
-  });
+  indexJson.blogs.unshift(blogMeta);
 
   await writeJson(indexPath, indexJson);
 
@@ -139,13 +165,13 @@ async function updateCategoryIndex(blogMeta) {
 }
 
 /**
- * Update global search index
+ * Update search-index.json
  */
 async function updateSearchIndex(blogMeta) {
   let searchIndex = await readJson(SEARCH_INDEX_PATH, []);
 
   searchIndex = searchIndex.filter(
-    (blog) => blog.slug !== blogMeta.slug
+    blog => blog.slug !== blogMeta.slug
   );
 
   searchIndex.unshift({
@@ -166,30 +192,50 @@ async function updateSearchIndex(blogMeta) {
 }
 
 /**
- * Main runner
+ * Remove deleted blogs
  */
-async function run() {
-  const changedFiles = getChangedMarkdownFiles();
+async function removeDeletedBlog(filePath) {
+  const slug = path.basename(filePath, ".md");
 
-  if (changedFiles.length === 0) {
+  let searchIndex = await readJson(SEARCH_INDEX_PATH, []);
+
+  searchIndex = searchIndex.filter(
+    blog => !blog.path.includes(slug)
+  );
+
+  await writeJson(SEARCH_INDEX_PATH, searchIndex);
+
+  console.log(`Removed deleted blog: ${slug}`);
+}
+
+async function run() {
+  const changes = getChangedMarkdownFiles();
+
+  if (changes.length === 0) {
     console.log("No markdown changes detected.");
     return;
   }
 
-  console.log("Changed markdown files:");
-  console.log(changedFiles);
+  for (const change of changes) {
+    const { status, file } = change;
 
-  for (const file of changedFiles) {
     try {
+      if (status === "D") {
+        await removeDeletedBlog(file);
+        continue;
+      }
+
       const frontmatter = await parseMarkdown(file);
 
       const blogMeta = buildBlogMetadata(frontmatter, file);
+
+      await updateCategoriesJson(blogMeta);
 
       await updateCategoryIndex(blogMeta);
 
       await updateSearchIndex(blogMeta);
 
-      console.log(`Processed: ${file}`);
+      console.log(`Processed ${file}`);
     } catch (error) {
       console.error(`Failed processing ${file}:`, error);
     }
