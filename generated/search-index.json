@@ -1,5 +1,23 @@
 [
   {
+    "title": "Backend Scaling: From 1 to 1M Users",
+    "description": "A practical guide to scaling backend systems from a single user to one million users with real-world architecture patterns and trade-offs.",
+    "tags": [
+      "backend",
+      "system-design",
+      "scalability",
+      "performance",
+      "caching"
+    ],
+    "author": "Abhishek Tiwari",
+    "coverImage": "/images/backend-scale-1m-users.png",
+    "date": "2026-05-10",
+    "category": "backend",
+    "subcategory": "backend-scale-1-to-1M-User",
+    "slug": "backend-scale-1-to-1M-User",
+    "path": "/blogs/backend/backend-scale-1-to-1M-User"
+  },
+  {
     "title": "Spring Data JPA Deep Dive: From Basics to Production Design",
     "description": "A practical guide to Spring Data JPA covering entities, repositories, queries, relationships, and best practices for building production-ready backend systems.",
     "tags": [
