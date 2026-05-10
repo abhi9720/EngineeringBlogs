@@ -4,25 +4,15 @@
     "title",
     "description",
     "date",
-    "tags",
-    "category",
-    "subcategory"
+    "author"
   ],
   "properties": {
     "title": { "type": "string" },
     "description": { "type": "string" },
     "date": { "type": "string" },
     "author": { "type": "string" },
-    "tags": {
-      "type": "array",
-      "items": { "type": "string" }
-    },
-    "category": { "type": "string" },
-    "subcategory": { "type": "string" },
+    "tags": { "type": "array" },
     "coverImage": { "type": "string" },
-    "slug": { "type": "string" },
-    "draft": { "type": "boolean" },
-    "updatedAt": { "type": "string" }
-  },
-  "additionalProperties": true
+    "draft": { "type": "boolean" }
+  }
 }
