@@ -4,19 +4,19 @@
       "name": "Backend",
       "slug": "backend",
       "path": "backend",
-      "blogCount": 3,
+      "blogCount": 4,
       "children": [
         {
           "name": "Spring Boot",
           "slug": "spring-boot",
           "path": "backend/spring-boot",
-          "blogCount": 3,
+          "blogCount": 4,
           "children": [
             {
               "name": "Spring Boot Internals & Development",
               "slug": "Spring Boot Internals & Development",
               "path": "backend/spring-boot/Spring Boot Internals & Development",
-              "blogCount": 1,
+              "blogCount": 2,
               "children": []
             },
             {

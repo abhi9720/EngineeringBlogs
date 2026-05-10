@@ -57,6 +57,26 @@
     "path": "/blogs/backend/spring-boot/Web-Services-and-API-Design/Spring-Web-MVC"
   },
   {
+    "title": "The Magic of Spring Boot: Starters, Auto-Configuration, and Properties",
+    "description": "Master the core pillars of Spring Boot: simplify dependency management with Starters, automate setup with Auto-Configuration, and manage settings with yml/properties.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "Spring Boot",
+      "Java",
+      "Backend Development"
+    ],
+    "coverImage": "",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "spring-boot",
+      "Spring Boot Internals & Development"
+    ],
+    "slug": "Magic of Spring Boot: Starters, Auto-Configuration, and Properties",
+    "path": "/blogs/backend/spring-boot/Spring Boot Internals & Development/Magic of Spring Boot: Starters, Auto-Configuration, and Properties"
+  },
+  {
     "title": "Decoupling Your Code: A Deep Dive into Dependency Injection and IoC Containers",
     "description": "Learn how Dependency Injection and IoC Containers transform rigid code into flexible, testable architectures with real-world examples.",
     "date": "2026-05-11",
