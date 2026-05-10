@@ -1,1 +1,4 @@
-
+{
+  "required": ["title", "description", "date", "tags", "category", "subcategory"],
+  "optional": ["coverImage", "slug", "author", "draft", "updatedAt"]
+}
