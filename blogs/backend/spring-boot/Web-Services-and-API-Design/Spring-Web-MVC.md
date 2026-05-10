@@ -5,7 +5,6 @@ description: "A deep dive into building robust REST APIs with Spring MVC, coveri
 date: "2026-05-11"
 author: "Abhishek"
 tags:
-
   - Spring Boot
   - Spring MVC
   - REST API
