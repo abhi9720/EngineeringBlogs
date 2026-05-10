@@ -3,5 +3,6 @@
   "blogs/backend/spring-boot/Spring Boot Internals & Development/Magic of Spring Boot: Starters, Auto-Configuration, and Properties.md": "e9832aeb385de95b54837e635b60e023c526018aae3d111c96f5508fa0f6feae",
   "blogs/backend/spring-boot/Web-Services-and-API-Design/Spring-Web-MVC.md": "0fff21f76b3b5b9009c68af7965791dcd1ae36e0cb01a86578eb2d90557b2e96",
   "blogs/backend/spring-boot/spring-boot-essentials.md": "d520deaa460dc170e5aedef10b19cf2888d001959d7584f5120aa56cf4dcff43",
-  "blogs/system-design/CAP-theorem.md": "5645a2d5549e8300e8710f19458ad6216b4272d1dd5809b77288b9b947d09b28"
+  "blogs/system-design/CAP-theorem.md": "5645a2d5549e8300e8710f19458ad6216b4272d1dd5809b77288b9b947d09b28",
+  "blogs/system-design/Fundamentals of System Design/Scalability (vertical vs horizontal).md": "13d442d2e4ef88d99e501d6696a4d3bcce77a0bdab0257148b4bc4bc951daae3"
 }

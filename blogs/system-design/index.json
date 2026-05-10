@@ -3,6 +3,25 @@
   "path": "/blogs/system-design",
   "blogs": [
     {
+      "title": "Scaling Your Application: Vertical vs. Horizontal Scalability",
+      "description": "A comprehensive guide to scaling strategies: understand when to power up a single machine and when to build a distributed fleet.",
+      "date": "2026-05-11",
+      "author": "Gemini",
+      "tags": [
+        "System Design",
+        "Cloud Computing",
+        "Architecture"
+      ],
+      "coverImage": "",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "Fundamentals of System Design"
+      ],
+      "slug": "Scalability (vertical vs horizontal)",
+      "path": "/blogs/system-design/Fundamentals of System Design/Scalability (vertical vs horizontal)"
+    },
+    {
       "title": "The CAP Theorem: Navigating the Trade-offs of Distributed Systems",
       "description": "An essential guide to understanding Consistency, Availability, and Partition Tolerance in distributed database architecture.",
       "date": "2026-05-11",

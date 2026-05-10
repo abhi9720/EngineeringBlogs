@@ -34,8 +34,16 @@
       "name": "System Design",
       "slug": "system-design",
       "path": "system-design",
-      "blogCount": 1,
-      "children": []
+      "blogCount": 2,
+      "children": [
+        {
+          "name": "Fundamentals of System Design",
+          "slug": "Fundamentals of System Design",
+          "path": "system-design/Fundamentals of System Design",
+          "blogCount": 1,
+          "children": []
+        }
+      ]
     }
   ]
 }
