@@ -8,8 +8,8 @@
       "JWT",
       "Java"
     ],
-    "category": "Backend Development",
-    "subcategory": "Security",
+    "category": "Backend",
+    "subcategory": "Springboot",
     "path": "/blogs/backend/springboot/jwt-authentication-with-spring-security",
     "author": "Gemini",
     "coverImage": "https://www.baeldung.com/wp-content/uploads/2019/07/bael-1239-image-simple-1-1024x858.png"
