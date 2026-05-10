@@ -14,7 +14,7 @@ function getHash(content) {
   return crypto.createHash("sha256").update(content).digest("hex");
 }
 
-/* ---------------- FS HELPERS ---------------- */
+/* ---------------- HELPERS ---------------- */
 
 async function readJson(file, fallback) {
   try {
@@ -29,7 +29,7 @@ async function writeJson(file, data) {
   await fs.writeFile(file, JSON.stringify(data, null, 2));
 }
 
-/* ---------------- FILE SCAN ---------------- */
+/* ---------------- SCAN ---------------- */
 
 async function getAllMarkdownFiles(dir) {
   let results = [];
@@ -50,24 +50,20 @@ async function getAllMarkdownFiles(dir) {
 
 /* ---------------- LABEL ---------------- */
 
-function formatLabel(value) {
-  return value
-    .split("-")
+function formatLabel(v) {
+  return v.split("-")
     .map(w => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
 }
 
-/* ---------------- METADATA ---------------- */
+/* ---------------- META ---------------- */
 
 function buildMeta(frontmatter, filePath) {
   const normalized = filePath.replace(/\\/g, "/").replace(".md", "");
   const parts = normalized.split("/");
 
   const category = parts[1];
-
-  // 🔥 FIX: capture ALL nesting levels after category
-  const hierarchy = parts.slice(2, parts.length - 1); // everything except file
-
+  const hierarchy = parts.slice(2, -1); // ALL nested folders
   const slug = parts[parts.length - 1];
 
   return {
@@ -79,7 +75,7 @@ function buildMeta(frontmatter, filePath) {
     date: frontmatter.date,
 
     category,
-    hierarchy, // 👈 NEW (important)
+    hierarchy,
     slug,
     path: `/${normalized}`
   };
@@ -91,12 +87,14 @@ function upsert(list, item) {
   return [item, ...list.filter(i => i.path !== item.path)];
 }
 
-/* ---------------- LOCAL INDEX ---------------- */
+/* ---------------- LOCAL INDEX (FIXED) ---------------- */
 
 async function updateLocalIndex(meta) {
-  const dirPath = path.join(BLOGS_DIR, meta.category, ...meta.hierarchy);
+  const indexDir = path.join(BLOGS_DIR, meta.category, ...meta.hierarchy);
 
-  const indexPath = path.join(dirPath, "index.json");
+  await fs.mkdir(indexDir, { recursive: true });
+
+  const indexPath = path.join(indexDir, "index.json");
 
   const data = await readJson(indexPath, {
     category: meta.category,
@@ -110,13 +108,13 @@ async function updateLocalIndex(meta) {
   await writeJson(indexPath, data);
 }
 
-/* ---------------- CATEGORY TREE (FIXED) ---------------- */
-function insertIntoTree(tree = [], pathParts = [], meta) {
+/* ---------------- CATEGORY TREE (SAFE) ---------------- */
+
+function insertIntoTree(tree, parts, meta) {
   if (!Array.isArray(tree)) return;
+  if (!parts.length) return;
 
-  if (pathParts.length === 0) return;
-
-  const [current, ...rest] = pathParts;
+  const [current, ...rest] = parts;
 
   let node = tree.find(n => n.slug === current);
 
@@ -130,13 +128,10 @@ function insertIntoTree(tree = [], pathParts = [], meta) {
     tree.push(node);
   }
 
-  // safety: always ensure children exists
-  if (!node.children) {
-    node.children = [];
-  }
+  if (!Array.isArray(node.children)) node.children = [];
 
   if (rest.length === 0) {
-    node.blogCount += (node.blogCount || 0) + 1;;
+    node.blogCount = (node.blogCount || 0) + 1;
     return;
   }
 
@@ -172,22 +167,21 @@ async function run() {
     /* ---------------- LOCAL INDEX ---------------- */
     await updateLocalIndex(meta);
 
-    /* ---------------- CATEGORY TREE (FIXED) ---------------- */
+    /* ---------------- CATEGORY TREE ---------------- */
     const pathParts = [meta.category, ...meta.hierarchy];
-
     insertIntoTree(categories.categories, pathParts, meta);
 
     /* ---------------- STATE ---------------- */
     newState[normalizedPath] = hash;
   }
 
-  /* ---------------- WRITE ---------------- */
+  /* ---------------- WRITE OUTPUTS ---------------- */
 
   await writeJson(SEARCH_INDEX_PATH, updatedSearch);
   await writeJson(CATEGORIES_PATH, categories);
   await writeJson(STATE_PATH, newState);
 
-  console.log("✅ Fully fixed: infinite nested category support enabled");
+  console.log("✅ Fully fixed: nested blog indexing + index.json creation stable");
 }
 
 run();
