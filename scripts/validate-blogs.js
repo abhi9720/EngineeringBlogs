@@ -1,52 +1,64 @@
-name: Update Blog Indexes
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+import Ajv from "ajv";
 
-on:
-  push:
-    paths:
-      - "blogs/**/*.md"
+const ajv = new Ajv();
 
-permissions:
-  contents: write
+// Load schema
+const schema = JSON.parse(
+  fs.readFileSync("blog-schema.json", "utf-8")
+);
 
-jobs:
-  validate-and-update:
-    runs-on: ubuntu-latest
+const validate = ajv.compile(schema);
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
+/**
+ * Get all markdown files recursively
+ */
+function getAllMarkdownFiles(dir) {
+  let results = [];
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+  const list = fs.readdirSync(dir);
 
-      - name: Install Dependencies
-        run: npm install
+  list.forEach((file) => {
+    const filePath = path.join(dir, file);
 
-      # STEP 1
-      - name: Validate Blogs
-        run: node scripts/validate-blogs.js
+    const stat = fs.statSync(filePath);
 
-      # STEP 2 (runs ONLY if validation passes)
-      - name: Update Blog Indexes
-        run: node scripts/update-indexes.js
+    if (stat.isDirectory()) {
+      results = results.concat(getAllMarkdownFiles(filePath));
+    } else if (file.endsWith(".md")) {
+      results.push(filePath);
+    }
+  });
 
-      # STEP 3
-      - name: Commit Updated JSON Files
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+  return results;
+}
 
-          git add blogs/**/index.json
-          git add blogs/categories.json
-          git add generated/search-index.json
+const files = getAllMarkdownFiles("blogs");
 
-          if git diff --cached --quiet; then
-            echo "No changes detected."
-          else
-            git commit -m "chore: auto-update blog indexes"
-            git push
-          fi
+let hasError = false;
+
+files.forEach((file) => {
+  const content = fs.readFileSync(file, "utf-8");
+
+  const parsed = matter(content);
+
+  const data = parsed.data;
+
+  const valid = validate(data);
+
+  if (!valid) {
+    console.log(`❌ Validation failed in: ${file}`);
+    console.log(validate.errors);
+    hasError = true;
+  } else {
+    console.log(`✅ Valid: ${file}`);
+  }
+});
+
+if (hasError) {
+  process.exit(1);
+}
+
+console.log("🎉 All blogs are valid!");
