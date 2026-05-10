@@ -1,0 +1,253 @@
+{
+  "name": "Career",
+  "path": "/blogs/career",
+  "blogs": [
+    {
+      "title": "Low-Level Design",
+      "description": "Master low-level design for object-oriented programming and system design interviews",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "lld",
+        "oops",
+        "design-patterns"
+      ],
+      "coverImage": "/images/low-level-design.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "system-design-interviews"
+      ],
+      "slug": "98. low-level-design",
+      "path": "/blogs/career/system-design-interviews/98. low-level-design"
+    },
+    {
+      "title": "Google System Design",
+      "description": "System design patterns and questions for Google interviews",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "system-design",
+        "google",
+        "architecture"
+      ],
+      "coverImage": "/images/google-system-design.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "system-design-interviews"
+      ],
+      "slug": "97. google-system-design",
+      "path": "/blogs/career/system-design-interviews/97. google-system-design"
+    },
+    {
+      "title": "Amazon System Design",
+      "description": "System design patterns and questions for Amazon interviews",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "system-design",
+        "amazon",
+        "hld"
+      ],
+      "coverImage": "/images/amazon-hld.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "system-design-interviews"
+      ],
+      "slug": "96. amazon-hld",
+      "path": "/blogs/career/system-design-interviews/96. amazon-hld"
+    },
+    {
+      "title": "Resume Building",
+      "description": "Complete guide to building a professional software engineering resume",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "resume",
+        "career",
+        "job-search"
+      ],
+      "coverImage": "/images/resume-building.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "resume"
+      ],
+      "slug": "99. resume-building",
+      "path": "/blogs/career/resume/99. resume-building"
+    },
+    {
+      "title": "Project Writing Guide",
+      "description": "How to write impactful project descriptions for your resume",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "projects",
+        "resume",
+        "writing"
+      ],
+      "coverImage": "/images/project-writing-guide.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "resume"
+      ],
+      "slug": "101. project-writing-guide",
+      "path": "/blogs/career/resume/101. project-writing-guide"
+    },
+    {
+      "title": "ATS Optimization",
+      "description": "Optimize your resume for Applicant Tracking Systems to get more interviews",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "ats",
+        "resume",
+        "optimization"
+      ],
+      "coverImage": "/images/ats-optimization.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "resume"
+      ],
+      "slug": "100. ats-optimization",
+      "path": "/blogs/career/resume/100. ats-optimization"
+    },
+    {
+      "title": "Coding Round Strategy",
+      "description": "Effective strategy for acing coding rounds in technical interviews",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "coding",
+        "interviews",
+        "strategy"
+      ],
+      "coverImage": "/images/coding-round-strategy.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "interviews"
+      ],
+      "slug": "95. coding-round-strategy",
+      "path": "/blogs/career/interviews/95. coding-round-strategy"
+    },
+    {
+      "title": "Behavioral Interviews",
+      "description": "Master behavioral interviews with proven strategies and common questions",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "behavioral",
+        "interviews",
+        "soft-skills"
+      ],
+      "coverImage": "/images/behavioral-interviews.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "interviews"
+      ],
+      "slug": "94. behavioral-interviews",
+      "path": "/blogs/career/interviews/94. behavioral-interviews"
+    },
+    {
+      "title": "DSA Patterns",
+      "description": "Essential Data Structures and Algorithms patterns for coding interviews",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "dsa",
+        "algorithms",
+        "interviews"
+      ],
+      "coverImage": "/images/dsa-patterns.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "interviews"
+      ],
+      "slug": "93. dsa-patterns",
+      "path": "/blogs/career/interviews/93. dsa-patterns"
+    },
+    {
+      "title": "SDE Roadmap",
+      "description": "A comprehensive roadmap for becoming a Software Development Engineer",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "career",
+        "sde",
+        "roadmap"
+      ],
+      "coverImage": "/images/sde-roadmap.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "interviews"
+      ],
+      "slug": "92. sde-roadmap",
+      "path": "/blogs/career/interviews/92. sde-roadmap"
+    },
+    {
+      "title": "Lessons from Production",
+      "description": "Valuable lessons learned from working in production systems",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "production",
+        "lessons",
+        "real-world"
+      ],
+      "coverImage": "/images/lessons-from-production.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "experience"
+      ],
+      "slug": "104. lessons-from-production",
+      "path": "/blogs/career/experience/104. lessons-from-production"
+    },
+    {
+      "title": "Mistakes I Made",
+      "description": "Common mistakes I made during my software engineering career and how to avoid them",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "mistakes",
+        "career",
+        "learning"
+      ],
+      "coverImage": "/images/mistakes-i-made.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "experience"
+      ],
+      "slug": "103. mistakes-i-made",
+      "path": "/blogs/career/experience/103. mistakes-i-made"
+    },
+    {
+      "title": "My SDE Journey",
+      "description": "Personal story of my journey as a Software Development Engineer",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "journey",
+        "career",
+        "personal"
+      ],
+      "coverImage": "/images/my-sde-journey.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "experience"
+      ],
+      "slug": "102. my-sde-journey",
+      "path": "/blogs/career/experience/102. my-sde-journey"
+    }
+  ]
+}

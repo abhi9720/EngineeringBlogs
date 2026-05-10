@@ -1,0 +1,505 @@
+{
+  "name": "Backend",
+  "path": "/blogs/backend",
+  "blogs": [
+    {
+      "title": "Transactions and Propagation",
+      "description": "Mastering Spring transaction management with different propagation behaviors",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "transactions",
+        "database",
+        "propagation"
+      ],
+      "coverImage": "/images/transactions-and-propagation.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "transactions-and-propagation",
+      "path": "/blogs/backend/spring-boot/transactions-and-propagation"
+    },
+    {
+      "title": "Spring Security Filters",
+      "description": "Understanding and implementing custom security filters in Spring Security",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "security",
+        "filters",
+        "spring-security"
+      ],
+      "coverImage": "/images/spring-security-filters.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "spring-security-filters",
+      "path": "/blogs/backend/spring-boot/spring-security-filters"
+    },
+    {
+      "title": "Spring Data JPA Basics",
+      "description": "Getting started with Spring Data JPA for simplified database access",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "jpa",
+        "database",
+        "hibernate"
+      ],
+      "coverImage": "/images/spring-data-jpa-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "spring-data-jpa-basics",
+      "path": "/blogs/backend/spring-boot/spring-data-jpa-basics"
+    },
+    {
+      "title": "REST API Best Practices",
+      "description": "Industry best practices for designing robust and scalable REST APIs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rest-api",
+        "best-practices",
+        "api-design",
+        "spring-boot"
+      ],
+      "coverImage": "/images/rest-api-best-practices.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "rest-api-best-practices",
+      "path": "/blogs/backend/spring-boot/rest-api-best-practices"
+    },
+    {
+      "title": "JWT Authentication",
+      "description": "A comprehensive guide to implementing JWT authentication in Spring Boot applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "security",
+        "jwt",
+        "authentication"
+      ],
+      "coverImage": "/images/jwt-authentication.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "jwt-authentication",
+      "path": "/blogs/backend/spring-boot/jwt-authentication"
+    },
+    {
+      "title": "Exception Handling",
+      "description": "Implementing centralized exception handling in Spring Boot applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "exception-handling",
+        "error-handling",
+        "rest-api"
+      ],
+      "coverImage": "/images/exception-handling.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "exception-handling",
+      "path": "/blogs/backend/spring-boot/exception-handling"
+    },
+    {
+      "title": "Caching with Redis",
+      "description": "Implementing efficient caching strategies using Redis in Spring Boot applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "redis",
+        "caching",
+        "performance"
+      ],
+      "coverImage": "/images/caching-with-redis.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "caching-with-redis",
+      "path": "/blogs/backend/spring-boot/caching-with-redis"
+    },
+    {
+      "title": "Service Discovery with Eureka",
+      "description": "Setting up and using Netflix Eureka for service discovery in microservices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "microservices",
+        "eureka",
+        "service-discovery",
+        "spring-cloud"
+      ],
+      "coverImage": "/images/service-discovery-eureka.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices"
+      ],
+      "slug": "service-discovery-eureka",
+      "path": "/blogs/backend/microservices/service-discovery-eureka"
+    },
+    {
+      "title": "Microservices Introduction",
+      "description": "An introduction to microservices architecture and its core principles",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "microservices",
+        "architecture",
+        "distributed-systems"
+      ],
+      "coverImage": "/images/microservices-introduction.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices"
+      ],
+      "slug": "microservices-introduction",
+      "path": "/blogs/backend/microservices/microservices-introduction"
+    },
+    {
+      "title": "Inter-Service Communication",
+      "description": "Effective strategies for communication between microservices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "microservices",
+        "communication",
+        "rest",
+        "grpc"
+      ],
+      "coverImage": "/images/inter-service-communication.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices"
+      ],
+      "slug": "inter-service-communication",
+      "path": "/blogs/backend/microservices/inter-service-communication"
+    },
+    {
+      "title": "Distributed Tracing",
+      "description": "Implementing distributed tracing to monitor and debug microservices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "microservices",
+        "distributed-tracing",
+        "observability",
+        "monitoring"
+      ],
+      "coverImage": "/images/distributed-tracing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices"
+      ],
+      "slug": "distributed-tracing",
+      "path": "/blogs/backend/microservices/distributed-tracing"
+    },
+    {
+      "title": "Circuit Breaker with Resilience4j",
+      "description": "Implementing circuit breaker pattern using Resilience4j for fault tolerance",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "microservices",
+        "resilience4j",
+        "circuit-breaker",
+        "fault-tolerance"
+      ],
+      "coverImage": "/images/circuit-breaker-resilience4j.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices"
+      ],
+      "slug": "circuit-breaker-resilience4j",
+      "path": "/blogs/backend/microservices/circuit-breaker-resilience4j"
+    },
+    {
+      "title": "API Gateway Pattern",
+      "description": "Implementing the API Gateway pattern for microservices architectures",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "microservices",
+        "api-gateway",
+        "architecture",
+        "spring-cloud"
+      ],
+      "coverImage": "/images/api-gateway-pattern.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices"
+      ],
+      "slug": "api-gateway-pattern",
+      "path": "/blogs/backend/microservices/api-gateway-pattern"
+    },
+    {
+      "title": "RabbitMQ Basics",
+      "description": "Introduction to RabbitMQ message broker and its core concepts",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rabbitmq",
+        "messaging",
+        "amqp",
+        "message-queue"
+      ],
+      "coverImage": "/images/rabbitmq-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "messaging"
+      ],
+      "slug": "rabbitmq-basics",
+      "path": "/blogs/backend/messaging/rabbitmq-basics"
+    },
+    {
+      "title": "Kafka Introduction",
+      "description": "Getting started with Apache Kafka for event streaming",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "kafka",
+        "event-streaming",
+        "messaging",
+        "apache"
+      ],
+      "coverImage": "/images/kafka-introduction.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "messaging"
+      ],
+      "slug": "kafka-introduction",
+      "path": "/blogs/backend/messaging/kafka-introduction"
+    },
+    {
+      "title": "Kafka Consumer Groups",
+      "description": "Understanding and implementing Kafka consumer groups for scalability",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "kafka",
+        "consumer-groups",
+        "messaging",
+        "scalability"
+      ],
+      "coverImage": "/images/kafka-consumer-groups.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "messaging"
+      ],
+      "slug": "kafka-consumer-groups",
+      "path": "/blogs/backend/messaging/kafka-consumer-groups"
+    },
+    {
+      "title": "Event-Driven Architecture",
+      "description": "Building applications using event-driven architecture patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "event-driven",
+        "architecture",
+        "messaging",
+        "patterns"
+      ],
+      "coverImage": "/images/event-driven-architecture.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "messaging"
+      ],
+      "slug": "event-driven-architecture",
+      "path": "/blogs/backend/messaging/event-driven-architecture"
+    },
+    {
+      "title": "N+1 Problem",
+      "description": "Identifying and solving the N+1 query problem in JPA and Hibernate",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "jpa",
+        "hibernate",
+        "n-plus-one",
+        "performance"
+      ],
+      "coverImage": "/images/n-plus-one-problem.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-access"
+      ],
+      "slug": "n-plus-one-problem",
+      "path": "/blogs/backend/data-access/n-plus-one-problem"
+    },
+    {
+      "title": "JDBC vs JPA",
+      "description": "Comparing JDBC and JPA approaches for database access in Java applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "jdbc",
+        "jpa",
+        "database",
+        "hibernate"
+      ],
+      "coverImage": "/images/jdbc-vs-jpa.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-access"
+      ],
+      "slug": "jdbc-vs-jpa",
+      "path": "/blogs/backend/data-access/jdbc-vs-jpa"
+    },
+    {
+      "title": "Hibernate Lazy vs Eager Loading",
+      "description": "Understanding lazy and eager loading strategies in Hibernate",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "hibernate",
+        "jpa",
+        "lazy-loading",
+        "eager-loading"
+      ],
+      "coverImage": "/images/hibernate-lazy-vs-eager-loading.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-access"
+      ],
+      "slug": "hibernate-lazy-vs-eager-loading",
+      "path": "/blogs/backend/data-access/hibernate-lazy-vs-eager-loading"
+    },
+    {
+      "title": "Connection Pooling with HikariCP",
+      "description": "Optimizing database connections using HikariCP connection pooling",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "hikaricp",
+        "connection-pooling",
+        "database",
+        "performance"
+      ],
+      "coverImage": "/images/connection-pooling-hikaricp.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-access"
+      ],
+      "slug": "connection-pooling-hikaricp",
+      "path": "/blogs/backend/data-access/connection-pooling-hikaricp"
+    },
+    {
+      "title": "Versioning APIs",
+      "description": "Strategies for versioning REST APIs while maintaining backward compatibility",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "api-design",
+        "versioning",
+        "rest-api",
+        "best-practices"
+      ],
+      "coverImage": "/images/versioning-apis.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design"
+      ],
+      "slug": "versioning-apis",
+      "path": "/blogs/backend/api-design/versioning-apis"
+    },
+    {
+      "title": "REST vs GraphQL",
+      "description": "Comparing REST and GraphQL API design paradigms",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rest-api",
+        "graphql",
+        "api-design",
+        "comparison"
+      ],
+      "coverImage": "/images/rest-vs-graphql.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design"
+      ],
+      "slug": "rest-vs-graphql",
+      "path": "/blogs/backend/api-design/rest-vs-graphql"
+    },
+    {
+      "title": "Pagination Strategies",
+      "description": "Implementing efficient pagination strategies for large datasets",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "pagination",
+        "api-design",
+        "database",
+        "performance"
+      ],
+      "coverImage": "/images/pagination-strategies.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design"
+      ],
+      "slug": "pagination-strategies",
+      "path": "/blogs/backend/api-design/pagination-strategies"
+    },
+    {
+      "title": "Idempotency",
+      "description": "Implementing idempotent API operations for reliable distributed systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "idempotency",
+        "api-design",
+        "rest-api",
+        "distributed-systems"
+      ],
+      "coverImage": "/images/idempotency.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design"
+      ],
+      "slug": "idempotency",
+      "path": "/blogs/backend/api-design/idempotency"
+    }
+  ]
+}

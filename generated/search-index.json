@@ -1,118 +1,2052 @@
 [
   {
-    "title": "Scaling Your Application: Vertical vs. Horizontal Scalability",
-    "description": "A comprehensive guide to scaling strategies: understand when to power up a single machine and when to build a distributed fleet.",
+    "title": "Blob vs Block Storage",
+    "description": "<Short SEO-friendly description of the blog>",
     "date": "2026-05-11",
-    "author": "Gemini",
+    "author": "Abhishek Tiwari",
     "tags": [
-      "System Design",
-      "Cloud Computing",
-      "Architecture"
+      "tag1",
+      "tag2",
+      "tag3"
     ],
-    "coverImage": "",
+    "coverImage": "/images/blob-vs-block-storage.png",
     "draft": false,
     "category": "system-design",
     "hierarchy": [
-      "Fundamentals of System Design"
+      "storage"
     ],
-    "slug": "Scalability (vertical vs horizontal)",
-    "path": "/blogs/system-design/Fundamentals of System Design/Scalability (vertical vs horizontal)"
+    "slug": "56. blob-vs-block-storage",
+    "path": "/blogs/system-design/storage/56. blob-vs-block-storage"
   },
   {
-    "title": "The CAP Theorem: Navigating the Trade-offs of Distributed Systems",
-    "description": "An essential guide to understanding Consistency, Availability, and Partition Tolerance in distributed database architecture.",
+    "title": "File Storage Systems",
+    "description": "<Short SEO-friendly description of the blog>",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "System Design",
-      "Distributed Systems",
-      "Backend"
+      "tag1",
+      "tag2",
+      "tag3"
     ],
-    "coverImage": "",
+    "coverImage": "/images/file-storage-systems.png",
     "draft": false,
     "category": "system-design",
-    "hierarchy": [],
-    "slug": "CAP-theorem",
-    "path": "/blogs/system-design/CAP-theorem"
+    "hierarchy": [
+      "storage"
+    ],
+    "slug": "55. file-storage-systems",
+    "path": "/blogs/system-design/storage/55. file-storage-systems"
   },
   {
-    "title": "Mastering the Essentials of Spring Boot: From Concept to Microservice",
-    "description": "A comprehensive guide to getting started with Spring Boot, covering auto-configuration, starter dependencies, and building your first REST API.",
+    "title": "Object Storage with S3",
+    "description": "<Short SEO-friendly description of the blog>",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "Java",
-      "Spring Boot",
-      "Microservices"
+      "tag1",
+      "tag2",
+      "tag3"
     ],
-    "coverImage": "/images/spring-boot-guide.png",
+    "coverImage": "/images/object-storage-s3.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [
+      "storage"
+    ],
+    "slug": "54. object-storage-s3",
+    "path": "/blogs/system-design/storage/54. object-storage-s3"
+  },
+  {
+    "title": "CQRS Pattern",
+    "description": "<Short SEO-friendly description of the blog>",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
+    ],
+    "coverImage": "/images/cqrs.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [
+      "patterns"
+    ],
+    "slug": "53. cqrs",
+    "path": "/blogs/system-design/patterns/53. cqrs"
+  },
+  {
+    "title": "Pub-Sub Model",
+    "description": "<Short SEO-friendly description of the blog>",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
+    ],
+    "coverImage": "/images/pub-sub-model.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [
+      "patterns"
+    ],
+    "slug": "52. pub-sub-model",
+    "path": "/blogs/system-design/patterns/52. pub-sub-model"
+  },
+  {
+    "title": "Circuit Breaker Pattern",
+    "description": "<Short SEO-friendly description of the blog>",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
+    ],
+    "coverImage": "/images/circuit-breaker.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [
+      "patterns"
+    ],
+    "slug": "51. circuit-breaker",
+    "path": "/blogs/system-design/patterns/51. circuit-breaker"
+  },
+  {
+    "title": "Rate Limiting",
+    "description": "<Short SEO-friendly description of the blog>",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
+    ],
+    "coverImage": "/images/rate-limiting.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [
+      "patterns"
+    ],
+    "slug": "50. rate-limiting",
+    "path": "/blogs/system-design/patterns/50. rate-limiting"
+  },
+  {
+    "title": "Netflix Streaming System Design",
+    "description": "<Short SEO-friendly description of the blog>",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
+    ],
+    "coverImage": "/images/netflix-streaming.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [
+      "case-studies"
+    ],
+    "slug": "49. netflix-streaming",
+    "path": "/blogs/system-design/case-studies/49. netflix-streaming"
+  },
+  {
+    "title": "YouTube System Design",
+    "description": "<Short SEO-friendly description of the blog>",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
+    ],
+    "coverImage": "/images/youtube-system-design.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [
+      "case-studies"
+    ],
+    "slug": "48. youtube-system-design",
+    "path": "/blogs/system-design/case-studies/48. youtube-system-design"
+  },
+  {
+    "title": "Instagram Feed System Design",
+    "description": "<Short SEO-friendly description of the blog>",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
+    ],
+    "coverImage": "/images/instagram-feed.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [
+      "case-studies"
+    ],
+    "slug": "47. instagram-feed",
+    "path": "/blogs/system-design/case-studies/47. instagram-feed"
+  },
+  {
+    "title": "WhatsApp Architecture",
+    "description": "<Short SEO-friendly description of the blog>",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
+    ],
+    "coverImage": "/images/whatsapp-architecture.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [
+      "case-studies"
+    ],
+    "slug": "46. whatsapp-architecture",
+    "path": "/blogs/system-design/case-studies/46. whatsapp-architecture"
+  },
+  {
+    "title": "URL Shortener System Design",
+    "description": "<Short SEO-friendly description of the blog>",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
+    ],
+    "coverImage": "/images/url-shortener.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [
+      "case-studies"
+    ],
+    "slug": "45. url-shortener",
+    "path": "/blogs/system-design/case-studies/45. url-shortener"
+  },
+  {
+    "title": "Database Sharding",
+    "description": "<Short SEO-friendly description of the blog>",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
+    ],
+    "coverImage": "/images/database-sharding.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [
+      "basics"
+    ],
+    "slug": "44. database-sharding",
+    "path": "/blogs/system-design/basics/44. database-sharding"
+  },
+  {
+    "title": "Caching Strategies",
+    "description": "<Short SEO-friendly description of the blog>",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
+    ],
+    "coverImage": "/images/caching-strategies.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [
+      "basics"
+    ],
+    "slug": "43. caching-strategies",
+    "path": "/blogs/system-design/basics/43. caching-strategies"
+  },
+  {
+    "title": "Load Balancing",
+    "description": "<Short SEO-friendly description of the blog>",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
+    ],
+    "coverImage": "/images/load-balancing.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [
+      "basics"
+    ],
+    "slug": "42. load-balancing",
+    "path": "/blogs/system-design/basics/42. load-balancing"
+  },
+  {
+    "title": "Scalability Introduction",
+    "description": "<Short SEO-friendly description of the blog>",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
+    ],
+    "coverImage": "/images/scalability-introduction.png",
+    "draft": false,
+    "category": "system-design",
+    "hierarchy": [
+      "basics"
+    ],
+    "slug": "41. scalability-introduction",
+    "path": "/blogs/system-design/basics/41. scalability-introduction"
+  },
+  {
+    "title": "State Management",
+    "description": "Exploring state management solutions in React - from useState to global state libraries.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "state management",
+      "redux",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/state-management.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react"
+    ],
+    "slug": "29. state-management",
+    "path": "/blogs/frontend/react/29. state-management"
+  },
+  {
+    "title": "useEffect Patterns",
+    "description": "Mastering useEffect in React - common patterns, pitfalls, and optimization strategies.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "hooks",
+      "useEffect",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/useeffect-patterns.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react"
+    ],
+    "slug": "28. useeffect-patterns",
+    "path": "/blogs/frontend/react/28. useeffect-patterns"
+  },
+  {
+    "title": "Hooks Deep Dive",
+    "description": "A comprehensive guide to React hooks - when to use them and how they work under the hood.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "hooks",
+      "javascript",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/hooks-deep-dive.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react"
+    ],
+    "slug": "27. hooks-deep-dive",
+    "path": "/blogs/frontend/react/27. hooks-deep-dive"
+  },
+  {
+    "title": "React Rendering Cycle",
+    "description": "Understanding how React's rendering cycle works and how to optimize component updates.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "rendering",
+      "performance",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/rendering-cycle.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react"
+    ],
+    "slug": "26. react-rendering-cycle",
+    "path": "/blogs/frontend/react/26. react-rendering-cycle"
+  },
+  {
+    "title": "Bundle Optimization",
+    "description": "Techniques for reducing JavaScript bundle size and improving load times.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "performance",
+      "bundle optimization",
+      "webpack",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/performance/bundle-optimization.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "performance"
+    ],
+    "slug": "40. bundle-optimization",
+    "path": "/blogs/frontend/performance/40. bundle-optimization"
+  },
+  {
+    "title": "Lazy Loading",
+    "description": "Implementing lazy loading in web applications for better performance and user experience.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "performance",
+      "lazy loading",
+      "optimization",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/performance/lazy-loading.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "performance"
+    ],
+    "slug": "39. lazy-loading",
+    "path": "/blogs/frontend/performance/39. lazy-loading"
+  },
+  {
+    "title": "Web Vitals",
+    "description": "Understanding Core Web Vitals - LCP, FID, CLS and how to optimize them.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "performance",
+      "web vitals",
+      "optimization",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/performance/web-vitals.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "performance"
+    ],
+    "slug": "38. web-vitals",
+    "path": "/blogs/frontend/performance/38. web-vitals"
+  },
+  {
+    "title": "Middleware",
+    "description": "Using middleware in Next.js for authentication, redirects, and request handling.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "nextjs",
+      "middleware",
+      "authentication",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/nextjs/middleware.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "nextjs"
+    ],
+    "slug": "33. middleware",
+    "path": "/blogs/frontend/nextjs/33. middleware"
+  },
+  {
+    "title": "API Routes",
+    "description": "Building API endpoints in Next.js - handlers, middleware, and best practices.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "nextjs",
+      "api routes",
+      "backend",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/nextjs/api-routes.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "nextjs"
+    ],
+    "slug": "32. api-routes",
+    "path": "/blogs/frontend/nextjs/32. api-routes"
+  },
+  {
+    "title": "App Router Explained",
+    "description": "A complete guide to Next.js App Router - file-based routing, layouts, and server components.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "nextjs",
+      "app router",
+      "routing",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/nextjs/app-router-explained.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "nextjs"
+    ],
+    "slug": "31. app-router-explained",
+    "path": "/blogs/frontend/nextjs/31. app-router-explained"
+  },
+  {
+    "title": "SSR vs SSG",
+    "description": "Understanding the differences between Server-Side Rendering and Static Site Generation in Next.js.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "nextjs",
+      "ssr",
+      "ssg",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/nextjs/ssr-vs-ssg.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "nextjs"
+    ],
+    "slug": "30. ssr-vs-ssg",
+    "path": "/blogs/frontend/nextjs/30. ssr-vs-ssg"
+  },
+  {
+    "title": "Prototype Chain",
+    "description": "Understanding JavaScript prototype chain and inheritance patterns.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "javascript",
+      "prototypes",
+      "inheritance",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/javascript/prototype-chain.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "javascript"
+    ],
+    "slug": "37. prototype-chain",
+    "path": "/blogs/frontend/javascript/37. prototype-chain"
+  },
+  {
+    "title": "Promises and Async Await",
+    "description": "Understanding JavaScript Promises and async/await for asynchronous programming.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "javascript",
+      "promises",
+      "async await",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/javascript/promises-async-await.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "javascript"
+    ],
+    "slug": "36. promises-async-await",
+    "path": "/blogs/frontend/javascript/36. promises-async-await"
+  },
+  {
+    "title": "Closures",
+    "description": "Mastering JavaScript closures - how they work, use cases, and common patterns.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "javascript",
+      "closures",
+      "scope",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/javascript/closures.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "javascript"
+    ],
+    "slug": "35. closures",
+    "path": "/blogs/frontend/javascript/35. closures"
+  },
+  {
+    "title": "Event Loop",
+    "description": "Understanding the JavaScript event loop - call stack, task queue, and microtasks.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "javascript",
+      "event loop",
+      "async",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/javascript/event-loop.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "javascript"
+    ],
+    "slug": "34. event-loop",
+    "path": "/blogs/frontend/javascript/34. event-loop"
+  },
+  {
+    "title": "Logging with ELK Stack",
+    "description": "A comprehensive guide to centralized logging with ELK Stack",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "elk",
+      "logging",
+      "elasticsearch",
+      "devops"
+    ],
+    "coverImage": "/images/logging-elk-stack.png",
+    "draft": false,
+    "category": "devops",
+    "hierarchy": [
+      "monitoring"
+    ],
+    "slug": "69. logging-elk-stack",
+    "path": "/blogs/devops/monitoring/69. logging-elk-stack"
+  },
+  {
+    "title": "Grafana Dashboards",
+    "description": "A comprehensive guide to creating Grafana dashboards for monitoring",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "grafana",
+      "dashboards",
+      "monitoring",
+      "devops"
+    ],
+    "coverImage": "/images/grafana-dashboards.png",
+    "draft": false,
+    "category": "devops",
+    "hierarchy": [
+      "monitoring"
+    ],
+    "slug": "68. grafana-dashboards",
+    "path": "/blogs/devops/monitoring/68. grafana-dashboards"
+  },
+  {
+    "title": "Prometheus Introduction",
+    "description": "A comprehensive guide to getting started with Prometheus monitoring",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "prometheus",
+      "monitoring",
+      "devops",
+      "observability"
+    ],
+    "coverImage": "/images/prometheus-introduction.png",
+    "draft": false,
+    "category": "devops",
+    "hierarchy": [
+      "monitoring"
+    ],
+    "slug": "67. prometheus-introduction",
+    "path": "/blogs/devops/monitoring/67. prometheus-introduction"
+  },
+  {
+    "title": "ConfigMaps and Secrets",
+    "description": "A comprehensive guide to Kubernetes ConfigMaps and Secrets",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "kubernetes",
+      "configmaps",
+      "secrets",
+      "devops"
+    ],
+    "coverImage": "/images/configmaps-secrets.png",
+    "draft": false,
+    "category": "devops",
+    "hierarchy": [
+      "kubernetes"
+    ],
+    "slug": "63. configmaps-secrets",
+    "path": "/blogs/devops/kubernetes/63. configmaps-secrets"
+  },
+  {
+    "title": "Autoscaling",
+    "description": "A comprehensive guide to Kubernetes Autoscaling",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "kubernetes",
+      "autoscaling",
+      "hpa",
+      "devops"
+    ],
+    "coverImage": "/images/autoscaling.png",
+    "draft": false,
+    "category": "devops",
+    "hierarchy": [
+      "kubernetes"
+    ],
+    "slug": "62. autoscaling",
+    "path": "/blogs/devops/kubernetes/62. autoscaling"
+  },
+  {
+    "title": "Services and Ingress",
+    "description": "A comprehensive guide to understanding Kubernetes Services and Ingress",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "kubernetes",
+      "services",
+      "ingress",
+      "devops"
+    ],
+    "coverImage": "/images/services-ingress.png",
+    "draft": false,
+    "category": "devops",
+    "hierarchy": [
+      "kubernetes"
+    ],
+    "slug": "61. services-ingress",
+    "path": "/blogs/devops/kubernetes/61. services-ingress"
+  },
+  {
+    "title": "Pods and Deployments",
+    "description": "A comprehensive guide to understanding Kubernetes Pods and Deployments",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "kubernetes",
+      "pods",
+      "deployments",
+      "devops"
+    ],
+    "coverImage": "/images/pods-deployments.png",
+    "draft": false,
+    "category": "devops",
+    "hierarchy": [
+      "kubernetes"
+    ],
+    "slug": "60. pods-deployments",
+    "path": "/blogs/devops/kubernetes/60. pods-deployments"
+  },
+  {
+    "title": "Multi-Stage Builds",
+    "description": "Learn how to use Docker multi-stage builds to create smaller, more secure, and optimized container images.",
+    "date": "2026-05-11",
+    "author": "Abhihek Tiwari",
+    "tags": [
+      "docker",
+      "multi-stage-builds",
+      "optimization",
+      "devops"
+    ],
+    "coverImage": "/images/multi-stage-builds.png",
+    "draft": false,
+    "category": "devops",
+    "hierarchy": [
+      "docker"
+    ],
+    "slug": "59. multi-stage-builds",
+    "path": "/blogs/devops/docker/59. multi-stage-builds"
+  },
+  {
+    "title": "Docker Compose",
+    "description": "Master Docker Compose to define and run multi-container Docker applications with ease.",
+    "date": "2026-05-11",
+    "author": "Abhihek Tiwari",
+    "tags": [
+      "docker",
+      "docker-compose",
+      "devops",
+      "containers"
+    ],
+    "coverImage": "/images/docker-compose.png",
+    "draft": false,
+    "category": "devops",
+    "hierarchy": [
+      "docker"
+    ],
+    "slug": "58. docker-compose",
+    "path": "/blogs/devops/docker/58. docker-compose"
+  },
+  {
+    "title": "Docker Basics",
+    "description": "Learn the fundamentals of Docker containers, images, and basic commands to get started with containerization.",
+    "date": "2026-05-11",
+    "author": "Abhihek Tiwari",
+    "tags": [
+      "docker",
+      "containers",
+      "devops",
+      "basics"
+    ],
+    "coverImage": "/images/docker-basics.png",
+    "draft": false,
+    "category": "devops",
+    "hierarchy": [
+      "docker"
+    ],
+    "slug": "57. docker-basics",
+    "path": "/blogs/devops/docker/57. docker-basics"
+  },
+  {
+    "title": "Deployment Strategies",
+    "description": "A comprehensive guide to modern deployment strategies",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "deployment",
+      "blue-green",
+      "canary",
+      "devops"
+    ],
+    "coverImage": "/images/deployment-strategies.png",
+    "draft": false,
+    "category": "devops",
+    "hierarchy": [
+      "ci-cd"
+    ],
+    "slug": "66. deployment-strategies",
+    "path": "/blogs/devops/ci-cd/66. deployment-strategies"
+  },
+  {
+    "title": "Jenkins Pipelines",
+    "description": "A comprehensive guide to Jenkins Pipelines for CI/CD",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "jenkins",
+      "pipelines",
+      "cicd",
+      "devops"
+    ],
+    "coverImage": "/images/jenkins-pipelines.png",
+    "draft": false,
+    "category": "devops",
+    "hierarchy": [
+      "ci-cd"
+    ],
+    "slug": "65. jenkins-pipelines",
+    "path": "/blogs/devops/ci-cd/65. jenkins-pipelines"
+  },
+  {
+    "title": "GitHub Actions",
+    "description": "A comprehensive guide to CI/CD with GitHub Actions",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "github-actions",
+      "cicd",
+      "devops",
+      "automation"
+    ],
+    "coverImage": "/images/github-actions.png",
+    "draft": false,
+    "category": "devops",
+    "hierarchy": [
+      "ci-cd"
+    ],
+    "slug": "64. github-actions",
+    "path": "/blogs/devops/ci-cd/64. github-actions"
+  },
+  {
+    "title": "Database Deadlocks",
+    "description": "Understand database deadlocks, prevention strategies, and detection techniques for maintaining system reliability.",
+    "date": "2026-05-11",
+    "author": "Engineering Blog",
+    "tags": [
+      "databases",
+      "transactions",
+      "deadlocks",
+      "concurrency"
+    ],
+    "coverImage": "/images/deadlocks.png",
+    "draft": false,
+    "category": "databases",
+    "hierarchy": [
+      "transactions"
+    ],
+    "slug": "83. deadlocks",
+    "path": "/blogs/databases/transactions/83. deadlocks"
+  },
+  {
+    "title": "Isolation Levels",
+    "description": "Learn about database transaction isolation levels: Read Uncommitted, Read Committed, Repeatable Read, and Serializable.",
+    "date": "2026-05-11",
+    "author": "Engineering Blog",
+    "tags": [
+      "databases",
+      "transactions",
+      "isolation",
+      "concurrency"
+    ],
+    "coverImage": "/images/isolation-levels.png",
+    "draft": false,
+    "category": "databases",
+    "hierarchy": [
+      "transactions"
+    ],
+    "slug": "82. isolation-levels",
+    "path": "/blogs/databases/transactions/82. isolation-levels"
+  },
+  {
+    "title": "ACID Properties",
+    "description": "Understand ACID transaction properties: Atomicity, Consistency, Isolation, and Durability in database systems.",
+    "date": "2026-05-11",
+    "author": "Engineering Blog",
+    "tags": [
+      "databases",
+      "transactions",
+      "acid",
+      "database-theory"
+    ],
+    "coverImage": "/images/acid-properties.png",
+    "draft": false,
+    "category": "databases",
+    "hierarchy": [
+      "transactions"
+    ],
+    "slug": "81. acid-properties",
+    "path": "/blogs/databases/transactions/81. acid-properties"
+  },
+  {
+    "title": "Database Normalization",
+    "description": "Understand database normalization forms (1NF, 2NF, 3NF, BCNF) and when to denormalize for performance.",
+    "date": "2026-05-11",
+    "author": "Engineering Blog",
+    "tags": [
+      "databases",
+      "sql",
+      "normalization",
+      "database-design"
+    ],
+    "coverImage": "/images/normalization.png",
+    "draft": false,
+    "category": "databases",
+    "hierarchy": [
+      "sql"
+    ],
+    "slug": "73. normalization",
+    "path": "/blogs/databases/sql/73. normalization"
+  },
+  {
+    "title": "Query Optimization",
+    "description": "Master database query optimization techniques to improve application performance and reduce resource usage.",
+    "date": "2026-05-11",
+    "author": "Engineering Blog",
+    "tags": [
+      "databases",
+      "sql",
+      "optimization",
+      "performance"
+    ],
+    "coverImage": "/images/query-optimization.png",
+    "draft": false,
+    "category": "databases",
+    "hierarchy": [
+      "sql"
+    ],
+    "slug": "72. query-optimization",
+    "path": "/blogs/databases/sql/72. query-optimization"
+  },
+  {
+    "title": "Joins Explained",
+    "description": "A comprehensive guide to SQL JOINs including INNER, LEFT, RIGHT, FULL, and CROSS joins with examples.",
+    "date": "2026-05-11",
+    "author": "Engineering Blog",
+    "tags": [
+      "databases",
+      "sql",
+      "joins",
+      "query"
+    ],
+    "coverImage": "/images/joins-explained.png",
+    "draft": false,
+    "category": "databases",
+    "hierarchy": [
+      "sql"
+    ],
+    "slug": "71. joins-explained",
+    "path": "/blogs/databases/sql/71. joins-explained"
+  },
+  {
+    "title": "Indexing in Databases",
+    "description": "Learn how database indexing improves query performance and when to use different index types.",
+    "date": "2026-05-11",
+    "author": "Engineering Blog",
+    "tags": [
+      "databases",
+      "indexing",
+      "performance",
+      "sql"
+    ],
+    "coverImage": "/images/indexing-databases.png",
+    "draft": false,
+    "category": "databases",
+    "hierarchy": [
+      "sql"
+    ],
+    "slug": "70. indexing",
+    "path": "/blogs/databases/sql/70. indexing"
+  },
+  {
+    "title": "When to Use NoSQL",
+    "description": "Compare NoSQL and relational databases, understand use cases, and learn when to choose NoSQL for your application.",
+    "date": "2026-05-11",
+    "author": "Engineering Blog",
+    "tags": [
+      "nosql",
+      "database",
+      "relational",
+      "architecture"
+    ],
+    "coverImage": "/images/when-to-use-nosql.png",
+    "draft": false,
+    "category": "databases",
+    "hierarchy": [
+      "nosql"
+    ],
+    "slug": "76. when-to-use-nosql",
+    "path": "/blogs/databases/nosql/76. when-to-use-nosql"
+  },
+  {
+    "title": "Cassandra Overview",
+    "description": "An introduction to Apache Cassandra architecture, data modeling, and when to use this distributed NoSQL database.",
+    "date": "2026-05-11",
+    "author": "Engineering Blog",
+    "tags": [
+      "cassandra",
+      "nosql",
+      "distributed",
+      "database"
+    ],
+    "coverImage": "/images/cassandra-overview.png",
+    "draft": false,
+    "category": "databases",
+    "hierarchy": [
+      "nosql"
+    ],
+    "slug": "75. cassandra-overview",
+    "path": "/blogs/databases/nosql/75. cassandra-overview"
+  },
+  {
+    "title": "MongoDB Schema Design",
+    "description": "Learn MongoDB schema design patterns, embedding vs referencing, and best practices for document databases.",
+    "date": "2026-05-11",
+    "author": "Engineering Blog",
+    "tags": [
+      "mongodb",
+      "nosql",
+      "schema-design",
+      "database"
+    ],
+    "coverImage": "/images/mongodb-schema-design.png",
+    "draft": false,
+    "category": "databases",
+    "hierarchy": [
+      "nosql"
+    ],
+    "slug": "74. mongodb-schema-design",
+    "path": "/blogs/databases/nosql/74. mongodb-schema-design"
+  },
+  {
+    "title": "Write-Through vs Write-Back",
+    "description": "Compare write-through and write-back caching strategies for data consistency and write performance optimization.",
+    "date": "2026-05-11",
+    "author": "Engineering Blog",
+    "tags": [
+      "caching",
+      "system-design",
+      "database",
+      "architecture"
+    ],
+    "coverImage": "/images/write-through-vs-write-back.png",
+    "draft": false,
+    "category": "databases",
+    "hierarchy": [
+      "caching"
+    ],
+    "slug": "80. write-through-vs-write-back",
+    "path": "/blogs/databases/caching/80. write-through-vs-write-back"
+  },
+  {
+    "title": "Cache-Aside Pattern",
+    "description": "Implement the cache-aside pattern for optimal read performance with lazy loading and event-driven invalidation.",
+    "date": "2026-05-11",
+    "author": "Engineering Blog",
+    "tags": [
+      "caching",
+      "design-patterns",
+      "redis",
+      "system-design"
+    ],
+    "coverImage": "/images/cache-aside-pattern.png",
+    "draft": false,
+    "category": "databases",
+    "hierarchy": [
+      "caching"
+    ],
+    "slug": "79. cache-aside-pattern",
+    "path": "/blogs/databases/caching/79. cache-aside-pattern"
+  },
+  {
+    "title": "Cache Invalidation",
+    "description": "Learn cache invalidation strategies including TTL, event-driven, and version-based approaches for maintaining data consistency.",
+    "date": "2026-05-11",
+    "author": "Engineering Blog",
+    "tags": [
+      "caching",
+      "redis",
+      "system-design",
+      "database"
+    ],
+    "coverImage": "/images/cache-invalidation.png",
+    "draft": false,
+    "category": "databases",
+    "hierarchy": [
+      "caching"
+    ],
+    "slug": "78. cache-invalidation",
+    "path": "/blogs/databases/caching/78. cache-invalidation"
+  },
+  {
+    "title": "Redis Introduction",
+    "description": "Learn Redis data structures, commands, and use cases for caching, sessions, and real-time applications.",
+    "date": "2026-05-11",
+    "author": "Engineering Blog",
+    "tags": [
+      "redis",
+      "caching",
+      "nosql",
+      "database"
+    ],
+    "coverImage": "/images/redis-introduction.png",
+    "draft": false,
+    "category": "databases",
+    "hierarchy": [
+      "caching"
+    ],
+    "slug": "77. redis-introduction",
+    "path": "/blogs/databases/caching/77. redis-introduction"
+  },
+  {
+    "title": "Low-Level Design",
+    "description": "Master low-level design for object-oriented programming and system design interviews",
+    "date": "2026-05-11",
+    "author": "Author Name",
+    "tags": [
+      "lld",
+      "oops",
+      "design-patterns"
+    ],
+    "coverImage": "/images/low-level-design.png",
+    "draft": false,
+    "category": "career",
+    "hierarchy": [
+      "system-design-interviews"
+    ],
+    "slug": "98. low-level-design",
+    "path": "/blogs/career/system-design-interviews/98. low-level-design"
+  },
+  {
+    "title": "Google System Design",
+    "description": "System design patterns and questions for Google interviews",
+    "date": "2026-05-11",
+    "author": "Author Name",
+    "tags": [
+      "system-design",
+      "google",
+      "architecture"
+    ],
+    "coverImage": "/images/google-system-design.png",
+    "draft": false,
+    "category": "career",
+    "hierarchy": [
+      "system-design-interviews"
+    ],
+    "slug": "97. google-system-design",
+    "path": "/blogs/career/system-design-interviews/97. google-system-design"
+  },
+  {
+    "title": "Amazon System Design",
+    "description": "System design patterns and questions for Amazon interviews",
+    "date": "2026-05-11",
+    "author": "Author Name",
+    "tags": [
+      "system-design",
+      "amazon",
+      "hld"
+    ],
+    "coverImage": "/images/amazon-hld.png",
+    "draft": false,
+    "category": "career",
+    "hierarchy": [
+      "system-design-interviews"
+    ],
+    "slug": "96. amazon-hld",
+    "path": "/blogs/career/system-design-interviews/96. amazon-hld"
+  },
+  {
+    "title": "Resume Building",
+    "description": "Complete guide to building a professional software engineering resume",
+    "date": "2026-05-11",
+    "author": "Author Name",
+    "tags": [
+      "resume",
+      "career",
+      "job-search"
+    ],
+    "coverImage": "/images/resume-building.png",
+    "draft": false,
+    "category": "career",
+    "hierarchy": [
+      "resume"
+    ],
+    "slug": "99. resume-building",
+    "path": "/blogs/career/resume/99. resume-building"
+  },
+  {
+    "title": "Project Writing Guide",
+    "description": "How to write impactful project descriptions for your resume",
+    "date": "2026-05-11",
+    "author": "Author Name",
+    "tags": [
+      "projects",
+      "resume",
+      "writing"
+    ],
+    "coverImage": "/images/project-writing-guide.png",
+    "draft": false,
+    "category": "career",
+    "hierarchy": [
+      "resume"
+    ],
+    "slug": "101. project-writing-guide",
+    "path": "/blogs/career/resume/101. project-writing-guide"
+  },
+  {
+    "title": "ATS Optimization",
+    "description": "Optimize your resume for Applicant Tracking Systems to get more interviews",
+    "date": "2026-05-11",
+    "author": "Author Name",
+    "tags": [
+      "ats",
+      "resume",
+      "optimization"
+    ],
+    "coverImage": "/images/ats-optimization.png",
+    "draft": false,
+    "category": "career",
+    "hierarchy": [
+      "resume"
+    ],
+    "slug": "100. ats-optimization",
+    "path": "/blogs/career/resume/100. ats-optimization"
+  },
+  {
+    "title": "Coding Round Strategy",
+    "description": "Effective strategy for acing coding rounds in technical interviews",
+    "date": "2026-05-11",
+    "author": "Author Name",
+    "tags": [
+      "coding",
+      "interviews",
+      "strategy"
+    ],
+    "coverImage": "/images/coding-round-strategy.png",
+    "draft": false,
+    "category": "career",
+    "hierarchy": [
+      "interviews"
+    ],
+    "slug": "95. coding-round-strategy",
+    "path": "/blogs/career/interviews/95. coding-round-strategy"
+  },
+  {
+    "title": "Behavioral Interviews",
+    "description": "Master behavioral interviews with proven strategies and common questions",
+    "date": "2026-05-11",
+    "author": "Author Name",
+    "tags": [
+      "behavioral",
+      "interviews",
+      "soft-skills"
+    ],
+    "coverImage": "/images/behavioral-interviews.png",
+    "draft": false,
+    "category": "career",
+    "hierarchy": [
+      "interviews"
+    ],
+    "slug": "94. behavioral-interviews",
+    "path": "/blogs/career/interviews/94. behavioral-interviews"
+  },
+  {
+    "title": "DSA Patterns",
+    "description": "Essential Data Structures and Algorithms patterns for coding interviews",
+    "date": "2026-05-11",
+    "author": "Author Name",
+    "tags": [
+      "dsa",
+      "algorithms",
+      "interviews"
+    ],
+    "coverImage": "/images/dsa-patterns.png",
+    "draft": false,
+    "category": "career",
+    "hierarchy": [
+      "interviews"
+    ],
+    "slug": "93. dsa-patterns",
+    "path": "/blogs/career/interviews/93. dsa-patterns"
+  },
+  {
+    "title": "SDE Roadmap",
+    "description": "A comprehensive roadmap for becoming a Software Development Engineer",
+    "date": "2026-05-11",
+    "author": "Author Name",
+    "tags": [
+      "career",
+      "sde",
+      "roadmap"
+    ],
+    "coverImage": "/images/sde-roadmap.png",
+    "draft": false,
+    "category": "career",
+    "hierarchy": [
+      "interviews"
+    ],
+    "slug": "92. sde-roadmap",
+    "path": "/blogs/career/interviews/92. sde-roadmap"
+  },
+  {
+    "title": "Lessons from Production",
+    "description": "Valuable lessons learned from working in production systems",
+    "date": "2026-05-11",
+    "author": "Author Name",
+    "tags": [
+      "production",
+      "lessons",
+      "real-world"
+    ],
+    "coverImage": "/images/lessons-from-production.png",
+    "draft": false,
+    "category": "career",
+    "hierarchy": [
+      "experience"
+    ],
+    "slug": "104. lessons-from-production",
+    "path": "/blogs/career/experience/104. lessons-from-production"
+  },
+  {
+    "title": "Mistakes I Made",
+    "description": "Common mistakes I made during my software engineering career and how to avoid them",
+    "date": "2026-05-11",
+    "author": "Author Name",
+    "tags": [
+      "mistakes",
+      "career",
+      "learning"
+    ],
+    "coverImage": "/images/mistakes-i-made.png",
+    "draft": false,
+    "category": "career",
+    "hierarchy": [
+      "experience"
+    ],
+    "slug": "103. mistakes-i-made",
+    "path": "/blogs/career/experience/103. mistakes-i-made"
+  },
+  {
+    "title": "My SDE Journey",
+    "description": "Personal story of my journey as a Software Development Engineer",
+    "date": "2026-05-11",
+    "author": "Author Name",
+    "tags": [
+      "journey",
+      "career",
+      "personal"
+    ],
+    "coverImage": "/images/my-sde-journey.png",
+    "draft": false,
+    "category": "career",
+    "hierarchy": [
+      "experience"
+    ],
+    "slug": "102. my-sde-journey",
+    "path": "/blogs/career/experience/102. my-sde-journey"
+  },
+  {
+    "title": "Transactions and Propagation",
+    "description": "Mastering Spring transaction management with different propagation behaviors",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "spring-boot",
+      "transactions",
+      "database",
+      "propagation"
+    ],
+    "coverImage": "/images/transactions-and-propagation.png",
     "draft": false,
     "category": "backend",
     "hierarchy": [
       "spring-boot"
     ],
-    "slug": "spring-boot-essentials",
-    "path": "/blogs/backend/spring-boot/spring-boot-essentials"
+    "slug": "transactions-and-propagation",
+    "path": "/blogs/backend/spring-boot/transactions-and-propagation"
   },
   {
-    "title": "Advanced Spring MVC: Mastering Request Flow, Validation, and Error Handling",
-    "description": "A deep dive into building robust REST APIs with Spring MVC, covering dynamic request mapping, JSR-380 validation, and global exception management.",
+    "title": "Spring Security Filters",
+    "description": "Understanding and implementing custom security filters in Spring Security",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "Spring Boot",
-      "Spring MVC",
-      "REST API",
-      "Java"
+      "spring-boot",
+      "security",
+      "filters",
+      "spring-security"
     ],
-    "coverImage": "/images/spring-mvc-advanced.png",
+    "coverImage": "/images/spring-security-filters.png",
     "draft": false,
     "category": "backend",
     "hierarchy": [
-      "spring-boot",
-      "Web-Services-and-API-Design"
+      "spring-boot"
     ],
-    "slug": "Spring-Web-MVC",
-    "path": "/blogs/backend/spring-boot/Web-Services-and-API-Design/Spring-Web-MVC"
+    "slug": "spring-security-filters",
+    "path": "/blogs/backend/spring-boot/spring-security-filters"
   },
   {
-    "title": "The Magic of Spring Boot: Starters, Auto-Configuration, and Properties",
-    "description": "Master the core pillars of Spring Boot: simplify dependency management with Starters, automate setup with Auto-Configuration, and manage settings with yml/properties.",
+    "title": "Spring Data JPA Basics",
+    "description": "Getting started with Spring Data JPA for simplified database access",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "Spring Boot",
-      "Java",
-      "Backend Development"
+      "spring-boot",
+      "jpa",
+      "database",
+      "hibernate"
     ],
-    "coverImage": "",
+    "coverImage": "/images/spring-data-jpa-basics.png",
     "draft": false,
     "category": "backend",
     "hierarchy": [
-      "spring-boot",
-      "Spring Boot Internals & Development"
+      "spring-boot"
     ],
-    "slug": "Magic of Spring Boot: Starters, Auto-Configuration, and Properties",
-    "path": "/blogs/backend/spring-boot/Spring Boot Internals & Development/Magic of Spring Boot: Starters, Auto-Configuration, and Properties"
+    "slug": "spring-data-jpa-basics",
+    "path": "/blogs/backend/spring-boot/spring-data-jpa-basics"
   },
   {
-    "title": "Decoupling Your Code: A Deep Dive into Dependency Injection and IoC Containers",
-    "description": "Learn how Dependency Injection and IoC Containers transform rigid code into flexible, testable architectures with real-world examples.",
+    "title": "REST API Best Practices",
+    "description": "Industry best practices for designing robust and scalable REST APIs",
     "date": "2026-05-11",
-    "author": "Gemini",
+    "author": "Abhishek Tiwari",
     "tags": [
-      "Software Architecture",
-      "Dependency Injection",
-      "Clean Code"
+      "rest-api",
+      "best-practices",
+      "api-design",
+      "spring-boot"
     ],
-    "coverImage": "",
+    "coverImage": "/images/rest-api-best-practices.png",
     "draft": false,
     "category": "backend",
     "hierarchy": [
-      "spring-boot",
-      "Spring Boot Internals & Development"
+      "spring-boot"
     ],
-    "slug": "Dependency Injection (IoC Container)",
-    "path": "/blogs/backend/spring-boot/Spring Boot Internals & Development/Dependency Injection (IoC Container)"
+    "slug": "rest-api-best-practices",
+    "path": "/blogs/backend/spring-boot/rest-api-best-practices"
+  },
+  {
+    "title": "JWT Authentication",
+    "description": "A comprehensive guide to implementing JWT authentication in Spring Boot applications",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "spring-boot",
+      "security",
+      "jwt",
+      "authentication"
+    ],
+    "coverImage": "/images/jwt-authentication.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "spring-boot"
+    ],
+    "slug": "jwt-authentication",
+    "path": "/blogs/backend/spring-boot/jwt-authentication"
+  },
+  {
+    "title": "Exception Handling",
+    "description": "Implementing centralized exception handling in Spring Boot applications",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "spring-boot",
+      "exception-handling",
+      "error-handling",
+      "rest-api"
+    ],
+    "coverImage": "/images/exception-handling.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "spring-boot"
+    ],
+    "slug": "exception-handling",
+    "path": "/blogs/backend/spring-boot/exception-handling"
+  },
+  {
+    "title": "Caching with Redis",
+    "description": "Implementing efficient caching strategies using Redis in Spring Boot applications",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "spring-boot",
+      "redis",
+      "caching",
+      "performance"
+    ],
+    "coverImage": "/images/caching-with-redis.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "spring-boot"
+    ],
+    "slug": "caching-with-redis",
+    "path": "/blogs/backend/spring-boot/caching-with-redis"
+  },
+  {
+    "title": "Service Discovery with Eureka",
+    "description": "Setting up and using Netflix Eureka for service discovery in microservices",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "microservices",
+      "eureka",
+      "service-discovery",
+      "spring-cloud"
+    ],
+    "coverImage": "/images/service-discovery-eureka.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "microservices"
+    ],
+    "slug": "service-discovery-eureka",
+    "path": "/blogs/backend/microservices/service-discovery-eureka"
+  },
+  {
+    "title": "Microservices Introduction",
+    "description": "An introduction to microservices architecture and its core principles",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "microservices",
+      "architecture",
+      "distributed-systems"
+    ],
+    "coverImage": "/images/microservices-introduction.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "microservices"
+    ],
+    "slug": "microservices-introduction",
+    "path": "/blogs/backend/microservices/microservices-introduction"
+  },
+  {
+    "title": "Inter-Service Communication",
+    "description": "Effective strategies for communication between microservices",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "microservices",
+      "communication",
+      "rest",
+      "grpc"
+    ],
+    "coverImage": "/images/inter-service-communication.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "microservices"
+    ],
+    "slug": "inter-service-communication",
+    "path": "/blogs/backend/microservices/inter-service-communication"
+  },
+  {
+    "title": "Distributed Tracing",
+    "description": "Implementing distributed tracing to monitor and debug microservices",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "microservices",
+      "distributed-tracing",
+      "observability",
+      "monitoring"
+    ],
+    "coverImage": "/images/distributed-tracing.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "microservices"
+    ],
+    "slug": "distributed-tracing",
+    "path": "/blogs/backend/microservices/distributed-tracing"
+  },
+  {
+    "title": "Circuit Breaker with Resilience4j",
+    "description": "Implementing circuit breaker pattern using Resilience4j for fault tolerance",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "microservices",
+      "resilience4j",
+      "circuit-breaker",
+      "fault-tolerance"
+    ],
+    "coverImage": "/images/circuit-breaker-resilience4j.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "microservices"
+    ],
+    "slug": "circuit-breaker-resilience4j",
+    "path": "/blogs/backend/microservices/circuit-breaker-resilience4j"
+  },
+  {
+    "title": "API Gateway Pattern",
+    "description": "Implementing the API Gateway pattern for microservices architectures",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "microservices",
+      "api-gateway",
+      "architecture",
+      "spring-cloud"
+    ],
+    "coverImage": "/images/api-gateway-pattern.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "microservices"
+    ],
+    "slug": "api-gateway-pattern",
+    "path": "/blogs/backend/microservices/api-gateway-pattern"
+  },
+  {
+    "title": "RabbitMQ Basics",
+    "description": "Introduction to RabbitMQ message broker and its core concepts",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "rabbitmq",
+      "messaging",
+      "amqp",
+      "message-queue"
+    ],
+    "coverImage": "/images/rabbitmq-basics.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "messaging"
+    ],
+    "slug": "rabbitmq-basics",
+    "path": "/blogs/backend/messaging/rabbitmq-basics"
+  },
+  {
+    "title": "Kafka Introduction",
+    "description": "Getting started with Apache Kafka for event streaming",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "kafka",
+      "event-streaming",
+      "messaging",
+      "apache"
+    ],
+    "coverImage": "/images/kafka-introduction.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "messaging"
+    ],
+    "slug": "kafka-introduction",
+    "path": "/blogs/backend/messaging/kafka-introduction"
+  },
+  {
+    "title": "Kafka Consumer Groups",
+    "description": "Understanding and implementing Kafka consumer groups for scalability",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "kafka",
+      "consumer-groups",
+      "messaging",
+      "scalability"
+    ],
+    "coverImage": "/images/kafka-consumer-groups.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "messaging"
+    ],
+    "slug": "kafka-consumer-groups",
+    "path": "/blogs/backend/messaging/kafka-consumer-groups"
+  },
+  {
+    "title": "Event-Driven Architecture",
+    "description": "Building applications using event-driven architecture patterns",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "event-driven",
+      "architecture",
+      "messaging",
+      "patterns"
+    ],
+    "coverImage": "/images/event-driven-architecture.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "messaging"
+    ],
+    "slug": "event-driven-architecture",
+    "path": "/blogs/backend/messaging/event-driven-architecture"
+  },
+  {
+    "title": "N+1 Problem",
+    "description": "Identifying and solving the N+1 query problem in JPA and Hibernate",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "jpa",
+      "hibernate",
+      "n-plus-one",
+      "performance"
+    ],
+    "coverImage": "/images/n-plus-one-problem.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "data-access"
+    ],
+    "slug": "n-plus-one-problem",
+    "path": "/blogs/backend/data-access/n-plus-one-problem"
+  },
+  {
+    "title": "JDBC vs JPA",
+    "description": "Comparing JDBC and JPA approaches for database access in Java applications",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "jdbc",
+      "jpa",
+      "database",
+      "hibernate"
+    ],
+    "coverImage": "/images/jdbc-vs-jpa.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "data-access"
+    ],
+    "slug": "jdbc-vs-jpa",
+    "path": "/blogs/backend/data-access/jdbc-vs-jpa"
+  },
+  {
+    "title": "Hibernate Lazy vs Eager Loading",
+    "description": "Understanding lazy and eager loading strategies in Hibernate",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "hibernate",
+      "jpa",
+      "lazy-loading",
+      "eager-loading"
+    ],
+    "coverImage": "/images/hibernate-lazy-vs-eager-loading.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "data-access"
+    ],
+    "slug": "hibernate-lazy-vs-eager-loading",
+    "path": "/blogs/backend/data-access/hibernate-lazy-vs-eager-loading"
+  },
+  {
+    "title": "Connection Pooling with HikariCP",
+    "description": "Optimizing database connections using HikariCP connection pooling",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "hikaricp",
+      "connection-pooling",
+      "database",
+      "performance"
+    ],
+    "coverImage": "/images/connection-pooling-hikaricp.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "data-access"
+    ],
+    "slug": "connection-pooling-hikaricp",
+    "path": "/blogs/backend/data-access/connection-pooling-hikaricp"
+  },
+  {
+    "title": "Versioning APIs",
+    "description": "Strategies for versioning REST APIs while maintaining backward compatibility",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "api-design",
+      "versioning",
+      "rest-api",
+      "best-practices"
+    ],
+    "coverImage": "/images/versioning-apis.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "api-design"
+    ],
+    "slug": "versioning-apis",
+    "path": "/blogs/backend/api-design/versioning-apis"
+  },
+  {
+    "title": "REST vs GraphQL",
+    "description": "Comparing REST and GraphQL API design paradigms",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "rest-api",
+      "graphql",
+      "api-design",
+      "comparison"
+    ],
+    "coverImage": "/images/rest-vs-graphql.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "api-design"
+    ],
+    "slug": "rest-vs-graphql",
+    "path": "/blogs/backend/api-design/rest-vs-graphql"
+  },
+  {
+    "title": "Pagination Strategies",
+    "description": "Implementing efficient pagination strategies for large datasets",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "pagination",
+      "api-design",
+      "database",
+      "performance"
+    ],
+    "coverImage": "/images/pagination-strategies.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "api-design"
+    ],
+    "slug": "pagination-strategies",
+    "path": "/blogs/backend/api-design/pagination-strategies"
+  },
+  {
+    "title": "Idempotency",
+    "description": "Implementing idempotent API operations for reliable distributed systems",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "idempotency",
+      "api-design",
+      "rest-api",
+      "distributed-systems"
+    ],
+    "coverImage": "/images/idempotency.png",
+    "draft": false,
+    "category": "backend",
+    "hierarchy": [
+      "api-design"
+    ],
+    "slug": "idempotency",
+    "path": "/blogs/backend/api-design/idempotency"
+  },
+  {
+    "title": "Function Calling",
+    "description": "Mastering function calling with large language models",
+    "date": "2026-05-11",
+    "author": "<Author Name>",
+    "tags": [
+      "AI",
+      "Function Calling",
+      "LLM",
+      "API"
+    ],
+    "coverImage": "/images/function-calling.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "tools"
+    ],
+    "slug": "91-function-calling",
+    "path": "/blogs/ai-ml/tools/91-function-calling"
+  },
+  {
+    "title": "Tool Calling",
+    "description": "Implementing tool calling in AI applications for enhanced functionality",
+    "date": "2026-05-11",
+    "author": "<Author Name>",
+    "tags": [
+      "AI",
+      "Tool Calling",
+      "LLM",
+      "API Integration"
+    ],
+    "coverImage": "/images/tool-calling.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "tools"
+    ],
+    "slug": "90-tool-calling",
+    "path": "/blogs/ai-ml/tools/90-tool-calling"
+  },
+  {
+    "title": "Embeddings Explained",
+    "description": "Comprehensive guide to text and vector embeddings in AI",
+    "date": "2026-05-11",
+    "author": "<Author Name>",
+    "tags": [
+      "AI",
+      "Embeddings",
+      "Natural Language Processing",
+      "Machine Learning"
+    ],
+    "coverImage": "/images/embeddings-explained.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "rag"
+    ],
+    "slug": "89-embeddings-explained",
+    "path": "/blogs/ai-ml/rag/89-embeddings-explained"
+  },
+  {
+    "title": "Vector Databases",
+    "description": "Guide to vector databases for AI and machine learning applications",
+    "date": "2026-05-11",
+    "author": "<Author Name>",
+    "tags": [
+      "AI",
+      "Vector Database",
+      "Machine Learning",
+      "Data Storage"
+    ],
+    "coverImage": "/images/vector-databases.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "rag"
+    ],
+    "slug": "88-vector-databases",
+    "path": "/blogs/ai-ml/rag/88-vector-databases"
+  },
+  {
+    "title": "RAG Architecture",
+    "description": "Understanding Retrieval-Augmented Generation architecture for AI systems",
+    "date": "2026-05-11",
+    "author": "<Author Name>",
+    "tags": [
+      "AI",
+      "RAG",
+      "Architecture",
+      "Information Retrieval"
+    ],
+    "coverImage": "/images/rag-architecture.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "rag"
+    ],
+    "slug": "87-rag-architecture",
+    "path": "/blogs/ai-ml/rag/87-rag-architecture"
+  },
+  {
+    "title": "AI Agents Introduction",
+    "description": "Introduction to AI agents and their role in modern AI systems",
+    "date": "2026-05-11",
+    "author": "<Author Name>",
+    "tags": [
+      "AI",
+      "AI Agents",
+      "Autonomous Systems",
+      "Machine Learning"
+    ],
+    "coverImage": "/images/ai-agents-introduction.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "genai"
+    ],
+    "slug": "86-ai-agents-introduction",
+    "path": "/blogs/ai-ml/genai/86-ai-agents-introduction"
+  },
+  {
+    "title": "Building LLM Applications",
+    "description": "Guide to building production-ready applications with large language models",
+    "date": "2026-05-11",
+    "author": "<Author Name>",
+    "tags": [
+      "AI",
+      "LLM",
+      "Application Development",
+      "Generative AI"
+    ],
+    "coverImage": "/images/building-llm-apps.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "genai"
+    ],
+    "slug": "85-building-llm-apps",
+    "path": "/blogs/ai-ml/genai/85-building-llm-apps"
+  },
+  {
+    "title": "Prompt Engineering",
+    "description": "Master the art of crafting effective prompts for AI language models",
+    "date": "2026-05-11",
+    "author": "<Author Name>",
+    "tags": [
+      "AI",
+      "Prompt Engineering",
+      "Generative AI",
+      "LLM"
+    ],
+    "coverImage": "/images/prompt-engineering.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "genai"
+    ],
+    "slug": "84-prompt-engineering",
+    "path": "/blogs/ai-ml/genai/84-prompt-engineering"
   }
 ]

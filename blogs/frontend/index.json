@@ -1,0 +1,306 @@
+{
+  "name": "Frontend",
+  "path": "/blogs/frontend",
+  "blogs": [
+    {
+      "title": "State Management",
+      "description": "Exploring state management solutions in React - from useState to global state libraries.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "state management",
+        "redux",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/state-management.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react"
+      ],
+      "slug": "29. state-management",
+      "path": "/blogs/frontend/react/29. state-management"
+    },
+    {
+      "title": "useEffect Patterns",
+      "description": "Mastering useEffect in React - common patterns, pitfalls, and optimization strategies.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "hooks",
+        "useEffect",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/useeffect-patterns.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react"
+      ],
+      "slug": "28. useeffect-patterns",
+      "path": "/blogs/frontend/react/28. useeffect-patterns"
+    },
+    {
+      "title": "Hooks Deep Dive",
+      "description": "A comprehensive guide to React hooks - when to use them and how they work under the hood.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "hooks",
+        "javascript",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/hooks-deep-dive.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react"
+      ],
+      "slug": "27. hooks-deep-dive",
+      "path": "/blogs/frontend/react/27. hooks-deep-dive"
+    },
+    {
+      "title": "React Rendering Cycle",
+      "description": "Understanding how React's rendering cycle works and how to optimize component updates.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "rendering",
+        "performance",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/rendering-cycle.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react"
+      ],
+      "slug": "26. react-rendering-cycle",
+      "path": "/blogs/frontend/react/26. react-rendering-cycle"
+    },
+    {
+      "title": "Bundle Optimization",
+      "description": "Techniques for reducing JavaScript bundle size and improving load times.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "performance",
+        "bundle optimization",
+        "webpack",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/performance/bundle-optimization.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "performance"
+      ],
+      "slug": "40. bundle-optimization",
+      "path": "/blogs/frontend/performance/40. bundle-optimization"
+    },
+    {
+      "title": "Lazy Loading",
+      "description": "Implementing lazy loading in web applications for better performance and user experience.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "performance",
+        "lazy loading",
+        "optimization",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/performance/lazy-loading.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "performance"
+      ],
+      "slug": "39. lazy-loading",
+      "path": "/blogs/frontend/performance/39. lazy-loading"
+    },
+    {
+      "title": "Web Vitals",
+      "description": "Understanding Core Web Vitals - LCP, FID, CLS and how to optimize them.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "performance",
+        "web vitals",
+        "optimization",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/performance/web-vitals.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "performance"
+      ],
+      "slug": "38. web-vitals",
+      "path": "/blogs/frontend/performance/38. web-vitals"
+    },
+    {
+      "title": "Middleware",
+      "description": "Using middleware in Next.js for authentication, redirects, and request handling.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nextjs",
+        "middleware",
+        "authentication",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/nextjs/middleware.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "nextjs"
+      ],
+      "slug": "33. middleware",
+      "path": "/blogs/frontend/nextjs/33. middleware"
+    },
+    {
+      "title": "API Routes",
+      "description": "Building API endpoints in Next.js - handlers, middleware, and best practices.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nextjs",
+        "api routes",
+        "backend",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/nextjs/api-routes.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "nextjs"
+      ],
+      "slug": "32. api-routes",
+      "path": "/blogs/frontend/nextjs/32. api-routes"
+    },
+    {
+      "title": "App Router Explained",
+      "description": "A complete guide to Next.js App Router - file-based routing, layouts, and server components.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nextjs",
+        "app router",
+        "routing",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/nextjs/app-router-explained.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "nextjs"
+      ],
+      "slug": "31. app-router-explained",
+      "path": "/blogs/frontend/nextjs/31. app-router-explained"
+    },
+    {
+      "title": "SSR vs SSG",
+      "description": "Understanding the differences between Server-Side Rendering and Static Site Generation in Next.js.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nextjs",
+        "ssr",
+        "ssg",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/nextjs/ssr-vs-ssg.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "nextjs"
+      ],
+      "slug": "30. ssr-vs-ssg",
+      "path": "/blogs/frontend/nextjs/30. ssr-vs-ssg"
+    },
+    {
+      "title": "Prototype Chain",
+      "description": "Understanding JavaScript prototype chain and inheritance patterns.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "prototypes",
+        "inheritance",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/prototype-chain.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript"
+      ],
+      "slug": "37. prototype-chain",
+      "path": "/blogs/frontend/javascript/37. prototype-chain"
+    },
+    {
+      "title": "Promises and Async Await",
+      "description": "Understanding JavaScript Promises and async/await for asynchronous programming.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "promises",
+        "async await",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/promises-async-await.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript"
+      ],
+      "slug": "36. promises-async-await",
+      "path": "/blogs/frontend/javascript/36. promises-async-await"
+    },
+    {
+      "title": "Closures",
+      "description": "Mastering JavaScript closures - how they work, use cases, and common patterns.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "closures",
+        "scope",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/closures.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript"
+      ],
+      "slug": "35. closures",
+      "path": "/blogs/frontend/javascript/35. closures"
+    },
+    {
+      "title": "Event Loop",
+      "description": "Understanding the JavaScript event loop - call stack, task queue, and microtasks.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "event loop",
+        "async",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/event-loop.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript"
+      ],
+      "slug": "34. event-loop",
+      "path": "/blogs/frontend/javascript/34. event-loop"
+    }
+  ]
+}

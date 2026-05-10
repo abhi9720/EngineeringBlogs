@@ -1,0 +1,256 @@
+{
+  "categories": [
+    {
+      "name": "Ai Ml",
+      "slug": "ai-ml",
+      "path": "ai-ml",
+      "blogCount": 8,
+      "children": [
+        {
+          "name": "Genai",
+          "slug": "genai",
+          "path": "ai-ml/genai",
+          "blogCount": 3,
+          "children": []
+        },
+        {
+          "name": "Rag",
+          "slug": "rag",
+          "path": "ai-ml/rag",
+          "blogCount": 3,
+          "children": []
+        },
+        {
+          "name": "Tools",
+          "slug": "tools",
+          "path": "ai-ml/tools",
+          "blogCount": 2,
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Backend",
+      "slug": "backend",
+      "path": "backend",
+      "blogCount": 25,
+      "children": [
+        {
+          "name": "Api Design",
+          "slug": "api-design",
+          "path": "backend/api-design",
+          "blogCount": 4,
+          "children": []
+        },
+        {
+          "name": "Data Access",
+          "slug": "data-access",
+          "path": "backend/data-access",
+          "blogCount": 4,
+          "children": []
+        },
+        {
+          "name": "Messaging",
+          "slug": "messaging",
+          "path": "backend/messaging",
+          "blogCount": 4,
+          "children": []
+        },
+        {
+          "name": "Microservices",
+          "slug": "microservices",
+          "path": "backend/microservices",
+          "blogCount": 6,
+          "children": []
+        },
+        {
+          "name": "Spring Boot",
+          "slug": "spring-boot",
+          "path": "backend/spring-boot",
+          "blogCount": 7,
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Career",
+      "slug": "career",
+      "path": "career",
+      "blogCount": 13,
+      "children": [
+        {
+          "name": "Experience",
+          "slug": "experience",
+          "path": "career/experience",
+          "blogCount": 3,
+          "children": []
+        },
+        {
+          "name": "Interviews",
+          "slug": "interviews",
+          "path": "career/interviews",
+          "blogCount": 4,
+          "children": []
+        },
+        {
+          "name": "Resume",
+          "slug": "resume",
+          "path": "career/resume",
+          "blogCount": 3,
+          "children": []
+        },
+        {
+          "name": "System Design Interviews",
+          "slug": "system-design-interviews",
+          "path": "career/system-design-interviews",
+          "blogCount": 3,
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Databases",
+      "slug": "databases",
+      "path": "databases",
+      "blogCount": 14,
+      "children": [
+        {
+          "name": "Caching",
+          "slug": "caching",
+          "path": "databases/caching",
+          "blogCount": 4,
+          "children": []
+        },
+        {
+          "name": "Nosql",
+          "slug": "nosql",
+          "path": "databases/nosql",
+          "blogCount": 3,
+          "children": []
+        },
+        {
+          "name": "Sql",
+          "slug": "sql",
+          "path": "databases/sql",
+          "blogCount": 4,
+          "children": []
+        },
+        {
+          "name": "Transactions",
+          "slug": "transactions",
+          "path": "databases/transactions",
+          "blogCount": 3,
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Devops",
+      "slug": "devops",
+      "path": "devops",
+      "blogCount": 13,
+      "children": [
+        {
+          "name": "Ci Cd",
+          "slug": "ci-cd",
+          "path": "devops/ci-cd",
+          "blogCount": 3,
+          "children": []
+        },
+        {
+          "name": "Docker",
+          "slug": "docker",
+          "path": "devops/docker",
+          "blogCount": 3,
+          "children": []
+        },
+        {
+          "name": "Kubernetes",
+          "slug": "kubernetes",
+          "path": "devops/kubernetes",
+          "blogCount": 4,
+          "children": []
+        },
+        {
+          "name": "Monitoring",
+          "slug": "monitoring",
+          "path": "devops/monitoring",
+          "blogCount": 3,
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Frontend",
+      "slug": "frontend",
+      "path": "frontend",
+      "blogCount": 15,
+      "children": [
+        {
+          "name": "Javascript",
+          "slug": "javascript",
+          "path": "frontend/javascript",
+          "blogCount": 4,
+          "children": []
+        },
+        {
+          "name": "Nextjs",
+          "slug": "nextjs",
+          "path": "frontend/nextjs",
+          "blogCount": 4,
+          "children": []
+        },
+        {
+          "name": "Performance",
+          "slug": "performance",
+          "path": "frontend/performance",
+          "blogCount": 3,
+          "children": []
+        },
+        {
+          "name": "React",
+          "slug": "react",
+          "path": "frontend/react",
+          "blogCount": 4,
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "System Design",
+      "slug": "system-design",
+      "path": "system-design",
+      "blogCount": 16,
+      "children": [
+        {
+          "name": "Basics",
+          "slug": "basics",
+          "path": "system-design/basics",
+          "blogCount": 4,
+          "children": []
+        },
+        {
+          "name": "Case Studies",
+          "slug": "case-studies",
+          "path": "system-design/case-studies",
+          "blogCount": 5,
+          "children": []
+        },
+        {
+          "name": "Patterns",
+          "slug": "patterns",
+          "path": "system-design/patterns",
+          "blogCount": 4,
+          "children": []
+        },
+        {
+          "name": "Storage",
+          "slug": "storage",
+          "path": "system-design/storage",
+          "blogCount": 3,
+          "children": []
+        }
+      ]
+    }
+  ]
+}

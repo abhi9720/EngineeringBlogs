@@ -1,0 +1,166 @@
+{
+  "name": "Ai Ml",
+  "path": "/blogs/ai-ml",
+  "blogs": [
+    {
+      "title": "Function Calling",
+      "description": "Mastering function calling with large language models",
+      "date": "2026-05-11",
+      "author": "<Author Name>",
+      "tags": [
+        "AI",
+        "Function Calling",
+        "LLM",
+        "API"
+      ],
+      "coverImage": "/images/function-calling.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "tools"
+      ],
+      "slug": "91-function-calling",
+      "path": "/blogs/ai-ml/tools/91-function-calling"
+    },
+    {
+      "title": "Tool Calling",
+      "description": "Implementing tool calling in AI applications for enhanced functionality",
+      "date": "2026-05-11",
+      "author": "<Author Name>",
+      "tags": [
+        "AI",
+        "Tool Calling",
+        "LLM",
+        "API Integration"
+      ],
+      "coverImage": "/images/tool-calling.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "tools"
+      ],
+      "slug": "90-tool-calling",
+      "path": "/blogs/ai-ml/tools/90-tool-calling"
+    },
+    {
+      "title": "Embeddings Explained",
+      "description": "Comprehensive guide to text and vector embeddings in AI",
+      "date": "2026-05-11",
+      "author": "<Author Name>",
+      "tags": [
+        "AI",
+        "Embeddings",
+        "Natural Language Processing",
+        "Machine Learning"
+      ],
+      "coverImage": "/images/embeddings-explained.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "rag"
+      ],
+      "slug": "89-embeddings-explained",
+      "path": "/blogs/ai-ml/rag/89-embeddings-explained"
+    },
+    {
+      "title": "Vector Databases",
+      "description": "Guide to vector databases for AI and machine learning applications",
+      "date": "2026-05-11",
+      "author": "<Author Name>",
+      "tags": [
+        "AI",
+        "Vector Database",
+        "Machine Learning",
+        "Data Storage"
+      ],
+      "coverImage": "/images/vector-databases.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "rag"
+      ],
+      "slug": "88-vector-databases",
+      "path": "/blogs/ai-ml/rag/88-vector-databases"
+    },
+    {
+      "title": "RAG Architecture",
+      "description": "Understanding Retrieval-Augmented Generation architecture for AI systems",
+      "date": "2026-05-11",
+      "author": "<Author Name>",
+      "tags": [
+        "AI",
+        "RAG",
+        "Architecture",
+        "Information Retrieval"
+      ],
+      "coverImage": "/images/rag-architecture.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "rag"
+      ],
+      "slug": "87-rag-architecture",
+      "path": "/blogs/ai-ml/rag/87-rag-architecture"
+    },
+    {
+      "title": "AI Agents Introduction",
+      "description": "Introduction to AI agents and their role in modern AI systems",
+      "date": "2026-05-11",
+      "author": "<Author Name>",
+      "tags": [
+        "AI",
+        "AI Agents",
+        "Autonomous Systems",
+        "Machine Learning"
+      ],
+      "coverImage": "/images/ai-agents-introduction.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "genai"
+      ],
+      "slug": "86-ai-agents-introduction",
+      "path": "/blogs/ai-ml/genai/86-ai-agents-introduction"
+    },
+    {
+      "title": "Building LLM Applications",
+      "description": "Guide to building production-ready applications with large language models",
+      "date": "2026-05-11",
+      "author": "<Author Name>",
+      "tags": [
+        "AI",
+        "LLM",
+        "Application Development",
+        "Generative AI"
+      ],
+      "coverImage": "/images/building-llm-apps.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "genai"
+      ],
+      "slug": "85-building-llm-apps",
+      "path": "/blogs/ai-ml/genai/85-building-llm-apps"
+    },
+    {
+      "title": "Prompt Engineering",
+      "description": "Master the art of crafting effective prompts for AI language models",
+      "date": "2026-05-11",
+      "author": "<Author Name>",
+      "tags": [
+        "AI",
+        "Prompt Engineering",
+        "Generative AI",
+        "LLM"
+      ],
+      "coverImage": "/images/prompt-engineering.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "genai"
+      ],
+      "slug": "84-prompt-engineering",
+      "path": "/blogs/ai-ml/genai/84-prompt-engineering"
+    }
+  ]
+}
