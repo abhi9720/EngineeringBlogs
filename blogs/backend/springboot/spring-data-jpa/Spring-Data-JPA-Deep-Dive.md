@@ -10,7 +10,7 @@ tags:
   - database
 category: "Backend"
 subcategory: "Spring Boot"
-coverImage: "/images/spring-data-jpa-guide.png"
+coverImage: ""
 slug: "spring-data-jpa-deep-dive"
 draft: false
 
