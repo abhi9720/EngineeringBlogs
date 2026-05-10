@@ -117,23 +117,29 @@ async function updateSearchIndex(meta, currentSearchIndex) {
 }
 
 /* ---------------- LOCAL INDEXES ---------------- */
-
 async function updateLocalIndexes(meta, filePath) {
   const normalized = filePath.replace(/\\/g, "/");
+
   const dir = path.dirname(normalized);
+  const fullDirPath = path.join(process.cwd(), dir);
 
-  const dirPath = path.join(process.cwd(), dir);
+  const indexPath = path.join(fullDirPath, "index.json");
 
-  const indexPath = path.join(dirPath, "index.json");
+  // ✅ ALWAYS ensure folder exists
+  await fs.mkdir(fullDirPath, { recursive: true });
 
-  await fs.mkdir(dirPath, { recursive: true });
+  // ✅ ALWAYS create index.json if missing
+  let existing = await readJson(indexPath, null);
 
-  const existing = await readJson(indexPath, {
-    name: formatLabel(path.basename(dir)),
-    path: `/${dir}`,
-    blogs: []
-  });
+  if (!existing) {
+    existing = {
+      name: formatLabel(path.basename(dir)),
+      path: `/${dir}`,
+      blogs: []
+    };
+  }
 
+  // upsert blog
   existing.blogs = upsert(existing.blogs || [], meta);
 
   await writeJson(indexPath, existing);
