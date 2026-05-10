@@ -7,10 +7,7 @@ tags:
   - tag1
   - tag2
   - tag3
-category: "<Category Name>"
-subcategory: "<Subcategory Name>"
 coverImage: "/images/<image-name>.png"
-slug: "<url-friendly-slug>"
 draft: false
 ---
 
