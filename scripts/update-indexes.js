@@ -48,7 +48,16 @@ async function getAllMarkdownFiles(dir) {
   return results;
 }
 
-/* ---------------- METADATA (FIXED LOGIC) ---------------- */
+/* ---------------- LABEL ---------------- */
+
+function formatLabel(value) {
+  return value
+    .split("-")
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+/* ---------------- METADATA ---------------- */
 
 function buildMeta(frontmatter, filePath) {
   const normalized = filePath.replace(/\\/g, "/").replace(".md", "");
@@ -56,18 +65,10 @@ function buildMeta(frontmatter, filePath) {
 
   const category = parts[1];
 
-  let subcategory = null;
-  let slug;
+  // 🔥 FIX: capture ALL nesting levels after category
+  const hierarchy = parts.slice(2, parts.length - 1); // everything except file
 
-  // ✅ FIX: detect structure properly
-  if (parts.length === 4) {
-    // blogs/backend/springboot/file.md
-    subcategory = parts[2];
-    slug = parts[3];
-  } else {
-    // blogs/backend/file.md (flat blog)
-    slug = parts[2];
-  }
+  const slug = parts[parts.length - 1];
 
   return {
     title: frontmatter.title,
@@ -78,7 +79,7 @@ function buildMeta(frontmatter, filePath) {
     date: frontmatter.date,
 
     category,
-    subcategory,
+    hierarchy, // 👈 NEW (important)
     slug,
     path: `/${normalized}`
   };
@@ -90,23 +91,16 @@ function upsert(list, item) {
   return [item, ...list.filter(i => i.path !== item.path)];
 }
 
-/* ---------------- LOCAL INDEX (FIXED) ---------------- */
+/* ---------------- LOCAL INDEX ---------------- */
 
 async function updateLocalIndex(meta) {
-  let indexPath;
+  const dirPath = path.join(BLOGS_DIR, meta.category, ...meta.hierarchy);
 
-  // ✅ FIX: correct folder routing
-  if (!meta.subcategory) {
-    // flat category index → blogs/backend/index.json
-    indexPath = path.join(BLOGS_DIR, meta.category, "index.json");
-  } else {
-    // nested index → blogs/backend/springboot/index.json
-    indexPath = path.join(BLOGS_DIR, meta.category, meta.subcategory, "index.json");
-  }
+  const indexPath = path.join(dirPath, "index.json");
 
   const data = await readJson(indexPath, {
     category: meta.category,
-    subcategory: meta.subcategory || null,
+    hierarchy: meta.hierarchy,
     blogs: []
   });
 
@@ -114,6 +108,33 @@ async function updateLocalIndex(meta) {
   data.blogs.unshift(meta);
 
   await writeJson(indexPath, data);
+}
+
+/* ---------------- CATEGORY TREE (FIXED) ---------------- */
+
+function insertIntoTree(tree, pathParts, meta) {
+  if (!pathParts.length) return;
+
+  const [current, ...rest] = pathParts;
+
+  let node = tree.find(n => n.slug === current);
+
+  if (!node) {
+    node = {
+      name: formatLabel(current),
+      slug: current,
+      children: [],
+      blogCount: 0
+    };
+    tree.push(node);
+  }
+
+  if (rest.length === 0) {
+    node.blogCount += 1;
+    return;
+  }
+
+  insertIntoTree(node.children, rest, meta);
 }
 
 /* ---------------- MAIN ---------------- */
@@ -134,7 +155,6 @@ async function run() {
 
     const normalizedPath = file.replace(/\\/g, "/");
 
-    // skip unchanged
     if (state[normalizedPath] === hash) continue;
 
     const { data } = matter(raw);
@@ -146,41 +166,22 @@ async function run() {
     /* ---------------- LOCAL INDEX ---------------- */
     await updateLocalIndex(meta);
 
-    /* ---------------- CATEGORY TREE ---------------- */
-    let cat = categories.categories.find(c => c.slug === meta.category);
+    /* ---------------- CATEGORY TREE (FIXED) ---------------- */
+    const pathParts = [meta.category, ...meta.hierarchy];
 
-    if (!cat) {
-      cat = {
-        name: meta.category,
-        slug: meta.category,
-        subcategories: []
-      };
-      categories.categories.push(cat);
-    }
+    insertIntoTree(categories.categories, pathParts, meta);
 
-    if (meta.subcategory) {
-      let sub = cat.subcategories.find(s => s.slug === meta.subcategory);
-
-      if (!sub) {
-        cat.subcategories.push({
-          name: meta.subcategory,
-          slug: meta.subcategory,
-          path: `/blogs/${meta.category}/${meta.subcategory}/index.json`
-        });
-      }
-    }
-
-    /* ---------------- STATE UPDATE ---------------- */
+    /* ---------------- STATE ---------------- */
     newState[normalizedPath] = hash;
   }
 
-  /* ---------------- WRITE OUTPUTS ---------------- */
+  /* ---------------- WRITE ---------------- */
 
   await writeJson(SEARCH_INDEX_PATH, updatedSearch);
   await writeJson(CATEGORIES_PATH, categories);
   await writeJson(STATE_PATH, newState);
 
-  console.log("✅ Fixed incremental indexing (flat + nested support)");
+  console.log("✅ Fully fixed: infinite nested category support enabled");
 }
 
 run();
