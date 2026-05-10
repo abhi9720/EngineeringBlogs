@@ -1,0 +1,46 @@
+{
+  "name": "Backend",
+  "path": "/blogs/backend",
+  "blogs": [
+    {
+      "title": "Mastering the Essentials of Spring Boot: From Concept to Microservice",
+      "description": "A comprehensive guide to getting started with Spring Boot, covering auto-configuration, starter dependencies, and building your first REST API.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Java",
+        "Spring Boot",
+        "Microservices"
+      ],
+      "coverImage": "/images/spring-boot-guide.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "spring-boot-essentials",
+      "path": "/blogs/backend/spring-boot/spring-boot-essentials"
+    },
+    {
+      "title": "Advanced Spring MVC: Mastering Request Flow, Validation, and Error Handling",
+      "description": "A deep dive into building robust REST APIs with Spring MVC, covering dynamic request mapping, JSR-380 validation, and global exception management.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Spring Boot",
+        "Spring MVC",
+        "REST API",
+        "Java"
+      ],
+      "coverImage": "/images/spring-mvc-advanced.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot",
+        "Web-Services-and-API-Design"
+      ],
+      "slug": "Spring-Web-MVC",
+      "path": "/blogs/backend/spring-boot/Web-Services-and-API-Design/Spring-Web-MVC"
+    }
+  ]
+}
