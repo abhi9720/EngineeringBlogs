@@ -2,7 +2,7 @@
 title: "Size Matters (But So Does Quantity): Horizontal vs. Vertical Scaling"
 description: "Should you buy a bigger server or add more servers? Learn the real-world trade-offs between Vertical Scaling (Scale Up) and Horizontal Scaling (Scale Out) with practical examples, architecture diagrams, and production insights."
 date: "2026-05-10"
-author: "Abhishek Tiwari"
+author: "Abhishek"
 tags:
   - System Design
   - Scalability
