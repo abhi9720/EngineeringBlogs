@@ -1,5 +1,21 @@
 [
   {
+    "title": "Spring Data JPA Deep Dive: From Basics to Production Design",
+    "description": "A practical guide to Spring Data JPA covering entities, repositories, queries, relationships, and best practices for building production-ready backend systems.",
+    "slug": "Spring-Data-JPA-Deep-Dive",
+    "tags": [
+      "spring-boot",
+      "spring-data-jpa",
+      "backend",
+      "database"
+    ],
+    "category": "Backend",
+    "subcategory": "Springboot",
+    "path": "/blogs/backend/springboot/spring-data-jpa/Spring-Data-JPA-Deep-Dive",
+    "author": "Abhi",
+    "coverImage": "/images/spring-data-jpa-guide.png"
+  },
+  {
     "title": "Scalable URL Shortener System Design (Like Bitly)",
     "description": "A deep dive into designing a scalable URL shortener system covering architecture, database design, caching, and scalability strategies.",
     "slug": "URL-Shortner",
