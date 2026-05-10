@@ -6,24 +6,18 @@
     {
       "title": "Spring Data JPA Deep Dive: From Basics to Production Design",
       "description": "A practical guide to Spring Data JPA covering entities, repositories, queries, relationships, and best practices for building production-ready backend systems.",
-      "date": "2026-05-10",
-      "author": "Abhi",
       "tags": [
         "spring-boot",
         "spring-data-jpa",
-        "backend",
         "database"
       ],
-      "category": "Backend",
-      "subcategory": "Springboot",
-      "coverImage": "/images/spring-data-jpa-guide.png",
+      "author": "Abhi",
+      "coverImage": "",
+      "date": "2026-05-10",
+      "category": "backend",
+      "subcategory": "springboot",
       "slug": "Spring-Data-JPA-Deep-Dive",
-      "draft": false,
-      "path": "/blogs/backend/springboot/spring-data-jpa/Spring-Data-JPA-Deep-Dive",
-      "readingTime": "5 min",
-      "featured": false,
-      "__folderCategory": "backend",
-      "__folderSubcategory": "springboot"
+      "path": "/blogs/backend/springboot/spring-data-jpa/Spring-Data-JPA-Deep-Dive"
     },
     {
       "title": "Redis Caching in Spring Boot",
