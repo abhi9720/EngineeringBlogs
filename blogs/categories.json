@@ -13,11 +13,6 @@
           "slug": "springboot",
           "indexFile": "backend-springboot-index.json",
           "blogCount": 2
-        },
-        {
-          "name": "backend-scale-1-to-1M-User",
-          "slug": "backend-scale-1-to-1M-User",
-          "path": "/blogs/backend/backend-scale-1-to-1M-User/index.json"
         }
       ]
     },
