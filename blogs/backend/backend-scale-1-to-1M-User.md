@@ -12,7 +12,7 @@ tags:
   - caching
 category: "Backend"
 subcategory: "System Design"
-coverImage: "/images/backend-scale-1m-users.png"
+coverImage: ""
 slug: "backend-scale-1-to-1m-users"
 draft: false
 
