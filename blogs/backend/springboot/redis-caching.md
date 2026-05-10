@@ -9,7 +9,7 @@ tags:
   - caching
 category: "backend"
 subcategory: "springboot"
-coverImage: "/images/redis-caching.png"
+coverImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2YmtCbcQ7rlCs33R3bg8ogF9CqjhaIuC7Gw&s"
 slug: "redis-caching-spring-boot"
 draft: false
 ---
