@@ -7,6 +7,7 @@ tags:
   - spring-boot
   - spring-data-jpa
   - database
+  - ORM
 coverImage: ""
 draft: false
 ---
