@@ -64,7 +64,7 @@
     },
     {
       "title": "React Rendering Cycle",
-      "description": "Understanding how React's rendering cycle works and how to optimize component updates.",
+      "description": "Deep dive into React's rendering cycle: reconciliation, virtual DOM, memo, and optimization techniques",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
@@ -224,7 +224,7 @@
     },
     {
       "title": "Prototype Chain",
-      "description": "Understanding JavaScript prototype chain and inheritance patterns.",
+      "description": "Understanding JavaScript prototype chain, prototypal inheritance, constructor functions, and ES6 classes",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
@@ -243,14 +243,14 @@
       "path": "/blogs/frontend/javascript/37. prototype-chain"
     },
     {
-      "title": "Promises and Async Await",
-      "description": "Understanding JavaScript Promises and async/await for asynchronous programming.",
-      "date": "2026-05-11",
+      "title": "Promises and Async/Await",
+      "description": "Deep dive into JavaScript asynchronous programming - Promises, async/await patterns, error handling, and concurrency",
+      "date": "6 May 2025",
       "author": "Abhishek Tiwari",
       "tags": [
         "javascript",
         "promises",
-        "async await",
+        "async-await",
         "frontend"
       ],
       "coverImage": "/images/frontend/javascript/promises-async-await.png",
@@ -264,7 +264,7 @@
     },
     {
       "title": "Closures",
-      "description": "Mastering JavaScript closures - how they work, use cases, and common patterns.",
+      "description": "Master JavaScript closures - lexical environment, scope chain, and practical applications in functional programming",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
@@ -284,7 +284,7 @@
     },
     {
       "title": "Event Loop",
-      "description": "Understanding the JavaScript event loop - call stack, task queue, and microtasks.",
+      "description": "Deep dive into JavaScript event loop - call stack, task queue, microtasks, and how async operations actually work",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
