@@ -1,0 +1,70 @@
+{
+  "name": "Hooks",
+  "path": "/blogs/frontend/react/hooks",
+  "blogs": [
+    {
+      "title": "useMemo & useCallback Real Use Cases",
+      "description": "Practical examples of when and how to use useMemo and useCallback for performance optimization.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "hooks",
+        "usememo",
+        "usecallback",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/usememo-usecallback.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "hooks"
+      ],
+      "slug": "usememo-usecallback-real-usecases",
+      "path": "/blogs/frontend/react/hooks/usememo-usecallback-real-usecases"
+    },
+    {
+      "title": "useEffect Dependency Problems",
+      "description": "Common useEffect issues - infinite loops, missing dependencies, and how to fix them.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "hooks",
+        "useEffect",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/useeffect-problems.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "hooks"
+      ],
+      "slug": "useeffect-dependency-problems",
+      "path": "/blogs/frontend/react/hooks/useeffect-dependency-problems"
+    },
+    {
+      "title": "Custom Hooks Design Patterns",
+      "description": "Creating reusable custom hooks - patterns for extracting logic and state from components.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "hooks",
+        "custom hooks",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/custom-hooks.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "hooks"
+      ],
+      "slug": "custom-hooks-design-patterns",
+      "path": "/blogs/frontend/react/hooks/custom-hooks-design-patterns"
+    }
+  ]
+}

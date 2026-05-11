@@ -3,6 +3,327 @@
   "path": "/blogs/frontend",
   "blogs": [
     {
+      "title": "Zustand vs Redux",
+      "description": "Comparing Zustand and Redux - when to use each for React state management.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "zustand",
+        "redux",
+        "state management",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/zustand-vs-redux.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "state-management"
+      ],
+      "slug": "zustand-vs-redux",
+      "path": "/blogs/frontend/react/state-management/zustand-vs-redux"
+    },
+    {
+      "title": "Redux Flow Explained",
+      "description": "Understanding Redux architecture - actions, reducers, store, and how data flows.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "redux",
+        "state management",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/redux-flow.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "state-management"
+      ],
+      "slug": "redux-flow-explained",
+      "path": "/blogs/frontend/react/state-management/redux-flow-explained"
+    },
+    {
+      "title": "Prop Drilling Problem",
+      "description": "Understanding and solving the prop drilling issue - when data needs to pass through many component levels.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "state management",
+        "props",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/prop-drilling.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "state-management"
+      ],
+      "slug": "prop-drilling-problem",
+      "path": "/blogs/frontend/react/state-management/prop-drilling-problem"
+    },
+    {
+      "title": "Context API Limitations",
+      "description": "Understanding React Context API limitations - when it's appropriate and when to use other solutions.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "context",
+        "state management",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/context-limitations.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "state-management"
+      ],
+      "slug": "context-api-limitations",
+      "path": "/blogs/frontend/react/state-management/context-api-limitations"
+    },
+    {
+      "title": "Virtual DOM Explained",
+      "description": "Understand the Virtual DOM - how React maintains an in-memory representation of the real DOM.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "virtual dom",
+        "rendering",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/virtual-dom.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "rendering-engine"
+      ],
+      "slug": "virtual-dom-explained",
+      "path": "/blogs/frontend/react/rendering-engine/virtual-dom-explained"
+    },
+    {
+      "title": "React Reconciliation Algorithm",
+      "description": "Understand how React compares and updates DOM - the reconciliation algorithm and diffing strategy.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "reconciliation",
+        "virtual dom",
+        "diffing",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/reconciliation.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "rendering-engine"
+      ],
+      "slug": "reconciliation-algorithm",
+      "path": "/blogs/frontend/react/rendering-engine/reconciliation-algorithm"
+    },
+    {
+      "title": "React Performance Profiling",
+      "description": "Profiling React applications - using React DevTools to find and fix performance issues.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "performance",
+        "profiling",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/profiling.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "performance"
+      ],
+      "slug": "react-performance-profiling",
+      "path": "/blogs/frontend/react/performance/react-performance-profiling"
+    },
+    {
+      "title": "Memoization Mistakes",
+      "description": "Common mistakes with React memoization - using React.memo, useMemo, and useCallback incorrectly.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "memoization",
+        "performance",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/memoization-mistakes.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "performance"
+      ],
+      "slug": "memoization-mistakes",
+      "path": "/blogs/frontend/react/performance/memoization-mistakes"
+    },
+    {
+      "title": "List Virtualization",
+      "description": "Rendering large lists efficiently - windowing and virtualization techniques in React.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "performance",
+        "virtualization",
+        "lists",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/virtualization.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "performance"
+      ],
+      "slug": "list-virtualization",
+      "path": "/blogs/frontend/react/performance/list-virtualization"
+    },
+    {
+      "title": "useMemo & useCallback Real Use Cases",
+      "description": "Practical examples of when and how to use useMemo and useCallback for performance optimization.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "hooks",
+        "usememo",
+        "usecallback",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/usememo-usecallback.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "hooks"
+      ],
+      "slug": "usememo-usecallback-real-usecases",
+      "path": "/blogs/frontend/react/hooks/usememo-usecallback-real-usecases"
+    },
+    {
+      "title": "useEffect Dependency Problems",
+      "description": "Common useEffect issues - infinite loops, missing dependencies, and how to fix them.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "hooks",
+        "useEffect",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/useeffect-problems.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "hooks"
+      ],
+      "slug": "useeffect-dependency-problems",
+      "path": "/blogs/frontend/react/hooks/useeffect-dependency-problems"
+    },
+    {
+      "title": "Custom Hooks Design Patterns",
+      "description": "Creating reusable custom hooks - patterns for extracting logic and state from components.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "hooks",
+        "custom hooks",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/custom-hooks.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "hooks"
+      ],
+      "slug": "custom-hooks-design-patterns",
+      "path": "/blogs/frontend/react/hooks/custom-hooks-design-patterns"
+    },
+    {
+      "title": "Props vs State Decision Guide",
+      "description": "When to use props vs state - making the right architectural decisions in React components.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "props",
+        "state",
+        "architecture",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/props-vs-state.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "components"
+      ],
+      "slug": "props-vs-state-decision-guide",
+      "path": "/blogs/frontend/react/components/props-vs-state-decision-guide"
+    },
+    {
+      "title": "Controlled vs Uncontrolled Components",
+      "description": "Understand controlled (state-driven) vs uncontrolled (ref-driven) components in React.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "forms",
+        "controlled",
+        "uncontrolled",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/controlled-uncontrolled.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "components"
+      ],
+      "slug": "controlled-vs-uncontrolled-components",
+      "path": "/blogs/frontend/react/components/controlled-vs-uncontrolled-components"
+    },
+    {
+      "title": "Component Re-render Causes",
+      "description": "Understanding why React components re-render - state changes, props, context, and how to optimize.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "re-render",
+        "performance",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/re-render-causes.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "components"
+      ],
+      "slug": "component-re-render-causes",
+      "path": "/blogs/frontend/react/components/component-re-render-causes"
+    },
+    {
       "title": "State Management",
       "description": "Exploring state management solutions in React - from useState to global state libraries.",
       "date": "2026-05-11",
@@ -64,7 +385,7 @@
     },
     {
       "title": "React Rendering Cycle",
-      "description": "Understanding how React's rendering cycle works and how to optimize component updates.",
+      "description": "Deep dive into React's rendering cycle: reconciliation, virtual DOM, memo, and optimization techniques",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
@@ -223,8 +544,223 @@
       "path": "/blogs/frontend/nextjs/30. ssr-vs-ssg"
     },
     {
+      "title": "Call Stack, Heap & Queue Model",
+      "description": "Understand JavaScript runtime - how call stack, memory heap, and task queue work together.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "runtime",
+        "call stack",
+        "memory heap",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/call-stack-heap.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript",
+        "runtime"
+      ],
+      "slug": "call-stack-heap-queue-model",
+      "path": "/blogs/frontend/javascript/runtime/call-stack-heap-queue-model"
+    },
+    {
+      "title": "Memory Leaks in JavaScript",
+      "description": "Identify and prevent memory leaks - common causes, detection, and best practices.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "memory",
+        "performance",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/memory-leaks.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript",
+        "performance"
+      ],
+      "slug": "memory-leaks-in-javascript",
+      "path": "/blogs/frontend/javascript/performance/memory-leaks-in-javascript"
+    },
+    {
+      "title": "Debounce & Throttle: Use Cases",
+      "description": "Master debounce and throttle - when to use each, implementation, and real-world patterns.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "performance",
+        "debounce",
+        "throttle",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/debounce-throttle.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript",
+        "performance"
+      ],
+      "slug": "debounce-throttle-use-cases",
+      "path": "/blogs/frontend/javascript/performance/debounce-throttle-use-cases"
+    },
+    {
+      "title": "Event Delegation Pattern",
+      "description": "Master event delegation - handle many events with one listener, improve performance, and understand the pattern.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "events",
+        "delegation",
+        "performance",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/event-delegation.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript",
+        "dom"
+      ],
+      "slug": "event-delegation-pattern",
+      "path": "/blogs/frontend/javascript/dom/event-delegation-pattern"
+    },
+    {
+      "title": "DOM Manipulation Best Practices",
+      "description": "Optimize DOM operations - minimize reflows, use DocumentFragment, batch updates, and more.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "dom",
+        "performance",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/dom-manipulation.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript",
+        "dom"
+      ],
+      "slug": "dom-manipulation-best-practices",
+      "path": "/blogs/frontend/javascript/dom/dom-manipulation-best-practices"
+    },
+    {
+      "title": "this Binding Explained",
+      "description": "Master JavaScript 'this' - understand how 'this' is determined in different contexts and common pitfalls.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "this",
+        "binding",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/this-binding.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript",
+        "core-concepts"
+      ],
+      "slug": "this-binding-explained",
+      "path": "/blogs/frontend/javascript/core-concepts/this-binding-explained"
+    },
+    {
+      "title": "Hoisting Behavior",
+      "description": "Understand JavaScript hoisting - how var, let, const, and function declarations are hoisted differently.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "hoisting",
+        "scope",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/hoisting.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript",
+        "core-concepts"
+      ],
+      "slug": "hoisting-behavior",
+      "path": "/blogs/frontend/javascript/core-concepts/hoisting-behavior"
+    },
+    {
+      "title": "Promises Deep Dive",
+      "description": "Master JavaScript Promises - states, chaining, error handling, and common patterns.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "promises",
+        "async",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/promises-deep-dive.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript",
+        "async"
+      ],
+      "slug": "promises-deep-dive",
+      "path": "/blogs/frontend/javascript/async/promises-deep-dive"
+    },
+    {
+      "title": "Microtasks vs Macrotasks",
+      "description": "Understand JavaScript task queues - microtasks (promises) vs macrotasks (setTimeout), execution order.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "async",
+        "microtasks",
+        "macrotasks",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/microtasks-macrotasks.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript",
+        "async"
+      ],
+      "slug": "microtasks-vs-macrotasks",
+      "path": "/blogs/frontend/javascript/async/microtasks-vs-macrotasks"
+    },
+    {
+      "title": "async/await Internals",
+      "description": "Understand how async/await works - syntactic sugar over Promises, execution flow, and common pitfalls.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "async",
+        "await",
+        "promises",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/async-await.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript",
+        "async"
+      ],
+      "slug": "async-await-internals",
+      "path": "/blogs/frontend/javascript/async/async-await-internals"
+    },
+    {
       "title": "Prototype Chain",
-      "description": "Understanding JavaScript prototype chain and inheritance patterns.",
+      "description": "Understanding JavaScript prototype chain, prototypal inheritance, constructor functions, and ES6 classes",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
@@ -243,14 +779,14 @@
       "path": "/blogs/frontend/javascript/37. prototype-chain"
     },
     {
-      "title": "Promises and Async Await",
-      "description": "Understanding JavaScript Promises and async/await for asynchronous programming.",
-      "date": "2026-05-11",
+      "title": "Promises and Async/Await",
+      "description": "Deep dive into JavaScript asynchronous programming - Promises, async/await patterns, error handling, and concurrency",
+      "date": "6 May 2025",
       "author": "Abhishek Tiwari",
       "tags": [
         "javascript",
         "promises",
-        "async await",
+        "async-await",
         "frontend"
       ],
       "coverImage": "/images/frontend/javascript/promises-async-await.png",
@@ -264,7 +800,7 @@
     },
     {
       "title": "Closures",
-      "description": "Mastering JavaScript closures - how they work, use cases, and common patterns.",
+      "description": "Master JavaScript closures - lexical environment, scope chain, and practical applications in functional programming",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
@@ -284,7 +820,7 @@
     },
     {
       "title": "Event Loop",
-      "description": "Understanding the JavaScript event loop - call stack, task queue, and microtasks.",
+      "description": "Deep dive into JavaScript event loop - call stack, task queue, microtasks, and how async operations actually work",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
@@ -301,6 +837,642 @@
       ],
       "slug": "34. event-loop",
       "path": "/blogs/frontend/javascript/34. event-loop"
+    },
+    {
+      "title": "Semantic HTML: Why It Matters",
+      "description": "Learn how semantic HTML improves accessibility, SEO, and code maintainability with practical examples.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "html",
+        "semantic",
+        "accessibility",
+        "seo",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/html/semantic-html.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "html",
+        "fundamentals"
+      ],
+      "slug": "semantic-html-why-it-matters",
+      "path": "/blogs/frontend/html/fundamentals/semantic-html-why-it-matters"
+    },
+    {
+      "title": "HTML Document Lifecycle",
+      "description": "Understand how browsers parse HTML, build the DOM, and render pages - from network request to final paint.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "html",
+        "parsing",
+        "dom",
+        "browser",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/html/document-lifecycle.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "html",
+        "fundamentals"
+      ],
+      "slug": "html-document-lifecycle",
+      "path": "/blogs/frontend/html/fundamentals/html-document-lifecycle"
+    },
+    {
+      "title": "Input Types Behavior",
+      "description": "Deep dive into HTML input types - behavior differences, browser support, and practical usage.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "html",
+        "forms",
+        "input",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/html/input-types.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "html",
+        "forms"
+      ],
+      "slug": "input-types-behavior",
+      "path": "/blogs/frontend/html/forms/input-types-behavior"
+    },
+    {
+      "title": "HTML Forms Validation Model",
+      "description": "Master HTML5 form validation - built-in constraints, custom validation, and the Constraint Validation API.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "html",
+        "forms",
+        "validation",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/html/forms-validation.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "html",
+        "forms"
+      ],
+      "slug": "html-forms-validation-model",
+      "path": "/blogs/frontend/html/forms/html-forms-validation-model"
+    },
+    {
+      "title": "Building Accessible Forms",
+      "description": "Create accessible forms that work for everyone - proper labeling, error handling, and navigation.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "html",
+        "forms",
+        "accessibility",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/html/accessible-forms.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "html",
+        "accessibility"
+      ],
+      "slug": "building-accessible-forms",
+      "path": "/blogs/frontend/html/accessibility/building-accessible-forms"
+    },
+    {
+      "title": "ARIA Basics for Developers",
+      "description": "Learn ARIA fundamentals - when to use it, common patterns, and accessibility best practices.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "html",
+        "aria",
+        "accessibility",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/html/aria-basics.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "html",
+        "accessibility"
+      ],
+      "slug": "aria-basics-for-developers",
+      "path": "/blogs/frontend/html/accessibility/aria-basics-for-developers"
+    },
+    {
+      "title": "Mobile-First vs Desktop-First",
+      "description": "Compare mobile-first and desktop-first approaches - when to use each and how to implement them.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "css",
+        "responsive",
+        "mobile-first",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/css/mobile-vs-desktop-first.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "css",
+        "responsive-design"
+      ],
+      "slug": "mobile-first-vs-desktop-first",
+      "path": "/blogs/frontend/css/responsive-design/mobile-first-vs-desktop-first"
+    },
+    {
+      "title": "Media Queries & Breakpoints Strategy",
+      "description": "Learn responsive design strategies - breakpoints, media query syntax, and common patterns.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "css",
+        "responsive",
+        "media queries",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/css/media-queries.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "css",
+        "responsive-design"
+      ],
+      "slug": "media-queries-breakpoints-strategy",
+      "path": "/blogs/frontend/css/responsive-design/media-queries-breakpoints-strategy"
+    },
+    {
+      "title": "How Browser Applies CSS",
+      "description": "Understand CSS selector specificity, the cascade, and how browsers match rules to elements.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "css",
+        "specificity",
+        "cascade",
+        "browser",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/css/browser-applies-css.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "css",
+        "rendering-engine"
+      ],
+      "slug": "how-browser-applies-css",
+      "path": "/blogs/frontend/css/rendering-engine/how-browser-applies-css"
+    },
+    {
+      "title": "CSS Reflow and Repaint",
+      "description": "Understand browser rendering performance - what causes reflows and repaints, and how to optimize.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "css",
+        "performance",
+        "reflow",
+        "repaint",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/css/reflow-repaint.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "css",
+        "performance"
+      ],
+      "slug": "css-reflow-repaint",
+      "path": "/blogs/frontend/css/performance/css-reflow-repaint"
+    },
+    {
+      "title": "Animation Performance Best Practices",
+      "description": "Create smooth 60fps animations - GPU acceleration, will-change, and avoiding layout thrashing.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "css",
+        "animation",
+        "performance",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/css/animation-performance.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "css",
+        "performance"
+      ],
+      "slug": "animation-performance-best-practices",
+      "path": "/blogs/frontend/css/performance/animation-performance-best-practices"
+    },
+    {
+      "title": "Positioning: Sticky, Absolute, Fixed",
+      "description": "Master CSS positioning - understand when to use static, relative, absolute, fixed, and sticky for different layouts.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "css",
+        "positioning",
+        "layout",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/css/positioning.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "css",
+        "layouts"
+      ],
+      "slug": "positioning-sticky-absolute-fixed",
+      "path": "/blogs/frontend/css/layouts/positioning-sticky-absolute-fixed"
+    },
+    {
+      "title": "Flexbox Real-World Layouts",
+      "description": "Master Flexbox with practical examples - navigation, card grids, form layouts, and common patterns.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "css",
+        "flexbox",
+        "layouts",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/css/flexbox-layouts.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "css",
+        "layouts"
+      ],
+      "slug": "flexbox-real-world-layouts",
+      "path": "/blogs/frontend/css/layouts/flexbox-real-world-layouts"
+    },
+    {
+      "title": "CSS Grid Architecture",
+      "description": "Master CSS Grid for complex two-dimensional layouts - page layouts, card systems, and responsive grids.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "css",
+        "grid",
+        "layouts",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/css/css-grid.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "css",
+        "layouts"
+      ],
+      "slug": "css-grid-architecture",
+      "path": "/blogs/frontend/css/layouts/css-grid-architecture"
+    },
+    {
+      "title": "CSS Box Model: The Complete Guide",
+      "description": "Master the CSS box model - content, padding, border, margin, and box-sizing. Build accurate layouts and avoid common CSS pitfalls.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "css",
+        "box model",
+        "layout",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/css/box-model.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "css"
+      ],
+      "slug": "41. css-box-model",
+      "path": "/blogs/frontend/css/41. css-box-model"
+    },
+    {
+      "title": "switchMap, map Explained",
+      "description": "Master RxJS switchMap and map operators - flattening streams and transforming data.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "rxjs",
+        "switchmap",
+        "map",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/rxjs-switchmap.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "rxjs"
+      ],
+      "slug": "switchmap-map-explained",
+      "path": "/blogs/frontend/angular/rxjs/switchmap-map-explained"
+    },
+    {
+      "title": "Observables vs Promises",
+      "description": "Understanding the difference between RxJS Observables and JavaScript Promises for async operations.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "rxjs",
+        "observables",
+        "promises",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/observables-promises.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "rxjs"
+      ],
+      "slug": "observables-vs-promises",
+      "path": "/blogs/frontend/angular/rxjs/observables-vs-promises"
+    },
+    {
+      "title": "Hot vs Cold Observables",
+      "description": "Understanding hot and cold observables in RxJS - how data producers work and when each applies.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "rxjs",
+        "hot",
+        "cold",
+        "observables",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/hot-cold-observables.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "rxjs"
+      ],
+      "slug": "hot-vs-cold-observables",
+      "path": "/blogs/frontend/angular/rxjs/hot-vs-cold-observables"
+    },
+    {
+      "title": "trackBy Function Importance",
+      "description": "Understanding Angular's trackBy function - why it matters for ngFor performance.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "performance",
+        "ngfor",
+        "trackby",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/trackby.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "performance"
+      ],
+      "slug": "trackby-function-importance",
+      "path": "/blogs/frontend/angular/performance/trackby-function-importance"
+    },
+    {
+      "title": "Angular Performance Optimization",
+      "description": "Optimizing Angular applications - change detection, lazy loading, bundle size, and more.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "performance",
+        "optimization",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/performance-optimization.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "performance"
+      ],
+      "slug": "angular-performance-optimization",
+      "path": "/blogs/frontend/angular/performance/angular-performance-optimization"
+    },
+    {
+      "title": "Injector Hierarchy",
+      "description": "Understanding Angular's injector hierarchy - how Angular resolves dependencies at different levels.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "dependency injection",
+        "injectors",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/injector-hierarchy.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "dependency-injection"
+      ],
+      "slug": "injector-hierarchy",
+      "path": "/blogs/frontend/angular/dependency-injection/injector-hierarchy"
+    },
+    {
+      "title": "Angular DI How It Works",
+      "description": "Understanding Angular's dependency injection system - providers, injectors, and tokens.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "dependency injection",
+        "di",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/di-explained.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "dependency-injection"
+      ],
+      "slug": "angular-di-how-it-works",
+      "path": "/blogs/frontend/angular/dependency-injection/angular-di-how-it-works"
+    },
+    {
+      "title": "Lifecycle Hooks Deep Dive",
+      "description": "Understanding Angular component lifecycle hooks - when each is called and what to do in each.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "lifecycle",
+        "components",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/lifecycle-hooks.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "components"
+      ],
+      "slug": "lifecycle-hooks-deep-dive",
+      "path": "/blogs/frontend/angular/components/lifecycle-hooks-deep-dive"
+    },
+    {
+      "title": "Input Output Patterns",
+      "description": "Angular component communication - @Input, @Output, and alternative patterns for parent-child communication.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "components",
+        "input",
+        "output",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/input-output.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "components"
+      ],
+      "slug": "input-output-patterns",
+      "path": "/blogs/frontend/angular/components/input-output-patterns"
+    },
+    {
+      "title": "Zone.js Explained",
+      "description": "Understanding how Zone.js works with Angular for automatic change detection.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "zonejs",
+        "change detection",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/zonejs.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "change-detection"
+      ],
+      "slug": "zonejs-explained",
+      "path": "/blogs/frontend/angular/change-detection/zonejs-explained"
+    },
+    {
+      "title": "OnPush vs Default Strategy",
+      "description": "Understanding Angular change detection strategies - when to use OnPush for performance.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "change detection",
+        "onpush",
+        "performance",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/change-detection-strategy.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "change-detection"
+      ],
+      "slug": "onpush-vs-default-strategy",
+      "path": "/blogs/frontend/angular/change-detection/onpush-vs-default-strategy"
+    },
+    {
+      "title": "Modules vs Standalone Components",
+      "description": "Understanding Angular modules vs standalone components - when to use each approach.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "modules",
+        "standalone",
+        "architecture",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/modules-standalone.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "architecture"
+      ],
+      "slug": "modules-vs-standalone-components",
+      "path": "/blogs/frontend/angular/architecture/modules-vs-standalone-components"
+    },
+    {
+      "title": "Angular App Bootstrapping",
+      "description": "Understand how Angular apps start - bootstrap process, platform, and module loading.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "bootstrap",
+        "platform",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/bootstrap.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "architecture"
+      ],
+      "slug": "angular-app-bootstrapping",
+      "path": "/blogs/frontend/angular/architecture/angular-app-bootstrapping"
+    },
+    {
+      "title": "How the Web Works",
+      "description": "Understanding the web from URL to page render - DNS, HTTP, browsers, and the rendering pipeline.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "web",
+        "http",
+        "dns",
+        "browser",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/how-web-works.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [],
+      "slug": "01-how-the-web-works",
+      "path": "/blogs/frontend/01-how-the-web-works"
+    },
+    {
+      "title": "Frontend Developer Roadmap",
+      "description": "Complete roadmap for becoming a frontend developer - from basics to advanced topics.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "roadmap",
+        "frontend",
+        "learning",
+        "beginner"
+      ],
+      "coverImage": "/images/frontend/roadmap.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [],
+      "slug": "00-roadmap",
+      "path": "/blogs/frontend/00-roadmap"
     }
   ]
 }

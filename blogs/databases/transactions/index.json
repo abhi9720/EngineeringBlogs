@@ -1,0 +1,66 @@
+{
+  "name": "Transactions",
+  "path": "/blogs/databases/transactions",
+  "blogs": [
+    {
+      "title": "Database Deadlocks",
+      "description": "Understand database deadlocks, prevention strategies, and detection techniques for maintaining system reliability.",
+      "date": "2026-05-11",
+      "author": "Engineering Blog",
+      "tags": [
+        "databases",
+        "transactions",
+        "deadlocks",
+        "concurrency"
+      ],
+      "coverImage": "/images/deadlocks.png",
+      "draft": false,
+      "category": "databases",
+      "hierarchy": [
+        "transactions"
+      ],
+      "slug": "83. deadlocks",
+      "path": "/blogs/databases/transactions/83. deadlocks"
+    },
+    {
+      "title": "Isolation Levels",
+      "description": "Learn about database transaction isolation levels: Read Uncommitted, Read Committed, Repeatable Read, and Serializable.",
+      "date": "2026-05-11",
+      "author": "Engineering Blog",
+      "tags": [
+        "databases",
+        "transactions",
+        "isolation",
+        "concurrency"
+      ],
+      "coverImage": "/images/isolation-levels.png",
+      "draft": false,
+      "category": "databases",
+      "hierarchy": [
+        "transactions"
+      ],
+      "slug": "82. isolation-levels",
+      "path": "/blogs/databases/transactions/82. isolation-levels"
+    },
+    {
+      "title": "ACID Properties",
+      "description": "Understand ACID transaction properties: Atomicity, Consistency, Isolation, and Durability in database systems.",
+      "date": "2026-05-11",
+      "author": "Engineering Blog",
+      "tags": [
+        "databases",
+        "transactions",
+        "acid",
+        "database-theory"
+      ],
+      "coverImage": "/images/acid-properties.png",
+      "draft": false,
+      "category": "databases",
+      "hierarchy": [
+        "transactions"
+      ],
+      "slug": "81. acid-properties",
+      "path": "/blogs/databases/transactions/81. acid-properties"
+    }
+  ]
+}

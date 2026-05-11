@@ -1,0 +1,48 @@
+{
+  "name": "Core Concepts",
+  "path": "/blogs/frontend/javascript/core-concepts",
+  "blogs": [
+    {
+      "title": "this Binding Explained",
+      "description": "Master JavaScript 'this' - understand how 'this' is determined in different contexts and common pitfalls.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "this",
+        "binding",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/this-binding.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript",
+        "core-concepts"
+      ],
+      "slug": "this-binding-explained",
+      "path": "/blogs/frontend/javascript/core-concepts/this-binding-explained"
+    },
+    {
+      "title": "Hoisting Behavior",
+      "description": "Understand JavaScript hoisting - how var, let, const, and function declarations are hoisted differently.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "javascript",
+        "hoisting",
+        "scope",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/javascript/hoisting.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "javascript",
+        "core-concepts"
+      ],
+      "slug": "hoisting-behavior",
+      "path": "/blogs/frontend/javascript/core-concepts/hoisting-behavior"
+    }
+  ]
+}

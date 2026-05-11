@@ -1,0 +1,88 @@
+{
+  "name": "Basics",
+  "path": "/blogs/system-design/basics",
+  "blogs": [
+    {
+      "title": "Database Sharding",
+      "description": "A comprehensive guide to database sharding in system design, covering sharding strategies, key selection, re-sharding, and implementation for scaling databases",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "database",
+        "sharding",
+        "system-design",
+        "scalability",
+        "distributed-systems"
+      ],
+      "coverImage": "/images/database-sharding.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "basics"
+      ],
+      "slug": "44. database-sharding",
+      "path": "/blogs/system-design/basics/44. database-sharding"
+    },
+    {
+      "title": "Caching Strategies",
+      "description": "A comprehensive guide to caching strategies in system design, covering multi-level caching, cache patterns, eviction policies, and implementation for improved performance",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "caching",
+        "system-design",
+        "performance",
+        "redis",
+        "memory"
+      ],
+      "coverImage": "/images/caching-strategies.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "basics"
+      ],
+      "slug": "43. caching-strategies",
+      "path": "/blogs/system-design/basics/43. caching-strategies"
+    },
+    {
+      "title": "Load Balancing",
+      "description": "A comprehensive guide to load balancing in system design, covering types of load balancers, algorithms, health checks, and implementation strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "load-balancing",
+        "system-design",
+        "infrastructure",
+        "networking"
+      ],
+      "coverImage": "/images/load-balancing.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "basics"
+      ],
+      "slug": "42. load-balancing",
+      "path": "/blogs/system-design/basics/42. load-balancing"
+    },
+    {
+      "title": "Scalability Introduction",
+      "description": "A comprehensive introduction to scalability concepts in system design, covering vertical vs horizontal scaling, types of scaling, and key principles",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "scalability",
+        "system-design",
+        "performance",
+        "architecture"
+      ],
+      "coverImage": "/images/scalability-introduction.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "basics"
+      ],
+      "slug": "41. scalability-introduction",
+      "path": "/blogs/system-design/basics/41. scalability-introduction"
+    }
+  ]
+}

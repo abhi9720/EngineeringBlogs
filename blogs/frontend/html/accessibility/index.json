@@ -1,0 +1,48 @@
+{
+  "name": "Accessibility",
+  "path": "/blogs/frontend/html/accessibility",
+  "blogs": [
+    {
+      "title": "Building Accessible Forms",
+      "description": "Create accessible forms that work for everyone - proper labeling, error handling, and navigation.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "html",
+        "forms",
+        "accessibility",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/html/accessible-forms.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "html",
+        "accessibility"
+      ],
+      "slug": "building-accessible-forms",
+      "path": "/blogs/frontend/html/accessibility/building-accessible-forms"
+    },
+    {
+      "title": "ARIA Basics for Developers",
+      "description": "Learn ARIA fundamentals - when to use it, common patterns, and accessibility best practices.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "html",
+        "aria",
+        "accessibility",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/html/aria-basics.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "html",
+        "accessibility"
+      ],
+      "slug": "aria-basics-for-developers",
+      "path": "/blogs/frontend/html/accessibility/aria-basics-for-developers"
+    }
+  ]
+}

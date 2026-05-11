@@ -1,0 +1,86 @@
+{
+  "name": "Sql",
+  "path": "/blogs/databases/sql",
+  "blogs": [
+    {
+      "title": "Database Normalization",
+      "description": "Understand database normalization forms (1NF, 2NF, 3NF, BCNF) and when to denormalize for performance.",
+      "date": "2026-05-11",
+      "author": "Engineering Blog",
+      "tags": [
+        "databases",
+        "sql",
+        "normalization",
+        "database-design"
+      ],
+      "coverImage": "/images/normalization.png",
+      "draft": false,
+      "category": "databases",
+      "hierarchy": [
+        "sql"
+      ],
+      "slug": "73. normalization",
+      "path": "/blogs/databases/sql/73. normalization"
+    },
+    {
+      "title": "Query Optimization",
+      "description": "Master database query optimization techniques to improve application performance and reduce resource usage.",
+      "date": "2026-05-11",
+      "author": "Engineering Blog",
+      "tags": [
+        "databases",
+        "sql",
+        "optimization",
+        "performance"
+      ],
+      "coverImage": "/images/query-optimization.png",
+      "draft": false,
+      "category": "databases",
+      "hierarchy": [
+        "sql"
+      ],
+      "slug": "72. query-optimization",
+      "path": "/blogs/databases/sql/72. query-optimization"
+    },
+    {
+      "title": "Joins Explained",
+      "description": "A comprehensive guide to SQL JOINs including INNER, LEFT, RIGHT, FULL, and CROSS joins with examples.",
+      "date": "2026-05-11",
+      "author": "Engineering Blog",
+      "tags": [
+        "databases",
+        "sql",
+        "joins",
+        "query"
+      ],
+      "coverImage": "/images/joins-explained.png",
+      "draft": false,
+      "category": "databases",
+      "hierarchy": [
+        "sql"
+      ],
+      "slug": "71. joins-explained",
+      "path": "/blogs/databases/sql/71. joins-explained"
+    },
+    {
+      "title": "Indexing in Databases",
+      "description": "Learn how database indexing improves query performance and when to use different index types.",
+      "date": "2026-05-11",
+      "author": "Engineering Blog",
+      "tags": [
+        "databases",
+        "indexing",
+        "performance",
+        "sql"
+      ],
+      "coverImage": "/images/indexing-databases.png",
+      "draft": false,
+      "category": "databases",
+      "hierarchy": [
+        "sql"
+      ],
+      "slug": "70. indexing",
+      "path": "/blogs/databases/sql/70. indexing"
+    }
+  ]
+}

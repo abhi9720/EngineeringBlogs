@@ -4,13 +4,15 @@
   "blogs": [
     {
       "title": "Blob vs Block Storage",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide comparing blob storage and block storage in system design, covering use cases, performance characteristics, and implementation strategies",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "blob-storage",
+        "block-storage",
+        "system-design",
+        "storage",
+        "cloud"
       ],
       "coverImage": "/images/blob-vs-block-storage.png",
       "draft": false,
@@ -23,13 +25,15 @@
     },
     {
       "title": "File Storage Systems",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide to file storage systems in system design, covering NFS, SMB/CIFS, distributed file systems, and implementation for enterprise applications",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "file-storage",
+        "nfs",
+        "system-design",
+        "storage",
+        "enterprise"
       ],
       "coverImage": "/images/file-storage-systems.png",
       "draft": false,
@@ -42,13 +46,15 @@
     },
     {
       "title": "Object Storage with S3",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide to object storage with Amazon S3, covering bucket operations, access control, versioning, lifecycle management, and implementation for scalable storage",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "object-storage",
+        "s3",
+        "aws",
+        "system-design",
+        "storage"
       ],
       "coverImage": "/images/object-storage-s3.png",
       "draft": false,
@@ -61,13 +67,15 @@
     },
     {
       "title": "CQRS Pattern",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide to the Command Query Responsibility Segregation pattern in system design, covering read/write separation, event sourcing, and implementation for high-performance applications",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "cqrs",
+        "system-design",
+        "patterns",
+        "architecture",
+        "event-sourcing"
       ],
       "coverImage": "/images/cqrs.png",
       "draft": false,
@@ -80,13 +88,15 @@
     },
     {
       "title": "Pub-Sub Model",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide to the publish-subscribe pattern in system design, covering message brokers, event-driven architecture, and implementation strategies for decoupled systems",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "pub-sub",
+        "messaging",
+        "system-design",
+        "event-driven",
+        "patterns"
       ],
       "coverImage": "/images/pub-sub-model.png",
       "draft": false,
@@ -99,13 +109,15 @@
     },
     {
       "title": "Circuit Breaker Pattern",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide to the circuit breaker pattern in system design, covering failure handling, resilience strategies, and implementation for distributed systems",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "circuit-breaker",
+        "system-design",
+        "resilience",
+        "fault-tolerance",
+        "patterns"
       ],
       "coverImage": "/images/circuit-breaker.png",
       "draft": false,
@@ -118,13 +130,15 @@
     },
     {
       "title": "Rate Limiting",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide to rate limiting in system design, covering token bucket algorithms, distributed rate limiting, and implementation strategies for API protection",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "rate-limiting",
+        "system-design",
+        "api",
+        "scalability",
+        "patterns"
       ],
       "coverImage": "/images/rate-limiting.png",
       "draft": false,
@@ -137,13 +151,16 @@
     },
     {
       "title": "Netflix Streaming System Design",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide to Netflix's streaming architecture, covering content delivery, recommendation systems, device adaptation, and global scaling for 200M+ subscribers",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "system-design",
+        "netflix",
+        "streaming",
+        "content-delivery",
+        "recommendations",
+        "case-study"
       ],
       "coverImage": "/images/netflix-streaming.png",
       "draft": false,
@@ -156,13 +173,16 @@
     },
     {
       "title": "YouTube System Design",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide to YouTube's system design, covering video storage, transcoding, CDN distribution, recommendations, and streaming architecture at scale",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "system-design",
+        "youtube",
+        "video-streaming",
+        "cdn",
+        "transcoding",
+        "case-study"
       ],
       "coverImage": "/images/youtube-system-design.png",
       "draft": false,
@@ -175,13 +195,16 @@
     },
     {
       "title": "Instagram Feed System Design",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide to designing Instagram's feed system, covering content ranking, fan-out mechanisms, caching strategies, and real-time updates for social feeds",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "system-design",
+        "instagram",
+        "feed",
+        "social",
+        "ranking",
+        "case-study"
       ],
       "coverImage": "/images/instagram-feed.png",
       "draft": false,
@@ -194,13 +217,15 @@
     },
     {
       "title": "WhatsApp Architecture",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide to WhatsApp's system architecture, covering real-time messaging, E2E encryption, media handling, and scaling to billions of users",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "system-design",
+        "whatsapp",
+        "messaging",
+        "real-time",
+        "case-study"
       ],
       "coverImage": "/images/whatsapp-architecture.png",
       "draft": false,
@@ -213,13 +238,15 @@
     },
     {
       "title": "URL Shortener System Design",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide to designing a URL shortener service like bit.ly, covering API design, storage, encoding, and implementation of scalable redirect systems",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "system-design",
+        "url-shortener",
+        "api-design",
+        "scalability",
+        "case-study"
       ],
       "coverImage": "/images/url-shortener.png",
       "draft": false,
@@ -232,13 +259,15 @@
     },
     {
       "title": "Database Sharding",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide to database sharding in system design, covering sharding strategies, key selection, re-sharding, and implementation for scaling databases",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "database",
+        "sharding",
+        "system-design",
+        "scalability",
+        "distributed-systems"
       ],
       "coverImage": "/images/database-sharding.png",
       "draft": false,
@@ -251,13 +280,15 @@
     },
     {
       "title": "Caching Strategies",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide to caching strategies in system design, covering multi-level caching, cache patterns, eviction policies, and implementation for improved performance",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "caching",
+        "system-design",
+        "performance",
+        "redis",
+        "memory"
       ],
       "coverImage": "/images/caching-strategies.png",
       "draft": false,
@@ -270,13 +301,14 @@
     },
     {
       "title": "Load Balancing",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive guide to load balancing in system design, covering types of load balancers, algorithms, health checks, and implementation strategies",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "load-balancing",
+        "system-design",
+        "infrastructure",
+        "networking"
       ],
       "coverImage": "/images/load-balancing.png",
       "draft": false,
@@ -289,13 +321,14 @@
     },
     {
       "title": "Scalability Introduction",
-      "description": "<Short SEO-friendly description of the blog>",
+      "description": "A comprehensive introduction to scalability concepts in system design, covering vertical vs horizontal scaling, types of scaling, and key principles",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "tag1",
-        "tag2",
-        "tag3"
+        "scalability",
+        "system-design",
+        "performance",
+        "architecture"
       ],
       "coverImage": "/images/scalability-introduction.png",
       "draft": false,

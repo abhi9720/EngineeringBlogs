@@ -1,0 +1,146 @@
+{
+  "name": "Spring Boot",
+  "path": "/blogs/backend/spring-boot",
+  "blogs": [
+    {
+      "title": "Transactions and Propagation",
+      "description": "Deep dive into Spring transaction management, propagation levels, isolation, and real-world patterns for reliable data consistency",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "transactions",
+        "database",
+        "jpa"
+      ],
+      "coverImage": "/images/transactions-and-propagation.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "transactions-and-propagation",
+      "path": "/blogs/backend/spring-boot/transactions-and-propagation"
+    },
+    {
+      "title": "Spring Security Filters",
+      "description": "Deep dive into Spring Security filter chain, custom filters, and how authentication flows through the pipeline",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-security",
+        "filters",
+        "authentication"
+      ],
+      "coverImage": "/images/spring-security-filters.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "spring-security-filters",
+      "path": "/blogs/backend/spring-boot/spring-security-filters"
+    },
+    {
+      "title": "Spring Data JPA Basics",
+      "description": "Master Spring Data JPA from repositories to custom queries, understanding how Hibernate integrates with Spring",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "jpa",
+        "hibernate",
+        "database"
+      ],
+      "coverImage": "/images/spring-data-jpa-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "spring-data-jpa-basics",
+      "path": "/blogs/backend/spring-boot/spring-data-jpa-basics"
+    },
+    {
+      "title": "REST API Best Practices",
+      "description": "Design production-ready REST APIs with proper error handling, versioning, documentation, and security practices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "rest-api",
+        "best-practices",
+        "web-services"
+      ],
+      "coverImage": "/images/rest-api-best-practices.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "rest-api-best-practices",
+      "path": "/blogs/backend/spring-boot/rest-api-best-practices"
+    },
+    {
+      "title": "JWT Authentication",
+      "description": "Deep dive into JWT authentication internals, real-world use cases, trade-offs, and production considerations for Spring Boot applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "security",
+        "jwt",
+        "authentication"
+      ],
+      "coverImage": "/images/jwt-authentication.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "jwt-authentication",
+      "path": "/blogs/backend/spring-boot/jwt-authentication"
+    },
+    {
+      "title": "Exception Handling",
+      "description": "Master exception handling in Spring Boot with global error handling, custom exceptions, and production-ready patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "exception-handling",
+        "error-handling",
+        "spring-mvc"
+      ],
+      "coverImage": "/images/exception-handling.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "exception-handling",
+      "path": "/blogs/backend/spring-boot/exception-handling"
+    },
+    {
+      "title": "Caching with Redis",
+      "description": "Master Redis caching in Spring Boot applications, from basic annotations to advanced patterns for high-performance systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "redis",
+        "caching",
+        "performance"
+      ],
+      "coverImage": "/images/caching-with-redis.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot"
+      ],
+      "slug": "caching-with-redis",
+      "path": "/blogs/backend/spring-boot/caching-with-redis"
+    }
+  ]
+}

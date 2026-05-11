@@ -1,0 +1,86 @@
+{
+  "name": "Caching",
+  "path": "/blogs/databases/caching",
+  "blogs": [
+    {
+      "title": "Write-Through vs Write-Back",
+      "description": "Compare write-through and write-back caching strategies for data consistency and write performance optimization.",
+      "date": "2026-05-11",
+      "author": "Engineering Blog",
+      "tags": [
+        "caching",
+        "system-design",
+        "database",
+        "architecture"
+      ],
+      "coverImage": "/images/write-through-vs-write-back.png",
+      "draft": false,
+      "category": "databases",
+      "hierarchy": [
+        "caching"
+      ],
+      "slug": "80. write-through-vs-write-back",
+      "path": "/blogs/databases/caching/80. write-through-vs-write-back"
+    },
+    {
+      "title": "Cache-Aside Pattern",
+      "description": "Implement the cache-aside pattern for optimal read performance with lazy loading and event-driven invalidation.",
+      "date": "2026-05-11",
+      "author": "Engineering Blog",
+      "tags": [
+        "caching",
+        "design-patterns",
+        "redis",
+        "system-design"
+      ],
+      "coverImage": "/images/cache-aside-pattern.png",
+      "draft": false,
+      "category": "databases",
+      "hierarchy": [
+        "caching"
+      ],
+      "slug": "79. cache-aside-pattern",
+      "path": "/blogs/databases/caching/79. cache-aside-pattern"
+    },
+    {
+      "title": "Cache Invalidation",
+      "description": "Learn cache invalidation strategies including TTL, event-driven, and version-based approaches for maintaining data consistency.",
+      "date": "2026-05-11",
+      "author": "Engineering Blog",
+      "tags": [
+        "caching",
+        "redis",
+        "system-design",
+        "database"
+      ],
+      "coverImage": "/images/cache-invalidation.png",
+      "draft": false,
+      "category": "databases",
+      "hierarchy": [
+        "caching"
+      ],
+      "slug": "78. cache-invalidation",
+      "path": "/blogs/databases/caching/78. cache-invalidation"
+    },
+    {
+      "title": "Redis Introduction",
+      "description": "Learn Redis data structures, commands, and use cases for caching, sessions, and real-time applications.",
+      "date": "2026-05-11",
+      "author": "Engineering Blog",
+      "tags": [
+        "redis",
+        "caching",
+        "nosql",
+        "database"
+      ],
+      "coverImage": "/images/redis-introduction.png",
+      "draft": false,
+      "category": "databases",
+      "hierarchy": [
+        "caching"
+      ],
+      "slug": "77. redis-introduction",
+      "path": "/blogs/databases/caching/77. redis-introduction"
+    }
+  ]
+}

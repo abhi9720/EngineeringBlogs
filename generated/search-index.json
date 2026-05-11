@@ -1,13 +1,15 @@
 [
   {
     "title": "Blob vs Block Storage",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide comparing blob storage and block storage in system design, covering use cases, performance characteristics, and implementation strategies",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "blob-storage",
+      "block-storage",
+      "system-design",
+      "storage",
+      "cloud"
     ],
     "coverImage": "/images/blob-vs-block-storage.png",
     "draft": false,
@@ -20,13 +22,15 @@
   },
   {
     "title": "File Storage Systems",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide to file storage systems in system design, covering NFS, SMB/CIFS, distributed file systems, and implementation for enterprise applications",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "file-storage",
+      "nfs",
+      "system-design",
+      "storage",
+      "enterprise"
     ],
     "coverImage": "/images/file-storage-systems.png",
     "draft": false,
@@ -39,13 +43,15 @@
   },
   {
     "title": "Object Storage with S3",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide to object storage with Amazon S3, covering bucket operations, access control, versioning, lifecycle management, and implementation for scalable storage",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "object-storage",
+      "s3",
+      "aws",
+      "system-design",
+      "storage"
     ],
     "coverImage": "/images/object-storage-s3.png",
     "draft": false,
@@ -58,13 +64,15 @@
   },
   {
     "title": "CQRS Pattern",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide to the Command Query Responsibility Segregation pattern in system design, covering read/write separation, event sourcing, and implementation for high-performance applications",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "cqrs",
+      "system-design",
+      "patterns",
+      "architecture",
+      "event-sourcing"
     ],
     "coverImage": "/images/cqrs.png",
     "draft": false,
@@ -77,13 +85,15 @@
   },
   {
     "title": "Pub-Sub Model",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide to the publish-subscribe pattern in system design, covering message brokers, event-driven architecture, and implementation strategies for decoupled systems",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "pub-sub",
+      "messaging",
+      "system-design",
+      "event-driven",
+      "patterns"
     ],
     "coverImage": "/images/pub-sub-model.png",
     "draft": false,
@@ -96,13 +106,15 @@
   },
   {
     "title": "Circuit Breaker Pattern",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide to the circuit breaker pattern in system design, covering failure handling, resilience strategies, and implementation for distributed systems",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "circuit-breaker",
+      "system-design",
+      "resilience",
+      "fault-tolerance",
+      "patterns"
     ],
     "coverImage": "/images/circuit-breaker.png",
     "draft": false,
@@ -115,13 +127,15 @@
   },
   {
     "title": "Rate Limiting",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide to rate limiting in system design, covering token bucket algorithms, distributed rate limiting, and implementation strategies for API protection",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "rate-limiting",
+      "system-design",
+      "api",
+      "scalability",
+      "patterns"
     ],
     "coverImage": "/images/rate-limiting.png",
     "draft": false,
@@ -134,13 +148,16 @@
   },
   {
     "title": "Netflix Streaming System Design",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide to Netflix's streaming architecture, covering content delivery, recommendation systems, device adaptation, and global scaling for 200M+ subscribers",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "system-design",
+      "netflix",
+      "streaming",
+      "content-delivery",
+      "recommendations",
+      "case-study"
     ],
     "coverImage": "/images/netflix-streaming.png",
     "draft": false,
@@ -153,13 +170,16 @@
   },
   {
     "title": "YouTube System Design",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide to YouTube's system design, covering video storage, transcoding, CDN distribution, recommendations, and streaming architecture at scale",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "system-design",
+      "youtube",
+      "video-streaming",
+      "cdn",
+      "transcoding",
+      "case-study"
     ],
     "coverImage": "/images/youtube-system-design.png",
     "draft": false,
@@ -172,13 +192,16 @@
   },
   {
     "title": "Instagram Feed System Design",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide to designing Instagram's feed system, covering content ranking, fan-out mechanisms, caching strategies, and real-time updates for social feeds",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "system-design",
+      "instagram",
+      "feed",
+      "social",
+      "ranking",
+      "case-study"
     ],
     "coverImage": "/images/instagram-feed.png",
     "draft": false,
@@ -191,13 +214,15 @@
   },
   {
     "title": "WhatsApp Architecture",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide to WhatsApp's system architecture, covering real-time messaging, E2E encryption, media handling, and scaling to billions of users",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "system-design",
+      "whatsapp",
+      "messaging",
+      "real-time",
+      "case-study"
     ],
     "coverImage": "/images/whatsapp-architecture.png",
     "draft": false,
@@ -210,13 +235,15 @@
   },
   {
     "title": "URL Shortener System Design",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide to designing a URL shortener service like bit.ly, covering API design, storage, encoding, and implementation of scalable redirect systems",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "system-design",
+      "url-shortener",
+      "api-design",
+      "scalability",
+      "case-study"
     ],
     "coverImage": "/images/url-shortener.png",
     "draft": false,
@@ -229,13 +256,15 @@
   },
   {
     "title": "Database Sharding",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide to database sharding in system design, covering sharding strategies, key selection, re-sharding, and implementation for scaling databases",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "database",
+      "sharding",
+      "system-design",
+      "scalability",
+      "distributed-systems"
     ],
     "coverImage": "/images/database-sharding.png",
     "draft": false,
@@ -248,13 +277,15 @@
   },
   {
     "title": "Caching Strategies",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide to caching strategies in system design, covering multi-level caching, cache patterns, eviction policies, and implementation for improved performance",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "caching",
+      "system-design",
+      "performance",
+      "redis",
+      "memory"
     ],
     "coverImage": "/images/caching-strategies.png",
     "draft": false,
@@ -267,13 +298,14 @@
   },
   {
     "title": "Load Balancing",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive guide to load balancing in system design, covering types of load balancers, algorithms, health checks, and implementation strategies",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "load-balancing",
+      "system-design",
+      "infrastructure",
+      "networking"
     ],
     "coverImage": "/images/load-balancing.png",
     "draft": false,
@@ -286,13 +318,14 @@
   },
   {
     "title": "Scalability Introduction",
-    "description": "<Short SEO-friendly description of the blog>",
+    "description": "A comprehensive introduction to scalability concepts in system design, covering vertical vs horizontal scaling, types of scaling, and key principles",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
+      "scalability",
+      "system-design",
+      "performance",
+      "architecture"
     ],
     "coverImage": "/images/scalability-introduction.png",
     "draft": false,
@@ -302,6 +335,327 @@
     ],
     "slug": "41. scalability-introduction",
     "path": "/blogs/system-design/basics/41. scalability-introduction"
+  },
+  {
+    "title": "Zustand vs Redux",
+    "description": "Comparing Zustand and Redux - when to use each for React state management.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "zustand",
+      "redux",
+      "state management",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/zustand-vs-redux.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "state-management"
+    ],
+    "slug": "zustand-vs-redux",
+    "path": "/blogs/frontend/react/state-management/zustand-vs-redux"
+  },
+  {
+    "title": "Redux Flow Explained",
+    "description": "Understanding Redux architecture - actions, reducers, store, and how data flows.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "redux",
+      "state management",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/redux-flow.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "state-management"
+    ],
+    "slug": "redux-flow-explained",
+    "path": "/blogs/frontend/react/state-management/redux-flow-explained"
+  },
+  {
+    "title": "Prop Drilling Problem",
+    "description": "Understanding and solving the prop drilling issue - when data needs to pass through many component levels.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "state management",
+      "props",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/prop-drilling.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "state-management"
+    ],
+    "slug": "prop-drilling-problem",
+    "path": "/blogs/frontend/react/state-management/prop-drilling-problem"
+  },
+  {
+    "title": "Context API Limitations",
+    "description": "Understanding React Context API limitations - when it's appropriate and when to use other solutions.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "context",
+      "state management",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/context-limitations.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "state-management"
+    ],
+    "slug": "context-api-limitations",
+    "path": "/blogs/frontend/react/state-management/context-api-limitations"
+  },
+  {
+    "title": "Virtual DOM Explained",
+    "description": "Understand the Virtual DOM - how React maintains an in-memory representation of the real DOM.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "virtual dom",
+      "rendering",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/virtual-dom.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "rendering-engine"
+    ],
+    "slug": "virtual-dom-explained",
+    "path": "/blogs/frontend/react/rendering-engine/virtual-dom-explained"
+  },
+  {
+    "title": "React Reconciliation Algorithm",
+    "description": "Understand how React compares and updates DOM - the reconciliation algorithm and diffing strategy.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "reconciliation",
+      "virtual dom",
+      "diffing",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/reconciliation.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "rendering-engine"
+    ],
+    "slug": "reconciliation-algorithm",
+    "path": "/blogs/frontend/react/rendering-engine/reconciliation-algorithm"
+  },
+  {
+    "title": "React Performance Profiling",
+    "description": "Profiling React applications - using React DevTools to find and fix performance issues.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "performance",
+      "profiling",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/profiling.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "performance"
+    ],
+    "slug": "react-performance-profiling",
+    "path": "/blogs/frontend/react/performance/react-performance-profiling"
+  },
+  {
+    "title": "Memoization Mistakes",
+    "description": "Common mistakes with React memoization - using React.memo, useMemo, and useCallback incorrectly.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "memoization",
+      "performance",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/memoization-mistakes.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "performance"
+    ],
+    "slug": "memoization-mistakes",
+    "path": "/blogs/frontend/react/performance/memoization-mistakes"
+  },
+  {
+    "title": "List Virtualization",
+    "description": "Rendering large lists efficiently - windowing and virtualization techniques in React.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "performance",
+      "virtualization",
+      "lists",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/virtualization.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "performance"
+    ],
+    "slug": "list-virtualization",
+    "path": "/blogs/frontend/react/performance/list-virtualization"
+  },
+  {
+    "title": "useMemo & useCallback Real Use Cases",
+    "description": "Practical examples of when and how to use useMemo and useCallback for performance optimization.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "hooks",
+      "usememo",
+      "usecallback",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/usememo-usecallback.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "hooks"
+    ],
+    "slug": "usememo-usecallback-real-usecases",
+    "path": "/blogs/frontend/react/hooks/usememo-usecallback-real-usecases"
+  },
+  {
+    "title": "useEffect Dependency Problems",
+    "description": "Common useEffect issues - infinite loops, missing dependencies, and how to fix them.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "hooks",
+      "useEffect",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/useeffect-problems.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "hooks"
+    ],
+    "slug": "useeffect-dependency-problems",
+    "path": "/blogs/frontend/react/hooks/useeffect-dependency-problems"
+  },
+  {
+    "title": "Custom Hooks Design Patterns",
+    "description": "Creating reusable custom hooks - patterns for extracting logic and state from components.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "hooks",
+      "custom hooks",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/custom-hooks.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "hooks"
+    ],
+    "slug": "custom-hooks-design-patterns",
+    "path": "/blogs/frontend/react/hooks/custom-hooks-design-patterns"
+  },
+  {
+    "title": "Props vs State Decision Guide",
+    "description": "When to use props vs state - making the right architectural decisions in React components.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "props",
+      "state",
+      "architecture",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/props-vs-state.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "components"
+    ],
+    "slug": "props-vs-state-decision-guide",
+    "path": "/blogs/frontend/react/components/props-vs-state-decision-guide"
+  },
+  {
+    "title": "Controlled vs Uncontrolled Components",
+    "description": "Understand controlled (state-driven) vs uncontrolled (ref-driven) components in React.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "forms",
+      "controlled",
+      "uncontrolled",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/controlled-uncontrolled.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "components"
+    ],
+    "slug": "controlled-vs-uncontrolled-components",
+    "path": "/blogs/frontend/react/components/controlled-vs-uncontrolled-components"
+  },
+  {
+    "title": "Component Re-render Causes",
+    "description": "Understanding why React components re-render - state changes, props, context, and how to optimize.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "react",
+      "re-render",
+      "performance",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/react/re-render-causes.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "react",
+      "components"
+    ],
+    "slug": "component-re-render-causes",
+    "path": "/blogs/frontend/react/components/component-re-render-causes"
   },
   {
     "title": "State Management",
@@ -365,7 +719,7 @@
   },
   {
     "title": "React Rendering Cycle",
-    "description": "Understanding how React's rendering cycle works and how to optimize component updates.",
+    "description": "Deep dive into React's rendering cycle: reconciliation, virtual DOM, memo, and optimization techniques",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
@@ -524,8 +878,223 @@
     "path": "/blogs/frontend/nextjs/30. ssr-vs-ssg"
   },
   {
+    "title": "Call Stack, Heap & Queue Model",
+    "description": "Understand JavaScript runtime - how call stack, memory heap, and task queue work together.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "javascript",
+      "runtime",
+      "call stack",
+      "memory heap",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/javascript/call-stack-heap.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "javascript",
+      "runtime"
+    ],
+    "slug": "call-stack-heap-queue-model",
+    "path": "/blogs/frontend/javascript/runtime/call-stack-heap-queue-model"
+  },
+  {
+    "title": "Memory Leaks in JavaScript",
+    "description": "Identify and prevent memory leaks - common causes, detection, and best practices.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "javascript",
+      "memory",
+      "performance",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/javascript/memory-leaks.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "javascript",
+      "performance"
+    ],
+    "slug": "memory-leaks-in-javascript",
+    "path": "/blogs/frontend/javascript/performance/memory-leaks-in-javascript"
+  },
+  {
+    "title": "Debounce & Throttle: Use Cases",
+    "description": "Master debounce and throttle - when to use each, implementation, and real-world patterns.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "javascript",
+      "performance",
+      "debounce",
+      "throttle",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/javascript/debounce-throttle.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "javascript",
+      "performance"
+    ],
+    "slug": "debounce-throttle-use-cases",
+    "path": "/blogs/frontend/javascript/performance/debounce-throttle-use-cases"
+  },
+  {
+    "title": "Event Delegation Pattern",
+    "description": "Master event delegation - handle many events with one listener, improve performance, and understand the pattern.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "javascript",
+      "events",
+      "delegation",
+      "performance",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/javascript/event-delegation.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "javascript",
+      "dom"
+    ],
+    "slug": "event-delegation-pattern",
+    "path": "/blogs/frontend/javascript/dom/event-delegation-pattern"
+  },
+  {
+    "title": "DOM Manipulation Best Practices",
+    "description": "Optimize DOM operations - minimize reflows, use DocumentFragment, batch updates, and more.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "javascript",
+      "dom",
+      "performance",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/javascript/dom-manipulation.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "javascript",
+      "dom"
+    ],
+    "slug": "dom-manipulation-best-practices",
+    "path": "/blogs/frontend/javascript/dom/dom-manipulation-best-practices"
+  },
+  {
+    "title": "this Binding Explained",
+    "description": "Master JavaScript 'this' - understand how 'this' is determined in different contexts and common pitfalls.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "javascript",
+      "this",
+      "binding",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/javascript/this-binding.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "javascript",
+      "core-concepts"
+    ],
+    "slug": "this-binding-explained",
+    "path": "/blogs/frontend/javascript/core-concepts/this-binding-explained"
+  },
+  {
+    "title": "Hoisting Behavior",
+    "description": "Understand JavaScript hoisting - how var, let, const, and function declarations are hoisted differently.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "javascript",
+      "hoisting",
+      "scope",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/javascript/hoisting.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "javascript",
+      "core-concepts"
+    ],
+    "slug": "hoisting-behavior",
+    "path": "/blogs/frontend/javascript/core-concepts/hoisting-behavior"
+  },
+  {
+    "title": "Promises Deep Dive",
+    "description": "Master JavaScript Promises - states, chaining, error handling, and common patterns.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "javascript",
+      "promises",
+      "async",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/javascript/promises-deep-dive.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "javascript",
+      "async"
+    ],
+    "slug": "promises-deep-dive",
+    "path": "/blogs/frontend/javascript/async/promises-deep-dive"
+  },
+  {
+    "title": "Microtasks vs Macrotasks",
+    "description": "Understand JavaScript task queues - microtasks (promises) vs macrotasks (setTimeout), execution order.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "javascript",
+      "async",
+      "microtasks",
+      "macrotasks",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/javascript/microtasks-macrotasks.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "javascript",
+      "async"
+    ],
+    "slug": "microtasks-vs-macrotasks",
+    "path": "/blogs/frontend/javascript/async/microtasks-vs-macrotasks"
+  },
+  {
+    "title": "async/await Internals",
+    "description": "Understand how async/await works - syntactic sugar over Promises, execution flow, and common pitfalls.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "javascript",
+      "async",
+      "await",
+      "promises",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/javascript/async-await.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "javascript",
+      "async"
+    ],
+    "slug": "async-await-internals",
+    "path": "/blogs/frontend/javascript/async/async-await-internals"
+  },
+  {
     "title": "Prototype Chain",
-    "description": "Understanding JavaScript prototype chain and inheritance patterns.",
+    "description": "Understanding JavaScript prototype chain, prototypal inheritance, constructor functions, and ES6 classes",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
@@ -544,14 +1113,14 @@
     "path": "/blogs/frontend/javascript/37. prototype-chain"
   },
   {
-    "title": "Promises and Async Await",
-    "description": "Understanding JavaScript Promises and async/await for asynchronous programming.",
-    "date": "2026-05-11",
+    "title": "Promises and Async/Await",
+    "description": "Deep dive into JavaScript asynchronous programming - Promises, async/await patterns, error handling, and concurrency",
+    "date": "6 May 2025",
     "author": "Abhishek Tiwari",
     "tags": [
       "javascript",
       "promises",
-      "async await",
+      "async-await",
       "frontend"
     ],
     "coverImage": "/images/frontend/javascript/promises-async-await.png",
@@ -565,7 +1134,7 @@
   },
   {
     "title": "Closures",
-    "description": "Mastering JavaScript closures - how they work, use cases, and common patterns.",
+    "description": "Master JavaScript closures - lexical environment, scope chain, and practical applications in functional programming",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
@@ -585,7 +1154,7 @@
   },
   {
     "title": "Event Loop",
-    "description": "Understanding the JavaScript event loop - call stack, task queue, and microtasks.",
+    "description": "Deep dive into JavaScript event loop - call stack, task queue, microtasks, and how async operations actually work",
     "date": "2026-05-11",
     "author": "Abhishek Tiwari",
     "tags": [
@@ -602,6 +1171,642 @@
     ],
     "slug": "34. event-loop",
     "path": "/blogs/frontend/javascript/34. event-loop"
+  },
+  {
+    "title": "Semantic HTML: Why It Matters",
+    "description": "Learn how semantic HTML improves accessibility, SEO, and code maintainability with practical examples.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "html",
+      "semantic",
+      "accessibility",
+      "seo",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/html/semantic-html.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "html",
+      "fundamentals"
+    ],
+    "slug": "semantic-html-why-it-matters",
+    "path": "/blogs/frontend/html/fundamentals/semantic-html-why-it-matters"
+  },
+  {
+    "title": "HTML Document Lifecycle",
+    "description": "Understand how browsers parse HTML, build the DOM, and render pages - from network request to final paint.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "html",
+      "parsing",
+      "dom",
+      "browser",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/html/document-lifecycle.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "html",
+      "fundamentals"
+    ],
+    "slug": "html-document-lifecycle",
+    "path": "/blogs/frontend/html/fundamentals/html-document-lifecycle"
+  },
+  {
+    "title": "Input Types Behavior",
+    "description": "Deep dive into HTML input types - behavior differences, browser support, and practical usage.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "html",
+      "forms",
+      "input",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/html/input-types.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "html",
+      "forms"
+    ],
+    "slug": "input-types-behavior",
+    "path": "/blogs/frontend/html/forms/input-types-behavior"
+  },
+  {
+    "title": "HTML Forms Validation Model",
+    "description": "Master HTML5 form validation - built-in constraints, custom validation, and the Constraint Validation API.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "html",
+      "forms",
+      "validation",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/html/forms-validation.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "html",
+      "forms"
+    ],
+    "slug": "html-forms-validation-model",
+    "path": "/blogs/frontend/html/forms/html-forms-validation-model"
+  },
+  {
+    "title": "Building Accessible Forms",
+    "description": "Create accessible forms that work for everyone - proper labeling, error handling, and navigation.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "html",
+      "forms",
+      "accessibility",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/html/accessible-forms.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "html",
+      "accessibility"
+    ],
+    "slug": "building-accessible-forms",
+    "path": "/blogs/frontend/html/accessibility/building-accessible-forms"
+  },
+  {
+    "title": "ARIA Basics for Developers",
+    "description": "Learn ARIA fundamentals - when to use it, common patterns, and accessibility best practices.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "html",
+      "aria",
+      "accessibility",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/html/aria-basics.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "html",
+      "accessibility"
+    ],
+    "slug": "aria-basics-for-developers",
+    "path": "/blogs/frontend/html/accessibility/aria-basics-for-developers"
+  },
+  {
+    "title": "Mobile-First vs Desktop-First",
+    "description": "Compare mobile-first and desktop-first approaches - when to use each and how to implement them.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "css",
+      "responsive",
+      "mobile-first",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/css/mobile-vs-desktop-first.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "css",
+      "responsive-design"
+    ],
+    "slug": "mobile-first-vs-desktop-first",
+    "path": "/blogs/frontend/css/responsive-design/mobile-first-vs-desktop-first"
+  },
+  {
+    "title": "Media Queries & Breakpoints Strategy",
+    "description": "Learn responsive design strategies - breakpoints, media query syntax, and common patterns.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "css",
+      "responsive",
+      "media queries",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/css/media-queries.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "css",
+      "responsive-design"
+    ],
+    "slug": "media-queries-breakpoints-strategy",
+    "path": "/blogs/frontend/css/responsive-design/media-queries-breakpoints-strategy"
+  },
+  {
+    "title": "How Browser Applies CSS",
+    "description": "Understand CSS selector specificity, the cascade, and how browsers match rules to elements.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "css",
+      "specificity",
+      "cascade",
+      "browser",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/css/browser-applies-css.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "css",
+      "rendering-engine"
+    ],
+    "slug": "how-browser-applies-css",
+    "path": "/blogs/frontend/css/rendering-engine/how-browser-applies-css"
+  },
+  {
+    "title": "CSS Reflow and Repaint",
+    "description": "Understand browser rendering performance - what causes reflows and repaints, and how to optimize.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "css",
+      "performance",
+      "reflow",
+      "repaint",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/css/reflow-repaint.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "css",
+      "performance"
+    ],
+    "slug": "css-reflow-repaint",
+    "path": "/blogs/frontend/css/performance/css-reflow-repaint"
+  },
+  {
+    "title": "Animation Performance Best Practices",
+    "description": "Create smooth 60fps animations - GPU acceleration, will-change, and avoiding layout thrashing.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "css",
+      "animation",
+      "performance",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/css/animation-performance.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "css",
+      "performance"
+    ],
+    "slug": "animation-performance-best-practices",
+    "path": "/blogs/frontend/css/performance/animation-performance-best-practices"
+  },
+  {
+    "title": "Positioning: Sticky, Absolute, Fixed",
+    "description": "Master CSS positioning - understand when to use static, relative, absolute, fixed, and sticky for different layouts.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "css",
+      "positioning",
+      "layout",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/css/positioning.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "css",
+      "layouts"
+    ],
+    "slug": "positioning-sticky-absolute-fixed",
+    "path": "/blogs/frontend/css/layouts/positioning-sticky-absolute-fixed"
+  },
+  {
+    "title": "Flexbox Real-World Layouts",
+    "description": "Master Flexbox with practical examples - navigation, card grids, form layouts, and common patterns.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "css",
+      "flexbox",
+      "layouts",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/css/flexbox-layouts.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "css",
+      "layouts"
+    ],
+    "slug": "flexbox-real-world-layouts",
+    "path": "/blogs/frontend/css/layouts/flexbox-real-world-layouts"
+  },
+  {
+    "title": "CSS Grid Architecture",
+    "description": "Master CSS Grid for complex two-dimensional layouts - page layouts, card systems, and responsive grids.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "css",
+      "grid",
+      "layouts",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/css/css-grid.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "css",
+      "layouts"
+    ],
+    "slug": "css-grid-architecture",
+    "path": "/blogs/frontend/css/layouts/css-grid-architecture"
+  },
+  {
+    "title": "CSS Box Model: The Complete Guide",
+    "description": "Master the CSS box model - content, padding, border, margin, and box-sizing. Build accurate layouts and avoid common CSS pitfalls.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "css",
+      "box model",
+      "layout",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/css/box-model.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "css"
+    ],
+    "slug": "41. css-box-model",
+    "path": "/blogs/frontend/css/41. css-box-model"
+  },
+  {
+    "title": "switchMap, map Explained",
+    "description": "Master RxJS switchMap and map operators - flattening streams and transforming data.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "angular",
+      "rxjs",
+      "switchmap",
+      "map",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/angular/rxjs-switchmap.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "angular",
+      "rxjs"
+    ],
+    "slug": "switchmap-map-explained",
+    "path": "/blogs/frontend/angular/rxjs/switchmap-map-explained"
+  },
+  {
+    "title": "Observables vs Promises",
+    "description": "Understanding the difference between RxJS Observables and JavaScript Promises for async operations.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "angular",
+      "rxjs",
+      "observables",
+      "promises",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/angular/observables-promises.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "angular",
+      "rxjs"
+    ],
+    "slug": "observables-vs-promises",
+    "path": "/blogs/frontend/angular/rxjs/observables-vs-promises"
+  },
+  {
+    "title": "Hot vs Cold Observables",
+    "description": "Understanding hot and cold observables in RxJS - how data producers work and when each applies.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "angular",
+      "rxjs",
+      "hot",
+      "cold",
+      "observables",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/angular/hot-cold-observables.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "angular",
+      "rxjs"
+    ],
+    "slug": "hot-vs-cold-observables",
+    "path": "/blogs/frontend/angular/rxjs/hot-vs-cold-observables"
+  },
+  {
+    "title": "trackBy Function Importance",
+    "description": "Understanding Angular's trackBy function - why it matters for ngFor performance.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "angular",
+      "performance",
+      "ngfor",
+      "trackby",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/angular/trackby.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "angular",
+      "performance"
+    ],
+    "slug": "trackby-function-importance",
+    "path": "/blogs/frontend/angular/performance/trackby-function-importance"
+  },
+  {
+    "title": "Angular Performance Optimization",
+    "description": "Optimizing Angular applications - change detection, lazy loading, bundle size, and more.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "angular",
+      "performance",
+      "optimization",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/angular/performance-optimization.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "angular",
+      "performance"
+    ],
+    "slug": "angular-performance-optimization",
+    "path": "/blogs/frontend/angular/performance/angular-performance-optimization"
+  },
+  {
+    "title": "Injector Hierarchy",
+    "description": "Understanding Angular's injector hierarchy - how Angular resolves dependencies at different levels.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "angular",
+      "dependency injection",
+      "injectors",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/angular/injector-hierarchy.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "angular",
+      "dependency-injection"
+    ],
+    "slug": "injector-hierarchy",
+    "path": "/blogs/frontend/angular/dependency-injection/injector-hierarchy"
+  },
+  {
+    "title": "Angular DI How It Works",
+    "description": "Understanding Angular's dependency injection system - providers, injectors, and tokens.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "angular",
+      "dependency injection",
+      "di",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/angular/di-explained.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "angular",
+      "dependency-injection"
+    ],
+    "slug": "angular-di-how-it-works",
+    "path": "/blogs/frontend/angular/dependency-injection/angular-di-how-it-works"
+  },
+  {
+    "title": "Lifecycle Hooks Deep Dive",
+    "description": "Understanding Angular component lifecycle hooks - when each is called and what to do in each.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "angular",
+      "lifecycle",
+      "components",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/angular/lifecycle-hooks.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "angular",
+      "components"
+    ],
+    "slug": "lifecycle-hooks-deep-dive",
+    "path": "/blogs/frontend/angular/components/lifecycle-hooks-deep-dive"
+  },
+  {
+    "title": "Input Output Patterns",
+    "description": "Angular component communication - @Input, @Output, and alternative patterns for parent-child communication.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "angular",
+      "components",
+      "input",
+      "output",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/angular/input-output.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "angular",
+      "components"
+    ],
+    "slug": "input-output-patterns",
+    "path": "/blogs/frontend/angular/components/input-output-patterns"
+  },
+  {
+    "title": "Zone.js Explained",
+    "description": "Understanding how Zone.js works with Angular for automatic change detection.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "angular",
+      "zonejs",
+      "change detection",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/angular/zonejs.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "angular",
+      "change-detection"
+    ],
+    "slug": "zonejs-explained",
+    "path": "/blogs/frontend/angular/change-detection/zonejs-explained"
+  },
+  {
+    "title": "OnPush vs Default Strategy",
+    "description": "Understanding Angular change detection strategies - when to use OnPush for performance.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "angular",
+      "change detection",
+      "onpush",
+      "performance",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/angular/change-detection-strategy.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "angular",
+      "change-detection"
+    ],
+    "slug": "onpush-vs-default-strategy",
+    "path": "/blogs/frontend/angular/change-detection/onpush-vs-default-strategy"
+  },
+  {
+    "title": "Modules vs Standalone Components",
+    "description": "Understanding Angular modules vs standalone components - when to use each approach.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "angular",
+      "modules",
+      "standalone",
+      "architecture",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/angular/modules-standalone.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "angular",
+      "architecture"
+    ],
+    "slug": "modules-vs-standalone-components",
+    "path": "/blogs/frontend/angular/architecture/modules-vs-standalone-components"
+  },
+  {
+    "title": "Angular App Bootstrapping",
+    "description": "Understand how Angular apps start - bootstrap process, platform, and module loading.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "angular",
+      "bootstrap",
+      "platform",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/angular/bootstrap.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [
+      "angular",
+      "architecture"
+    ],
+    "slug": "angular-app-bootstrapping",
+    "path": "/blogs/frontend/angular/architecture/angular-app-bootstrapping"
+  },
+  {
+    "title": "How the Web Works",
+    "description": "Understanding the web from URL to page render - DNS, HTTP, browsers, and the rendering pipeline.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "web",
+      "http",
+      "dns",
+      "browser",
+      "frontend"
+    ],
+    "coverImage": "/images/frontend/how-web-works.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [],
+    "slug": "01-how-the-web-works",
+    "path": "/blogs/frontend/01-how-the-web-works"
+  },
+  {
+    "title": "Frontend Developer Roadmap",
+    "description": "Complete roadmap for becoming a frontend developer - from basics to advanced topics.",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "roadmap",
+      "frontend",
+      "learning",
+      "beginner"
+    ],
+    "coverImage": "/images/frontend/roadmap.png",
+    "draft": false,
+    "category": "frontend",
+    "hierarchy": [],
+    "slug": "00-roadmap",
+    "path": "/blogs/frontend/00-roadmap"
   },
   {
     "title": "Logging with ELK Stack",
@@ -1884,163 +3089,424 @@
     "path": "/blogs/backend/api-design/idempotency"
   },
   {
-    "title": "Function Calling",
-    "description": "Mastering function calling with large language models",
+    "title": "Vector Similarity",
+    "description": "Master vector similarity measures - cosine, dot product, Euclidean distance for semantic search",
     "date": "2026-05-11",
-    "author": "<Author Name>",
+    "author": "Abhishek Tiwari",
     "tags": [
-      "AI",
-      "Function Calling",
       "LLM",
-      "API"
+      "Vector Similarity",
+      "Semantic Search",
+      "Embeddings",
+      "AI"
     ],
-    "coverImage": "/images/function-calling.png",
+    "coverImage": "/images/vector-similarity.png",
     "draft": false,
     "category": "ai-ml",
     "hierarchy": [
-      "tools"
+      "03-llm-foundations"
     ],
-    "slug": "91-function-calling",
-    "path": "/blogs/ai-ml/tools/91-function-calling"
+    "slug": "vector-similarity",
+    "path": "/blogs/ai-ml/03-llm-foundations/vector-similarity"
   },
   {
-    "title": "Tool Calling",
-    "description": "Implementing tool calling in AI applications for enhanced functionality",
+    "title": "Tokenization and Context Windows",
+    "description": "Understand how LLMs process text - tokenization, subword algorithms, and context window limits",
     "date": "2026-05-11",
-    "author": "<Author Name>",
+    "author": "Abhishek Tiwari",
     "tags": [
-      "AI",
-      "Tool Calling",
       "LLM",
-      "API Integration"
+      "Tokenization",
+      "Context Window",
+      "NLP",
+      "AI"
     ],
-    "coverImage": "/images/tool-calling.png",
+    "coverImage": "/images/tokenization-context-windows.png",
     "draft": false,
     "category": "ai-ml",
     "hierarchy": [
-      "tools"
+      "03-llm-foundations"
     ],
-    "slug": "90-tool-calling",
-    "path": "/blogs/ai-ml/tools/90-tool-calling"
+    "slug": "tokenization-context-windows",
+    "path": "/blogs/ai-ml/03-llm-foundations/tokenization-context-windows"
+  },
+  {
+    "title": "Introduction to LLMs",
+    "description": "Understand large language models - how they work, key capabilities, and popular models",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "LLM",
+      "Generative AI",
+      "GPT",
+      "Language Models",
+      "AI",
+      "Fundamentals"
+    ],
+    "coverImage": "/images/intro-to-llms.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "03-llm-foundations"
+    ],
+    "slug": "intro-to-llms",
+    "path": "/blogs/ai-ml/03-llm-foundations/intro-to-llms"
   },
   {
     "title": "Embeddings Explained",
-    "description": "Comprehensive guide to text and vector embeddings in AI",
+    "description": "Understand text embeddings - converting text to vectors for similarity search and semantic understanding",
     "date": "2026-05-11",
-    "author": "<Author Name>",
+    "author": "Abhishek Tiwari",
     "tags": [
-      "AI",
+      "LLM",
       "Embeddings",
-      "Natural Language Processing",
-      "Machine Learning"
+      "Vector Search",
+      "NLP",
+      "AI"
     ],
     "coverImage": "/images/embeddings-explained.png",
     "draft": false,
     "category": "ai-ml",
     "hierarchy": [
-      "rag"
+      "03-llm-foundations"
     ],
-    "slug": "89-embeddings-explained",
-    "path": "/blogs/ai-ml/rag/89-embeddings-explained"
+    "slug": "embeddings-explained",
+    "path": "/blogs/ai-ml/03-llm-foundations/embeddings-explained"
   },
   {
-    "title": "Vector Databases",
-    "description": "Guide to vector databases for AI and machine learning applications",
+    "title": "Transformers Architecture",
+    "description": "Master the transformer architecture - attention, positional encoding, and building transformer models",
     "date": "2026-05-11",
-    "author": "<Author Name>",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "Deep Learning",
+      "Transformers",
+      "Attention",
+      "BERT",
+      "GPT",
+      "NLP"
+    ],
+    "coverImage": "/images/transformers-architecture.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "02-deep-learning-core"
+    ],
+    "slug": "transformers-architecture",
+    "path": "/blogs/ai-ml/02-deep-learning-core/transformers-architecture"
+  },
+  {
+    "title": "RNN Sequence Models",
+    "description": "Master RNNs, LSTMs, and GRUs for processing sequential data - text, time series, and more",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "Deep Learning",
+      "RNN",
+      "LSTM",
+      "GRU",
+      "Sequence Models",
+      "NLP"
+    ],
+    "coverImage": "/images/rnn-sequence-models.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "02-deep-learning-core"
+    ],
+    "slug": "rnn-sequence-models",
+    "path": "/blogs/ai-ml/02-deep-learning-core/rnn-sequence-models"
+  },
+  {
+    "title": "Neural Networks Basics",
+    "description": "Understand neural networks from scratch - neurons, layers, activation functions, and building your first ANN",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "Deep Learning",
+      "Neural Networks",
+      "AI",
+      "Fundamentals",
+      "Perceptron"
+    ],
+    "coverImage": "/images/neural-networks-basics.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "02-deep-learning-core"
+    ],
+    "slug": "neural-networks-basics",
+    "path": "/blogs/ai-ml/02-deep-learning-core/neural-networks-basics"
+  },
+  {
+    "title": "Embeddings in Deep Learning",
+    "description": "Understand word embeddings, vector representations, and how neural networks represent meaning",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "Deep Learning",
+      "Embeddings",
+      "NLP",
+      "Word Vectors",
+      "Representation Learning"
+    ],
+    "coverImage": "/images/embeddings-in-deep-learning.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "02-deep-learning-core"
+    ],
+    "slug": "embeddings-in-deep-learning",
+    "path": "/blogs/ai-ml/02-deep-learning-core/embeddings-in-deep-learning"
+  },
+  {
+    "title": "CNN Convolutional Networks",
+    "description": "Master CNNs for image recognition - convolutional layers, pooling, and building image classifiers",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "Deep Learning",
+      "CNN",
+      "Computer Vision",
+      "Image Classification",
+      "Neural Networks"
+    ],
+    "coverImage": "/images/cnn-convolutional-networks.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "02-deep-learning-core"
+    ],
+    "slug": "cnn-convolutional-networks",
+    "path": "/blogs/ai-ml/02-deep-learning-core/cnn-convolutional-networks"
+  },
+  {
+    "title": "Backpropagation Explained",
+    "description": "Understand backpropagation - the core algorithm that trains neural networks by computing gradients",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "Deep Learning",
+      "Backpropagation",
+      "Gradient Descent",
+      "Neural Networks",
+      "AI"
+    ],
+    "coverImage": "/images/backpropagation-explained.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "02-deep-learning-core"
+    ],
+    "slug": "backpropagation-explained",
+    "path": "/blogs/ai-ml/02-deep-learning-core/backpropagation-explained"
+  },
+  {
+    "title": "Attention Mechanism",
+    "description": "Understand the attention mechanism - the core innovation behind transformers that enables modeling long-range dependencies",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "Deep Learning",
+      "Attention",
+      "Transformers",
+      "NLP",
+      "AI"
+    ],
+    "coverImage": "/images/attention-mechanism.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "02-deep-learning-core"
+    ],
+    "slug": "attention-mechanism",
+    "path": "/blogs/ai-ml/02-deep-learning-core/attention-mechanism"
+  },
+  {
+    "title": "How to Learn AI/ML",
+    "description": "Your complete guide to starting and mastering AI and Machine Learning - resources, strategies, and learning paths",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
     "tags": [
       "AI",
-      "Vector Database",
       "Machine Learning",
-      "Data Storage"
+      "Learning Guide",
+      "Getting Started"
     ],
-    "coverImage": "/images/vector-databases.png",
+    "coverImage": "/images/how-to-learn-ai-ml.png",
     "draft": false,
     "category": "ai-ml",
-    "hierarchy": [
-      "rag"
-    ],
-    "slug": "88-vector-databases",
-    "path": "/blogs/ai-ml/rag/88-vector-databases"
+    "hierarchy": [],
+    "slug": "01-introduction-to-ai-ml",
+    "path": "/blogs/ai-ml/01-introduction-to-ai-ml"
   },
   {
-    "title": "RAG Architecture",
-    "description": "Understanding Retrieval-Augmented Generation architecture for AI systems",
+    "title": "What is AI and ML?",
+    "description": "Understand artificial intelligence and machine learning - the technologies transforming our world",
     "date": "2026-05-11",
-    "author": "<Author Name>",
+    "author": "Abhishek Tiwari",
     "tags": [
       "AI",
-      "RAG",
-      "Architecture",
-      "Information Retrieval"
+      "Machine Learning",
+      "Artificial Intelligence",
+      "Getting Started",
+      "Fundamentals"
     ],
-    "coverImage": "/images/rag-architecture.png",
+    "coverImage": "/images/what-is-ai-ml.png",
     "draft": false,
     "category": "ai-ml",
     "hierarchy": [
-      "rag"
+      "01-foundations"
     ],
-    "slug": "87-rag-architecture",
-    "path": "/blogs/ai-ml/rag/87-rag-architecture"
+    "slug": "what-is-ai-ml",
+    "path": "/blogs/ai-ml/01-foundations/what-is-ai-ml"
   },
   {
-    "title": "AI Agents Introduction",
-    "description": "Introduction to AI agents and their role in modern AI systems",
+    "title": "Unsupervised Learning",
+    "description": "Learn unsupervised learning - clustering, dimensionality reduction, and finding patterns without labeled data",
     "date": "2026-05-11",
-    "author": "<Author Name>",
+    "author": "Abhishek Tiwari",
     "tags": [
-      "AI",
-      "AI Agents",
-      "Autonomous Systems",
-      "Machine Learning"
+      "Machine Learning",
+      "Unsupervised Learning",
+      "Clustering",
+      "Dimensionality Reduction",
+      "Fundamentals"
     ],
-    "coverImage": "/images/ai-agents-introduction.png",
+    "coverImage": "/images/unsupervised-learning.png",
     "draft": false,
     "category": "ai-ml",
     "hierarchy": [
-      "genai"
+      "01-foundations"
     ],
-    "slug": "86-ai-agents-introduction",
-    "path": "/blogs/ai-ml/genai/86-ai-agents-introduction"
+    "slug": "unsupervised-learning",
+    "path": "/blogs/ai-ml/01-foundations/unsupervised-learning"
   },
   {
-    "title": "Building LLM Applications",
-    "description": "Guide to building production-ready applications with large language models",
+    "title": "Types of Machine Learning",
+    "description": "Understand the three main types of machine learning - supervised, unsupervised, and reinforcement learning",
     "date": "2026-05-11",
-    "author": "<Author Name>",
+    "author": "Abhishek Tiwari",
     "tags": [
-      "AI",
-      "LLM",
-      "Application Development",
-      "Generative AI"
+      "Machine Learning",
+      "Types of ML",
+      "Supervised",
+      "Unsupervised",
+      "Reinforcement",
+      "Fundamentals"
     ],
-    "coverImage": "/images/building-llm-apps.png",
+    "coverImage": "/images/types-of-ml.png",
     "draft": false,
     "category": "ai-ml",
     "hierarchy": [
-      "genai"
+      "01-foundations"
     ],
-    "slug": "85-building-llm-apps",
-    "path": "/blogs/ai-ml/genai/85-building-llm-apps"
+    "slug": "types-of-ml",
+    "path": "/blogs/ai-ml/01-foundations/types-of-ml"
   },
   {
-    "title": "Prompt Engineering",
-    "description": "Master the art of crafting effective prompts for AI language models",
+    "title": "Supervised Learning",
+    "description": "Master supervised learning - the most common type of ML for classification and regression problems",
     "date": "2026-05-11",
-    "author": "<Author Name>",
+    "author": "Abhishek Tiwari",
     "tags": [
-      "AI",
-      "Prompt Engineering",
-      "Generative AI",
-      "LLM"
+      "Machine Learning",
+      "Supervised Learning",
+      "Classification",
+      "Regression",
+      "Fundamentals"
     ],
-    "coverImage": "/images/prompt-engineering.png",
+    "coverImage": "/images/supervised-learning.png",
     "draft": false,
     "category": "ai-ml",
     "hierarchy": [
-      "genai"
+      "01-foundations"
     ],
-    "slug": "84-prompt-engineering",
-    "path": "/blogs/ai-ml/genai/84-prompt-engineering"
+    "slug": "supervised-learning",
+    "path": "/blogs/ai-ml/01-foundations/supervised-learning"
+  },
+  {
+    "title": "Model Evaluation Metrics",
+    "description": "Learn how to evaluate ML models with the right metrics for classification, regression, and ranking problems",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "Machine Learning",
+      "Model Evaluation",
+      "Metrics",
+      "Accuracy",
+      "Precision",
+      "Recall",
+      "Fundamentals"
+    ],
+    "coverImage": "/images/model-evaluation-metrics.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "01-foundations"
+    ],
+    "slug": "model-evaluation-metrics",
+    "path": "/blogs/ai-ml/01-foundations/model-evaluation-metrics"
+  },
+  {
+    "title": "ML Lifecycle",
+    "description": "Learn the complete machine learning lifecycle - from problem definition to deployment and monitoring",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "Machine Learning",
+      "ML Lifecycle",
+      "ML Pipeline",
+      "Data Science",
+      "Fundamentals"
+    ],
+    "coverImage": "/images/ml-lifecycle.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "01-foundations"
+    ],
+    "slug": "ml-lifecycle",
+    "path": "/blogs/ai-ml/01-foundations/ml-lifecycle"
+  },
+  {
+    "title": "Bias-Variance Tradeoff",
+    "description": "Understand the bias-variance tradeoff - the fundamental concept behind model performance and generalization",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "Machine Learning",
+      "Bias-Variance",
+      "Model Performance",
+      "Overfitting",
+      "Underfitting",
+      "Fundamentals"
+    ],
+    "coverImage": "/images/bias-variance-tradeoff.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "01-foundations"
+    ],
+    "slug": "bias-variance-tradeoff",
+    "path": "/blogs/ai-ml/01-foundations/bias-variance-tradeoff"
+  },
+  {
+    "title": "AI/ML Learning Roadmap",
+    "description": "Your complete guide to mastering AI and Machine Learning - from fundamentals to production systems",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "AI",
+      "Machine Learning",
+      "Learning Path",
+      "Roadmap"
+    ],
+    "coverImage": "/images/ai-ml-roadmap.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [],
+    "slug": "00-roadmap",
+    "path": "/blogs/ai-ml/00-roadmap"
   }
 ]

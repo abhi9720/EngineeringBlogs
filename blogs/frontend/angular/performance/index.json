@@ -1,0 +1,49 @@
+{
+  "name": "Performance",
+  "path": "/blogs/frontend/angular/performance",
+  "blogs": [
+    {
+      "title": "trackBy Function Importance",
+      "description": "Understanding Angular's trackBy function - why it matters for ngFor performance.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "performance",
+        "ngfor",
+        "trackby",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/trackby.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "performance"
+      ],
+      "slug": "trackby-function-importance",
+      "path": "/blogs/frontend/angular/performance/trackby-function-importance"
+    },
+    {
+      "title": "Angular Performance Optimization",
+      "description": "Optimizing Angular applications - change detection, lazy loading, bundle size, and more.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "angular",
+        "performance",
+        "optimization",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/angular/performance-optimization.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "angular",
+        "performance"
+      ],
+      "slug": "angular-performance-optimization",
+      "path": "/blogs/frontend/angular/performance/angular-performance-optimization"
+    }
+  ]
+}

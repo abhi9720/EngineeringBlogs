@@ -1,0 +1,126 @@
+{
+  "name": "Microservices",
+  "path": "/blogs/backend/microservices",
+  "blogs": [
+    {
+      "title": "Service Discovery with Eureka",
+      "description": "Master service discovery in microservices using Netflix Eureka: client-side discovery, registration, health checks, and production patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "microservices",
+        "eureka",
+        "service-discovery",
+        "spring-cloud"
+      ],
+      "coverImage": "/images/service-discovery-eureka.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices"
+      ],
+      "slug": "service-discovery-eureka",
+      "path": "/blogs/backend/microservices/service-discovery-eureka"
+    },
+    {
+      "title": "Microservices Introduction",
+      "description": "Understanding microservices architecture from fundamentals to practical implementation, trade-offs, and common pitfalls",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "microservices",
+        "architecture",
+        "distributed-systems"
+      ],
+      "coverImage": "/images/microservices-introduction.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices"
+      ],
+      "slug": "microservices-introduction",
+      "path": "/blogs/backend/microservices/microservices-introduction"
+    },
+    {
+      "title": "Inter-Service Communication",
+      "description": "Master synchronous and asynchronous communication patterns between microservices: REST, gRPC, message queues, and event-driven patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "microservices",
+        "communication",
+        "rest",
+        "grpc",
+        "messaging"
+      ],
+      "coverImage": "/images/inter-service-communication.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices"
+      ],
+      "slug": "inter-service-communication",
+      "path": "/blogs/backend/microservices/inter-service-communication"
+    },
+    {
+      "title": "Distributed Tracing",
+      "description": "Implement distributed tracing in microservices with Spring Cloud Sleuth and Zipkin: correlation IDs, span propagation, and troubleshooting patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "microservices",
+        "distributed-tracing",
+        "sleuth",
+        "zipkin"
+      ],
+      "coverImage": "/images/distributed-tracing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices"
+      ],
+      "slug": "distributed-tracing",
+      "path": "/blogs/backend/microservices/distributed-tracing"
+    },
+    {
+      "title": "Circuit Breaker with Resilience4j",
+      "description": "Implement circuit breaker pattern with Resilience4j for microservices fault tolerance, retry mechanisms, and bulkhead isolation",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "microservices",
+        "resilience4j",
+        "circuit-breaker",
+        "fault-tolerance"
+      ],
+      "coverImage": "/images/circuit-breaker-resilience4j.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices"
+      ],
+      "slug": "circuit-breaker-resilience4j",
+      "path": "/blogs/backend/microservices/circuit-breaker-resilience4j"
+    },
+    {
+      "title": "API Gateway Pattern",
+      "description": "Deep dive into API Gateway patterns for microservices: routing, authentication, rate limiting, and implementation with Spring Cloud Gateway",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "microservices",
+        "api-gateway",
+        "spring-cloud",
+        "gateway"
+      ],
+      "coverImage": "/images/api-gateway-pattern.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices"
+      ],
+      "slug": "api-gateway-pattern",
+      "path": "/blogs/backend/microservices/api-gateway-pattern"
+    }
+  ]
+}

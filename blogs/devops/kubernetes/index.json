@@ -1,0 +1,86 @@
+{
+  "name": "Kubernetes",
+  "path": "/blogs/devops/kubernetes",
+  "blogs": [
+    {
+      "title": "ConfigMaps and Secrets",
+      "description": "A comprehensive guide to Kubernetes ConfigMaps and Secrets",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "kubernetes",
+        "configmaps",
+        "secrets",
+        "devops"
+      ],
+      "coverImage": "/images/configmaps-secrets.png",
+      "draft": false,
+      "category": "devops",
+      "hierarchy": [
+        "kubernetes"
+      ],
+      "slug": "63. configmaps-secrets",
+      "path": "/blogs/devops/kubernetes/63. configmaps-secrets"
+    },
+    {
+      "title": "Autoscaling",
+      "description": "A comprehensive guide to Kubernetes Autoscaling",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "kubernetes",
+        "autoscaling",
+        "hpa",
+        "devops"
+      ],
+      "coverImage": "/images/autoscaling.png",
+      "draft": false,
+      "category": "devops",
+      "hierarchy": [
+        "kubernetes"
+      ],
+      "slug": "62. autoscaling",
+      "path": "/blogs/devops/kubernetes/62. autoscaling"
+    },
+    {
+      "title": "Services and Ingress",
+      "description": "A comprehensive guide to understanding Kubernetes Services and Ingress",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "kubernetes",
+        "services",
+        "ingress",
+        "devops"
+      ],
+      "coverImage": "/images/services-ingress.png",
+      "draft": false,
+      "category": "devops",
+      "hierarchy": [
+        "kubernetes"
+      ],
+      "slug": "61. services-ingress",
+      "path": "/blogs/devops/kubernetes/61. services-ingress"
+    },
+    {
+      "title": "Pods and Deployments",
+      "description": "A comprehensive guide to understanding Kubernetes Pods and Deployments",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "kubernetes",
+        "pods",
+        "deployments",
+        "devops"
+      ],
+      "coverImage": "/images/pods-deployments.png",
+      "draft": false,
+      "category": "devops",
+      "hierarchy": [
+        "kubernetes"
+      ],
+      "slug": "60. pods-deployments",
+      "path": "/blogs/devops/kubernetes/60. pods-deployments"
+    }
+  ]
+}

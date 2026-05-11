@@ -4,27 +4,27 @@
       "name": "Ai Ml",
       "slug": "ai-ml",
       "path": "ai-ml",
-      "blogCount": 8,
+      "blogCount": 20,
       "children": [
         {
-          "name": "Genai",
-          "slug": "genai",
-          "path": "ai-ml/genai",
-          "blogCount": 3,
+          "name": "01 Foundations",
+          "slug": "01-foundations",
+          "path": "ai-ml/01-foundations",
+          "blogCount": 7,
           "children": []
         },
         {
-          "name": "Rag",
-          "slug": "rag",
-          "path": "ai-ml/rag",
-          "blogCount": 3,
+          "name": "02 Deep Learning Core",
+          "slug": "02-deep-learning-core",
+          "path": "ai-ml/02-deep-learning-core",
+          "blogCount": 7,
           "children": []
         },
         {
-          "name": "Tools",
-          "slug": "tools",
-          "path": "ai-ml/tools",
-          "blogCount": 2,
+          "name": "03 Llm Foundations",
+          "slug": "03-llm-foundations",
+          "path": "ai-ml/03-llm-foundations",
+          "blogCount": 4,
           "children": []
         }
       ]
@@ -184,14 +184,165 @@
       "name": "Frontend",
       "slug": "frontend",
       "path": "frontend",
-      "blogCount": 15,
+      "blogCount": 70,
       "children": [
+        {
+          "name": "Angular",
+          "slug": "angular",
+          "path": "frontend/angular",
+          "blogCount": 13,
+          "children": [
+            {
+              "name": "Architecture",
+              "slug": "architecture",
+              "path": "frontend/angular/architecture",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "Change Detection",
+              "slug": "change-detection",
+              "path": "frontend/angular/change-detection",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "Components",
+              "slug": "components",
+              "path": "frontend/angular/components",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "Dependency Injection",
+              "slug": "dependency-injection",
+              "path": "frontend/angular/dependency-injection",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "Performance",
+              "slug": "performance",
+              "path": "frontend/angular/performance",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "Rxjs",
+              "slug": "rxjs",
+              "path": "frontend/angular/rxjs",
+              "blogCount": 3,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "Css",
+          "slug": "css",
+          "path": "frontend/css",
+          "blogCount": 9,
+          "children": [
+            {
+              "name": "Layouts",
+              "slug": "layouts",
+              "path": "frontend/css/layouts",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "Performance",
+              "slug": "performance",
+              "path": "frontend/css/performance",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "Rendering Engine",
+              "slug": "rendering-engine",
+              "path": "frontend/css/rendering-engine",
+              "blogCount": 1,
+              "children": []
+            },
+            {
+              "name": "Responsive Design",
+              "slug": "responsive-design",
+              "path": "frontend/css/responsive-design",
+              "blogCount": 2,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "Html",
+          "slug": "html",
+          "path": "frontend/html",
+          "blogCount": 6,
+          "children": [
+            {
+              "name": "Accessibility",
+              "slug": "accessibility",
+              "path": "frontend/html/accessibility",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "Forms",
+              "slug": "forms",
+              "path": "frontend/html/forms",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "Fundamentals",
+              "slug": "fundamentals",
+              "path": "frontend/html/fundamentals",
+              "blogCount": 2,
+              "children": []
+            }
+          ]
+        },
         {
           "name": "Javascript",
           "slug": "javascript",
           "path": "frontend/javascript",
-          "blogCount": 4,
-          "children": []
+          "blogCount": 14,
+          "children": [
+            {
+              "name": "Async",
+              "slug": "async",
+              "path": "frontend/javascript/async",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "Core Concepts",
+              "slug": "core-concepts",
+              "path": "frontend/javascript/core-concepts",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "Dom",
+              "slug": "dom",
+              "path": "frontend/javascript/dom",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "Performance",
+              "slug": "performance",
+              "path": "frontend/javascript/performance",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "Runtime",
+              "slug": "runtime",
+              "path": "frontend/javascript/runtime",
+              "blogCount": 1,
+              "children": []
+            }
+          ]
         },
         {
           "name": "Nextjs",
@@ -211,8 +362,44 @@
           "name": "React",
           "slug": "react",
           "path": "frontend/react",
-          "blogCount": 4,
-          "children": []
+          "blogCount": 19,
+          "children": [
+            {
+              "name": "Components",
+              "slug": "components",
+              "path": "frontend/react/components",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "Hooks",
+              "slug": "hooks",
+              "path": "frontend/react/hooks",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "Performance",
+              "slug": "performance",
+              "path": "frontend/react/performance",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "Rendering Engine",
+              "slug": "rendering-engine",
+              "path": "frontend/react/rendering-engine",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "State Management",
+              "slug": "state-management",
+              "path": "frontend/react/state-management",
+              "blogCount": 4,
+              "children": []
+            }
+          ]
         }
       ]
     },

@@ -1,0 +1,63 @@
+{
+  "name": "Resume",
+  "path": "/blogs/career/resume",
+  "blogs": [
+    {
+      "title": "Resume Building",
+      "description": "Complete guide to building a professional software engineering resume",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "resume",
+        "career",
+        "job-search"
+      ],
+      "coverImage": "/images/resume-building.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "resume"
+      ],
+      "slug": "99. resume-building",
+      "path": "/blogs/career/resume/99. resume-building"
+    },
+    {
+      "title": "Project Writing Guide",
+      "description": "How to write impactful project descriptions for your resume",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "projects",
+        "resume",
+        "writing"
+      ],
+      "coverImage": "/images/project-writing-guide.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "resume"
+      ],
+      "slug": "101. project-writing-guide",
+      "path": "/blogs/career/resume/101. project-writing-guide"
+    },
+    {
+      "title": "ATS Optimization",
+      "description": "Optimize your resume for Applicant Tracking Systems to get more interviews",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "ats",
+        "resume",
+        "optimization"
+      ],
+      "coverImage": "/images/ats-optimization.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "resume"
+      ],
+      "slug": "100. ats-optimization",
+      "path": "/blogs/career/resume/100. ats-optimization"
+    }
+  ]
+}

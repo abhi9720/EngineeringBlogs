@@ -1,0 +1,63 @@
+{
+  "name": "Experience",
+  "path": "/blogs/career/experience",
+  "blogs": [
+    {
+      "title": "Lessons from Production",
+      "description": "Valuable lessons learned from working in production systems",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "production",
+        "lessons",
+        "real-world"
+      ],
+      "coverImage": "/images/lessons-from-production.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "experience"
+      ],
+      "slug": "104. lessons-from-production",
+      "path": "/blogs/career/experience/104. lessons-from-production"
+    },
+    {
+      "title": "Mistakes I Made",
+      "description": "Common mistakes I made during my software engineering career and how to avoid them",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "mistakes",
+        "career",
+        "learning"
+      ],
+      "coverImage": "/images/mistakes-i-made.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "experience"
+      ],
+      "slug": "103. mistakes-i-made",
+      "path": "/blogs/career/experience/103. mistakes-i-made"
+    },
+    {
+      "title": "My SDE Journey",
+      "description": "Personal story of my journey as a Software Development Engineer",
+      "date": "2026-05-11",
+      "author": "Author Name",
+      "tags": [
+        "journey",
+        "career",
+        "personal"
+      ],
+      "coverImage": "/images/my-sde-journey.png",
+      "draft": false,
+      "category": "career",
+      "hierarchy": [
+        "experience"
+      ],
+      "slug": "102. my-sde-journey",
+      "path": "/blogs/career/experience/102. my-sde-journey"
+    }
+  ]
+}

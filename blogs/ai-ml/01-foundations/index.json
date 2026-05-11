@@ -1,0 +1,157 @@
+{
+  "name": "01 Foundations",
+  "path": "/blogs/ai-ml/01-foundations",
+  "blogs": [
+    {
+      "title": "What is AI and ML?",
+      "description": "Understand artificial intelligence and machine learning - the technologies transforming our world",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI",
+        "Machine Learning",
+        "Artificial Intelligence",
+        "Getting Started",
+        "Fundamentals"
+      ],
+      "coverImage": "/images/what-is-ai-ml.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "01-foundations"
+      ],
+      "slug": "what-is-ai-ml",
+      "path": "/blogs/ai-ml/01-foundations/what-is-ai-ml"
+    },
+    {
+      "title": "Unsupervised Learning",
+      "description": "Learn unsupervised learning - clustering, dimensionality reduction, and finding patterns without labeled data",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Machine Learning",
+        "Unsupervised Learning",
+        "Clustering",
+        "Dimensionality Reduction",
+        "Fundamentals"
+      ],
+      "coverImage": "/images/unsupervised-learning.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "01-foundations"
+      ],
+      "slug": "unsupervised-learning",
+      "path": "/blogs/ai-ml/01-foundations/unsupervised-learning"
+    },
+    {
+      "title": "Types of Machine Learning",
+      "description": "Understand the three main types of machine learning - supervised, unsupervised, and reinforcement learning",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Machine Learning",
+        "Types of ML",
+        "Supervised",
+        "Unsupervised",
+        "Reinforcement",
+        "Fundamentals"
+      ],
+      "coverImage": "/images/types-of-ml.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "01-foundations"
+      ],
+      "slug": "types-of-ml",
+      "path": "/blogs/ai-ml/01-foundations/types-of-ml"
+    },
+    {
+      "title": "Supervised Learning",
+      "description": "Master supervised learning - the most common type of ML for classification and regression problems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Machine Learning",
+        "Supervised Learning",
+        "Classification",
+        "Regression",
+        "Fundamentals"
+      ],
+      "coverImage": "/images/supervised-learning.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "01-foundations"
+      ],
+      "slug": "supervised-learning",
+      "path": "/blogs/ai-ml/01-foundations/supervised-learning"
+    },
+    {
+      "title": "Model Evaluation Metrics",
+      "description": "Learn how to evaluate ML models with the right metrics for classification, regression, and ranking problems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Machine Learning",
+        "Model Evaluation",
+        "Metrics",
+        "Accuracy",
+        "Precision",
+        "Recall",
+        "Fundamentals"
+      ],
+      "coverImage": "/images/model-evaluation-metrics.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "01-foundations"
+      ],
+      "slug": "model-evaluation-metrics",
+      "path": "/blogs/ai-ml/01-foundations/model-evaluation-metrics"
+    },
+    {
+      "title": "ML Lifecycle",
+      "description": "Learn the complete machine learning lifecycle - from problem definition to deployment and monitoring",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Machine Learning",
+        "ML Lifecycle",
+        "ML Pipeline",
+        "Data Science",
+        "Fundamentals"
+      ],
+      "coverImage": "/images/ml-lifecycle.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "01-foundations"
+      ],
+      "slug": "ml-lifecycle",
+      "path": "/blogs/ai-ml/01-foundations/ml-lifecycle"
+    },
+    {
+      "title": "Bias-Variance Tradeoff",
+      "description": "Understand the bias-variance tradeoff - the fundamental concept behind model performance and generalization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Machine Learning",
+        "Bias-Variance",
+        "Model Performance",
+        "Overfitting",
+        "Underfitting",
+        "Fundamentals"
+      ],
+      "coverImage": "/images/bias-variance-tradeoff.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "01-foundations"
+      ],
+      "slug": "bias-variance-tradeoff",
+      "path": "/blogs/ai-ml/01-foundations/bias-variance-tradeoff"
+    }
+  ]
+}

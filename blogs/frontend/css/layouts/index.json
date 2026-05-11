@@ -1,0 +1,69 @@
+{
+  "name": "Layouts",
+  "path": "/blogs/frontend/css/layouts",
+  "blogs": [
+    {
+      "title": "Positioning: Sticky, Absolute, Fixed",
+      "description": "Master CSS positioning - understand when to use static, relative, absolute, fixed, and sticky for different layouts.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "css",
+        "positioning",
+        "layout",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/css/positioning.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "css",
+        "layouts"
+      ],
+      "slug": "positioning-sticky-absolute-fixed",
+      "path": "/blogs/frontend/css/layouts/positioning-sticky-absolute-fixed"
+    },
+    {
+      "title": "Flexbox Real-World Layouts",
+      "description": "Master Flexbox with practical examples - navigation, card grids, form layouts, and common patterns.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "css",
+        "flexbox",
+        "layouts",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/css/flexbox-layouts.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "css",
+        "layouts"
+      ],
+      "slug": "flexbox-real-world-layouts",
+      "path": "/blogs/frontend/css/layouts/flexbox-real-world-layouts"
+    },
+    {
+      "title": "CSS Grid Architecture",
+      "description": "Master CSS Grid for complex two-dimensional layouts - page layouts, card systems, and responsive grids.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "css",
+        "grid",
+        "layouts",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/css/css-grid.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "css",
+        "layouts"
+      ],
+      "slug": "css-grid-architecture",
+      "path": "/blogs/frontend/css/layouts/css-grid-architecture"
+    }
+  ]
+}

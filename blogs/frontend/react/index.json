@@ -1,0 +1,407 @@
+{
+  "name": "React",
+  "path": "/blogs/frontend/react",
+  "blogs": [
+    {
+      "title": "Zustand vs Redux",
+      "description": "Comparing Zustand and Redux - when to use each for React state management.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "zustand",
+        "redux",
+        "state management",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/zustand-vs-redux.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "state-management"
+      ],
+      "slug": "zustand-vs-redux",
+      "path": "/blogs/frontend/react/state-management/zustand-vs-redux"
+    },
+    {
+      "title": "Redux Flow Explained",
+      "description": "Understanding Redux architecture - actions, reducers, store, and how data flows.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "redux",
+        "state management",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/redux-flow.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "state-management"
+      ],
+      "slug": "redux-flow-explained",
+      "path": "/blogs/frontend/react/state-management/redux-flow-explained"
+    },
+    {
+      "title": "Prop Drilling Problem",
+      "description": "Understanding and solving the prop drilling issue - when data needs to pass through many component levels.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "state management",
+        "props",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/prop-drilling.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "state-management"
+      ],
+      "slug": "prop-drilling-problem",
+      "path": "/blogs/frontend/react/state-management/prop-drilling-problem"
+    },
+    {
+      "title": "Context API Limitations",
+      "description": "Understanding React Context API limitations - when it's appropriate and when to use other solutions.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "context",
+        "state management",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/context-limitations.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "state-management"
+      ],
+      "slug": "context-api-limitations",
+      "path": "/blogs/frontend/react/state-management/context-api-limitations"
+    },
+    {
+      "title": "Virtual DOM Explained",
+      "description": "Understand the Virtual DOM - how React maintains an in-memory representation of the real DOM.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "virtual dom",
+        "rendering",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/virtual-dom.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "rendering-engine"
+      ],
+      "slug": "virtual-dom-explained",
+      "path": "/blogs/frontend/react/rendering-engine/virtual-dom-explained"
+    },
+    {
+      "title": "React Reconciliation Algorithm",
+      "description": "Understand how React compares and updates DOM - the reconciliation algorithm and diffing strategy.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "reconciliation",
+        "virtual dom",
+        "diffing",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/reconciliation.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "rendering-engine"
+      ],
+      "slug": "reconciliation-algorithm",
+      "path": "/blogs/frontend/react/rendering-engine/reconciliation-algorithm"
+    },
+    {
+      "title": "React Performance Profiling",
+      "description": "Profiling React applications - using React DevTools to find and fix performance issues.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "performance",
+        "profiling",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/profiling.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "performance"
+      ],
+      "slug": "react-performance-profiling",
+      "path": "/blogs/frontend/react/performance/react-performance-profiling"
+    },
+    {
+      "title": "Memoization Mistakes",
+      "description": "Common mistakes with React memoization - using React.memo, useMemo, and useCallback incorrectly.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "memoization",
+        "performance",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/memoization-mistakes.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "performance"
+      ],
+      "slug": "memoization-mistakes",
+      "path": "/blogs/frontend/react/performance/memoization-mistakes"
+    },
+    {
+      "title": "List Virtualization",
+      "description": "Rendering large lists efficiently - windowing and virtualization techniques in React.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "performance",
+        "virtualization",
+        "lists",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/virtualization.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "performance"
+      ],
+      "slug": "list-virtualization",
+      "path": "/blogs/frontend/react/performance/list-virtualization"
+    },
+    {
+      "title": "useMemo & useCallback Real Use Cases",
+      "description": "Practical examples of when and how to use useMemo and useCallback for performance optimization.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "hooks",
+        "usememo",
+        "usecallback",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/usememo-usecallback.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "hooks"
+      ],
+      "slug": "usememo-usecallback-real-usecases",
+      "path": "/blogs/frontend/react/hooks/usememo-usecallback-real-usecases"
+    },
+    {
+      "title": "useEffect Dependency Problems",
+      "description": "Common useEffect issues - infinite loops, missing dependencies, and how to fix them.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "hooks",
+        "useEffect",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/useeffect-problems.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "hooks"
+      ],
+      "slug": "useeffect-dependency-problems",
+      "path": "/blogs/frontend/react/hooks/useeffect-dependency-problems"
+    },
+    {
+      "title": "Custom Hooks Design Patterns",
+      "description": "Creating reusable custom hooks - patterns for extracting logic and state from components.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "hooks",
+        "custom hooks",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/custom-hooks.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "hooks"
+      ],
+      "slug": "custom-hooks-design-patterns",
+      "path": "/blogs/frontend/react/hooks/custom-hooks-design-patterns"
+    },
+    {
+      "title": "Props vs State Decision Guide",
+      "description": "When to use props vs state - making the right architectural decisions in React components.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "props",
+        "state",
+        "architecture",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/props-vs-state.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "components"
+      ],
+      "slug": "props-vs-state-decision-guide",
+      "path": "/blogs/frontend/react/components/props-vs-state-decision-guide"
+    },
+    {
+      "title": "Controlled vs Uncontrolled Components",
+      "description": "Understand controlled (state-driven) vs uncontrolled (ref-driven) components in React.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "forms",
+        "controlled",
+        "uncontrolled",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/controlled-uncontrolled.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "components"
+      ],
+      "slug": "controlled-vs-uncontrolled-components",
+      "path": "/blogs/frontend/react/components/controlled-vs-uncontrolled-components"
+    },
+    {
+      "title": "Component Re-render Causes",
+      "description": "Understanding why React components re-render - state changes, props, context, and how to optimize.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "re-render",
+        "performance",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/re-render-causes.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "components"
+      ],
+      "slug": "component-re-render-causes",
+      "path": "/blogs/frontend/react/components/component-re-render-causes"
+    },
+    {
+      "title": "State Management",
+      "description": "Exploring state management solutions in React - from useState to global state libraries.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "state management",
+        "redux",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/state-management.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react"
+      ],
+      "slug": "29. state-management",
+      "path": "/blogs/frontend/react/29. state-management"
+    },
+    {
+      "title": "useEffect Patterns",
+      "description": "Mastering useEffect in React - common patterns, pitfalls, and optimization strategies.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "hooks",
+        "useEffect",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/useeffect-patterns.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react"
+      ],
+      "slug": "28. useeffect-patterns",
+      "path": "/blogs/frontend/react/28. useeffect-patterns"
+    },
+    {
+      "title": "Hooks Deep Dive",
+      "description": "A comprehensive guide to React hooks - when to use them and how they work under the hood.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "hooks",
+        "javascript",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/hooks-deep-dive.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react"
+      ],
+      "slug": "27. hooks-deep-dive",
+      "path": "/blogs/frontend/react/27. hooks-deep-dive"
+    },
+    {
+      "title": "React Rendering Cycle",
+      "description": "Deep dive into React's rendering cycle: reconciliation, virtual DOM, memo, and optimization techniques",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "rendering",
+        "performance",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/rendering-cycle.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react"
+      ],
+      "slug": "26. react-rendering-cycle",
+      "path": "/blogs/frontend/react/26. react-rendering-cycle"
+    }
+  ]
+}

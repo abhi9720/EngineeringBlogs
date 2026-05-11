@@ -1,0 +1,86 @@
+{
+  "name": "Data Access",
+  "path": "/blogs/backend/data-access",
+  "blogs": [
+    {
+      "title": "N+1 Problem",
+      "description": "Understand and solve the N+1 query problem in Hibernate: fetch joins, entity graphs, and batch fetching solutions",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "hibernate",
+        "n-plus-1",
+        "jpa",
+        "performance"
+      ],
+      "coverImage": "/images/n-plus-one-problem.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-access"
+      ],
+      "slug": "n-plus-one-problem",
+      "path": "/blogs/backend/data-access/n-plus-one-problem"
+    },
+    {
+      "title": "JDBC vs JPA",
+      "description": "Compare JDBC and JPA for database access in Java: understand when to use each approach, their trade-offs, and real-world patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "jdbc",
+        "jpa",
+        "hibernate",
+        "database"
+      ],
+      "coverImage": "/images/jdbc-vs-jpa.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-access"
+      ],
+      "slug": "jdbc-vs-jpa",
+      "path": "/blogs/backend/data-access/jdbc-vs-jpa"
+    },
+    {
+      "title": "Hibernate Lazy vs Eager Loading",
+      "description": "Understand Hibernate fetch strategies: LazyInitializationException causes, when to use eager loading, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "hibernate",
+        "lazy-loading",
+        "jpa",
+        "performance"
+      ],
+      "coverImage": "/images/hibernate-lazy-vs-eager-loading.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-access"
+      ],
+      "slug": "hibernate-lazy-vs-eager-loading",
+      "path": "/blogs/backend/data-access/hibernate-lazy-vs-eager-loading"
+    },
+    {
+      "title": "Connection Pooling with HikariCP",
+      "description": "Configure HikariCP for optimal database connection management: pool sizing, health checks, and performance tuning",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "hikaricp",
+        "connection-pool",
+        "database",
+        "performance"
+      ],
+      "coverImage": "/images/connection-pooling-hikaricp.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-access"
+      ],
+      "slug": "connection-pooling-hikaricp",
+      "path": "/blogs/backend/data-access/connection-pooling-hikaricp"
+    }
+  ]
+}

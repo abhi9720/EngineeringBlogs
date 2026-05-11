@@ -1,0 +1,91 @@
+{
+  "name": "State Management",
+  "path": "/blogs/frontend/react/state-management",
+  "blogs": [
+    {
+      "title": "Zustand vs Redux",
+      "description": "Comparing Zustand and Redux - when to use each for React state management.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "zustand",
+        "redux",
+        "state management",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/zustand-vs-redux.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "state-management"
+      ],
+      "slug": "zustand-vs-redux",
+      "path": "/blogs/frontend/react/state-management/zustand-vs-redux"
+    },
+    {
+      "title": "Redux Flow Explained",
+      "description": "Understanding Redux architecture - actions, reducers, store, and how data flows.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "redux",
+        "state management",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/redux-flow.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "state-management"
+      ],
+      "slug": "redux-flow-explained",
+      "path": "/blogs/frontend/react/state-management/redux-flow-explained"
+    },
+    {
+      "title": "Prop Drilling Problem",
+      "description": "Understanding and solving the prop drilling issue - when data needs to pass through many component levels.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "state management",
+        "props",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/prop-drilling.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "state-management"
+      ],
+      "slug": "prop-drilling-problem",
+      "path": "/blogs/frontend/react/state-management/prop-drilling-problem"
+    },
+    {
+      "title": "Context API Limitations",
+      "description": "Understanding React Context API limitations - when it's appropriate and when to use other solutions.",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "react",
+        "context",
+        "state management",
+        "frontend"
+      ],
+      "coverImage": "/images/frontend/react/context-limitations.png",
+      "draft": false,
+      "category": "frontend",
+      "hierarchy": [
+        "react",
+        "state-management"
+      ],
+      "slug": "context-api-limitations",
+      "path": "/blogs/frontend/react/state-management/context-api-limitations"
+    }
+  ]
+}

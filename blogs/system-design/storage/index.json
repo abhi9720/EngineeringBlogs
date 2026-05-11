@@ -1,0 +1,69 @@
+{
+  "name": "Storage",
+  "path": "/blogs/system-design/storage",
+  "blogs": [
+    {
+      "title": "Blob vs Block Storage",
+      "description": "A comprehensive guide comparing blob storage and block storage in system design, covering use cases, performance characteristics, and implementation strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "blob-storage",
+        "block-storage",
+        "system-design",
+        "storage",
+        "cloud"
+      ],
+      "coverImage": "/images/blob-vs-block-storage.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "storage"
+      ],
+      "slug": "56. blob-vs-block-storage",
+      "path": "/blogs/system-design/storage/56. blob-vs-block-storage"
+    },
+    {
+      "title": "File Storage Systems",
+      "description": "A comprehensive guide to file storage systems in system design, covering NFS, SMB/CIFS, distributed file systems, and implementation for enterprise applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "file-storage",
+        "nfs",
+        "system-design",
+        "storage",
+        "enterprise"
+      ],
+      "coverImage": "/images/file-storage-systems.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "storage"
+      ],
+      "slug": "55. file-storage-systems",
+      "path": "/blogs/system-design/storage/55. file-storage-systems"
+    },
+    {
+      "title": "Object Storage with S3",
+      "description": "A comprehensive guide to object storage with Amazon S3, covering bucket operations, access control, versioning, lifecycle management, and implementation for scalable storage",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "object-storage",
+        "s3",
+        "aws",
+        "system-design",
+        "storage"
+      ],
+      "coverImage": "/images/object-storage-s3.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "storage"
+      ],
+      "slug": "54. object-storage-s3",
+      "path": "/blogs/system-design/storage/54. object-storage-s3"
+    }
+  ]
+}

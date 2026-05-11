@@ -1,0 +1,90 @@
+{
+  "name": "Patterns",
+  "path": "/blogs/system-design/patterns",
+  "blogs": [
+    {
+      "title": "CQRS Pattern",
+      "description": "A comprehensive guide to the Command Query Responsibility Segregation pattern in system design, covering read/write separation, event sourcing, and implementation for high-performance applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "cqrs",
+        "system-design",
+        "patterns",
+        "architecture",
+        "event-sourcing"
+      ],
+      "coverImage": "/images/cqrs.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "patterns"
+      ],
+      "slug": "53. cqrs",
+      "path": "/blogs/system-design/patterns/53. cqrs"
+    },
+    {
+      "title": "Pub-Sub Model",
+      "description": "A comprehensive guide to the publish-subscribe pattern in system design, covering message brokers, event-driven architecture, and implementation strategies for decoupled systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "pub-sub",
+        "messaging",
+        "system-design",
+        "event-driven",
+        "patterns"
+      ],
+      "coverImage": "/images/pub-sub-model.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "patterns"
+      ],
+      "slug": "52. pub-sub-model",
+      "path": "/blogs/system-design/patterns/52. pub-sub-model"
+    },
+    {
+      "title": "Circuit Breaker Pattern",
+      "description": "A comprehensive guide to the circuit breaker pattern in system design, covering failure handling, resilience strategies, and implementation for distributed systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "circuit-breaker",
+        "system-design",
+        "resilience",
+        "fault-tolerance",
+        "patterns"
+      ],
+      "coverImage": "/images/circuit-breaker.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "patterns"
+      ],
+      "slug": "51. circuit-breaker",
+      "path": "/blogs/system-design/patterns/51. circuit-breaker"
+    },
+    {
+      "title": "Rate Limiting",
+      "description": "A comprehensive guide to rate limiting in system design, covering token bucket algorithms, distributed rate limiting, and implementation strategies for API protection",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rate-limiting",
+        "system-design",
+        "api",
+        "scalability",
+        "patterns"
+      ],
+      "coverImage": "/images/rate-limiting.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "patterns"
+      ],
+      "slug": "50. rate-limiting",
+      "path": "/blogs/system-design/patterns/50. rate-limiting"
+    }
+  ]
+}

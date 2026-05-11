@@ -1,0 +1,82 @@
+{
+  "name": "Api Design",
+  "path": "/blogs/backend/api-design",
+  "blogs": [
+    {
+      "title": "API Versioning",
+      "description": "Design API versioning strategies: URL paths, headers, and query parameters; maintaining backward compatibility",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "api-versioning",
+        "rest-api",
+        "backward-compatibility"
+      ],
+      "coverImage": "/images/versioning-apis.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design"
+      ],
+      "slug": "versioning-apis",
+      "path": "/blogs/backend/api-design/versioning-apis"
+    },
+    {
+      "title": "REST vs GraphQL",
+      "description": "Compare REST and GraphQL API paradigms: when to use each, performance trade-offs, and practical implementation patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rest-api",
+        "graphql",
+        "api-design"
+      ],
+      "coverImage": "/images/rest-vs-graphql.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design"
+      ],
+      "slug": "rest-vs-graphql",
+      "path": "/blogs/backend/api-design/rest-vs-graphql"
+    },
+    {
+      "title": "Pagination Strategies",
+      "description": "Implement effective pagination in REST APIs: offset vs cursor-based, handling large datasets, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "pagination",
+        "rest-api",
+        "performance"
+      ],
+      "coverImage": "/images/pagination-strategies.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design"
+      ],
+      "slug": "pagination-strategies",
+      "path": "/blogs/backend/api-design/pagination-strategies"
+    },
+    {
+      "title": "Idempotency",
+      "description": "Implement idempotent APIs: handling duplicate requests, idempotency keys, and safe vs unsafe operations",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "idempotency",
+        "rest-api",
+        "api-design"
+      ],
+      "coverImage": "/images/idempotency.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design"
+      ],
+      "slug": "idempotency",
+      "path": "/blogs/backend/api-design/idempotency"
+    }
+  ]
+}

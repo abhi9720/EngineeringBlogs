@@ -1,0 +1,66 @@
+{
+  "name": "Nosql",
+  "path": "/blogs/databases/nosql",
+  "blogs": [
+    {
+      "title": "When to Use NoSQL",
+      "description": "Compare NoSQL and relational databases, understand use cases, and learn when to choose NoSQL for your application.",
+      "date": "2026-05-11",
+      "author": "Engineering Blog",
+      "tags": [
+        "nosql",
+        "database",
+        "relational",
+        "architecture"
+      ],
+      "coverImage": "/images/when-to-use-nosql.png",
+      "draft": false,
+      "category": "databases",
+      "hierarchy": [
+        "nosql"
+      ],
+      "slug": "76. when-to-use-nosql",
+      "path": "/blogs/databases/nosql/76. when-to-use-nosql"
+    },
+    {
+      "title": "Cassandra Overview",
+      "description": "An introduction to Apache Cassandra architecture, data modeling, and when to use this distributed NoSQL database.",
+      "date": "2026-05-11",
+      "author": "Engineering Blog",
+      "tags": [
+        "cassandra",
+        "nosql",
+        "distributed",
+        "database"
+      ],
+      "coverImage": "/images/cassandra-overview.png",
+      "draft": false,
+      "category": "databases",
+      "hierarchy": [
+        "nosql"
+      ],
+      "slug": "75. cassandra-overview",
+      "path": "/blogs/databases/nosql/75. cassandra-overview"
+    },
+    {
+      "title": "MongoDB Schema Design",
+      "description": "Learn MongoDB schema design patterns, embedding vs referencing, and best practices for document databases.",
+      "date": "2026-05-11",
+      "author": "Engineering Blog",
+      "tags": [
+        "mongodb",
+        "nosql",
+        "schema-design",
+        "database"
+      ],
+      "coverImage": "/images/mongodb-schema-design.png",
+      "draft": false,
+      "category": "databases",
+      "hierarchy": [
+        "nosql"
+      ],
+      "slug": "74. mongodb-schema-design",
+      "path": "/blogs/databases/nosql/74. mongodb-schema-design"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "name": "Monitoring",
+  "path": "/blogs/devops/monitoring",
+  "blogs": [
+    {
+      "title": "Logging with ELK Stack",
+      "description": "A comprehensive guide to centralized logging with ELK Stack",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "elk",
+        "logging",
+        "elasticsearch",
+        "devops"
+      ],
+      "coverImage": "/images/logging-elk-stack.png",
+      "draft": false,
+      "category": "devops",
+      "hierarchy": [
+        "monitoring"
+      ],
+      "slug": "69. logging-elk-stack",
+      "path": "/blogs/devops/monitoring/69. logging-elk-stack"
+    },
+    {
+      "title": "Grafana Dashboards",
+      "description": "A comprehensive guide to creating Grafana dashboards for monitoring",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "grafana",
+        "dashboards",
+        "monitoring",
+        "devops"
+      ],
+      "coverImage": "/images/grafana-dashboards.png",
+      "draft": false,
+      "category": "devops",
+      "hierarchy": [
+        "monitoring"
+      ],
+      "slug": "68. grafana-dashboards",
+      "path": "/blogs/devops/monitoring/68. grafana-dashboards"
+    },
+    {
+      "title": "Prometheus Introduction",
+      "description": "A comprehensive guide to getting started with Prometheus monitoring",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "prometheus",
+        "monitoring",
+        "devops",
+        "observability"
+      ],
+      "coverImage": "/images/prometheus-introduction.png",
+      "draft": false,
+      "category": "devops",
+      "hierarchy": [
+        "monitoring"
+      ],
+      "slug": "67. prometheus-introduction",
+      "path": "/blogs/devops/monitoring/67. prometheus-introduction"
+    }
+  ]
+}

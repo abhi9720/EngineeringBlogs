@@ -1,0 +1,83 @@
+{
+  "name": "Messaging",
+  "path": "/blogs/backend/messaging",
+  "blogs": [
+    {
+      "title": "RabbitMQ Basics",
+      "description": "Learn RabbitMQ fundamentals: exchanges, queues, bindings, and message patterns for asynchronous communication",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rabbitmq",
+        "messaging",
+        "amqp"
+      ],
+      "coverImage": "/images/rabbitmq-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "messaging"
+      ],
+      "slug": "rabbitmq-basics",
+      "path": "/blogs/backend/messaging/rabbitmq-basics"
+    },
+    {
+      "title": "Kafka Introduction",
+      "description": "Introduction to Apache Kafka: topics, partitions, producers, consumers, and how to build event streaming applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "kafka",
+        "messaging",
+        "event-streaming"
+      ],
+      "coverImage": "/images/kafka-introduction.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "messaging"
+      ],
+      "slug": "kafka-introduction",
+      "path": "/blogs/backend/messaging/kafka-introduction"
+    },
+    {
+      "title": "Kafka Consumer Groups",
+      "description": "Master Kafka consumer groups: parallel processing, rebalancing, partition assignment, and scaling strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "kafka",
+        "consumer-groups",
+        "partitioning"
+      ],
+      "coverImage": "/images/kafka-consumer-groups.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "messaging"
+      ],
+      "slug": "kafka-consumer-groups",
+      "path": "/blogs/backend/messaging/kafka-consumer-groups"
+    },
+    {
+      "title": "Event-Driven Architecture",
+      "description": "Design event-driven microservices: event sourcing, CQRS, saga patterns, and message-driven communication",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "event-driven",
+        "architecture",
+        "microservices",
+        "cqrs"
+      ],
+      "coverImage": "/images/event-driven-architecture.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "messaging"
+      ],
+      "slug": "event-driven-architecture",
+      "path": "/blogs/backend/messaging/event-driven-architecture"
+    }
+  ]
+}

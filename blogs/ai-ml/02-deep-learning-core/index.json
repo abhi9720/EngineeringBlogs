@@ -1,0 +1,155 @@
+{
+  "name": "02 Deep Learning Core",
+  "path": "/blogs/ai-ml/02-deep-learning-core",
+  "blogs": [
+    {
+      "title": "Transformers Architecture",
+      "description": "Master the transformer architecture - attention, positional encoding, and building transformer models",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Deep Learning",
+        "Transformers",
+        "Attention",
+        "BERT",
+        "GPT",
+        "NLP"
+      ],
+      "coverImage": "/images/transformers-architecture.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "02-deep-learning-core"
+      ],
+      "slug": "transformers-architecture",
+      "path": "/blogs/ai-ml/02-deep-learning-core/transformers-architecture"
+    },
+    {
+      "title": "RNN Sequence Models",
+      "description": "Master RNNs, LSTMs, and GRUs for processing sequential data - text, time series, and more",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Deep Learning",
+        "RNN",
+        "LSTM",
+        "GRU",
+        "Sequence Models",
+        "NLP"
+      ],
+      "coverImage": "/images/rnn-sequence-models.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "02-deep-learning-core"
+      ],
+      "slug": "rnn-sequence-models",
+      "path": "/blogs/ai-ml/02-deep-learning-core/rnn-sequence-models"
+    },
+    {
+      "title": "Neural Networks Basics",
+      "description": "Understand neural networks from scratch - neurons, layers, activation functions, and building your first ANN",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Deep Learning",
+        "Neural Networks",
+        "AI",
+        "Fundamentals",
+        "Perceptron"
+      ],
+      "coverImage": "/images/neural-networks-basics.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "02-deep-learning-core"
+      ],
+      "slug": "neural-networks-basics",
+      "path": "/blogs/ai-ml/02-deep-learning-core/neural-networks-basics"
+    },
+    {
+      "title": "Embeddings in Deep Learning",
+      "description": "Understand word embeddings, vector representations, and how neural networks represent meaning",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Deep Learning",
+        "Embeddings",
+        "NLP",
+        "Word Vectors",
+        "Representation Learning"
+      ],
+      "coverImage": "/images/embeddings-in-deep-learning.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "02-deep-learning-core"
+      ],
+      "slug": "embeddings-in-deep-learning",
+      "path": "/blogs/ai-ml/02-deep-learning-core/embeddings-in-deep-learning"
+    },
+    {
+      "title": "CNN Convolutional Networks",
+      "description": "Master CNNs for image recognition - convolutional layers, pooling, and building image classifiers",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Deep Learning",
+        "CNN",
+        "Computer Vision",
+        "Image Classification",
+        "Neural Networks"
+      ],
+      "coverImage": "/images/cnn-convolutional-networks.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "02-deep-learning-core"
+      ],
+      "slug": "cnn-convolutional-networks",
+      "path": "/blogs/ai-ml/02-deep-learning-core/cnn-convolutional-networks"
+    },
+    {
+      "title": "Backpropagation Explained",
+      "description": "Understand backpropagation - the core algorithm that trains neural networks by computing gradients",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Deep Learning",
+        "Backpropagation",
+        "Gradient Descent",
+        "Neural Networks",
+        "AI"
+      ],
+      "coverImage": "/images/backpropagation-explained.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "02-deep-learning-core"
+      ],
+      "slug": "backpropagation-explained",
+      "path": "/blogs/ai-ml/02-deep-learning-core/backpropagation-explained"
+    },
+    {
+      "title": "Attention Mechanism",
+      "description": "Understand the attention mechanism - the core innovation behind transformers that enables modeling long-range dependencies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Deep Learning",
+        "Attention",
+        "Transformers",
+        "NLP",
+        "AI"
+      ],
+      "coverImage": "/images/attention-mechanism.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "02-deep-learning-core"
+      ],
+      "slug": "attention-mechanism",
+      "path": "/blogs/ai-ml/02-deep-learning-core/attention-mechanism"
+    }
+  ]
+}
