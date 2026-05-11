@@ -4,7 +4,7 @@
       "name": "Ai Ml",
       "slug": "ai-ml",
       "path": "ai-ml",
-      "blogCount": 20,
+      "blogCount": 28,
       "children": [
         {
           "name": "01 Foundations",
@@ -24,7 +24,14 @@
           "name": "03 Llm Foundations",
           "slug": "03-llm-foundations",
           "path": "ai-ml/03-llm-foundations",
-          "blogCount": 4,
+          "blogCount": 6,
+          "children": []
+        },
+        {
+          "name": "04 Llm Applications",
+          "slug": "04-llm-applications",
+          "path": "ai-ml/04-llm-applications",
+          "blogCount": 6,
           "children": []
         }
       ]

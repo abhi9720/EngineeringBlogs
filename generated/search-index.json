@@ -3089,6 +3089,134 @@
     "path": "/blogs/backend/api-design/idempotency"
   },
   {
+    "title": "Tool Calling",
+    "description": "Enable LLMs to use external tools and APIs to extend their capabilities",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "LLM",
+      "Tool Calling",
+      "AI Agents",
+      "Function Calling",
+      "AI",
+      "Applications"
+    ],
+    "coverImage": "/images/tool-calling.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "04-llm-applications"
+    ],
+    "slug": "tool-calling",
+    "path": "/blogs/ai-ml/04-llm-applications/tool-calling"
+  },
+  {
+    "title": "Structured Outputs",
+    "description": "Get consistent, typed outputs from LLMs using structured response formats",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "LLM",
+      "Structured Output",
+      "JSON Mode",
+      "AI",
+      "Applications"
+    ],
+    "coverImage": "/images/structured-outputs.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "04-llm-applications"
+    ],
+    "slug": "structured-outputs",
+    "path": "/blogs/ai-ml/04-llm-applications/structured-outputs"
+  },
+  {
+    "title": "Prompt Patterns",
+    "description": "Advanced prompting patterns - chain-of-thought, ReAct, tree-of-thought, and more",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "LLM",
+      "Prompt Engineering",
+      "Patterns",
+      "AI",
+      "Applications"
+    ],
+    "coverImage": "/images/prompt-patterns.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "04-llm-applications"
+    ],
+    "slug": "prompt-patterns",
+    "path": "/blogs/ai-ml/04-llm-applications/prompt-patterns"
+  },
+  {
+    "title": "Prompt Engineering",
+    "description": "Master prompt engineering - crafting effective prompts for better LLM outputs",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "LLM",
+      "Prompt Engineering",
+      "AI",
+      "Applications",
+      "Generative AI"
+    ],
+    "coverImage": "/images/prompt-engineering.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "04-llm-applications"
+    ],
+    "slug": "prompt-engineering",
+    "path": "/blogs/ai-ml/04-llm-applications/prompt-engineering"
+  },
+  {
+    "title": "Function Calling",
+    "description": "Master structured function calling for reliable LLM interactions with typed outputs",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "LLM",
+      "Function Calling",
+      "Structured Output",
+      "AI",
+      "Applications"
+    ],
+    "coverImage": "/images/function-calling.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "04-llm-applications"
+    ],
+    "slug": "function-calling",
+    "path": "/blogs/ai-ml/04-llm-applications/function-calling"
+  },
+  {
+    "title": "Building LLM Apps",
+    "description": "Build production-ready LLM applications - from architecture to deployment and monitoring",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "LLM",
+      "Application Development",
+      "Production AI",
+      "FastAPI",
+      "AI",
+      "Applications"
+    ],
+    "coverImage": "/images/building-llm-apps.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "04-llm-applications"
+    ],
+    "slug": "building-llm-apps",
+    "path": "/blogs/ai-ml/04-llm-applications/building-llm-apps"
+  },
+  {
     "title": "Vector Similarity",
     "description": "Master vector similarity measures - cosine, dot product, Euclidean distance for semantic search",
     "date": "2026-05-11",
@@ -3110,6 +3238,28 @@
     "path": "/blogs/ai-ml/03-llm-foundations/vector-similarity"
   },
   {
+    "title": "Vector Databases Intro",
+    "description": "Introduction to vector databases - storing and searching embeddings at scale",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "LLM",
+      "Vector Database",
+      "ChromaDB",
+      "Pinecone",
+      "Embeddings",
+      "AI"
+    ],
+    "coverImage": "/images/vector-databases-intro.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "03-llm-foundations"
+    ],
+    "slug": "vector-databases-intro",
+    "path": "/blogs/ai-ml/03-llm-foundations/vector-databases-intro"
+  },
+  {
     "title": "Tokenization and Context Windows",
     "description": "Understand how LLMs process text - tokenization, subword algorithms, and context window limits",
     "date": "2026-05-11",
@@ -3129,6 +3279,27 @@
     ],
     "slug": "tokenization-context-windows",
     "path": "/blogs/ai-ml/03-llm-foundations/tokenization-context-windows"
+  },
+  {
+    "title": "Semantic Search Basics",
+    "description": "Learn semantic search - finding information by meaning, not keywords",
+    "date": "2026-05-11",
+    "author": "Abhishek Tiwari",
+    "tags": [
+      "LLM",
+      "Semantic Search",
+      "Information Retrieval",
+      "Embeddings",
+      "AI"
+    ],
+    "coverImage": "/images/semantic-search-basics.png",
+    "draft": false,
+    "category": "ai-ml",
+    "hierarchy": [
+      "03-llm-foundations"
+    ],
+    "slug": "semantic-search-basics",
+    "path": "/blogs/ai-ml/03-llm-foundations/semantic-search-basics"
   },
   {
     "title": "Introduction to LLMs",
