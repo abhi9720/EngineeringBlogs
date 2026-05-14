@@ -24,31 +24,36 @@ JPA entities go through distinct lifecycle states: new, managed, detached, and r
 
 ### State Transitions
 
-```java
-public class EntityStateDiagram {
+```mermaid
+---
+title: Entity State Transitions
+---
+stateDiagram-v2
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
 
-    // Entity States and Transitions:
-    //
-    //                persist()
-    //  TRANSIENT ───────────────> MANAGED
-    //      ^                         │
-    //      │                         │ remove()
-    //      │                         │
-    //      │                    ┌────┘
-    //      │                    ▼
-    //      │               REMOVED
-    //      │
-    //      └── merge() ◄─────────────┐
-    //                                │
-    //  DETACHED ◄───────────────────┘
-    //                    detach()
-    //                    close()
-    //                    clear()
-    //
-}
+    [*] --> TRANSIENT
+    TRANSIENT --> MANAGED: persist()
+    MANAGED --> REMOVED: remove()
+    MANAGED --> DETACHED: detach()/close()/clear()
+    DETACHED --> MANAGED: merge()
+    DETACHED --> [*]: clear()
+    REMOVED --> [*]
+
+    class TRANSIENT yellow
+    class MANAGED green
+    class DETACHED blue
+    class REMOVED pink
 ```
 
+The four entity states form a well-defined lifecycle within the persistence context. A **Transient** entity has no database identity and is not tracked. Calling `persist()` moves it into the **Managed** state, where Hibernate tracks every field change via its snapshot-based dirty checking mechanism. **Detached** entities have a database identity but are no longer monitored—modifications to them do not generate SQL unless they are re-attached via `merge()`. The **Removed** state marks an entity for deletion at flush time. Understanding these transitions is critical to avoiding `LazyInitializationException`, unintended persists, and stale data reads.
+
 ### State Demonstration
+
+The code below walks through each state transition programmatically. Note how `persist()` adds the entity to the persistence context and schedules an `INSERT`. Subsequent modifications are automatically detected. `detach()` removes the entity from tracking, and `merge()` returns a new managed instance (not the same object) that reflects the detached entity's state. Finally, `remove()` schedules a `DELETE`.
 
 ```java
 @Service
@@ -101,6 +106,8 @@ public class EntityStateService {
 
 ### Using find, getReference, and refresh
 
+Beyond the basic state transitions, JPA provides three distinct methods for obtaining entity references. `find()` eagerly loads the entity and returns `null` if it does not exist—use it when you need the data and the entity may not exist. `getReference()` returns a lazy proxy that defers the database hit until a non-primary-key field is accessed—use it for establishing entity relationships without an extra query, but only when you are certain the entity exists (it throws `EntityNotFoundException` if not found). `refresh()` reloads the entity state from the database, discarding any local changes—useful for reverting optimistic lock failures or stale data.
+
 ```java
 @Service
 public class EntityAccessService {
@@ -151,6 +158,8 @@ public class EntityAccessService {
 ## Lifecycle Callbacks
 
 ### Entity-Level Callbacks
+
+Lifecycle callbacks allow you to execute custom logic at specific points in the entity's lifecycle. The seven callback annotations—`@PrePersist`, `@PostPersist`, `@PreUpdate`, `@PostUpdate`, `@PreRemove`, `@PostRemove`, and `@PostLoad`—cover every state transition. These are ideal for setting timestamps, logging, validation, or initializing transient fields.
 
 ```java
 @Entity
@@ -206,6 +215,8 @@ public class AuditableEntity {
 ```
 
 ### External Entity Listener
+
+Using `@EntityListeners` with a separate listener class keeps auditing logic out of the entity itself. The `AuditListener` below automatically sets `createdAt`/`createdBy` before persist and `updatedAt`/`updatedBy` before update, using Spring Security's `SecurityContextHolder` to get the current user. The `Auditable` mapped superclass provides these fields to any entity that extends it, ensuring consistent auditing across the entire domain model.
 
 ```java
 @Component
@@ -276,6 +287,8 @@ public abstract class Auditable {
 ## Spring Data JPA Event Publishing
 
 ### Application Events from Entity Lifecycle
+
+Spring Data JPA extends the lifecycle callback mechanism with application event publishing. By using `@PostPersist`, `@PostUpdate`, and `@PostRemove` in a component, you can publish domain events that other Spring beans handle asynchronously. In the example below, when an order is created, the event handler sends a confirmation email, updates the search index, and publishes an integration event—all without coupling these concerns into the entity or repository.
 
 ```java
 @Component
@@ -365,6 +378,8 @@ public class EntityEventHandler {
 9. **Publish events asynchronously**: Don't block the persistence context
 10. **Test callback behavior**: Integration tests with flush/commit
 
+The `@PostLoad` callback is useful for initializing transient fields that depend on persistent data, such as formatting a price for display. However, it should never modify persistent fields—doing so would mark the entity as dirty and trigger an unnecessary `UPDATE` on the next flush.
+
 ```java
 @Entity
 public class Product {
@@ -382,6 +397,8 @@ public class Product {
 ## Common Mistakes
 
 ### Mistake 1: Database Queries in Callbacks
+
+Callbacks execute within the persistence context, and performing additional database queries inside them can cause unexpected behavior, including `LazyInitializationException` or transaction anomalies. Keep callbacks limited to in-memory operations.
 
 ```java
 // WRONG: Database access in @PrePersist
@@ -401,6 +418,8 @@ public void prePersist() {
 
 ### Mistake 2: Throwing Exceptions in Callbacks
 
+Unchecked exceptions thrown in lifecycle callbacks cause the transaction to roll back. For validation, use Bean Validation annotations (`@NotNull`, `@NotBlank`) instead of throwing exceptions in `@PrePersist` or `@PreUpdate`.
+
 ```java
 // WRONG: Unchecked exception will rollback transaction
 @PrePersist
@@ -415,6 +434,8 @@ public void validate() {
 ```
 
 ### Mistake 3: Modifying @PostLoad Entity
+
+Modifying persistent fields in `@PostLoad` marks the entity as dirty, causing an unnecessary `UPDATE` on the next flush. If you need derived values, set them as `@Transient` fields instead.
 
 ```java
 // WRONG: Modification in @PostLoad triggers dirty checking

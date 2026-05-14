@@ -16,6 +16,8 @@ draft: false
 
 Choosing between reactive (WebFlux) and imperative (WebMVC) programming models is a critical architectural decision. This guide compares both approaches across dimensions like performance, resource utilization, complexity, and use cases to help you make an informed decision.
 
+The decision should never be "reactive is faster" — that's a common misconception. Reactive offers better scalability under high concurrency, not lower latency for individual requests. For typical CRUD applications under moderate load, WebMVC is simpler and equally performant.
+
 ## Comparison Overview
 
 | Aspect | Imperative (WebMVC) | Reactive (WebFlux) |
@@ -32,6 +34,8 @@ Choosing between reactive (WebFlux) and imperative (WebMVC) programming models i
 
 ### Imperative Thread Model
 
+In the imperative model, each request occupies a thread from the Tomcat thread pool for its entire duration — including when waiting for database queries or external API calls. With a default pool of 200 threads, only 200 requests can be processed simultaneously. When all threads are blocked waiting for I/O, new requests are queued.
+
 ```java
 // Imperative: One thread per request
 @RestController
@@ -40,17 +44,14 @@ public class OrderController {
 
     @GetMapping("/api/orders")
     public List<Order> getOrders() {
-        // Thread blocked while waiting for DB
         return orderService.findAll();
     }
 }
-
-// Thread usage: Each request blocks a thread from the pool
-// Tomcat default: 200 threads max
-// With 200 concurrent slow DB queries -> thread pool exhausted
 ```
 
 ### Reactive Thread Model
+
+The reactive model uses a small number of event loop threads (typically one per CPU core). When a request triggers a database query, the thread returns to the event loop to handle other requests. When the database responds, the event loop continues processing the original request. This enables thousands of concurrent connections with a tiny thread pool.
 
 ```java
 // Reactive: Event loop, no blocking
@@ -61,56 +62,33 @@ public class ReactiveOrderController {
 
     @GetMapping
     public Flux<Order> getOrders() {
-        // Non-blocking, releases thread while waiting
         return orderService.findAll();
     }
 }
-
-// Small fixed thread pool (CPU cores)
-// Handles thousands of concurrent connections
-// Threads never block, always doing work or parked
 ```
 
 ## Performance Characteristics
-
-### Throughput Comparison
 
 ```java
 @RestController
 public class ThroughputTestController {
 
-    // Imperative endpoint - limited by thread pool
     @GetMapping("/imperative")
     public List<Product> getProductsImperative() {
-        List<Product> products = productRepository.findAll(); // Blocks thread
+        List<Product> products = productRepository.findAll();
         List<Review> reviews = reviewRepository.findByProductIds(
-            products.stream().map(Product::getId).toList()
-        ); // Blocks again
+            products.stream().map(Product::getId).toList());
         return enrichWithReviews(products, reviews);
     }
 
-    // Reactive endpoint - scales with connections
     @GetMapping("/reactive")
     public Flux<Product> getProductsReactive() {
         return productRepository.findAll()
             .flatMap(product -> reviewRepository.findByProductId(product.getId())
                 .collectList()
-                .map(reviews -> enrichProduct(product, reviews))
-            );
+                .map(reviews -> enrichProduct(product, reviews)));
     }
 }
-```
-
-### Resource Utilization
-
-```java
-// Imperative: Memory per request
-// Each thread: ~1MB stack + request processing memory
-// 1000 concurrent requests -> ~1GB+ just for thread stacks
-
-// Reactive: Memory per request
-// Each subscription: ~few KB
-// 1000 concurrent requests -> ~few MB
 ```
 
 ## When to Use Reactive
@@ -124,8 +102,6 @@ public class ApiGatewayService {
     private final WebClient serviceA;
     private final WebClient serviceB;
 
-    // Aggregates responses from multiple services
-    // Without blocking, handles thousands of concurrent aggregations
     public Mono<AggregatedResponse> aggregate(String id) {
         return Mono.zip(
             serviceA.get().uri("/data/{id}", id).retrieve().bodyToMono(DataA.class),
@@ -139,16 +115,12 @@ public class ApiGatewayService {
 // 2. Streaming / Server-Sent Events
 @RestController
 public class StreamingController {
-
     @GetMapping(value = "/stream/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ServerSentEvent<Event>> streamEvents() {
         return Flux.interval(Duration.ofSeconds(1))
             .map(i -> ServerSentEvent.<Event>builder()
-                .id(String.valueOf(i))
-                .event("tick")
-                .data(new Event("Tick #" + i, Instant.now()))
-                .build()
-            )
+                .id(String.valueOf(i)).event("tick")
+                .data(new Event("Tick #" + i, Instant.now())).build())
             .take(100);
     }
 }
@@ -161,15 +133,12 @@ public class ProxyService {
     private final WebClient webClient;
 
     public Mono<ResponseEntity<Resource>> proxyRequest(String url) {
-        return webClient.get()
-            .uri(url)
-            .exchangeToMono(response -> {
-                if (response.statusCode().is2xxSuccessful()) {
-                    return response.body(Resource.class)
-                        .map(body -> ResponseEntity.ok(body));
-                }
-                return Mono.just(ResponseEntity.status(response.statusCode()).build());
-            });
+        return webClient.get().uri(url).exchangeToMono(response -> {
+            if (response.statusCode().is2xxSuccessful()) {
+                return response.body(Resource.class).map(body -> ResponseEntity.ok(body));
+            }
+            return Mono.just(ResponseEntity.status(response.statusCode()).build());
+        });
     }
 }
 ```
@@ -181,10 +150,8 @@ public class ProxyService {
 @Service
 public class ImageProcessingService {
     public Mono<ProcessedImage> processImage(Image image) {
-        return Mono.fromCallable(() -> {
-            // CPU-intensive operation - blocks the event loop!
-            return applyFilters(image);
-        }).subscribeOn(Schedulers.boundedElastic());
+        return Mono.fromCallable(() -> applyFilters(image))
+            .subscribeOn(Schedulers.boundedElastic());
     }
 }
 
@@ -202,15 +169,6 @@ public class ImageProcessingServiceImperative {
 ```java
 // 2. Simple CRUD with low traffic
 @Service
-public class SimpleCrudService {
-    // Reactive overhead not justified for <1000 req/s
-    public Mono<User> getUser(Long id) {
-        return userRepository.findById(id);
-    }
-}
-
-// Better: Simple and maintainable
-@Service
 public class SimpleCrudServiceImperative {
     public User getUser(Long id) {
         return userRepository.findById(id)
@@ -222,8 +180,6 @@ public class SimpleCrudServiceImperative {
 ## Decision Framework
 
 ```java
-// Decision tree for choosing WebFlux vs WebMVC
-
 public class FrameworkDecision {
     public static String choose(ApplicationRequirements req) {
         if (req.isLowTraffic() && req.isSimpleCrud()) {
@@ -251,26 +207,6 @@ public class FrameworkDecision {
 }
 ```
 
-## Team and Operational Considerations
-
-```java
-// Skills required for reactive development
-public class TeamReadiness {
-    // Must understand:
-    // - Reactive Streams specification
-    // - Project Reactor (Mono, Flux, Operators)
-    // - Backpressure
-    // - Async debugging techniques
-    // - Reactive database drivers (R2DBC, MongoDB Reactive)
-    //
-    // Tooling challenges:
-    // - Debugging: Reactor Debug Agent
-    // - Logging: MDC context propagation
-    // - Monitoring: Reactor metrics
-    // - Testing: StepVerifier, TestPublisher
-}
-```
-
 ## Migration Strategy
 
 ```java
@@ -278,18 +214,14 @@ public class TeamReadiness {
 @RestController
 public class StandardController {
     @GetMapping("/api/standard")
-    public String standard() {
-        return "Standard MVC";
-    }
+    public String standard() { return "Standard MVC"; }
 }
 
 // Step 2: Add WebFlux for specific reactive endpoints
 @RestController
 public class ReactiveController {
     @GetMapping(value = "/api/reactive", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<String> reactive() {
-        return Flux.just("reactive");
-    }
+    public Flux<String> reactive() { return Flux.just("reactive"); }
 }
 
 // Step 3: Use WebClient in WebMVC for non-blocking external calls
@@ -299,11 +231,8 @@ public class HybridService {
 
     @Async
     public CompletableFuture<Result> callExternal() {
-        return webClient.get()
-            .uri("https://api.example.com/data")
-            .retrieve()
-            .bodyToMono(Result.class)
-            .toFuture();
+        return webClient.get().uri("https://api.example.com/data")
+            .retrieve().bodyToMono(Result.class).toFuture();
     }
 }
 ```
@@ -316,7 +245,7 @@ public class HybridService {
 4. **Start with WebMVC** - add WebFlux only when performance requirements justify it
 5. **Consider team expertise** - reactive has a steep learning curve
 6. **Measure before optimizing** - profile your actual bottlenecks
-7. **Use reactive databases** (R2DBC) if going fully reactive - mixing blocking JDBC defeats the purpose
+7. **Use reactive databases** (R2DBC) if going fully reactive
 
 ## Common Mistakes
 
@@ -324,30 +253,19 @@ public class HybridService {
 
 ```java
 // Wrong: Using WebFlux because "it's faster"
-// WebFlux is NOT faster for individual requests
-// It scales BETTER under high concurrency
-
-// This endpoint in WebFlux is actually slower per-request than WebMVC
 @RestController
 @RequestMapping("/api")
 public class UnnecessaryReactiveController {
     @GetMapping("/simple")
-    public Mono<String> simple() {
-        return Mono.just("Hello");
-    }
+    public Mono<String> simple() { return Mono.just("Hello"); }
 }
-```
 
-```java
 // Correct: Choose based on actual requirements
-// WebMVC for simple endpoints
 @RestController
 @RequestMapping("/api")
 public class SimpleController {
     @GetMapping("/simple")
-    public String simple() {
-        return "Hello";
-    }
+    public String simple() { return "Hello"; }
 }
 ```
 
@@ -359,24 +277,17 @@ public class SimpleController {
 public class BadReactiveService {
     @Transactional
     public Mono<List<User>> getUsers() {
-        return Mono.fromCallable(() -> {
-            // This blocks the event loop thread!
-            return jdbcTemplate.query("SELECT * FROM users", userRowMapper);
-        });
+        return Mono.fromCallable(() -> jdbcTemplate.query("SELECT * FROM users", userRowMapper));
     }
 }
-```
 
-```java
 // Correct: Use dedicated scheduler for blocking calls
 @Service
 public class GoodReactiveService {
     private final JdbcTemplate jdbcTemplate;
 
     public Mono<List<User>> getUsers() {
-        return Mono.fromCallable(() ->
-                jdbcTemplate.query("SELECT * FROM users", userRowMapper)
-            )
+        return Mono.fromCallable(() -> jdbcTemplate.query("SELECT * FROM users", userRowMapper))
             .subscribeOn(Schedulers.boundedElastic());
     }
 }

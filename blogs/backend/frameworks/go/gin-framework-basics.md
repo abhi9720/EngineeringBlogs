@@ -16,6 +16,8 @@ draft: false
 
 Gin is a high-performance HTTP web framework written in Go. It features a martini-like API with up to 40x better performance, built-in middleware support, request validation, and JSON binding.
 
+Gin's design philosophy centers on performance without sacrificing developer ergonomics. It builds on `httprouter`, a high-performance radix tree router, and provides a minimal but powerful API for building REST APIs. Understanding its core abstractions — context, middleware chain, and binding — is essential for building production-grade applications.
+
 ## Setup
 
 ```go
@@ -40,6 +42,8 @@ func main() {
 ```
 
 ## Routing
+
+Gin's router supports path parameters, query strings, and route grouping out of the box. The `:param` syntax extracts path segments while `c.Query()` handles query parameters. Route grouping with `Group()` enables prefix-based organization and scoped middleware application — a pattern that keeps large APIs maintainable.
 
 ### Basic Routing
 
@@ -92,6 +96,8 @@ func setupRouter() *gin.Engine {
 
 ## Request Binding
 
+Gin's binding layer automatically deserializes request bodies into Go structs based on Content-Type. The `binding` struct tag drives both deserialization and validation — tags like `required`, `email`, `min`, and `max` are processed by the underlying `go-playground/validator` library. Using pointer types for optional fields (like `*string` in `UpdateUserRequest`) enables distinguishing between "field not sent" and "field sent as empty".
+
 ```go
 type CreateUserRequest struct {
     Email    string `json:"email" binding:"required,email"`
@@ -138,6 +144,8 @@ func searchUsers(c *gin.Context) {
 ```
 
 ## Middleware
+
+Gin middleware follows the chain-of-responsibility pattern. Each middleware function receives `*gin.Context`, can read/write to it, and calls `c.Next()` to pass control to the next handler. Middleware can also abort the chain with `c.Abort()` — useful for auth checks, rate limiting, and validation gates. The order of `r.Use()` calls determines execution order.
 
 ### Custom Middleware
 
@@ -194,6 +202,8 @@ func RateLimitMiddleware() gin.HandlerFunc {
 }
 ```
 
+A key design decision in Gin is applying middleware at different granularities. Global middleware (via `r.Use()`) affects every route. Group-level middleware scopes to a prefix. Route-level middleware applies to individual handlers. This layered approach allows clean separation of cross-cutting concerns: recovery and logging globally, auth for protected groups, and role checks for admin sub-groups.
+
 ### Using Middleware
 
 ```go
@@ -227,6 +237,8 @@ func setupRouter() *gin.Engine {
 ```
 
 ## Error Handling
+
+Gin's error handling mechanism collects errors on the context throughout the middleware chain via `c.Error()`. A centralized error handler middleware (registered last) inspects `c.Errors` after all handlers have run and maps errors to structured API responses. This pattern keeps error handling logic out of individual handlers while providing consistent error formatting.
 
 ```go
 type APIError struct {
@@ -281,6 +293,8 @@ func getUser(c *gin.Context) {
 
 ## File Upload
 
+File handling in Gin uses the standard `multipart/form-data` support. The `c.FormFile()` method retrieves single files while `c.MultipartForm()` handles batch uploads. Always validate file type and size server-side — client-side checks are trivially bypassed. Gin's `SaveUploadedFile` wraps the underlying copy operation with proper directory handling.
+
 ```go
 func uploadFile(c *gin.Context) {
     file, err := c.FormFile("file")
@@ -330,6 +344,8 @@ func uploadMultipleFiles(c *gin.Context) {
 ```
 
 ## Testing
+
+Gin integrates with Go's `httptest` package for HTTP-level testing. The key pattern is creating the router via `setupRouter()`, constructing `http.Request` objects, and using `httptest.NewRecorder` to capture responses. Table-driven tests (as shown in `TestValidation`) are idiomatic in Go and work well for testing multiple request variations against the same endpoint.
 
 ```go
 func TestCreateUser(t *testing.T) {

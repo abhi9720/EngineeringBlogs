@@ -18,23 +18,50 @@ Choosing between them depends on your specific requirements: ease of use, real-t
 
 ### Elasticsearch Architecture
 
-Elasticsearch uses a RESTful API and JSON-based query DSL. It is designed for near real-time search and analytics.
+Elasticsearch uses a RESTful API and JSON-based query DSL. It is designed for near real-time search and analytics. The cluster topology consists of nodes with specialized roles — master nodes manage cluster state, data nodes store shards, and coordinating nodes route requests. An index is split into primary shards (for write and read) and replica shards (for failover and read scaling):
 
-```
-Cluster
-  ├── Node (Master)
-  ├── Node (Data)
-  ├── Node (Data)
-  └── Node (Coordinating)
+```mermaid
+graph TB
+    subgraph "Elasticsearch Cluster"
+        Master["Master Node<br/>(Cluster Management)"]
+        Data1["Data Node 1"]
+        Data2["Data Node 2"]
+        Coord["Coordinating Node"]
+    end
 
-Index
-  ├── Shard 0 (Primary)
-  │   └── Shard 0 (Replica)
-  ├── Shard 1 (Primary)
-  │   └── Shard 1 (Replica)
-  └── Shard 2 (Primary)
-      └── Shard 2 (Replica)
+    subgraph "Index: products"
+        P0["Shard 0 (Primary)"]
+        R0["Shard 0 (Replica)"]
+        P1["Shard 1 (Primary)"]
+        R1["Shard 1 (Replica)"]
+        P2["Shard 2 (Primary)"]
+        R2["Shard 2 (Replica)"]
+    end
+
+    Master -.-> Data1
+    Master -.-> Data2
+    Master -.-> Coord
+    Coord --> Data1
+    Coord --> Data2
+    Data1 --> P0
+    Data1 --> P1
+    Data2 --> R0
+    Data2 --> P2
+    Data1 --> R1
+    Data2 --> R2
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class Master,P0 yellow
+    class Data1,Data2,P1,R1 blue
+    class Coord pink
+    class R0,R2 green
 ```
+
+Elasticsearch queries use a JSON DSL that is both human-readable and programmatically constructed. The `NativeSearchQueryBuilder` in Spring Data Elasticsearch provides a fluent Java API that translates to the underlying REST calls:
 
 ```java
 // Elasticsearch: RESTful API with JSON query DSL
@@ -56,7 +83,7 @@ public class ElasticsearchSearchService {
 
 ### Solr Architecture
 
-Solr uses a collection concept and supports both RESTful and native APIs.
+Solr uses a collection concept and supports both RESTful and native APIs. Configuration is XML-based, with schemas defined upfront in `schema.xml`. Solr's query API uses URL parameters and a JSON facet API:
 
 ```xml
 <!-- Solr: Schema configuration -->
@@ -72,6 +99,8 @@ Solr uses a collection concept and supports both RESTful and native APIs.
   <copyField source="description" dest="_text_"/>
 </schema>
 ```
+
+The SolrJ client provides a Java API. Note the `df` (default field) parameter pointing to `_text_`, a catch-all field built by `copyField` directives — this is Solr's approach to multi-field search without explicit field listing:
 
 ```java
 // Solr: Java client
@@ -102,6 +131,8 @@ public class SolrSearchService {
 
 ### Elasticsearch Indexing
 
+Elasticsearch's `bulk` API batches multiple index operations into a single HTTP request. The `BulkResponse` reports per-operation results — checking `hasFailures()` is essential to catch partial failures that might otherwise go unnoticed:
+
 ```java
 @Component
 public class ElasticsearchBulkIndexer {
@@ -126,6 +157,8 @@ public class ElasticsearchBulkIndexer {
 ```
 
 ### Solr Indexing
+
+Solr requires explicit `commit()` calls to make indexed documents visible. The autoCommit settings in `solrconfig.xml` can mitigate this, but programmatic commits give you precise control over the trade-off between indexing throughput and search freshness:
 
 ```java
 @Component
@@ -163,6 +196,8 @@ public class SolrBulkIndexer {
 
 ### Elasticsearch: Full-text and Analytics
 
+Elasticsearch's aggregation framework is the most powerful analytics engine in the search space. The following query computes a `terms` aggregation on `category`, with sub-aggregations for average price, price statistics, and brand distribution — all in a single round-trip. The `date_histogram` aggregation enables time-series analysis:
+
 ```java
 // Elasticsearch: Aggregation for analytics
 @Service
@@ -192,6 +227,8 @@ public class ElasticsearchAnalyticsService {
 ```
 
 ### Solr: Faceting and Analytics
+
+Solr's faceting module is mature and highly optimized for enumerated fields. It supports field faceting, range faceting, and pivot faceting. The query below replicates the Elasticsearch aggregation — category facets, price range facets, and a facet query for expensive items:
 
 ```java
 // Solr: Faceting
@@ -234,6 +271,8 @@ public class SolrFacetService {
 
 ## When to Choose Elasticsearch
 
+Elasticsearch excels at time-series analytics (the ELK Stack is the de facto standard for log analytics), complex full-text search with relevance tuning, and applications needing auto-scaling. Its JSON-based query DSL and aggregation framework make it ideal for real-time analytics dashboards:
+
 ```java
 // Elasticsearch excels at:
 // 1. Time-series data and logging (ELK Stack)
@@ -261,6 +300,8 @@ public class SearchDecisionService {
 
 ## When to Choose Solr
 
+Solr excels at enterprise search with complex faceting, handling large relatively static datasets, and environments where schema must be strictly controlled. Its rich document parsing (PDF, Word, HTML) and more predictable performance for known query patterns make it a strong choice for content management and document-centric applications:
+
 ```java
 // Solr excels at:
 // 1. Enterprise search with complex faceting
@@ -276,6 +317,8 @@ public class SearchDecisionService {
 ```
 
 ## Migration Considerations
+
+Migrating between search engines is a multi-step process that requires significant planning. The plan below covers schema mapping, query translation, dual-write (writing to both engines simultaneously to verify correctness), and finally cutover. Always run comparison queries before decommissioning the old engine:
 
 ```java
 // Planning a migration between search engines
@@ -317,6 +360,8 @@ public class SearchMigrationPlanner {
 
 ### Assuming Feature Parity
 
+Despite sharing the Lucene foundation, Elasticsearch and Solr behave differently in subtle ways. Analyzers, query syntax, and scoring algorithms all have nuances. Test thoroughly when migrating:
+
 ```java
 // Wrong: Assuming Elasticsearch and Solr behaviors are identical
 // Both handle "analyzers" differently, query syntax differs,
@@ -326,6 +371,8 @@ public class SearchMigrationPlanner {
 ```
 
 ### Not Considering Operations
+
+The best search engine is the one your team can operate effectively. Evaluate monitoring infrastructure, available expertise, and operational cost:
 
 ```java
 // Wrong: Choosing based only on search features

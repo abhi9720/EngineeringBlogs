@@ -22,9 +22,24 @@ OpenID Connect (OIDC) is an identity layer built on top of OAuth 2.0. While OAut
 
 ## OIDC vs OAuth2
 
-```
-OAuth 2.0: "I authorize this app to access my data"
-OIDC:      "I am who I say I am, and I authorize this app"
+```mermaid
+graph LR
+    OAuth2["OAuth 2.0:<br/>'I authorize this app<br/>to access my data'"]
+    OIDC["OpenID Connect:<br/>'I am who I say I am,<br/>and I authorize this app'"]
+
+    OIDC -->|Adds| IDToken["ID Token (JWT)"]
+    OIDC -->|Adds| UserInfo["UserInfo Endpoint"]
+    OIDC -->|Adds| Discovery["Discovery URL"]
+    OIDC -->|Adds| AuthClasses["Auth Context Classes"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class OAuth2 blue
+    class OIDC green
+    class IDToken,UserInfo,Discovery,AuthClasses pink
 ```
 
 OAuth2 alone does not authenticate the user. It only delegates access. OIDC adds:
@@ -38,7 +53,7 @@ OAuth2 alone does not authenticate the user. It only delegates access. OIDC adds
 
 ## ID Token Structure
 
-The ID token is a JWT with specific claims defined by OIDC:
+The ID token is a JWT with specific claims defined by OIDC. The `iss` (issuer), `sub` (subject), `aud` (audience), `exp`, and `iat` are required. Standard claims like `name`, `email`, and `picture` carry user profile data. The `nonce` claim prevents replay attacks, and `acr`/`amr` indicate the authentication strength and methods used:
 
 ```json
 {
@@ -88,7 +103,7 @@ The ID token is a JWT with specific claims defined by OIDC:
 
 ## OIDC Discovery
 
-OIDC providers expose a discovery document at a well-known URL:
+OIDC providers expose a discovery document at a well-known URL that lists all endpoints, supported scopes, response types, and signing algorithms. Clients use this document to auto-configure themselves:
 
 ```http
 GET https://auth.example.com/.well-known/openid-configuration
@@ -115,6 +130,8 @@ GET https://auth.example.com/.well-known/openid-configuration
 ```
 
 ### Using Discovery in Spring Security
+
+When you specify an `issuerUri`, Spring Security automatically fetches the discovery document and configures all endpoints — no need to manually specify authorization, token, or JWKS URIs:
 
 ```java
 @Configuration
@@ -143,6 +160,8 @@ Spring Security automatically fetches the discovery document and configures all 
 ## Authentication Flow with OIDC
 
 ### Requesting an ID Token
+
+To request an ID token, include the `openid` scope in the authorization request. A `nonce` parameter is added — it will be embedded in the ID token and must be validated to prevent replay attacks:
 
 ```java
 public class OidcAuthorizationRequest {
@@ -176,6 +195,8 @@ public class OidcAuthorizationRequest {
 ```
 
 ### Validating the ID Token
+
+ID token validation must check signature, issuer, audience, nonce, expiration, and optionally `auth_time`. Each check prevents a specific attack — signature prevents forgery, nonce prevents replay, expiration limits the window of exploit:
 
 ```java
 @Component
@@ -233,7 +254,7 @@ public class IdTokenValidator {
 
 ### UserInfo Endpoint
 
-The UserInfo endpoint provides additional claims. It requires a valid access token:
+The UserInfo endpoint returns additional claims about the authenticated user. It requires a valid access token (not the ID token) for authorization. The response includes the `sub` claim which should match the ID token's `sub`:
 
 ```java
 @Component
@@ -281,6 +302,8 @@ public class OidcUserInfo {
 ## OIDC in Spring Security
 
 ### Complete OIDC Login Configuration
+
+Spring Security's OIDC support streamlines the entire flow. The `DefaultOidcUserService` handles ID token validation, UserInfo fetching, and user creation. The custom `oidcUserService` below intercepts the OIDC user to create or look up a local user account:
 
 ```java
 @Configuration
@@ -343,6 +366,8 @@ public class OidcLoginConfig {
 
 ### Accessing the OIDC User
 
+Once authenticated, the OIDC user's claims are available through the `OidcUser` object stored in the security context. This provides verified identity data (email, name, subject) for personalization and authorization:
+
 ```java
 @RestController
 @RequestMapping("/api")
@@ -379,6 +404,8 @@ public class UserController {
 ---
 
 ## OIDC Logout (RP-Initiated Logout)
+
+Single logout requires coordination between the application and the IdP. After invalidating the local session, the application redirects the user to the IdP's `end_session_endpoint` with the ID token as a hint. The IdP then terminates the SSO session, potentially logging the user out of all applications:
 
 ```java
 @Controller
@@ -433,6 +460,8 @@ public class LogoutController {
 
 ### Mistake 1: Treating OAuth2 as Authentication
 
+OAuth2 access tokens are opaque to the client — they do not contain user identity. Using them for authentication is incorrect:
+
 ```java
 // WRONG: Using OAuth2 access token alone for authentication
 // Access tokens are opaque to the client; they contain no user identity
@@ -453,6 +482,8 @@ public String whoami() {
 
 ### Mistake 2: Not Validating the Nonce
 
+Without nonce validation, a captured ID token can be replayed by an attacker:
+
 ```java
 // WRONG: Skipping nonce validation
 // Attacker can replay a captured ID token
@@ -469,6 +500,8 @@ if (!expectedNonce.equals(actualNonce)) {
 ```
 
 ### Mistake 3: Using Access Token Instead of ID Token for Authorization
+
+Basing authorization decisions on access token scopes is wrong — scopes represent delegated permissions, not user identity:
 
 ```java
 // WRONG: Basing authz decisions on access token scopes

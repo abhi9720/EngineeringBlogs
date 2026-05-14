@@ -20,14 +20,25 @@ Trace context propagation is the mechanism by which distributed tracing systems 
 
 ### Why Propagation Matters
 
-```
-Without Propagation:
-Service A ──> trace-id: abc ──> Service B ──> trace-id: xyz
-                                 Independent traces!
+```mermaid
+flowchart LR
+    subgraph Without["Without Propagation"]
+        A1["Service A"] -->|"trace-id: abc"| B1["Service B"]
+        B1 -->|"trace-id: xyz"| End1["Independent traces!"]
+    end
+    subgraph With["With Propagation"]
+        A2["Service A"] -->|"trace-id: abc"| B2["Service B"]
+        B2 -->|"trace-id: abc"| End2["Same trace!"]
+    end
 
-With Propagation:
-Service A ──> trace-id: abc ──> Service B ──> trace-id: abc
-                                 Same trace!
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class A1,A2 blue
+    class B1,B2 green
 ```
 
 ---
@@ -67,6 +78,8 @@ public class W3CPropagationExample {
 }
 ```
 
+The `traceFlags` byte is especially important for performance. When the edge service sets `01` (sampled), every downstream service knows to create spans. When set to `00`, downstream services can skip span creation entirely, avoiding the CPU and memory overhead of instrumentation at each hop. This single bit, propagated globally, is the most cost-effective sampling mechanism in distributed tracing.
+
 ### B3 Propagation (Zipkin)
 
 ```
@@ -76,6 +89,8 @@ X-B3-ParentSpanId: 1234567890abcdef
 X-B3-Sampled: 1
 X-B3-Flags: 1
 ```
+
+B3 uses multiple headers rather than a single combined header like W3C. The `X-B3-ParentSpanId` field is notable—it encodes the parent-child relationship directly, which is redundant in W3C's model (the parent is always the span that created the child). B3 is still widely used in Zipkin-centric deployments, but W3C Trace-Context is the recommended standard for new projects.
 
 ---
 
@@ -137,6 +152,8 @@ public class TracingRestTemplateInterceptor implements ClientHttpRequestIntercep
     }
 }
 ```
+
+The `TextMapSetter` adapter converts OpenTelemetry's generic inject API to Spring's `HttpHeaders` class. The propagator writes the `traceparent` and `tracestate` headers into the outgoing request. When using the OpenTelemetry Java Agent, this interceptor is not needed—the agent instruments `RestTemplate` automatically. But in cases where the agent cannot be used (e.g., restricted environments), this pattern gives manual control.
 
 ### Server-Side Extraction
 
@@ -201,6 +218,8 @@ public class TracingHandlerInterceptor implements HandlerInterceptor {
 }
 ```
 
+On the server side, `TextMapGetter` extracts the propagated context from incoming HTTP headers. The `setParent(extracted)` call is what links this span to the trace started by the caller. Without this, a new trace would be created and the request would appear as an orphan. Storing the span in a request attribute ensures it can be retrieved and ended in `afterCompletion`, even if the request handler throws an exception.
+
 ---
 
 ## Async Context Propagation
@@ -240,6 +259,8 @@ public class AsyncTracingWrapper {
     }
 }
 ```
+
+Context propagation across thread boundaries is one of the hardest problems in distributed tracing. The `Context` object is stored in a `ThreadLocal`, so when work is submitted to another thread, the context must be captured before submission and restored in the executing thread. The `taskDecorator` pattern on `ThreadPoolTaskExecutor` is the cleanest solution for Spring Boot: every task submitted to the executor is automatically wrapped with context propagation, eliminating the risk of forgetting to capture context at call sites.
 
 ### Message Queue Propagation
 
@@ -289,6 +310,8 @@ public class MessagingPropagationService {
     }
 }
 ```
+
+Message queues introduce temporal decoupling—the producer and consumer may not overlap in time. The trace context is serialized into Kafka record headers. On the consumer side, the context is extracted before processing, so any spans created during message processing are linked back to the producer's trace. This works across service restarts and even across different time zones, as long as the W3C headers survive serialization.
 
 ---
 
@@ -350,6 +373,8 @@ public class GrpcTracingServerInterceptor implements ServerInterceptor {
     }
 }
 ```
+
+gRPC uses its own `Metadata` object instead of HTTP headers. The injection and extraction patterns are the same as HTTP; only the carrier type changes. grpc-java's `Contexts.interceptCall` ensures the OpenTelemetry context is active for the entire gRPC call lifecycle, including streaming responses where multiple messages arrive over time.
 
 ---
 
@@ -424,6 +449,8 @@ public TextMapPropagator propagator() {
     );
 }
 ```
+
+Using `TextMapPropagator.composite` allows both W3C Trace-Context and W3C Baggage to be propagated simultaneously. The `Baggage` propagator carries non-identifying metadata (e.g., `user.tier=premium`) alongside the trace context, enabling downstream services to make decisions based on request attributes without parsing HTTP headers.
 
 ---
 

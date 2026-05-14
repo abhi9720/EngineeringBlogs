@@ -18,6 +18,8 @@ HTTP routing is the foundation of any web application. Go's standard library pro
 
 ## Standard Library Routing
 
+Go's `net/http` package provides everything needed for production routing without third-party dependencies. Prior to Go 1.22, path parameter extraction required manual string manipulation. With Go 1.22's enhanced routing, method-based patterns and path parameters are built directly into `http.ServeMux`, reducing boilerplate significantly while maintaining the standard library's zero-dependency promise.
+
 ### Basic ServeMux
 
 ```go
@@ -84,6 +86,8 @@ func extractID(path, prefix string) string {
 }
 ```
 
+The pre-1.22 approach above requires manual path parsing via `extractID` and explicit HTTP method switching. It works but adds ceremony. The `userByIDHandler` function demonstrates the common pattern of stripping a prefix to extract a variable path segment — a pattern so common that Go 1.22 made it a first-class feature.
+
 ### Go 1.22 Enhanced Routing
 
 ```go
@@ -126,6 +130,8 @@ func serveStatic(w http.ResponseWriter, r *http.Request) {
     http.ServeFile(w, r, filepath)
 }
 ```
+
+Go 1.22 routing simplifies this dramatically. Method and pattern are combined in the pattern string (`"GET /api/users/{id}"`), and `r.PathValue("id")` extracts path parameters. Wildcard matching (`{path}` or `*path`) enables static file serving without manual prefix stripping. This built-in support covers 90% of routing needs without third-party routers.
 
 ## Custom Router Implementation
 
@@ -220,6 +226,8 @@ func Params(r *http.Request) map[string]string {
 }
 ```
 
+While the standard library suffices for many applications, building a custom router clarifies the routing internals. The `Route` struct pairs HTTP method, pattern, and handler. Middleware is stored in slices and applied in nested fashion — last added, first executed (LIFO). Path parameters are stored in the request's context, a pattern used by most third-party Go routers.
+
 ## Middleware Chaining
 
 ```go
@@ -310,6 +318,8 @@ func main() {
 }
 ```
 
+Middleware in Go is a function signature `func(http.Handler) http.Handler` — it takes a handler and returns a wrapped handler. The `Chain` utility applies middleware in reverse order so they execute in the order listed. Recovery middleware should always be outermost (first applied) so it catches panics from all inner layers. CORS, logging, and auth follow in order of decreasing scope.
+
 ## Path Parameter Matching
 
 ```go
@@ -349,6 +359,8 @@ func getUser(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(user)
 }
 ```
+
+The custom `matchPattern` function implements brace-delimited parameter matching — a simplified version of what frameworks like Gin and Echo use internally. It splits both pattern and path on `/`, checks segment count equality, and extracts parameters where the pattern segment matches the `{name}` format. This function powers the router's `ServeHTTP` dispatch loop.
 
 ## Testing Routes
 

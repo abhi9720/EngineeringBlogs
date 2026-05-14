@@ -32,40 +32,65 @@ Centralized logging aggregates logs from multiple services into a single platfor
 
 ### Basic Architecture
 
-```
-Service A ──┐
-Service B ──┼──> Log Shipper ──> Message Queue ──> Log Aggregator ──> Storage ──> Search & Visualization
-Service C ──┘
+```mermaid
+flowchart LR
+    A["Service A"] --> Shipper["Log Shipper"]
+    B["Service B"] --> Shipper
+    C["Service C"] --> Shipper
+    Shipper --> Queue["Message Queue"]
+    Queue --> Aggregator["Log Aggregator"]
+    Aggregator --> Storage["Storage"]
+    Storage --> Viz["Search & Visualization"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class A,B,C yellow
+    class Shipper,Queue blue
+    class Aggregator,Storage,Viz green
 ```
 
 ### Production Architecture
 
+```mermaid
+flowchart LR
+    subgraph Services["Services"]
+        SA["Service A<br/>Service A logs"]
+        SB["Service B<br/>Service B logs"]
+        SC["Service C<br/>Service C logs"]
+    end
+    subgraph Shippers["Shippers"]
+        FA["Filebeat<br/>(sidecar)"]
+        FB["Filebeat<br/>(sidecar)"]
+        FC["Filebeat<br/>(sidecar)"]
+    end
+    SA --> FA
+    SB --> FB
+    SC --> FC
+    FA --> K["Kafka<br/>(buffer)"]
+    FB --> K
+    FC --> K
+    K --> L["Logstash<br/>(parse, enrich)"]
+    L --> ES["Elasticsearch<br/>(store, index)"]
+    ES --> KI["Kibana<br/>(visualize)"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class SA,SB,SC yellow
+    class FA,FB,FC pink
+    class K blue
+    class L green
+    class ES,KI blue
 ```
-┌─────────────────┐     ┌──────────────┐     ┌───────────────┐
-│ Service A       │     │ Filebeat     │     │               │
-│ Service A logs ─┼────>│ (sidecar)    │     │               │
-└─────────────────┘     └──────┬───────┘     │               │
-                               │              │   Kafka       │
-┌─────────────────┐     ┌──────┴───────┐     │   (buffer)    │
-│ Service B       │     │ Filebeat     │     │               │
-│ Service B logs ─┼────>│ (sidecar)    │     │               │
-└─────────────────┘     └──────┬───────┘     └───────┬───────┘
-                               │                      │
-┌─────────────────┐     ┌──────┴───────┐     ┌───────┴───────┐
-│ Service C       │     │ Filebeat     │     │ Logstash      │
-│ Service C logs ─┼────>│ (sidecar)    │     │ (parse, enrich)│
-└─────────────────┘     └──────────────┘     └───────┬───────┘
-                                                      │
-                                               ┌──────┴──────┐
-                                               │ Elasticsearch│
-                                               │ (store, index)│
-                                               └──────┬───────┘
-                                                      │
-                                               ┌──────┴──────┐
-                                               │   Kibana    │
-                                               │ (visualize) │
-                                               └─────────────┘
-```
+
+The pipeline from logs to visualization involves several stages. Each service writes logs to a local file (or stdout). A log shipper (Filebeat) tails these files, optionally sends to a buffering layer (Kafka), and forwards to a transformation layer (Logstash) before the data lands in Elasticsearch for indexing and storage. The message queue (Kafka) is optional but highly recommended: it absorbs traffic spikes when the downstream pipeline is slow and provides replay capability if Logstash or Elasticsearch need to be restarted.
 
 ---
 
@@ -108,6 +133,8 @@ spec:
           name: filebeat-config
 ```
 
+In Kubernetes, the sidecar pattern runs Filebeat in the same pod as the application, sharing a log directory via an `emptyDir` volume. This isolates each application's log shipping configuration and prevents a single misconfigured Filebeat from affecting multiple applications. The downside is resource overhead: each pod now runs two containers instead of one, consuming extra CPU and memory.
+
 ### Agent Pattern (Node-Level)
 
 ```yaml
@@ -140,6 +167,8 @@ spec:
         hostPath:
           path: /var/lib/docker/containers
 ```
+
+The DaemonSet pattern runs one Filebeat per Kubernetes node, reading all container logs from the host filesystem. This is more resource-efficient than the sidecar approach because a single agent handles dozens of pods per node. The trade-off is that log metadata (pod name, namespace, container name) must be inferred from the container log filename rather than injected by a co-located sidecar.
 
 ---
 
@@ -201,6 +230,8 @@ output {
 }
 ```
 
+Kafka in the logging pipeline serves three purposes: buffering (smoothes out traffic bursts), decoupling (Logstash can be restarted without losing logs), and multi-consumer (multiple consumers can read the same log stream for different purposes). The Logstash Kafka input uses `consumer_threads` to parallelize consumption—each thread reads from a different Kafka partition, matching the partition count for optimal throughput.
+
 ---
 
 ## Multi-Tenant Log Isolation
@@ -241,6 +272,8 @@ PUT _security/role/tenant-a-role
   ]
 }
 ```
+
+Index-based isolation creates a separate Elasticsearch index per tenant, simplifying shard management and enabling per-tenant retention policies. Field-based isolation uses a single index with Elasticsearch field-level security to restrict access—simpler to manage but requires Elasticsearch's security features (paid license). The choice depends on whether you need per-tenant retention tuning (choose index-based) or ease of administration (choose field-based).
 
 ---
 
@@ -288,6 +321,8 @@ filter {
 }
 ```
 
+Log enrichment adds context that the application itself may not know. The Kubernetes filter adds pod name, namespace, and container name from the environment. The `translate` filter maps namespace names to deployment environments—critical for setting up cross-environment dashboards that use consistent labels.
+
 ---
 
 ## Correlation Patterns
@@ -320,6 +355,8 @@ public class LogCorrelationFilter extends OncePerRequestFilter {
     }
 }
 ```
+
+The correlation ID pattern ensures that every log line emitted during a request carries the same `trace_id`. When combined with structured JSON logging, the `trace_id` becomes a queryable field in Elasticsearch—allowing operators to find all log entries across all services for a single request by searching: `trace_id: abc123`.
 
 ### Service-to-Service Correlation
 

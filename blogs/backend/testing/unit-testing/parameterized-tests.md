@@ -1,4 +1,4 @@
----
+﻿---
 title: "Parameterized Tests"
 description: "Deep dive into JUnit 5 parameterized tests: @ValueSource, @CsvSource, @EnumSource, @MethodSource, and custom argument providers"
 date: "2026-05-11"

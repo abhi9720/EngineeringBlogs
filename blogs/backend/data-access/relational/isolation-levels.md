@@ -24,6 +24,8 @@ Transaction isolation levels define how concurrent transactions interact with ea
 
 ### Dirty Read (Uncommitted Data)
 
+A dirty read occurs when one transaction reads uncommitted changes made by another transaction. If the other transaction later rolls back, the first transaction has read data that never officially existed. `READ_UNCOMMITTED` allows dirty reads but is rarely used in practice—PostgreSQL does not even support it (it silently upgrades to `READ_COMMITTED`).
+
 ```java
 // Transaction 1: Updates but doesn't commit
 @Transactional
@@ -51,6 +53,8 @@ public BigDecimal getPrice(Long productId) {
 
 ### Non-Repeatable Read
 
+A non-repeatable read happens when a transaction reads the same row twice and gets different values because another transaction modified and committed the row between the two reads. This is prevented by `REPEATABLE_READ`, which uses snapshot isolation (in PostgreSQL) or shared locks (in MySQL) to guarantee consistent reads within the transaction.
+
 ```java
 // Transaction 1: Two reads of same row get different values
 @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -71,6 +75,8 @@ public void calculateDiscount(Long orderId) {
 
 ### Phantom Read
 
+A phantom read occurs when a transaction executes the same range query twice and gets a different number of rows because another transaction inserted or deleted rows that match the filter. `REPEATABLE_READ` in most databases prevents non-repeatable reads but allows phantom reads. PostgreSQL's snapshot isolation (used for both `REPEATABLE_READ` and `SERIALIZABLE`) prevents phantoms at both levels.
+
 ```java
 // Transaction 1: Range query returns different results
 @Transactional(isolation = Isolation.REPEATABLE_READ)
@@ -88,6 +94,8 @@ public List<Product> getProductsInPriceRange(BigDecimal min, BigDecimal max) {
 ```
 
 ### Serialization Anomaly
+
+Even `SERIALIZABLE` isolation can exhibit specific anomalies depending on the implementation. Write skew is one such anomaly: two concurrent transactions read overlapping data sets, make decisions based on what they read, and then write conflicting data. In the doctor scheduling example, both transactions see one doctor on call, both add a doctor, and the final count ends up at three instead of at most two.
 
 ```java
 // Even SERIALIZABLE level has a specific anomaly: read-only transaction anomaly
@@ -109,23 +117,52 @@ public void assignDoctors() {
 
 ## Isolation Level Comparison
 
+```mermaid
+---
+title: Isolation Level Phenomena Matrix
+---
+classDiagram
+    class READ_UNCOMMITTED {
+        +Dirty Read: Possible
+        +Non-Repeatable Read: Possible
+        +Phantom Read: Possible
+        +Write Skew: Possible
+    }
+    class READ_COMMITTED {
+        +Dirty Read: Prevented
+        +Non-Repeatable Read: Possible
+        +Phantom Read: Possible
+        +Write Skew: Possible
+    }
+    class REPEATABLE_READ {
+        +Dirty Read: Prevented
+        +Non-Repeatable Read: Prevented
+        +Phantom Read: Possible*
+        +Write Skew: Possible
+    }
+    class SERIALIZABLE {
+        +Dirty Read: Prevented
+        +Non-Repeatable Read: Prevented
+        +Phantom Read: Prevented
+        +Write Skew: Prevented
+    }
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
 ```
-Isolation Level      | Dirty Read | Non-Repeatable Read | Phantom Read | Write Skew
----------------------|------------|---------------------|--------------|-----------
-READ UNCOMMITTED     | Possible   | Possible            | Possible     | Possible
-READ COMMITTED       | Prevented  | Possible            | Possible     | Possible
-REPEATABLE READ      | Prevented  | Prevented           | Possible*    | Possible
-SERIALIZABLE         | Prevented  | Prevented           | Prevented    | Prevented
 
 * PostgreSQL REPEATABLE READ prevents phantom reads (uses snapshot isolation)
 * MySQL REPEATABLE READ prevents phantom reads (uses gap locking)
-```
 
 ---
 
 ## Spring Configuration
 
 ### Setting Isolation Levels
+
+Spring's `@Transactional(isolation = ...)` sets the isolation level at the JDBC connection level. `READ_COMMITTED` is the default for most databases and suitable for most applications. `REPEATABLE_READ` provides consistent snapshots for reporting. `SERIALIZABLE` should be reserved for cases where correctness absolutely requires it, as it significantly reduces concurrency and increases deadlock risk.
 
 ```java
 @Service
@@ -201,6 +238,8 @@ public class IsolationLevelDemoService {
 
 ### PostgreSQL
 
+PostgreSQL's implementation of isolation levels differs from the SQL standard in important ways. `REPEATABLE_READ` uses snapshot isolation, which prevents phantom reads—something the SQL standard does not guarantee at this level. `SERIALIZABLE` uses Serializable Snapshot Isolation (SSI), which detects serialization conflicts using predicate locks and returns a `could not serialize access` error when conflicts are detected.
+
 ```java
 @Configuration
 public class PostgresIsolationConfig {
@@ -232,6 +271,8 @@ public class PostgresIsolationConfig {
 ```
 
 ### MySQL
+
+MySQL with the InnoDB storage engine defaults to `REPEATABLE_READ`. It prevents phantom reads using gap locking—locking the gaps between index entries to prevent new rows from being inserted. This works well for many workloads but can cause increased lock contention compared to `READ_COMMITTED`.
 
 ```java
 @Configuration
@@ -268,6 +309,8 @@ public class MysqlIsolationConfig {
 ## Handling Isolation Failures
 
 ### Retry for Serialization Failures
+
+Transactions at `SERIALIZABLE` isolation can fail with serialization errors when the SSI mechanism detects a conflict. These errors are transient and should be retried. The pattern below retries up to three times with exponential backoff, which is the recommended approach for `SERIALIZABLE` transactions.
 
 ```java
 @Component
@@ -319,6 +362,8 @@ public class RetryableTransactionService {
 9. **Avoid READ_UNCOMMITTED**: Rarely worth the risk
 10. **Consider optimistic locking**: Alternative to high isolation
 
+Optimistic locking with `@Version` provides an alternative to high isolation levels. Instead of preventing conflicts at the database level with locks, it detects them after they happen by checking a version number. This allows `READ_COMMITTED` isolation to be used for most operations, with conflicts handled by retrying the transaction.
+
 ```java
 // Optimistic locking as alternative to high isolation
 @Entity
@@ -343,6 +388,8 @@ public class InventoryItem {
 
 ### Mistake 1: Choosing Incorrect Isolation
 
+Using `READ_UNCOMMITTED` for financial transactions risks reading uncommitted data that might later be rolled back, potentially showing incorrect balances to users or triggering incorrect business decisions.
+
 ```java
 // WRONG: Using READ_UNCOMMITTED for financial transactions
 @Transactional(isolation = Isolation.READ_UNCOMMITTED)
@@ -360,6 +407,8 @@ public void transferMoney(Long fromId, Long toId, BigDecimal amount) {
 
 ### Mistake 2: Assuming REPEATABLE_READ Prevents All Anomalies
 
+The SQL standard defines `REPEATABLE_READ` as preventing only dirty reads and non-repeatable reads—phantom reads are allowed. However, databases implement it differently: PostgreSQL and SQL Server (with snapshot isolation) prevent phantoms, while Oracle does not. Always consult your database's documentation.
+
 ```java
 // WRONG: Assuming REPEATABLE_READ prevents phantoms in all databases
 // Phantom prevention depends on database implementation
@@ -370,6 +419,8 @@ public void transferMoney(Long fromId, Long toId, BigDecimal amount) {
 ```
 
 ### Mistake 3: Ignoring Deadlocks with Higher Isolation
+
+`SERIALIZABLE` isolation is prone to deadlocks because of the locks it acquires. If two transactions access the same resources in a different order, a deadlock is likely. Always lock resources in a consistent order across all transactions.
 
 ```java
 // WRONG: SERIALIZABLE without deadlock handling

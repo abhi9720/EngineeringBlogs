@@ -26,6 +26,8 @@ This guide analyzes both approaches, their trade-offs, and when to use each.
 
 ### JDBC: Direct Database Access
 
+The JDBC approach gives you full control over SQL execution. Every `Connection`, `PreparedStatement`, and `ResultSet` is managed explicitly. This means you write all the CRUD boilerplate—mapping result set columns to Java objects, handling `SQLException`, managing transactions manually—but you also get precise control over every query that hits the database. The `try-with-resources` pattern shown below is the standard way to ensure connections, statements, and result sets are always closed, even when exceptions occur.
+
 ```java
 // JDBC raw connection
 public class JdbcUserDao {
@@ -86,6 +88,8 @@ public class JdbcUserDao {
 ```
 
 ### JPA: Object-Relational Mapping
+
+JPA eliminates the boilerplate by mapping Java objects to database tables declaratively. The `@Entity` annotation tells Hibernate that `User` corresponds to the `users` table. Column mappings, primary key generation, and relationships are all expressed through annotations. The `JpaRepository` interface then provides the common CRUD operations out of the box—`findById`, `save`, `delete`—without any implementation code. For custom queries, method naming conventions (e.g., `findByEmail`) or `@Query` annotations with JPQL replace raw SQL strings. This productivity gain is significant, but it comes with the cost of abstraction leaks: you need to understand Hibernate's SQL generation, caching behavior, and transaction semantics to avoid performance pitfalls.
 
 ```java
 // JPA Entity
@@ -155,6 +159,8 @@ public class JpaUserService {
 
 ### When to Use JDBC
 
+JDBC excels in scenarios where JPA's overhead is counterproductive. Bulk operations benefit from JDBC's ability to use batching without the entity lifecycle management that JPA imposes. The batch insert example below sets `autoCommit` to false, adds rows in batches via `addBatch()`, and executes with a single network round trip. Similarly, complex reporting queries with window functions, multiple joins, and aggregations are often cleaner and more performant in raw SQL than in JPQL or the Criteria API.
+
 ```java
 // High-performance batch operations
 @Service
@@ -211,6 +217,8 @@ public class ReportJdbcDao {
 
 ### When to Use JPA
 
+JPA shines in standard CRUD applications where the majority of database interactions are create, read, update, and delete operations against well-defined entities. The method naming convention in Spring Data JPA—`findByCategoryAndPriceLessThan` compiles into a parameterized query automatically—saves dozens of lines of boilerplate per query. Pagination is also trivial: returning `Page<Order>` from a repository method gives you the data slice plus the total count in one call, without writing LIMIT/OFFSET SQL.
+
 ```java
 // CRUD operations
 @Service
@@ -247,6 +255,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
 ### Performance: JDBC for Bulk Operations
 
+When inserting thousands of records, the performance difference between JDBC and JPA can be an order of magnitude. JDBC's `executeBatch` sends all statements in a single database round trip. JPA's equivalent operation triggers entity lifecycle callbacks, dirty checking, and individual `INSERT` statements unless carefully configured with `hibernate.jdbc.batch_size` and `order_inserts`. The same 1000-record insert that takes ~100ms with JDBC can take over a second with naive JPA usage.
+
 ```java
 // JDBC: Batch inserts with 1000 records in ~100ms
 @Service
@@ -282,6 +292,8 @@ public class JdbcBulkService {
 ```
 
 ### Transaction Management
+
+Transaction management is another area where the two approaches differ significantly. JDBC requires manual `commit` and `rollback` calls on the `Connection` object, wrapping the business logic in try-catch blocks. JPA with Spring's `@Transactional` provides declarative transaction demarcation—the framework handles begin, commit, and rollback automatically. The trade-off is that JDBC's explicit control makes it clearer where transaction boundaries are, while JPA's declarative approach is cleaner but can obscure what happens under the hood.
 
 ```java
 // JDBC: Manual transaction control
@@ -342,6 +354,8 @@ public class JpaTransactionService {
 
 ### Mistake 1: Using JPA for Complex Reports
 
+JPQL is not designed for analytic queries with window functions, complex aggregations, or multi-table reports. While it is possible to express some of these in JPQL or the Criteria API, the resulting queries are hard to read, harder to tune, and often generate suboptimal SQL. For reporting, drop down to native SQL where you have full control over the execution plan.
+
 ```java
 // WRONG: Using JPA for reporting queries
 @Query("SELECT new com.example.ReportDTO(u.name, COUNT(o), SUM(o.total)) " +
@@ -360,6 +374,8 @@ public class ReportDao {
 
 ### Mistake 2: Using JDBC for Simple CRUD
 
+Writing 50 lines of JDBC boilerplate for a simple `findById` is wasteful when a one-line `JpaRepository` interface gives you the same functionality with built-in caching, lazy loading, and transaction integration. Reserve JDBC for the 10-20% of your data access that genuinely needs it.
+
 ```java
 // WRONG: Writing JDBC for simple CRUD
 public class JdbcUserDao {
@@ -374,6 +390,8 @@ public interface UserRepository extends JpaRepository<User, Long> { }
 ```
 
 ### Mistake 3: Mixing JDBC and JPA Inconsistently
+
+Using both JDBC and JPA within the same service without caution can lead to stale data issues, since JDBC operations bypass the Hibernate persistence context and first-level cache. If you must mix both, either use JPA's native query support (`EntityManager.createNativeQuery`) or manually evict the affected entities from the persistence context after JDBC operations.
 
 ```java
 // WRONG: Inconsistent approach
@@ -433,4 +451,4 @@ The key is understanding when each approach shines and not forcing one to do wha
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

@@ -36,6 +36,8 @@ istioctl verify-install
 
 ## Enabling Sidecar Injection
 
+Istio injects an Envoy proxy sidecar container into every pod in a labeled namespace. The sidecar intercepts all inbound and outbound traffic, applying traffic management, security (mTLS), and observability policies — all without any changes to the application code. Sidecar resource limits prevent the proxy from starving the application container.
+
 ```yaml
 # Global namespace injection
 apiVersion: v1
@@ -64,6 +66,8 @@ spec:
 ## Traffic Management
 
 ### VirtualService and DestinationRule
+
+VirtualService defines routing rules — header-based matches take priority, then weighted distribution applies to remaining traffic. DestinationRule configures how traffic is handled after routing: connection pooling limits, circuit breaker thresholds (outlier detection ejects unhealthy pods), and TLS settings. Together they provide fine-grained traffic management without application code changes.
 
 ```yaml
 apiVersion: networking.istio.io/v1beta1
@@ -129,6 +133,8 @@ spec:
 
 ### Traffic Splitting
 
+Traffic mirroring sends a copy of live traffic to a mirrored service without impacting the response to the client. Here, 20% of actual traffic goes to v2, while 100% of all traffic is mirrored to a v2-mirror instance. This allows testing v2 against production traffic patterns without user-facing risk.
+
 ```yaml
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -156,6 +162,8 @@ spec:
 
 ### Fault Injection
 
+Fault injection tests resilience without modifying application code. This configuration adds a 5-second delay to 10% of requests and returns HTTP 500 for 5% of requests — simulating real-world degradation and validating that circuit breakers, retries, and timeouts behave correctly under adverse conditions.
+
 ```yaml
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -181,6 +189,8 @@ spec:
 ```
 
 ## Security with mTLS
+
+Mutual TLS (mTLS) encrypts and authenticates all service-to-service communication. `STRICT` mode rejects unencrypted connections, while `PERMISSIVE` accepts both encrypted and plaintext — useful during migration. The AuthorizationPolicy adds fine-grained access control: only requests from the api-gateway service account in the microservices namespace can access order-service.
 
 ```yaml
 apiVersion: security.istio.io/v1beta1
@@ -226,6 +236,8 @@ spec:
 
 ### Kiali Dashboard
 
+Istio enables observability at the mesh level without application instrumentation. Kiali visualizes service topology and traffic flow, Prometheus stores metrics, Grafana provides dashboards, and Jaeger collects traces. The Telemetry resource configures access logging and metrics collection across the entire mesh.
+
 ```yaml
 apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
@@ -257,6 +269,8 @@ spec:
 
 ### Distributed Tracing with Jaeger
 
+Jeager distributed tracing is configured at the mesh level — the Envoy sidecars automatically propagate trace context and report spans. The `randomSamplingPercentage: 100` samples all traces (adjust down in production). Custom tags like `service.version` add business context to every span.
+
 ```yaml
 apiVersion: telemetry.istio.io/v1alpha1
 kind: Telemetry
@@ -274,6 +288,8 @@ spec:
 ```
 
 ### Spring Boot Configuration for Istio
+
+While Istio handles most cross-cutting concerns at the mesh level, applications must propagate certain headers (`x-request-id`, `x-b3-*`) for distributed tracing to work. The Feign interceptor shown here ensures these headers are forwarded on every outbound HTTP call, enabling end-to-end trace correlation.
 
 ```java
 @Configuration

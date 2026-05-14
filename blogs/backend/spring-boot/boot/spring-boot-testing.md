@@ -16,25 +16,43 @@ draft: false
 
 Spring Boot provides slice testing annotations that load only the relevant part of the application context for focused testing. This approach leads to faster tests, better isolation, and clearer test intent. This guide covers all major slice annotations with practical examples.
 
+The key insight is that `@SpringBootTest` loads the entire application context — all beans, all configurations. This is slow and makes tests brittle. Slice annotations load only the beans needed for a particular layer: controllers for `@WebMvcTest`, repositories for `@DataJpaTest`, JSON serializers for `@JsonTest`, REST clients for `@RestClientTest`.
+
 ## Testing Pyramid with Spring Boot
 
-```
-Manual Tests (E2E)
-    /\
-   /  \
-  / UI \
- /______\
-/  Integration  \  <- @SpringBootTest
-/----------------\
-/    Slice Tests   \  <- @WebMvcTest, @DataJpaTest, etc.
-/------------------\
-/   Unit Tests       \  <- Plain JUnit + Mockito
-/--------------------\
+```mermaid
+flowchart TB
+    subgraph Pyramid[Testing Pyramid]
+        Manual[Manual Tests E2E] 
+        Integration[Integration Tests @SpringBootTest]
+        Slice[Slice Tests @WebMvcTest, @DataJpaTest]
+        Unit[Unit Tests JUnit + Mockito]
+    end
+
+    Manual --> Integration
+    Integration --> Slice
+    Slice --> Unit
+
+    linkStyle default stroke:#278ea5
+
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+
+    class Manual pink
+    class Integration blue
+    class Slice green
+    class Unit yellow
 ```
 
 ## @WebMvcTest
 
 ### Controller Testing
+
+`@WebMvcTest` loads only the controller layer: the specified controller, security configuration, interceptors, and Jackson configuration. It does NOT load services, repositories, or any other beans. Dependencies of the controller must be mocked with `@MockBean`.
+
+This isolation is intentional: controller tests verify HTTP mapping, input validation, response serialization, and status codes — not business logic. Business logic is tested at the service layer. The `mockMvc` field is auto-configured to send requests through the Spring MVC dispatcher.
 
 ```java
 @WebMvcTest(UserController.class)
@@ -93,6 +111,8 @@ class UserControllerTest {
 
 ### Customizing @WebMvcTest
 
+When your controller depends on beans beyond the web layer (like `@Import` for test security configuration), use `@Import` to bring in specific beans. The `excludeFilters` option excludes unwanted auto-configurations like the default security configuration.
+
 ```java
 @WebMvcTest(controllers = {UserController.class, OrderController.class},
             excludeFilters = @ComponentScan.Filter(
@@ -109,6 +129,10 @@ class CombinedControllerTest {
 ## @DataJpaTest
 
 ### Repository Testing
+
+`@DataJpaTest` configures an in-memory database (by default H2), scans for `@Entity` classes, and configures Spring Data JPA repositories. It does NOT load services, controllers, or web configuration. Use `TestEntityManager` for test data setup — it's a wrapper around `EntityManager` with convenience methods like `persistFlushFind`.
+
+The `@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)` annotation tells Spring Boot to use the configured database instead of the default in-memory one. This is useful when your entity annotations rely on database-specific features.
 
 ```java
 @DataJpaTest
@@ -174,6 +198,8 @@ class UserRepositoryTest {
 
 ### Customizing @DataJpaTest
 
+For tests that rely on JPA auditing (createdBy, createdAt fields), import the auditing configuration with `@Import` and enable it with `@EnableJpaAuditing`. Without this, auditing fields remain null in tests.
+
 ```java
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -199,6 +225,10 @@ class AuditableEntityTest {
 ## @JsonTest
 
 ### Serialization Testing
+
+`@JsonTest` configures Jackson (or Gson) and auto-configures `JacksonTester` for testing serialization and deserialization. It does NOT load any other beans. Use it to verify that your JSON annotations (`@JsonProperty`, `@JsonFormat`, `@JsonIgnore`) work correctly and that custom serializers/deserializers produce the expected output.
+
+Testing serialization in isolation catches annotation mistakes and format issues before they cause API contract violations.
 
 ```java
 @JsonTest
@@ -239,6 +269,8 @@ class UserJsonTest {
 
 ### Custom ObjectMapper
 
+When your application configures a custom `ObjectMapper`, import that configuration into the `@JsonTest`. The `@AutoConfigureJsonTesters` annotation enables the `JacksonTester`/`GsonTester`/`JsonbTester` injection.
+
 ```java
 @JsonTest
 @AutoConfigureJsonTesters
@@ -265,6 +297,10 @@ class CustomJsonTest {
 ## @RestClientTest
 
 ### REST Client Testing
+
+`@RestClientTest` configures a mock HTTP server for testing REST clients. It auto-configures `MockRestServiceServer` and injects it into the test. The mock server lets you define expectations for outgoing requests and stub responses, without making actual HTTP calls.
+
+This is essential for testing error handling, timeouts, and deserialization in REST clients without relying on external services.
 
 ```java
 @RestClientTest(UserServiceClient.class)
@@ -319,6 +355,10 @@ class UserServiceClientTest {
 
 ### Reactive Controller Testing
 
+`@WebFluxTest` is the reactive equivalent of `@WebMvcTest`. It auto-configures `WebTestClient` for making requests to reactive controllers without starting a server. `@MockBean` annotates mocked dependencies.
+
+The `WebTestClient` API is similar to `MockMvc` but designed for reactive types: it can consume `Flux` and `Mono` responses and supports streaming endpoints.
+
 ```java
 @WebFluxTest(ReactiveUserController.class)
 class ReactiveUserControllerTest {
@@ -367,6 +407,10 @@ class ReactiveUserControllerTest {
 ## @SpringBootTest
 
 ### Full Integration Testing
+
+`@SpringBootTest` starts the full application context. Use it sparingly — primarily for smoke tests that verify the context loads without errors, and for end-to-end flows that involve multiple layers. The `webEnvironment = RANDOM_PORT` option starts an embedded server on a random port.
+
+`TestRestTemplate` is a convenience wrapper around `RestTemplate` that auto-configures for testing (including authentication and error handling). For REST-assured-style testing, consider `@AutoConfigureMockMvc` with `@SpringBootTest`.
 
 ```java
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -426,6 +470,8 @@ class UserRegistrationIntegrationTest {
 
 ### Isolating Test Configuration
 
+`@TestConfiguration` creates a configuration that is excluded from component scanning and is only active in tests. Use it to provide mock or alternative beans for testing. The test configuration is merged with the application's primary configuration.
+
 ```java
 @TestConfiguration
 public class TestSecurityConfig {
@@ -443,6 +489,8 @@ public class TestSecurityConfig {
 ```
 
 ### Using @TestComponent
+
+`@TestComponent` is similar to `@TestConfiguration` but marks individual beans as test-only. Use it when you need a test-specific bean (like a fixed clock) that should not be picked up by `@SpringBootTest` bean scanning.
 
 ```java
 @TestComponent

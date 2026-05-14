@@ -20,6 +20,8 @@ Canary deployments release new versions to a small subset of users before rollin
 
 ### Canary with Service Mesh Labels
 
+The stable deployment runs 9 replicas of v1.0.0 while the canary runs a single replica of v2.0.0. With Istio weighted routing, 10% of traffic can be directed to the canary — if metrics degrade, only 10% of users are affected and the canary is rolled back immediately.
+
 ```yaml
 # Stable deployment
 apiVersion: apps/v1
@@ -77,6 +79,8 @@ spec:
 
 ### Canary with NGINX Ingress
 
+NGINX Ingress supports canary deployments through annotations — the canary ingress uses a 10% weight or a header-based rule (`x-canary: canary`) to selectively route requests. This approach requires no service mesh but offers less sophisticated traffic management than Istio.
+
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -124,6 +128,8 @@ spec:
 
 ### Weighted Routing
 
+Istio VirtualService enables both header-based and weighted routing simultaneously. Beta testers get 100% canary traffic via header match, while the general population sees 5% canary exposure. This dual strategy allows targeted testing alongside gradual statistical rollout.
+
 ```yaml
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -155,6 +161,8 @@ spec:
 
 ### Header-Based Canary
 
+Header-based routing allows precise targeting — internal QA teams can set `x-canary: true` to always hit the canary, while cookie-based matching enables session-persistent canary assignment for A/B testing scenarios.
+
 ```yaml
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -183,7 +191,7 @@ spec:
 
 ## Automated Canary with Flagger
 
-Flagger automates canary deployments with metrics analysis.
+Flagger extends Istio with automated canary analysis — it gradually increases traffic weight, evaluates Prometheus metrics (success rate, latency) at each step, and auto-rolls back if thresholds are breached. The `stepWeight: 10` means traffic increases by 10% every `interval: 60s` while metrics are healthy.
 
 ```yaml
 apiVersion: flagger.app/v1beta1
@@ -224,6 +232,8 @@ spec:
 ```
 
 ## Metrics-Based Rollback
+
+Automated rollback is the safety net for canary deployments. The scheduled evaluator checks the canary's error rate and average latency against thresholds — if either degrades, it scales the canary to zero replicas and alerts the team. Without automation, canaries often become permanent because no one remembers to promote or roll back.
 
 ```java
 @Component
@@ -295,6 +305,8 @@ public class CanaryRollbackService {
 
 ## Feature Flag Integration
 
+Feature flags provide an additional control layer for canary deployments. Instead of relying solely on traffic routing, the application code itself checks whether a user should use the canary version. This enables user-ID-based targeting, gradual percentage rollout, and kill switches — all without redeploying.
+
 ```java
 @Component
 public class CanaryFeatureFlagRouter {
@@ -339,6 +351,8 @@ public class OrderService {
 ```
 
 ## Canary with Spring Cloud Gateway
+
+Spring Cloud Gateway supports header-based canary routing at the gateway level. Requests with `X-Canary: true` are routed to the canary service, while all other requests go to the stable version. This approach works without a service mesh, but requires the gateway to be in the request path.
 
 ```java
 @Configuration

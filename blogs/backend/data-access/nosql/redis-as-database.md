@@ -24,6 +24,8 @@ Redis is an in-memory data structure store that can be used as a database, cache
 
 ### Strings, Lists, Sets, Sorted Sets, Hashes
 
+Redis's power comes from its data structures. **Strings** are the simplest but support TTL-based expiration, making them ideal for session data. **Lists** enable queue patterns with blocking pop operations. **Sets** provide fast membership checks and set operations like union and intersection. **Sorted Sets** maintain a score-based ordering, perfect for leaderboards and rate limiters. **Hashes** store objects as field-value pairs within a single key, providing efficient partial updates without serializing and deserializing the entire object.
+
 ```java
 @Service
 public class RedisDataStructuresService {
@@ -124,6 +126,8 @@ public class RedisDataStructuresService {
 ## Redis Streams for Event Processing
 
 ### Stream Producer and Consumer
+
+Redis Streams provide a persistent, append-only log with consumer group support—similar to Apache Kafka but with lower operational overhead. The producer adds messages with structured fields (event type, order ID, timestamp). The consumer reads from the stream in a consumer group, which distributes messages across multiple consumers and tracks which messages have been processed. Failed messages can be claimed by a recovery worker using the `XPENDING` and `XCLAIM` commands. The `MAXLEN` trim prevents unbounded stream growth.
 
 ```java
 @Service
@@ -244,6 +248,8 @@ public class RedisStreamService {
 
 ### RedisJSON and RediSearch
 
+Redis modules extend Redis with new data types and commands. **RedisJSON** allows storing, updating, and querying JSON documents with native JSONPath support, avoiding the need to serialize/deserialize in the application. **RediSearch** provides secondary indexes, full-text search, and aggregation queries on Redis hashes or JSON documents—turning Redis into a capable search engine.
+
 ```java
 @Service
 public class RedisModuleService {
@@ -295,6 +301,8 @@ public class RedisModuleService {
 ## Persistence and Replication
 
 ### Configuration
+
+When using Redis as a database (not just a cache), persistence is critical. The configuration below sets up both RDB snapshots and AOF (Append-Only File) for durability. RDB snapshots are point-in-time backups triggered by the `save` directives. AOF logs every write operation, providing finer-grained durability at the cost of disk I/O. In production, enable both: RDB for fast recovery, AOF for minimal data loss.
 
 ```java
 @Configuration
@@ -364,6 +372,8 @@ public class RedisDatabaseConfig {
 9. **Use Redis Cluster for high availability**: Automatic sharding
 10. **Profile slow queries**: Use SLOWLOG
 
+Pipelining batches multiple commands into a single network round trip, dramatically improving throughput for batch operations like updating many scores in a leaderboard.
+
 ```java
 // Pipelining for batch operations
 public void batchUpdateScores(Map<String, Double> scores) {
@@ -382,6 +392,8 @@ public void batchUpdateScores(Map<String, Double> scores) {
 
 ### Mistake 1: Storing Large Values
 
+Redis is an in-memory database—every byte of data consumes RAM. Storing large serialized objects as single string values wastes memory and hurts throughput. Use Hashes to store objects as field-value pairs, which are more memory-efficient and allow partial updates.
+
 ```java
 // WRONG: Storing entire JSON documents as string values
 // Limits throughput, memory usage
@@ -391,6 +403,8 @@ redisTemplate.opsForHash().putAll("user:123", fields);
 ```
 
 ### Mistake 2: No TTL on Keys
+
+Keys without TTLs accumulate indefinitely, eventually filling memory and triggering eviction. Every key stored in Redis should have a TTL, even if it is very long (e.g., 30 days for user profiles).
 
 ```java
 // WRONG: Keys never expire
@@ -402,6 +416,8 @@ redisTemplate.opsForValue().set("session:123", data, 30, TimeUnit.MINUTES);
 ```
 
 ### Mistake 3: Using Redis as Primary Database Without Persistence
+
+Without persistence, all data is lost if Redis restarts. For database use cases, enable both RDB snapshots and AOF. The `appendonly yes` directive enables AOF, and the `save` directives configure RDB snapshot frequency.
 
 ```java
 // WRONG: No persistence - all data lost on restart

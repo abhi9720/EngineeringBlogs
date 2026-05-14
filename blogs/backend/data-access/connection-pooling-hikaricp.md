@@ -22,6 +22,8 @@ Database connections are expensive to create. Connection pooling reuses connecti
 
 ## How HikariCP Works
 
+The lifecycle of a pooled connection follows a consistent pattern: when the application requests a `Connection` from the `DataSource`, HikariCP first checks for an idle connection in the pool. If none is available and the pool has not reached its maximum size, a new connection is created. If all connections are active, the calling thread blocks for up to `connectionTimeout` milliseconds waiting for a connection to be returned. When the application calls `close()`, the connection is not actually closed—it is returned to the pool for reuse, avoiding the significant overhead of TCP handshakes, SSL negotiation, and database authentication on every request.
+
 ```java
 // HikariCP maintains a pool of connections
 // When you request a connection:
@@ -32,6 +34,8 @@ Database connections are expensive to create. Connection pooling reuses connecti
 ```
 
 ### Basic Configuration
+
+The configuration below defines a pool named `MyHikariPool` with a maximum of 20 connections, a minimum of 5 idle connections kept warm, a 30-second timeout for waiting on a connection, a 10-minute idle timeout before evicting unused connections, and a 30-minute max lifetime after which connections are recycled to prevent issues with network middleboxes or database-side timeouts.
 
 ```yaml
 # application.yml
@@ -54,6 +58,8 @@ spring:
 ## Real-World Use Cases
 
 ### Production Pool Sizing
+
+A common rule of thumb for initial pool sizing is `(core_count * 2) + spindle_count`, but the true optimal size depends on your database's response time and your application's throughput requirements. The key insight—popularized by the HikariCP documentation—is that more connections do not equal more throughput beyond a certain point. Each connection consumes a database worker thread, and context switching overhead eventually dominates. The configuration below computes pool size dynamically based on available CPU cores and disk spindles, sets timeouts appropriate for a production environment, and uses `SELECT 1` as a lightweight connection health check.
 
 ```java
 // Rule of thumb: connections = (core_count * 2) + spindle_count
@@ -90,6 +96,8 @@ public class HikariConfig {
 ```
 
 ### Monitoring Pool Health
+
+Once the pool is configured, monitoring its runtime behavior is essential. The `HikariPoolMXBean` exposes four key metrics—active connections, idle connections, total connections, and threads awaiting a connection. A high number of threads awaiting connection indicates that the pool is undersized or that queries are taking too long. Spring Boot Actuator can automatically expose these metrics when the HikariCP health indicator is enabled, allowing integration with Prometheus, Grafana, or your existing monitoring stack.
 
 ```java
 @Service
@@ -131,6 +139,8 @@ management:
 
 ### Mistake 1: Pool Too Small
 
+Setting the pool size too small leads to threads queueing up waiting for connections, increasing response latency under load. Conversely, setting it too large wastes database resources and can degrade performance due to context switching. The right size balances concurrency needs against database capacity—start conservatively and tune upward based on observed `threadsAwaitingConnection` counts.
+
 ```yaml
 # WRONG: Default pool might be too small for concurrent users
 spring:
@@ -147,6 +157,8 @@ spring:
 ```
 
 ### Mistake 2: No Connection Timeout
+
+Without a connection timeout, threads can block indefinitely waiting for a connection, leading to thread starvation and cascading failures across the application. Always set a reasonable timeout so that failures are fast and the system can degrade gracefully or trigger circuit breakers.
 
 ```yaml
 # WRONG: Default wait is infinite - threads hang forever!
@@ -179,4 +191,4 @@ spring:
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

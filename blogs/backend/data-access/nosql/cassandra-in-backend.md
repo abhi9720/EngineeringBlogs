@@ -24,6 +24,8 @@ Apache Cassandra is a distributed NoSQL database designed for high availability,
 
 ### Keyspace and Table Design
 
+Cassandra data modeling starts with the keyspace, which defines the replication strategy across data centers. The configuration below connects to a three-node cluster with `LOCAL_QUORUM` consistency—meaning reads require a majority of replicas within the local data center to respond. The keyspace uses `NetworkTopologyStrategy`, which is the production-standard replication strategy for multi-datacenter deployments.
+
 ```java
 @Configuration
 public class CassandraConfig {
@@ -54,6 +56,8 @@ public class CassandraConfig {
 ```
 
 ### Entity Mapping
+
+In Cassandra, you design tables for specific query patterns, not for normalized entity relationships. The example below creates two tables for the same order data but with different primary keys. `orders_by_user` uses `user_id` as the partition key and `order_date` plus `order_id` as clustering columns, optimized for queries like "get all orders for user X ordered by date descending." `orders_by_date` uses a `date_bucket` as the partition key, supporting time-range queries. This intentional denormalization is a core Cassandra pattern: you store the same data in multiple tables, each organized for a different access path.
 
 ```java
 @Table("orders_by_user")
@@ -126,6 +130,8 @@ public class OrderByDateKey implements Serializable {
 
 ### Cassandra Repository
 
+Spring Data Cassandra repositories follow the same pattern as JPA repositories but with Cassandra-specific considerations. Queries must include the partition key—querying without it requires `ALLOW FILTERING`, which performs a full table scan and should be avoided in production. Note how `findByKeyUserId` uses only the partition key, while `findByKeyUserIdAndKeyOrderDateGreaterThan` adds a clustering column filter, both of which are efficient because Cassandra can route them directly to the correct nodes.
+
 ```java
 @Repository
 public interface OrderByUserRepository extends CassandraRepository<OrderByUser, OrderByUserKey> {
@@ -163,6 +169,8 @@ public interface OrderByDateRepository extends CassandraRepository<OrderByDate, 
 ```
 
 ### CassandraTemplate
+
+For queries that do not fit the repository pattern, `CassandraTemplate` provides direct access to the query builder API. The `insertOrderWithTimestamp` method below writes to both denormalized tables in a batch statement. Note that Cassandra batches only guarantee atomicity when all operations target the same partition—cross-partition batches are not atomic and should be avoided in production.
 
 ```java
 @Service
@@ -223,6 +231,8 @@ public class OrderDataService {
 ## Consistency Levels
 
 ### Configuring Consistency
+
+Cassandra's consistency levels allow you to trade performance for accuracy. `LOCAL_QUORUM` is the recommended default for most operations: it waits for a majority of replicas in the local data center, balancing consistency and latency. `LOCAL_ONE` provides the fastest reads and writes but only guarantees that one replica has the data. `LOCAL_SERIAL` is used for lightweight transactions (compare-and-set operations), providing linearizable consistency for conditional updates.
 
 ```java
 @Service
@@ -287,6 +297,8 @@ public class ConsistencyService {
 ## Time Series Data Modeling
 
 ### Bucketing Strategy
+
+Time-series data in Cassandra requires a bucketing strategy to prevent unbounded partition growth. The pattern below uses daily buckets: `day_bucket` is a string like `"2026-05-14"` that becomes the partition key. Each partition contains at most one day's worth of data, keeping partitions small and queries fast. TTL (Time-To-Live) is used to automatically expire old data—Cassandra deletes rows after the TTL elapses, which is far more efficient than running manual `DELETE` statements.
 
 ```java
 @Service
@@ -369,6 +381,8 @@ public class TimeSeriesService {
 9. **Monitor compaction**: Size-tiered or leveled compaction strategies
 10. **Use prepared statements**: Reuse query plans
 
+Prepared statements in Cassandra follow the same principle as JDBC: the query is parsed once on each node, and subsequent executions only send the bind parameters. This reduces CPU usage on the coordinator node and improves throughput for repeated queries.
+
 ```java
 // Prepared statements
 @Repository
@@ -407,6 +421,8 @@ public class PreparedStatementService {
 
 ### Mistake 1: Using SQL-like Joins
 
+Cassandra does not support joins. If your application requires joining tables, you are modeling for a relational database, not Cassandra. The correct approach is to denormalize the data so that each query can be served from a single table.
+
 ```java
 // WRONG: Trying to join tables
 // Cassandra does not support joins
@@ -416,6 +432,8 @@ public class PreparedStatementService {
 ```
 
 ### Mistake 2: Large Partitions
+
+A partition key that does not provide enough cardinality creates hot spots. For example, using only `user_id` as the partition key means that a user with millions of orders will have a single huge partition, causing read and write pressure on one node. The fix is to add a time-based component to the partition key.
 
 ```java
 // WRONG: Poor partition key choice causes hot spots
@@ -427,6 +445,8 @@ PRIMARY KEY ((user_id, date_bucket), timestamp)
 ```
 
 ### Mistake 3: Read-Before-Write Pattern
+
+Cassandra is optimized for writes, not reads. The read-before-write pattern (loading an entity, modifying it, then saving it) adds unnecessary read latency. Instead, use Cassandra's upsert semantics: just issue the `UPDATE` or `INSERT` directly.
 
 ```java
 // WRONG: Read then write (Cassandra anti-pattern)

@@ -76,6 +76,8 @@ Structured logs are searchable, filterable, and aggregatable without parsing.
 </configuration>
 ```
 
+The `customFields` element injects fixed metadata (service name, environment) into every JSON log event without the application knowing about them. The `fieldNames` block remaps Logback's default field names to Elastic Common Schema-compatible names—`@timestamp` instead of `timestamp`, `severity` instead of `level`. This mapping is essential when feeding logs into Elasticsearch with ECS-formatted index templates.
+
 ### Programmatic Configuration
 
 ```java
@@ -106,6 +108,8 @@ public class LoggingConfig {
     }
 }
 ```
+
+The programmatic equivalent provides the same configuration outside XML. The `version` field in custom fields is particularly useful—it allows operators to search for logs from a specific application version when investigating a regression.
 
 ---
 
@@ -143,6 +147,8 @@ public class StructuredLoggingService {
 }
 ```
 
+MDC values are automatically included in the JSON output as a nested `context` object (as mapped in the `fieldNames` block). The `finally` block with `MDC.clear()` is critical: without it, the `requestId` from a previous request could leak into the log entries of a subsequent request on the same thread, making the log search yield incorrect results.
+
 ### Structured Arguments
 
 ```java
@@ -166,6 +172,8 @@ public class StructuredArgsService {
     }
 }
 ```
+
+The Logstash encoder recognizes SLF4J parameterized arguments and promotes them to top-level JSON fields. The message string itself becomes a `message` field, and each `{}` placeholder becomes a named field derived from the message text. This gives every structured field its own Elasticsearch mapping type—numeric fields become `long` or `double`, enabling aggregation queries.
 
 ---
 
@@ -224,6 +232,8 @@ public class EventLoggingService {
 }
 ```
 
+Using a dedicated logger named `business-events` allows the logging framework to route business events differently—for example, sending them to a separate Elasticsearch index or to an audit data stream. The `StructuredArguments.value` serializes the `OrderEvent` object via Jackson into the JSON output, giving each field its own indexable column in Elasticsearch.
+
 ---
 
 ## Async Logging for Performance
@@ -281,6 +291,8 @@ public void asyncLogging() {
     </jsonGeneratorDecorator>
 </encoder>
 ```
+
+Data masking is applied at the JSON serialization level—before the log event ever reaches the output stream. Fields matching the specified paths are replaced with `****`, preventing passwords and credit card numbers from appearing in log files. This is far more reliable than relying on developers to avoid logging sensitive data, and it satisfies PCI-DSS and SOC2 requirements for log data handling.
 
 ### Include Caller Information
 

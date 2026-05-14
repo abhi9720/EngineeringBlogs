@@ -18,28 +18,39 @@ The event loop is what allows Node.js to perform non-blocking I/O operations des
 
 ## Event Loop Phases
 
-```
-   ┌───────────────────────────┐
-┌─>│           timers          │
-│  └─────────────┬─────────────┘
-│  ┌─────────────┴─────────────┐
-│  │     pending callbacks     │
-│  └─────────────┬─────────────┘
-│  ┌─────────────┴─────────────┐
-│  │       idle, prepare       │
-│  └─────────────┬─────────────┘
-│  ┌─────────────┴─────────────┐
-│  │           poll            │
-│  └─────────────┬─────────────┘
-│  ┌─────────────┴─────────────┐
-│  │           check           │
-│  └─────────────┬─────────────┘
-│  ┌─────────────┴─────────────┐
-│  │      close callbacks      │
-│  └───────────────────────────┘
+```mermaid
+graph TD
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    Timers[timers]
+    Pending[pending callbacks]
+    Idle[idle, prepare]
+    Poll[poll]
+    Check[check]
+    Close[close callbacks]
+
+    Timers --> Pending
+    Pending --> Idle
+    Idle --> Poll
+    Poll --> Check
+    Check --> Close
+    Close -->|loop| Timers
+
+    class Timers green
+    class Pending blue
+    class Idle yellow
+    class Poll pink
+    class Check green
+    class Close blue
 ```
 
 ## Phase Details
+
+The event loop is a single-threaded loop that processes callbacks in six phases. Each phase has a FIFO callback queue. The loop iterates through phases, executing all callbacks in the current phase's queue before moving to the next phase. Between phases, the loop processes the microtask queue (process.nextTick and Promise callbacks). Understanding this ordering is critical for predicting async execution order.
 
 ### Timers Phase
 
@@ -62,6 +73,8 @@ setTimeout(() => {
 // Important: setTimeout with 0ms delay is NOT immediate
 // It's subject to a minimum delay of 1ms (after clamping)
 ```
+
+The timers phase executes callbacks scheduled by `setTimeout` and `setInterval`. A key detail: `setTimeout(fn, 0)` does not execute immediately — Node.js enforces a minimum delay of 1ms (after clamping), and the callback must wait for the timers phase to run. This means `setTimeout(fn, 0)` is not guaranteed to execute in any specific order relative to other phases, especially in the main module where phase timing depends on system load.
 
 ### Pending Callbacks Phase
 
@@ -88,6 +101,8 @@ fs.readFile(__filename, () => {
 // Timer in I/O callback
 ```
 
+The pending callbacks phase handles I/O callbacks deferred from the previous cycle, specifically some types of system operations like TCP errors. The critical observation in this section is that when I/O callbacks are running, `setImmediate` callbacks are prioritized over `setTimeout(fn, 0)` — this is because the check phase (setImmediate) runs right after the poll phase, while timers have to wait for the next loop iteration.
+
 ### Poll Phase
 
 ```javascript
@@ -111,6 +126,8 @@ while (Date.now() - start < 50) {
   Math.sqrt(Math.random() * 100000);
 }
 ```
+
+The poll phase is where most I/O callbacks execute. It also determines the blocking duration of the event loop — if the poll queue is empty, Node.js estimates how long to wait for new I/O events based on pending timers. If CPU-intensive work blocks the poll phase (as shown with the `while` loop), timer accuracy degrades because the event loop cannot process callbacks until the poll phase yields.
 
 ### Check Phase
 
@@ -141,6 +158,8 @@ setImmediate(() => {
 // Depends on phase timing when script started
 ```
 
+The check phase runs `setImmediate` callbacks. `setImmediate` is named to convey "run as soon as possible after I/O" — it fires callbacks in the check phase, which immediately follows the poll phase. This makes `setImmediate` more predictable than `setTimeout(fn, 0)` when scheduling callbacks from I/O handlers. In the main module, the order between `setTimeout(fn, 0)` and `setImmediate` is non-deterministic because it depends on the phase timing of the first event loop iteration.
+
 ### Close Callbacks Phase
 
 ```javascript
@@ -164,7 +183,11 @@ server.listen(8080, () => {
 // Close callback: Socket closed
 ```
 
+The close callbacks phase handles cleanup events like `socket.on('close')`. These are distinct from other I/O callbacks because they represent the completion of the close lifecycle. The phase executes callbacks for `close` or `destroy` events emitted by sockets or other objects.
+
 ## Microtasks and nextTick
+
+Microtasks are processed between each event loop phase, not within a specific phase. This makes them higher priority than any phase callback. `process.nextTick` callbacks run before Promise microtasks, creating a priority hierarchy: nextTick > Promise > phase callbacks. Misusing nextTick (especially recursively) can starve the event loop entirely because it prevents phase callbacks from ever executing.
 
 ### process.nextTick
 
@@ -196,6 +219,8 @@ console.log('End');
 // Not part of event loop, it's an inter-phase queue
 ```
 
+The output demonstrates nextTick's inter-phase nature: even though `Start` and `End` log synchronously, the nextTick callbacks run between the synchronous code and the next phase. Nested nextTick calls (3 levels deep here) all flush before the next phase because the nextTick queue is fully drained after each phase. This is why recursive nextTick is dangerous — it never yields to I/O.
+
 ### Promise Microtasks
 
 ```javascript
@@ -224,6 +249,8 @@ console.log('End');
 // Promise callbacks are microtasks
 // Processed after each callback in the event loop
 ```
+
+Promise microtasks follow the same inter-phase rule as nextTick but with lower priority. They are processed after nextTick callbacks but before the next phase callback. This execution model means that a long microtask queue (from deeply nested Promise chains or recursive `then` calls) can also delay I/O processing, though Promise microtasks do yield to nextTick.
 
 ## Complete Execution Order
 
@@ -283,6 +310,8 @@ console.log('11: End main module');
 // 7: setTimeout in I/O
 ```
 
+The complete execution order example demonstrates the full priority chain. Synchronous code runs first (main module), then inter-phase microtasks (nextTick, then Promise), then the first phase callback. Inside an I/O callback, the priority chain repeats: nextTick and Promise microtasks flush before the check phase (`setImmediate`), which runs before the next timers phase (`setTimeout`).
+
 ## libuv's Role
 
 ```javascript
@@ -321,6 +350,8 @@ crypto.pbkdf2('password', 'salt', 100000, 64, 'sha512', () => {
 // First 4 complete at roughly the same time
 // 5th completes about 2x later
 ```
+
+libuv provides the thread pool that Node.js uses for operations that the OS kernel doesn't support asynchronously — primarily filesystem operations, DNS lookups, and cryptographic functions. The default thread pool size is 4, controlled by `UV_THREADPOOL_SIZE`. The `crypto.pbkdf2` example demonstrates this: the first 4 calls complete nearly simultaneously because they each get a thread, while the 5th waits for a thread to become available.
 
 ## Common Patterns
 
@@ -367,6 +398,8 @@ function processInWorker(items) {
 }
 ```
 
+The three approaches to CPU-bound work illustrate the evolution of Node.js concurrency. The first approach (synchronous loop) blocks the event loop entirely — no other requests can be processed. The second approach (chunked with `setImmediate`) yields to the event loop between chunks, allowing I/O to interleave. The third approach (Worker threads) offloads the work entirely to a separate OS-level thread, achieving true parallelism without blocking either the event loop or each other.
+
 ### Avoiding nextTick Recursion
 
 ```javascript
@@ -385,6 +418,8 @@ function safeRecursive() {
   setImmediate(safeRecursive);
 }
 ```
+
+The `nextTick` recursion problem has a simple fix: use `setImmediate` instead. While nextTick inserts at the front of the microtask queue (starving I/O), `setImmediate` inserts at the check phase queue (after I/O callbacks in poll). The `setTimeout(fn, 0)` approach also works but has a minimum 1ms delay and lower priority than `setImmediate` when scheduled from I/O callbacks.
 
 ## Testing Event Loop Behavior
 

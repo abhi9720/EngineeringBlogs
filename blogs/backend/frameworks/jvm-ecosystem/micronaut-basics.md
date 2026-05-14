@@ -16,6 +16,8 @@ draft: false
 
 Micronaut is a modern, JVM-based framework for building microservices and serverless applications. Unlike Spring and Quarkus that use runtime reflection, Micronaut performs dependency injection at compile time, resulting in faster startup and smaller memory footprint.
 
+Micronaut's compile-time dependency injection is its defining feature. Traditional frameworks like Spring use runtime reflection — scanning the classpath, analyzing annotations, and building dependency graphs at startup. This is the primary cause of slow JVM startup. Micronaut instead processes annotations during compilation, generating Java source code that wires dependencies together. The result is startup comparable to Go or Rust applications.
+
 ## Core Concept: Compile-Time DI
 
 ```java
@@ -34,6 +36,8 @@ Micronaut is a modern, JVM-based framework for building microservices and server
 
 ## Dependencies
 
+Micronaut's dependency structure is modular. The `micronaut-inject` artifact handles DI, `micronaut-http-server-netty` provides the Netty-based HTTP server, and `micronaut-http-client` offers declarative HTTP clients. Unlike Spring Boot's all-in-one starters, Micronaut encourages pulling only what you need — a design that keeps the runtime footprint small.
+
 ```xml
 <dependency>
     <groupId>io.micronaut</groupId>
@@ -51,6 +55,8 @@ Micronaut is a modern, JVM-based framework for building microservices and server
 
 ## Basic Application
 
+The `Micronaut.run()` call starts the application. Unlike Spring Boot's `SpringApplication.run()` which triggers classpath scanning, Micronaut's startup is primarily loading generated classes — making it an order of magnitude faster. The application class itself needs no `@SpringBootApplication` equivalent; Micronaut discovers beans through the generated code.
+
 ```java
 import io.micronaut.runtime.Micronaut;
 
@@ -62,6 +68,8 @@ public class Application {
 ```
 
 ## Controllers
+
+Micronaut controllers use JAX-RS-inspired annotations: `@Controller`, `@Get`, `@Post`, `@Body`, etc. The controller takes dependencies through constructor injection (no `@Autowired` needed). Micronaut's `HttpResponse` type provides a fluent API for setting status codes, headers, and body — `HttpResponse.created(user)` sets 201 with location header in one call. This contrasts with Spring Boot's `ResponseEntity` builder pattern.
 
 ```java
 import io.micronaut.http.annotation.*;
@@ -114,6 +122,8 @@ public class UserController {
 
 ## Dependency Injection
 
+Micronaut uses Jakarta Inject (`jakarta.inject.Singleton`, `jakarta.inject.Inject`) rather than framework-specific annotations. This means beans are portable across Jakarta EE-compatible containers. Constructor injection is the default and recommended approach — it enables immutable beans and simplifies testing since dependencies are explicit.
+
 ### Bean Registration
 
 ```java
@@ -144,6 +154,8 @@ public class UserService {
 }
 ```
 
+Micronaut's scopes map closely to familiar concepts but add some unique ones. `@Singleton` creates one instance per JVM. `@Prototype` creates a new instance per injection point. `@RequestScope` creates a bean per HTTP request — useful for request-scoped data like trace IDs. `@Refreshable` beans can be hot-reloaded via the `/refresh` endpoint without restarting the application, enabling runtime configuration updates.
+
 ### Bean Scopes
 
 ```java
@@ -173,6 +185,8 @@ public class DynamicConfig {
 }
 ```
 
+Factory beans let you create beans that are not simple class instances — for example, beans that require configuration parameters or conditional setup. The `@Factory` annotation marks a class whose `@Bean` methods produce injectable instances. The `@Requires` annotation adds conditional bean registration based on configuration properties, classpath presence, or environment, enabling feature flags without runtime overhead.
+
 ### Factory Beans
 
 ```java
@@ -199,6 +213,8 @@ public class HttpClientFactory {
 
 ## Configuration
 
+Micronaut's configuration system processes `application.yml` at build time, not runtime. This means configuration values are validated during compilation, catching typos and type mismatches early. Environment variable interpolation with `${DB_USER}` syntax provides secure credential injection without hardcoding secrets in configuration files.
+
 ```yaml
 micronaut:
   application:
@@ -220,6 +236,8 @@ app:
     enabled: true
     ttl: 300
 ```
+
+Type-safe configuration in Micronaut uses interfaces with getter methods rather than classes with fields. This design enables compile-time implementation generation — Micronaut creates the implementation class during compilation, avoiding reflection at runtime. The `@EachProperty` annotation enables dynamic configuration for data sources or clients where the number of instances is determined by the configuration structure.
 
 ### Type-Safe Configuration
 
@@ -260,6 +278,8 @@ public interface DataSourceConfig {
 
 ## Reactive Support
 
+Micronaut has first-class reactive support through RxJava. Controllers can return `Single` (single value) or `Flowable` (stream of values) directly — Micronaut handles the subscription and back-pressure automatically. This reactive support works with the Netty event loop, enabling non-blocking request processing from HTTP to database and back without thread blocking.
+
 ```java
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
@@ -289,6 +309,8 @@ public class ReactiveUserController {
 
 ## HTTP Client
 
+Micronaut's declarative HTTP client is one of its standout features. Define an interface with annotations, and Micronaut generates the implementation at compile time — no runtime proxies, no reflection. The `@Client` annotation specifies the base URL, and method annotations define endpoints. This same approach works for service-to-service communication in microservice architectures, replacing manual `RestTemplate` or `WebClient` usage.
+
 ```java
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
@@ -310,6 +332,8 @@ public interface ExternalApiClient {
 ```
 
 ## Testing
+
+Micronaut's `@MicronautTest` annotation bootstraps the application context for integration tests. It starts the embedded server, injects beans, and supports `@Inject` directly in tests. The HTTP client injected with `@Client("/")` enables end-to-end testing without starting an external server. Tests run fast because the context starts in milliseconds — a significant improvement over Spring Boot's multi-second test bootstrap.
 
 ```java
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;

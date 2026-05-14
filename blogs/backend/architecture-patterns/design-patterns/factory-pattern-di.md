@@ -40,6 +40,8 @@ public class NotificationService {
 }
 ```
 
+The "without factory" approach has multiple problems. First, `NotificationService` must know how to construct every sender type, including their configuration details. Second, the senders are not managed by Spring — they are created with `new` and bypass DI, so their dependencies (like database connections or API clients) must be constructed inline. Third, adding a new channel requires modifying `NotificationService`.
+
 ### Simple Factory
 
 ```java
@@ -120,6 +122,8 @@ public class SmsSender implements NotificationSender {
     }
 }
 ```
+
+With the factory, each sender is a Spring-managed `@Component` that receives its dependencies through constructor injection. The `NotificationSenderFactory` is injected with all sender instances and delegates selection to a `switch` expression. `NotificationService` now only depends on the factory — it has no idea how senders are created or which implementations exist. Adding a new channel means creating a new `@Component` class and updating the factory's switch.
 
 ## Factory Method Pattern
 
@@ -205,6 +209,8 @@ public class DocumentExportFactory {
 }
 ```
 
+The `DocumentExportFactory` uses Spring's auto-collection feature — it injects a `List<DocumentExporter>` containing all beans that implement the interface. The factory builds a `Map<String, DocumentExporter>` from the list, keyed by format name. This is automatically extensible: adding a new `@Component` that implements `DocumentExporter` with a new format is enough — the factory doesn't change.
+
 ## Abstract Factory Pattern
 
 For creating families of related objects:
@@ -254,6 +260,8 @@ public class ClassicUIFactory implements UIFactory {
     }
 }
 ```
+
+The abstract factory uses `@ConditionalOnProperty` to select the active implementation at startup based on a configuration property. Only one factory is instantiated, and all UI components are guaranteed to be consistent — you won't get a modern button with a classic dialog. This is the key benefit of the Abstract Factory pattern: ensuring families of related objects are used together.
 
 ## Factory with Prototype Scope
 
@@ -316,6 +324,8 @@ public class ReportService {
     }
 }
 ```
+
+Singleton beans share state across all callers, which is dangerous for `ReportGenerator` since it maintains per-request state (report ID, status). Marking it as `@Scope("prototype")` ensures each `getBean()` call returns a new instance. The factory uses `ApplicationContext.getBean()` because Spring cannot inject prototype beans directly into singletons — the factory mediates this by calling the application context each time.
 
 ## Factory with Dynamic Implementation Selection
 
@@ -393,6 +403,8 @@ public class H2DataSourceProvider implements DataSourceProvider {
 }
 ```
 
+The `DataSourceFactory` dynamically selects the database provider based on configuration. Each `DataSourceProvider` handles the nuances of its specific database — Postgres uses `PGSimpleDataSource`, MySQL uses `MysqlDataSource`, H2 uses Spring's `EmbeddedDatabaseBuilder`. Adding support for a new database (e.g., Oracle) requires only a new `@Component` class.
+
 ## Testing Factory Pattern
 
 ```java
@@ -424,6 +436,8 @@ class NotificationSenderFactoryTest {
     }
 }
 ```
+
+Testing the factory validates both the selection logic and that all expected implementations are registered. The `@SpringBootTest` loads the full context and verifies that Spring correctly discovers and wires all `NotificationSender` beans.
 
 ## Common Mistakes
 
@@ -457,6 +471,8 @@ public class GoodFactory {
     }
 }
 ```
+
+Using `new` inside a factory defeats DI because the created objects are not managed by Spring. Their dependencies (like `JavaMailSenderImpl`, `TwilioApiClient`) won't be injected, and features like AOP, `@Transactional`, and `@Async` won't work. The fix is to inject existing Spring beans rather than creating new instances.
 
 ### Complex Factory Logic in Business Code
 

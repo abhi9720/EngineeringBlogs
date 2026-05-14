@@ -18,6 +18,8 @@ NestJS has a powerful dependency injection system inspired by Angular. It suppor
 
 ## Basic Dependency Injection
 
+NestJS's DI system is inspired by Angular's. Providers are registered in modules and made available to constructors through TypeScript's type system. The framework uses the type information at runtime — since TypeScript types are erased during compilation, NestJS uses the `@Injectable()` decorator to emit metadata that the DI container reads. This hybrid approach gives type-safety at development time with runtime DI resolution.
+
 ### Constructor Injection
 
 ```typescript
@@ -38,6 +40,8 @@ export class UsersModule {}
 ```
 
 ## Provider Types
+
+NestJS supports four provider types, each serving different use cases. Class providers create instances from constructors. Value providers supply pre-initialized objects. Factory providers defer creation to a factory function with optional dependency injection. Existing providers create aliases, enabling interface-like abstraction without TypeScript's erased interfaces.
 
 ### Class Providers
 
@@ -61,6 +65,8 @@ export class UsersModule {}
 })
 export class UsersModule {}
 ```
+
+The class provider shorthand `providers: [UsersService]` expands to `{ provide: UsersService, useClass: UsersService }`. The `useClass` variant allows environment-specific swapping — for example, replacing a real service with a mock during testing. This is NestJS's primary mechanism for dependency substitution, eliminating the need for a separate DI configuration file.
 
 ### Value Providers
 
@@ -88,6 +94,8 @@ export class DatabaseService {
   constructor(@Inject(DATABASE_CONFIG) private config: DatabaseConfig) {}
 }
 ```
+
+Value providers are ideal for configuration objects, third-party library instances, or constants. The `useValue` syntax pairs a string token with a literal value. Since there's no class to serve as the injection key, string tokens require the `@Inject('TOKEN')` decorator on the consumer side. This is a common pattern for database config, feature flags, and external service credentials.
 
 ### Factory Providers
 
@@ -126,6 +134,8 @@ export class CacheModule {}
 export class DatabaseModule {}
 ```
 
+Factory providers enable dependency creation with complex initialization logic. The `useFactory` function receives injected dependencies (specified in the `inject` array) and returns the created provider. Async factories using `async`/`await` are particularly useful for database connections, cache clients, and other resources that need asynchronous setup. The factory runs once for singleton scoped providers.
+
 ### Existing Providers
 
 ```typescript
@@ -150,7 +160,11 @@ export class OrdersService {
 }
 ```
 
+Existing providers create aliases — `useExisting: UsersService` means the token `'USER_SERVICE_ALIAS'` resolves to the same singleton instance as `UsersService`. This is useful for interface-based design where you want to expose a service under a generic token while keeping the implementation class hidden from consumers.
+
 ## Custom Providers with Tokens
+
+Tokens are the keys that NestJS's DI container uses to identify providers. Class references are the most common and most type-safe tokens. String tokens offer flexibility but sacrifice compile-time checking. Symbol tokens provide uniqueness guarantees — two modules cannot accidentally collide on the same symbol token. Choose tokens based on the desired balance of type safety and flexibility.
 
 ### String Tokens
 
@@ -174,6 +188,8 @@ export const LOGGER = 'LOGGER';
 export class CommonModule {}
 ```
 
+String tokens are the simplest custom token — just a string constant like `'CACHE_MANAGER'`. However, strings can collide between modules. The convention is to define tokens as exported constants in a shared module, ensuring both the provider and consumer reference the same string value. The `exports` array must include custom tokens for other modules to access them.
+
 ### Symbol Tokens
 
 ```typescript
@@ -194,6 +210,8 @@ export class RedisModule {}
 ```
 
 ## Injection Scopes
+
+NestJS supports three provider scopes. `DEFAULT` (Singleton) creates one instance shared across the entire application — this is the most memory-efficient but requires thread-safety. `REQUEST` creates a new instance per incoming HTTP request, useful for request-scoped data like authentication context. `TRANSIENT` creates a new instance every time the provider is injected, even within the same request. Choose the minimum scope needed to avoid unnecessary allocations.
 
 ```typescript
 import { Injectable, Scope } from '@nestjs/common';
@@ -232,6 +250,8 @@ export class TasksModule {}
 
 ## Circular Dependencies
 
+Circular dependencies occur when two modules or providers depend on each other. NestJS detects these at startup and throws an error unless `forwardRef()` is used. `forwardRef` wraps the reference in a thunk — a function that returns the type — deferring resolution until both modules are fully initialized. While `forwardRef` resolves the error, circular dependencies are a design smell; consider extracting shared logic into a third module.
+
 ### Module-Level
 
 ```typescript
@@ -251,6 +271,8 @@ export class UsersModule {}
 })
 export class AuthModule {}
 ```
+
+Module-level circular deps happen when `ModuleA` imports `ModuleB` and vice versa. The `forwardRef(() => Module)` in the `imports` array resolves this. Both modules must use `forwardRef` on the import. NestJS resolves the dependency graph lazily for forward-referenced modules, so validation errors in the circular path may appear only at runtime rather than during initialization.
 
 ### Provider-Level
 
@@ -274,6 +296,8 @@ export class AuthService {
 
 ## Optional Dependencies
 
+The `@Optional()` decorator tells the DI container not to throw when a provider is missing. The dependency becomes `undefined` instead, which can be handled with null-safe operators (`?.`). This pattern is useful for optional features like analytics clients, debug loggers, or feature-flagged services where the provider might not be registered.
+
 ```typescript
 @Injectable()
 export class AnalyticsService {
@@ -294,6 +318,8 @@ export class AnalyticsService {
 
 ## Global Modules
 
+By default, NestJS modules are singletons with isolated scope — providers must be exported and the module imported to access them. `@Global()` makes a module's exported providers available everywhere without explicit imports. Use sparingly for true cross-cutting concerns like logging, configuration, or database connections. Overuse of global modules makes dependency graphs harder to trace.
+
 ```typescript
 @Global()
 @Module({
@@ -313,6 +339,8 @@ export class AnyModule {
 ```
 
 ## Testing with DI
+
+NestJS's `Test.createTestingModule` creates a lightweight DI container for testing without launching the full application. Providers can be overridden with mocks via `useClass` or `useValue`. The `compile()` method builds the module and `module.get<T>()` retrieves provider instances. This pattern enables isolated unit tests for services with all dependencies mocked.
 
 ```typescript
 import { Test, TestingModule } from '@nestjs/testing';

@@ -27,6 +27,8 @@ This guide covers multi-stage build patterns for Java/Spring Boot applications, 
 
 ### Basic Concept
 
+A multi-stage Dockerfile uses multiple `FROM` statements. Each `FROM` begins a new stage. The final stage produces the runtime image — everything from earlier stages is discarded unless explicitly copied.
+
 ```dockerfile
 # Stage 1: Build with full JDK and tools
 FROM eclipse-temurin:21-jdk-alpine AS builder
@@ -43,7 +45,11 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 # Final image: only JRE + JAR (~180MB instead of ~400MB)
 ```
 
+The `COPY --from=builder` syntax copies artifacts from the builder stage into the runtime stage. The builder stage's layers (JDK, Maven, source code, compiled classes) are not part of the final image — only what you explicitly copy over.
+
 ### Why Multi-Stage Matters
+
+A single-stage build with the JDK produces images that are 2–3× larger. Beyond size, including build tools in the final image increases the attack surface for production deployments.
 
 ```dockerfile
 # Without multi-stage: everything in one image
@@ -67,6 +73,8 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 ## Spring Boot Layered JAR Pattern
 
 ### Spring Boot Layered JAR Extraction
+
+Spring Boot 2.3+ supports building "layered" JARs. These JARs group files into layers (dependencies, framework classes, application code) that can be extracted and copied separately for optimal Docker layer caching.
 
 ```dockerfile
 # Build stage
@@ -107,7 +115,11 @@ ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS org.springframework.boot.loader.launch.JarLauncher"]
 ```
 
+The key insight is layer ordering: `dependencies/` contains third-party libraries that rarely change, `application/` contains your code that changes frequently. When you rebuild after a code change, the `dependencies/` layer is served from cache, and only the `application/` layer is rebuilt.
+
 ### Enabling Layered JAR in Build
+
+Layered JARs must be explicitly enabled in your build tool. Without this, the JAR is a single fat JAR and cannot be extracted into layers.
 
 ```xml
 <!-- Maven: pom.xml -->
@@ -140,6 +152,8 @@ tasks.bootJar {
 
 ### Custom Layer Configuration
 
+You can customize which dependencies go into which layer using a `layers.xml` file. This is useful for separating internal library dependencies from third-party dependencies.
+
 ```xml
 <!-- layers.xml -->
 <layers xmlns="http://www.springframework.org/schema/boot/layers"
@@ -164,6 +178,8 @@ tasks.bootJar {
 ## Maven Multi-Stage Dockerfile
 
 ### Full Maven Multi-Stage Build
+
+This Dockerfile builds the application entirely inside Docker — the host machine only needs Docker, not Maven or JDK. This is the approach used in CI/CD pipelines.
 
 ```dockerfile
 # Stage 1: Maven build
@@ -224,7 +240,11 @@ ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -Djava.securit
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS org.springframework.boot.loader.launch.JarLauncher"]
 ```
 
+Three stages separate concerns: build (Maven + source → JAR), extract (JAR → layers), and runtime (JRE + layers → runnable container). Each stage discards tools from the previous stage, keeping the final image minimal.
+
 ### Optimized Maven with Cache
+
+Using Google's distroless base image for the runtime stage removes even the OS package manager and shell, reducing the attack surface to just the JVM and application code.
 
 ```dockerfile
 # Use Maven cache for faster rebuilds
@@ -270,6 +290,8 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ## Gradle Multi-Stage Dockerfile
 
 ### Gradle Build with Daemon
+
+Gradle's build cache and incremental compilation make it faster than Maven for multi-module projects. The same multi-stage pattern applies.
 
 ```dockerfile
 # Stage 1: Gradle build
@@ -332,6 +354,8 @@ ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS org.springframework.boot.loader.launch.
 
 ### BuildKit Cache Mount
 
+BuildKit cache mounts persist the Gradle cache across builds on the same host, radically reducing build time for CI runners that reuse the same build host.
+
 ```dockerfile
 # syntax=docker/dockerfile:1.4
 # Use BuildKit cache mounts for faster builds
@@ -362,6 +386,8 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 ## Custom JRE with jlink
 
 ### Minimal JRE Creation
+
+`jlink` creates a custom JRE containing only the Java modules your application needs. This can shrink the runtime from ~180MB (full JRE) to under 40MB.
 
 ```dockerfile
 # Stage 1: Build application
@@ -424,6 +450,8 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 ### Module Analysis for jlink
 
+Instead of guessing which modules you need, `jdeps` analyzes the compiled bytecode to determine exactly which Java modules are required. This eliminates guesswork and produces the smallest possible JRE.
+
 ```dockerfile
 # Stage: Analyze which modules are needed
 FROM eclipse-temurin:21-jdk-alpine AS module-analyzer
@@ -470,6 +498,8 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 ### Distroless Images
 
+Distroless images contain only the application and its runtime dependencies — no shell, package manager, or system utilities. This dramatically reduces the attack surface.
+
 ```dockerfile
 # Use Google Distroless for minimal attack surface
 FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
@@ -497,6 +527,8 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 ### Layered Caching with BuildKit
 
+BuildKit (available as `DOCKER_BUILDKIT=1`) introduces `--mount=type=cache` which persists directories across builds without adding them to image layers. This is ideal for Maven's `.m2` repository and Gradle's cache.
+
 ```dockerfile
 # syntax=docker/dockerfile:1.4
 
@@ -522,6 +554,8 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
 
 ### Combined Multi-Stage with CI
+
+This GitHub Actions workflow integrates multi-stage Docker builds with layer caching. The cache is stored on disk and moved between runs to preserve it across CI jobs.
 
 ```yaml
 # .github/workflows/docker-multi-stage.yml
@@ -576,6 +610,8 @@ jobs:
 
 ### Image Size Comparison
 
+The table below compares image sizes across different build approaches. The multi-stage jlink approach produces an image 6× smaller than the naive single-stage JDK approach.
+
 ```
 Application: Spring Boot order-service (100MB JAR)
 
@@ -594,6 +630,8 @@ Application: Spring Boot order-service (100MB JAR)
 ## Common Mistakes
 
 ### Mistake 1: Not Ordering COPY for Layer Cache
+
+Docker caches layers based on whether the input files changed. Copying source code before downloading dependencies means any source change invalidates the dependency download cache.
 
 ```dockerfile
 # WRONG: Source code copied before dependency download
@@ -615,6 +653,8 @@ RUN mvn package
 
 ### Mistake 2: Including Build Tools in Runtime
 
+Build tools (JDK, Maven, Gradle) add hundreds of megabytes and increase the attack surface. They should never appear in the final runtime image.
+
 ```dockerfile
 # WRONG: Build stage artifacts leak to runtime
 FROM eclipse-temurin:21-jdk-alpine
@@ -634,6 +674,8 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 ### Mistake 3: Not Extracting Layers for Spring Boot
 
+Without layer extraction, any change to any class file invalidates the entire JAR layer, forcing a full rebuild of that layer.
+
 ```dockerfile
 # WRONG: Copying whole JAR (no layer caching)
 FROM eclipse-temurin:21-jre-alpine
@@ -652,6 +694,8 @@ COPY --from=layers application/ ./
 
 ### Mistake 4: Using Same Stage for Multiple Architectures
 
+Hardcoded JDK paths break when building for different architectures. Use `$JAVA_HOME` instead.
+
 ```dockerfile
 # WRONG: Platform-specific JDK path
 RUN jlink --module-path /usr/lib/jvm/java-21-openjdk/jmods  # Hardcoded path!
@@ -665,6 +709,8 @@ RUN jlink --module-path $JAVA_HOME/jmods --add-modules java.base --output /jre
 ```
 
 ### Mistake 5: Not Cleaning Up in Build Stage
+
+The build stage's `.m2` directory contains all downloaded dependencies (~500MB). While this doesn't affect the final image (it's a separate stage), it adds to the build cache size on disk and slows cache export/import in CI.
 
 ```dockerfile
 # WRONG: Build stage accumulates temp files
@@ -707,7 +753,5 @@ Use layered JAR extraction for Spring Boot, jlink for minimal JREs, and BuildKit
 - [jlink Documentation](https://docs.oracle.com/en/java/javase/21/docs/specs/man/jlink.html)
 
 ---
-
-Happy Coding 👨‍💻
 
 Happy Coding

@@ -54,6 +54,8 @@ public class SyncController {
 // Request 101 → WAITING (no available threads)
 ```
 
+The thread-per-request model maps each HTTP connection to a dedicated OS thread from Tomcat's internal pool. When all 200 threads are blocked on database socket reads or external HTTP calls, the 201st request must wait in the TCP accept queue — or be rejected outright. A thread dump under load will show most threads in `RUNNABLE` state waiting on `java.net.SocketInputStream.read`, meaning the CPU is largely idle but no threads are free to accept new work. This is the fundamental inefficiency that async and reactive models are designed to eliminate.
+
 ### Thread Pool Configuration
 
 ```yaml
@@ -79,12 +81,14 @@ public class TomcatThreadPoolConfig {
                 connector.setProperty("minSpareThreads", "10");
                 connector.setProperty("maxConnections", "10000");
                 connector.setProperty("acceptCount", "100");
-                connector.setProperty("connectionTimeout", "5000");
+        connector.setProperty("connectionTimeout", "5000");
             });
         };
     }
 }
 ```
+
+The Tomcat connector properties control the request pipeline from the network layer up. `maxThreads` (200) is the hard limit on concurrent request processing. `maxConnections` (10,000) allows the OS to accept many more TCP connections than there are threads — the excess are buffered in the kernel's SYN backlog. `acceptCount` (100) is the size of that backlog. When all three fill, the kernel starts dropping SYN packets, which clients see as `Connection refused`. Tuning these values is a trade-off between burst tolerance and memory: each queued connection consumes a socket descriptor and a small kernel buffer.
 
 ### Synchronous Performance Characteristics
 
@@ -111,6 +115,8 @@ public class SyncMetricsService {
     }
 }
 ```
+
+The metrics reveal the sync bottleneck clearly: CPU sits at 30 % — most threads are I/O-waiting — yet throughput is capped at 1000 req/s because no thread is free to accept new connections. The p99 latency spike to 5000 ms comes from requests queuing for a thread, not from the actual processing time. When you see CPU utilization below 50 % alongside saturated thread pools, it is a strong signal that async processing will help.
 
 ---
 
@@ -243,6 +249,8 @@ public class PerformanceComparisonService {
 }
 ```
 
+`CompletableFuture.supplyAsync` decomposes the dashboard into three independent data fetches that execute concurrently on the async thread pool. While the three futures are outstanding, the calling thread returns to the pool and can serve other requests — the JVM's `ForkJoinPool` manages continuation scheduling rather than blocking. The `allOf` + `thenApply` pattern assembles results when all three complete, giving a total latency equal to the slowest call (~100 ms) rather than their sum (~300 ms). In production, always supply a dedicated `ThreadPoolTaskExecutor` instead of relying on `ForkJoinPool.commonPool`, which is shared across parallel streams and framework components.
+
 ---
 
 ## Reactive Programming
@@ -313,6 +321,8 @@ spring:
 # - Higher concurrency: 10,000+ concurrent connections
 # - Lower memory: ~50MB (vs 200MB+ for Tomcat)
 ```
+
+The event-loop model inverts the thread-per-request approach: a small fixed set of I/O threads multiplexes thousands of channel registrations using the operating system's `select`/`epoll`/`kqueue` primitives. Because no thread is ever blocked waiting for I/O — all reads and writes are registered as callbacks — a single event loop can handle tens of thousands of concurrent connections. The memory saving comes from eliminating per-thread stack allocations (typically 1 MB per thread) and from the non-blocking I/O buffers being far smaller than per-connection thread stacks.
 
 ### Scheduler Configuration
 

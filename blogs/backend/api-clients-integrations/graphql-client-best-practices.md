@@ -72,6 +72,8 @@ public class ErrorLocation {
 }
 ```
 
+Every GraphQL HTTP request follows the same wire format: a JSON body with a `query` string, optional `variables` map, and optional `operationName`. The response always returns HTTP 200 unless there is a transport-level error — GraphQL errors are communicated within the response body itself, not through HTTP status codes. The `hasErrors()` method distinguishes between success and failure responses, while `isPartial()` detects the critical case where data was returned alongside errors. This means the caller must always inspect the response body, never just the HTTP status code.
+
 ### Transport Layer
 
 ```java
@@ -101,6 +103,8 @@ public class GraphQLTransportConfig {
     }
 }
 ```
+
+Unlike REST where each endpoint has its own URL, GraphQL uses a single endpoint (typically `/graphql`) for all queries and mutations. The request is always HTTP POST with `Content-Type: application/json`. Default headers like `X-API-Key` and `X-Source` are applied to every request via WebClient configuration. The separate bean with `X-GraphQL-Batch: true` configures the client for batch endpoints, where multiple queries are sent in a single HTTP request — a performance optimization that reduces round trips when independent data fetches are needed simultaneously.
 
 ---
 
@@ -185,6 +189,8 @@ public class SimpleGraphQLClient {
     }
 }
 ```
+
+The simple client demonstrates the core GraphQL request pattern: POST a `GraphQLRequest` containing the query string and variables, receive a `GraphQLResponse` containing `data` and `errors`. Because GraphQL error codes are custom per API (not standardized like HTTP), the `getErrorCode` method extracts the error code from the `extensions` map — a common GraphQL convention for error metadata. The `parseOperationName` helper extracts the top-level field name from the query to navigate the JSON response tree. Note that this client uses Jackson's `JsonNode` for the intermediate representation and then converts to the target type, providing flexibility at the cost of losing compile-time type safety.
 
 ### Typed Query Builder
 
@@ -320,6 +326,8 @@ public class TypedGraphQLClient {
 }
 ```
 
+Defining queries as static constants separates the GraphQL schema knowledge from the Java code that uses it. Each public method maps to a single GraphQL operation: `getUser` calls the `GetUser` query, `searchProducts` calls `SearchProducts`, and `createOrder` calls the `CreateOrder` mutation. Note the important distinction between queries and mutations in error handling — queries log partial errors and continue (accepting potentially incomplete data), while mutations throw an exception because mutations should be atomic. The timeout is also differentiated: mutations get 15 seconds because they typically perform more work on the server than simple queries.
+
 ---
 
 ## Apollo GraphQL Client
@@ -410,6 +418,8 @@ public class ApolloGraphQLConfig {
 }
 ```
 
+Apollo GraphQL is a mature client that provides code generation from schema files, normalized caching, and type-safe query builders. The configuration above sets up OkHttp as the HTTP transport with authentication, logging, and error interceptors. The `normalizedCache` with LRU eviction (10MB max) stores GraphQL objects normalized by type and ID, enabling automatic cache updates when mutations modify previously fetched data. Unlike WebClient-based approaches, Apollo generates type-safe query classes from `.graphql` schema files, providing compile-time validation that requested fields exist in the schema — a significant reliability advantage.
+
 ### Query Execution with Apollo
 
 ```java
@@ -475,6 +485,8 @@ public class ApolloGraphQLService {
 }
 ```
 
+Apollo's query execution returns strongly-typed response objects generated from the schema. The `GetUserQuery` class is auto-generated with builder methods for variables and nested `Data` classes matching the query's selection set. The `enqueue()` method is synchronous, while Apollo also supports asynchronous execution via callbacks or reactive wrappers. The batch processing example wraps synchronous Apollo calls in `Mono.fromCallable` with `Schedulers.boundedElastic()` to avoid blocking event-loop threads when fetching data for multiple users in parallel.
+
 ---
 
 ## Advanced Patterns
@@ -525,6 +537,8 @@ public class BatchGraphQLService {
     }
 }
 ```
+
+The N+1 problem in GraphQL occurs when a list of items triggers individual queries for each item's nested data. The batch execution pattern addresses this by sending multiple queries in a single HTTP request to a dedicated batch endpoint. The DataLoader pattern takes a different approach: it defines a single query that accepts a list of IDs and returns all results at once, then maps them by ID for O(1) lookup. This replaces N separate round trips with a single request, dramatically reducing latency and server load when fetching related data for multiple parent objects.
 
 ### Automatic Persisted Queries (APQ)
 
@@ -597,6 +611,8 @@ public class APQGraphQLClient {
 }
 ```
 
+Automatic Persisted Queries reduce bandwidth by sending a hash of the query string instead of the full query on subsequent requests. The client first sends only the hash; if the server recognizes it because it was registered on a previous request, it returns the data immediately. If the hash is unknown, the server returns a `PersistedQueryNotFound` error, and the client falls back to sending the full query alongside the hash so the server can register it for future requests. APQ is particularly valuable for bandwidth-constrained environments where every kilobyte matters.
+
 ### Subscription Support
 
 ```java
@@ -649,6 +665,8 @@ public class GraphQLSubscriptionService {
     }
 }
 ```
+
+GraphQL subscriptions enable real-time push notifications from the server. The WebClient-based approach sends a subscription query via HTTP POST and receives a stream of events as a `Flux`. The retry configuration with exponential backoff and jitter is critical for subscriptions — network interruptions are inevitable for long-lived connections, and aggressive reconnection with jitter prevents the "thundering herd" problem where all reconnecting clients hit the server simultaneously. The Server-Sent Events alternative uses HTTP GET with `text/event-stream` content type, which is simpler and more widely supported by infrastructure proxies.
 
 ---
 
@@ -728,6 +746,8 @@ public class GraphQLResponseValidator {
 }
 ```
 
+A dedicated response validator enforces consistent error handling across all GraphQL operations. It distinguishes three cases: complete failure (no data, only errors), partial success (data with errors — handle with caution), and success (data without errors). The `validateAndExtract` method also checks that the expected top-level field exists in the response, catching schema mismatches early. Mutation validation is stricter — any error causes an exception because mutations should be atomic. The error code extraction from `extensions` maps vendor-specific codes to typed exceptions, keeping callers insulated from the upstream API's error format.
+
 ### Retry with Exponential Backoff
 
 ```java
@@ -781,6 +801,8 @@ public class ResilientGraphQLClient {
     }
 }
 ```
+
+The retry configuration uses exponential backoff with jitter (200ms base, max 10s, ±50% jitter). The `isRetryable` check ensures only transient errors trigger retries — connection timeouts and retryable GraphQL errors (INTERNAL_ERROR, TIMEOUT, SERVICE_UNAVAILABLE) are retried, while client errors and validation failures are not. The `onRetryExhaustedThrow` callback provides a custom exception when all retries are exhausted, allowing callers to distinguish between a transient delay and a persistent failure.
 
 ---
 
@@ -848,6 +870,8 @@ public class OptimizedGraphQLClient {
 }
 ```
 
+GraphQL's primary advantage is requesting only the fields you need. The over-fetching example requests the user's entire profile, posts, settings, and billing data when only name and email are needed for a summary view. This wastes bandwidth, slows response times, and increases server load. The optimized query requests exactly the fields needed and uses query variables for flexibility. The dynamic field selection pattern takes this further by building queries from a set of requested fields, allowing different callers to request different data without maintaining separate query strings for every use case.
+
 ### Caching Strategy
 
 ```java
@@ -894,6 +918,8 @@ public class CachedGraphQLClient {
 }
 ```
 
+Caching GraphQL queries requires careful consideration because the caching key must include both the query string and the variables — the same query with different variable values returns different results. The `@Cacheable` annotation with `key = "#query + #variables.hashCode()"` ensures that cache entries are unique per query-variable combination. Caffeine with a 5-minute TTL and 1000-entry limit provides an in-memory cache that reduces latency for frequently executed queries without consuming excessive memory. The `@CacheEvict` method allows manual invalidation when data freshness is critical, such as after a mutation.
+
 ---
 
 ## Common Mistakes
@@ -922,6 +948,8 @@ public class CorrectClient {
 }
 ```
 
+String concatenation in GraphQL queries is dangerous — it opens the door to injection attacks where malicious input could alter the query structure, and it prevents the server from caching query plans since the query text changes on every invocation. Using variables via `Map.of("id", id)` keeps the query text stable and the inputs safely separated. Stable query texts also enable persisted queries and server-side query plan caching, improving performance for frequently executed queries.
+
 ### Mistake 2: Ignoring Partial Errors
 
 ```java
@@ -945,6 +973,8 @@ public OrderResponse createOrder(CreateOrderInput input) {
 }
 ```
 
+GraphQL can return partial results — data alongside errors. A mutation that partially succeeds (e.g., order creates but inventory reservation fails) returns both `data` and `errors`. Ignoring the errors field means the caller processes the incomplete result as if everything succeeded. The correct approach inspects errors and makes a decision: for critical errors, throw an exception so the caller can retry or roll back; for non-critical errors, log a warning and proceed with the partial data. Always document which errors your service considers critical versus informational.
+
 ### Mistake 3: N+1 Queries in Batch Processing
 
 ```java
@@ -965,6 +995,8 @@ public List<UserResponse> getUsers(List<String> userIds) {
     return executeQuery(query, Map.of("ids", userIds), UsersList.class).getUsers();
 }
 ```
+
+Making N individual GraphQL calls for N items multiplies latency by N and creates N times the server load. Batch queries consolidate all requests into a single round trip, reducing total latency from N multiplied by individual latency to a single latency value. Most GraphQL APIs support list arguments for batch fetching — always check the schema for batch query support before implementing per-item loops. For APIs that do not support batching, consider using a DataLoader or batching proxy.
 
 ### Mistake 4: No Pagination for List Queries
 
@@ -988,6 +1020,8 @@ public SearchResult<Product> getProducts(int first, String after) {
     return execute(query, Map.of("first", first, "after", after));
 }
 ```
+
+Unpaginated list queries are a common production incident waiting to happen. A query that returns all products with no limit can return millions of rows, exhausting memory on both the client and server. Always use cursor-based pagination (`first`, `after`) for list fields. Cursor-based pagination is preferred over offset-based because it remains stable when items are added or removed between page fetches — a new item inserted on page 1 would shift all subsequent items by one with offset pagination, causing duplicates or misses.
 
 ### Mistake 5: Using Same Timeout for Queries and Mutations
 
@@ -1030,18 +1064,20 @@ public class TimeoutAwareClient {
 }
 ```
 
+Mutations typically involve side effects (database writes, external API calls, event publishing) and take longer than read-only queries. Using the same aggressive timeout for both causes unnecessary mutation failures — the mutation might succeed but the client receives a timeout and retries, causing duplicate side effects. Separate timeouts allow queries to fail fast (5 seconds) while giving mutations adequate time (15 seconds) to complete. Apply this pattern consistently with a timeout-aware client that accepts a `Duration` parameter for flexible timeout configuration per operation type.
+
 ---
 
 ## Summary
 
 GraphQL clients in Spring Boot require careful design for production use:
 
-1. **Use WebClient or Apollo**: Both provide robust HTTP communication with proper configuration
-2. **Prefer variables over string interpolation**: Avoid injection risks and enable query caching
-3. **Always paginate list fields**: Use cursor-based pagination for large datasets
-4. **Handle partial responses**: Check for errors even when data is returned
-5. **Cache aggressively**: Use normalized cache and APQ for performance
-6. **Batch queries together**: Replace N+1 patterns with batch loading
+1. **Use WebClient or Apollo**: Both provide robust HTTP communication with proper configuration. WebClient offers finer control over the reactive pipeline, while Apollo provides type-safe code generation and normalized caching out of the box.
+2. **Prefer variables over string interpolation**: Use `$variable` placeholders in queries and pass values via the `variables` map. This prevents injection attacks, enables server-side query plan caching, and keeps the query text stable for persisted query optimization.
+3. **Always paginate list fields**: Use cursor-based pagination (`first`/`after`) rather than offset-based. Cursor pagination remains stable when items are inserted or deleted between pages, and it is the standard for production GraphQL APIs.
+4. **Handle partial responses**: Check the `errors` field even when `data` is present. Partial responses occur when some resolvers succeed and others fail — ignoring errors means processing incomplete data. Decide per-operation whether partial data is acceptable or should trigger a rollback.
+5. **Cache aggressively**: Use normalized cache (Apollo) or Caffeine-based query caching (WebClient) to reduce latency for frequently executed queries. Combine with Automatic Persisted Queries to reduce bandwidth for large query strings.
+6. **Batch queries together**: Replace N+1 patterns with batch loading using list arguments or dedicated batch endpoints. A single batched query is orders of magnitude more efficient than N individual queries, both in network round trips and server processing load.
 
 ---
 
@@ -1053,7 +1089,5 @@ GraphQL clients in Spring Boot require careful design for production use:
 - [Netflix DGS Framework](https://netflix.github.io/dgs/)
 
 ---
-
-Happy Coding 👨‍💻
 
 Happy Coding

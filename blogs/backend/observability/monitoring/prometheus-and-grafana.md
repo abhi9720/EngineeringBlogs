@@ -20,10 +20,24 @@ Prometheus and Grafana are the most widely used open-source monitoring stack. Pr
 
 ### Architecture
 
-```
-Application → Expose /metrics → Prometheus Scrape → TSDB → Grafana Dashboard
-                                  ↑ Pull Model              ↑ Visualize
-                               Alertmanager → Notifications
+```mermaid
+flowchart LR
+    App["Application"] -->|"Expose /metrics"| Prom["Prometheus Scrape"]
+    Prom --> TSDB["TSDB"]
+    TSDB --> Graf["Grafana Dashboard"]
+    Prom --> Alert["Alertmanager"]
+    Alert --> Notif["Notifications"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class App yellow
+    class Prom,Alert blue
+    class TSDB green
+    class Graf,Notif pink
 ```
 
 ---
@@ -77,6 +91,8 @@ alerting:
         - targets:
           - 'alertmanager:9093'
 ```
+
+Prometheus uses a pull model: it scrapes metrics from HTTP endpoints at regular intervals. The `scrape_interval` of 10 seconds for Spring Boot applications provides a good balance between data granularity and storage volume. For Kubernetes service discovery, the relabeling configuration selects pods annotated with `prometheus.io/scrape: true` and constructs the correct target address from the pod IP and port annotation.
 
 ### Docker Compose
 
@@ -132,6 +148,8 @@ networks:
   monitoring:
     driver: bridge
 ```
+
+The Prometheus data directory is persisted on a Docker volume to survive container restarts. Retention is limited by both time (30 days) and size (50 GB)—whichever is reached first. This prevents a traffic spike from filling the disk and crashing the monitoring stack. Grafana is configured with provisioning directories so that dashboards and data sources are automatically loaded at startup, eliminating manual setup after deployment.
 
 ---
 
@@ -193,6 +211,8 @@ public class ActuatorSecurityConfig {
     }
 }
 ```
+
+The `/actuator/prometheus` endpoint is restricted to the internal network (10.0.0.0/8) so that only Prometheus servers within the cluster can scrape it. The `/actuator/health` endpoint is public so that load balancers can perform health checks without authentication. This layered security ensures that sensitive metric data is not exposed externally.
 
 ---
 
@@ -287,6 +307,8 @@ providers:
 }
 ```
 
+The provisioning system allows dashboards to be version-controlled alongside application code. The `timeInterval: "5s"` in the datasource config tells Grafana to auto-adjust the Prometheus step parameter to at least 5 seconds, preventing excessive query load when zoomed into short time ranges.
+
 ---
 
 ## PromQL Query Examples
@@ -325,6 +347,8 @@ jvm_memory_used_bytes{area="heap"}
   / sum(rate(http_server_requests_seconds_count[30d]))
 )
 ```
+
+The `rate()` function computes a per-second average over the specified time window. For histograms, `rate()` on bucket counters gives the per-second rate of requests falling into each bucket. The `histogram_quantile()` function then interpolates the exact percentile from the bucket boundaries. This two-step process (rate then quantile) is essential for combining data across multiple Prometheus server restarts.
 
 ---
 

@@ -24,8 +24,24 @@ JSON Web Tokens (JWT) are the backbone of modern stateless authentication. Under
 
 A JWT is a URL-safe string composed of three Base64URL-encoded segments separated by dots:
 
-```
-<Base64URL(Header)>.<Base64URL(Payload)>.<Signature>
+```mermaid
+graph LR
+    H["Header<br/>(Base64URL)"]
+    P["Payload<br/>(Base64URL)"]
+    S["Signature<br/>(Base64URL)"]
+
+    JWT["JWT Token"] --> H
+    JWT --> P
+    JWT --> S
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class H blue
+    class P green
+    class S pink
 ```
 
 Each segment serves a distinct purpose in the token's security model.
@@ -34,7 +50,7 @@ Each segment serves a distinct purpose in the token's security model.
 
 Consider this actual token:
 
-```
+```text
 eyJhbGciOiJSUzI1NiIsImtpZCI6InYyIn0.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFiaGlzaGVrIFRpd2FyaSIsImlhdCI6MTUxNjIzOTAyMiwiZXhwIjo5OTk5OTk5OTk5fQ.pA3JnFVFGNsL_diX2Q9p3kzCLaRc3vVLoLL9mUZqT1k
 ```
 
@@ -64,7 +80,7 @@ The `sub` claim identifies the principal. `iat` and `exp` establish the token's 
 
 ### Base64URL Encoding Details
 
-JWT uses Base64URL, not standard Base64. The difference matters:
+JWT uses Base64URL, not standard Base64. The difference matters: Base64URL replaces `+` with `-`, `/` with `_`, and omits padding (`=`), making the token safe for inclusion in URLs without percent-encoding:
 
 ```java
 public class Base64UrlExample {
@@ -96,16 +112,33 @@ Base64URL is URL-safe because `-` and `_` don't require percent-encoding in URLs
 
 HMAC is a symmetric algorithm: the same secret both signs and verifies tokens.
 
-**Signing process**:
+**Signing process:**
 
-```
-Signature = HMAC-SHA256(
-    secret,
-    base64url(header) + "." + base64url(payload)
-)
+```mermaid
+graph LR
+    H["Base64URL(Header)"]
+    P["Base64URL(Payload)"]
+    M["message = header.payload"]
+    S["Secret"]
+    Sig["Signature"]
+
+    H --> M
+    P --> M
+    M --> Sig
+    S --> Sig
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class H blue
+    class P green
+    class S yellow
+    class Sig pink
 ```
 
-Java implementation:
+Java implementation showing both signing and constant-time verification:
 
 ```java
 import javax.crypto.Mac;
@@ -138,7 +171,7 @@ public class HmacSigner {
 }
 ```
 
-**Security characteristics**:
+**Security characteristics:**
 - Single shared secret, no key distribution
 - Fast computation
 - Not suitable for distributed systems where multiple services need to verify
@@ -148,16 +181,33 @@ public class HmacSigner {
 
 RSA is asymmetric: a private key signs, a public key verifies.
 
-**Signing process**:
+```mermaid
+graph LR
+    H["Base64URL(Header)"]
+    P["Base64URL(Payload)"]
+    M["message = header.payload"]
+    SHA["SHA-256"]
+    PK["Private Key"]
+    Sig["Signature"]
 
-```
-Signature = RSA-Sign(
-    SHA256(base64url(header) + "." + base64url(payload)),
-    privateKey
-)
+    H --> M
+    P --> M
+    M --> SHA
+    SHA --> Sig
+    PK --> Sig
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class H blue
+    class P green
+    class PK yellow
+    class Sig pink
 ```
 
-Java implementation:
+Full RSA implementation with key generation:
 
 ```java
 import java.security.*;
@@ -201,7 +251,7 @@ public class RsaSigner {
 }
 ```
 
-**Security characteristics**:
+**Security characteristics:**
 - Private key stays on the signing server
 - Any service with the public key can verify
 - Larger signatures (256 bytes for 2048-bit RSA)
@@ -211,18 +261,35 @@ public class RsaSigner {
 
 ECDSA uses elliptic curve cryptography for smaller signatures with equivalent security.
 
-**Signing process**:
+```mermaid
+graph LR
+    H["Base64URL(Header)"]
+    P["Base64URL(Payload)"]
+    M["message = header.payload"]
+    SHA["SHA-256"]
+    EC["EC Private Key"]
+    DER["DER Signature"]
+    Raw["Raw R‖S Format<br/>(64 bytes for P-256)"]
 
+    H --> M
+    P --> M
+    M --> SHA
+    SHA --> DER
+    EC --> DER
+    DER --> Raw
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class H blue
+    class P green
+    class EC yellow
+    class Raw pink
 ```
-Signature = ECDSA-Sign(
-    SHA256(base64url(header) + "." + base64url(payload)),
-    privateKey (EC)
-)
 
-// Signature is DER-encoded by default, but JWT uses raw R||S format
-```
-
-Java implementation:
+Java ECDSA implementation with DER-to-raw conversion (Java returns DER-encoded signatures, but JWT expects raw R||S format):
 
 ```java
 public class EcdsaSigner {
@@ -288,7 +355,7 @@ public class EcdsaSigner {
 }
 ```
 
-**Security characteristics**:
+**Security characteristics:**
 - Much smaller signatures than RSA (64 bytes for P-256 vs 256 bytes for 2048-bit RSA)
 - Equivalent security to RSA with smaller key sizes
 - More complex to implement correctly (nonce generation is critical)
@@ -310,7 +377,7 @@ public class EcdsaSigner {
 
 ## Complete Token Validation Pipeline
 
-A robust JWT validator performs these checks in order:
+A robust JWT validator performs these checks in order, each catching different attack vectors:
 
 ```java
 @Component
@@ -541,7 +608,7 @@ Each validation step catches different attacks:
 
 ## Algorithm Confusion Attack
 
-The most dangerous JWT vulnerability occurs when an attacker changes the algorithm from RS256 to HS256. Since HS256 uses the same key for signing and verification:
+The most dangerous JWT vulnerability occurs when an attacker changes the algorithm from RS256 to HS256. Since HS256 uses the same key for signing and verification, if the server's public key is used as the HMAC secret, the attacker can forge tokens:
 
 ```java
 // VULNERABLE: Using the same object for both key types
@@ -579,6 +646,8 @@ public JwtDecoder jwtDecoder() {
 JWT revocation is inherently difficult. Implement one of these patterns:
 
 ### Strategy 1: Short-Lived Tokens with Refresh Token Rotation
+
+Access tokens live only 15 minutes. Refresh tokens last 7 days but are stored server-side (hashed) and can be revoked. Each rotation invalidates the previous refresh token — if a stolen token is reused, the system detects the theft and revokes all tokens for that user:
 
 ```java
 public class TokenRotationService {
@@ -639,6 +708,8 @@ public class TokenRotationService {
 
 ### Strategy 2: Token Blocklist
 
+A Redis-backed blocklist stores revoked JWT IDs (jti) until the token's original expiration. The TTL ensures automatic cleanup — once the token would have expired anyway, the blocklist entry is removed:
+
 ```java
 @Component
 public class JwtBlocklist {
@@ -682,6 +753,8 @@ public class JwtBlocklist {
 
 ### Mistake 1: Accepting Algorithm "none"
 
+If the validator does not explicitly reject `alg: none`, an attacker can remove the signature and set an empty signature string:
+
 ```java
 // WRONG: Vulnerable to alg:none attack
 String[] parts = token.split("\\.");
@@ -699,6 +772,8 @@ Jwt jwt = Jwts.parserBuilder()
 
 ### Mistake 2: Using Wrong Key Type for Algorithm
 
+Using an RSA public key's raw bytes as an HMAC secret enables the algorithm confusion attack:
+
 ```java
 // WRONG: Using public key bytes as HMAC secret
 byte[] publicKeyBytes = publicKey.getEncoded();
@@ -711,6 +786,8 @@ NimbusJwtDecoder decoder = NimbusJwtDecoder.withPublicKey(publicKey)
 ```
 
 ### Mistake 3: Not Validating Token Before Claims Extraction
+
+Using the unsigned JWT parser (`parseClaimsJwt`) instead of the signed parser (`parseClaimsJws`) skips signature verification:
 
 ```java
 // WRONG: Parsing without validation

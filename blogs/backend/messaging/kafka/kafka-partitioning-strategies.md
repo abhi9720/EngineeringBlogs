@@ -18,7 +18,7 @@ Partitioning is the core mechanism that enables Kafka's scalability and parallel
 
 ## Default Partitioning Behavior
 
-When a producer sends a record with a key, Kafka uses the default partitioner which computes `hash(key) % numPartitions`. Records with the same key always go to the same partition, preserving order per key.
+When a producer sends a record with a key, Kafka uses the default partitioner which computes `hash(key) % numPartitions`. Records with the same key always go to the same partition, preserving order per key. This is critical for event-sourced systems where all events for a given entity (identified by key) must be processed in order. The key to use should be the entity's natural identifier (user ID, order ID, etc.), not a random or timestamp value.
 
 ```java
 // Key-based partitioning preserves order for same key
@@ -29,7 +29,7 @@ When no key is provided (null key), the default partitioner uses a round-robin s
 
 ## Sticky Partitioner (Kafka 2.4+)
 
-The sticky partitioner batches records to the same partition before switching, improving throughput by reducing the number of batches.
+The sticky partitioner batches records to the same partition before switching, improving throughput by reducing the number of batches. In the round-robin approach, each record was sent to a different partition, resulting in many small, inefficient batches. The sticky partitioner sends multiple records to the same partition (while it's available), achieving larger batch sizes and better compression. The `linger.ms` and `batch.size` settings control how long the producer waits to fill a batch before sending.
 
 ```java
 Properties props = new Properties();
@@ -43,7 +43,7 @@ props.put(ProducerConfig.BATCH_SIZE_CONFIG, "65536");
 
 ## Custom Partitioner
 
-Implement the `Partitioner` interface to define custom partitioning logic based on business rules.
+Implement the `Partitioner` interface to define custom partitioning logic based on business rules. This is useful when the default hash-based partitioning doesn't match your requirements — for example, routing all VIP orders to a dedicated partition for priority processing, or partitioning by geographic region to optimize latency. The `UserRegionPartitioner` below maps US and EU regions to specific partitions, ensuring that all messages for a region land in the same partition for regional processing.
 
 ```java
 public class UserRegionPartitioner implements Partitioner {
@@ -91,6 +91,8 @@ props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, UserRegionPartitioner.class.g
 
 ### Custom Partitioner with Spring Boot
 
+The `OrderPartitioner` demonstrates a more complex business rule: VIP orders (key starting with "VIP-") go to partition 0 for priority processing, 20% of non-VIP traffic is distributed across a dedicated range, and the remaining 80% goes to the rest. This ensures critical customers always get dedicated resources while balancing load across the cluster.
+
 ```java
 @Component
 public class OrderPartitioner implements Partitioner {
@@ -123,7 +125,7 @@ public class OrderPartitioner implements Partitioner {
 
 ## Choosing Partition Count
 
-Partition count affects parallelism, throughput, and rebalance time. Follow these guidelines:
+Partition count affects parallelism, throughput, and rebalance time. Follow these guidelines: each partition can handle roughly 10 MB/s with default configurations. The partition count should be at least as large as the maximum number of concurrent consumers you plan to run, and leave headroom for future growth. Keep in mind that more partitions increase the overhead of leader elections, file handles, and rebalance time — there's a sweet spot between parallelism and overhead.
 
 ```java
 public class PartitionCountCalculator {
@@ -155,6 +157,8 @@ public class PartitionCountCalculator {
 
 ### Mistake: Hot spotting due to poor key design
 
+Using `System.currentTimeMillis()` as a key causes all records to hash to the same partition — specifically the last partition — because monotonically increasing values produce a narrow range of hash values. This creates a hot spot where one partition handles all traffic while others sit idle, defeating the purpose of partitioning.
+
 ```java
 // Wrong - all records go to last partition
 String key = String.valueOf(System.currentTimeMillis());
@@ -168,6 +172,8 @@ producer.send(new ProducerRecord<>("logs", key, logLine));
 ```
 
 ### Mistake: Too few partitions limiting consumer parallelism
+
+If a topic has only 3 partitions, you can have at most 3 consumers processing it in parallel — adding a 4th consumer would leave it idle. Plan for future growth by starting with more partitions than you currently need. Kafka allows adding partitions later, but reducing them is not supported.
 
 ```java
 // Wrong - cannot scale consumers beyond 3

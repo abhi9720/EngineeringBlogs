@@ -18,6 +18,8 @@ Go's concurrency model is based on Communicating Sequential Processes (CSP). Gor
 
 ## Goroutines
 
+Goroutines are the foundation of concurrency in Go. Unlike OS threads, goroutines are multiplexed onto a small number of kernel threads by Go's runtime scheduler. They start with a tiny stack (a few KB) that grows and shrinks as needed, enabling you to launch thousands or even millions of goroutines without exhausting system resources.
+
 ### Basic Goroutines
 
 ```go
@@ -46,6 +48,8 @@ func main() {
 }
 ```
 
+Using `time.Sleep` to wait for goroutines is fragile and non-deterministic. The `sync.WaitGroup` provides proper synchronization: `wg.Add(n)` increments the counter before launching goroutines, each goroutine calls `wg.Done()` (typically via `defer`) when it finishes, and `wg.Wait()` blocks the main goroutine until all workers complete. Always pass the counter increment before the goroutine launch to avoid race conditions.
+
 ### WaitGroup
 
 ```go
@@ -66,6 +70,8 @@ func main() {
 ```
 
 ## Channels
+
+Channels are Go's mechanism for communication between goroutines. The fundamental principle from CSP (Communicating Sequential Processes) is: "Do not communicate by sharing memory; instead, share memory by communicating." Unbuffered channels synchronize both sender and receiver — a send blocks until a receive occurs, and vice versa. Buffered channels decouple sender and receiver up to the buffer capacity.
 
 ### Basic Channel Operations
 
@@ -96,6 +102,8 @@ func main() {
 }
 ```
 
+Channel directions (`chan<-` for send-only, `<-chan` for receive-only) are a compile-time type safety feature. They prevent accidental misuse — a function that should only send to a channel cannot accidentally read from it. This constraint is enforced by the Go compiler, catching entire classes of concurrency bugs before they manifest at runtime.
+
 ### Channel Direction
 
 ```go
@@ -124,6 +132,8 @@ func main() {
 
 ## Select Statement
 
+The `select` statement is Go's multiplexing primitive for channels. It lets a goroutine wait on multiple channel operations simultaneously, blocking until one of its cases can proceed. Combined with `time.After`, it provides a clean way to implement timeouts without external libraries. The `default` case makes the entire statement non-blocking, enabling the "try-without-blocking" pattern.
+
 ```go
 func main() {
     ch1 := make(chan string)
@@ -149,6 +159,8 @@ func main() {
     }
 }
 ```
+
+Non-blocking channel operations use `select` with a `default` case. This pattern is useful when you want to attempt a send or receive without stalling the goroutine. The trade-off is that without blocking, you lose the natural back-pressure that unbuffered channels provide. Use this pattern deliberately, typically in monitoring or health-check code paths.
 
 ### Non-Blocking Operations
 
@@ -184,6 +196,8 @@ func main() {
 ```
 
 ## Worker Pool Pattern
+
+The worker pool pattern limits concurrency by bounding the number of goroutines processing jobs. This prevents resource exhaustion while maximizing throughput. The pattern uses two channels: `jobs` for distributing work and `results` for collecting outputs. Closing the `jobs` channel signals workers to exit, and a separate goroutine waits for all workers to finish before closing the `results` channel — completing the ownership chain.
 
 ```go
 type Job struct {
@@ -253,6 +267,8 @@ func main() {
 
 ## Pipeline Pattern
 
+The pipeline pattern composes multiple stages connected by channels. Each stage takes an input channel, processes data, and returns an output channel. This functional composition makes pipelines testable — each stage can be tested in isolation. A key design rule: responsibility for closing a channel lies with the sender, not the receiver. Breaking this rule causes panics or deadlocks.
+
 ```go
 func generate(nums ...int) <-chan int {
     out := make(chan int)
@@ -300,6 +316,8 @@ func main() {
 ```
 
 ## Fan-Out / Fan-In
+
+Fan-out distributes work across multiple goroutines, while fan-in merges multiple result channels into one. This pattern is useful when a stage in your pipeline is compute-bound and benefits from parallel execution. Fan-out creates N goroutines that all read from the same input channel, while fan-in uses a `sync.WaitGroup` to coordinate merging multiple output channels into a single channel.
 
 ```go
 func fanOut(in <-chan int, workers int) []<-chan int {
@@ -359,6 +377,8 @@ func main() {
 
 ## Context Propagation
 
+The `context.Context` type carries cancellation signals, deadlines, and request-scoped values across API boundaries. In concurrent Go programs, context is the idiomatic way to propagate cancellation from top-level handlers down through goroutine trees. The `select` pattern with `ctx.Done()` allows goroutines to respond to cancellation promptly, preventing resource leaks in long-running operations.
+
 ```go
 func operation(ctx context.Context, duration time.Duration) error {
     select {
@@ -391,6 +411,8 @@ func main() {
 ```
 
 ## Testing Concurrency
+
+Testing concurrent code requires controlling goroutine execution. The approach here avoids real parallelism by using buffered channels and predictable job counts. For worker pools, send a fixed number of jobs, collect the same number of results, and verify invariants. For pipelines, trace the transformation chain and assert on the final output. Use `go test -race` to detect data races.
 
 ```go
 func TestWorkerPool(t *testing.T) {

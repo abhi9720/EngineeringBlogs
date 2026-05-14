@@ -24,6 +24,8 @@ Data versioning manages changes to data schemas and structures over time. As app
 
 ### Database Schema Versions
 
+Schema versioning is the most fundamental form of data versioning. Each migration script represents a new version of the database schema. The key principle is to make additive changes (nullable columns, new tables) whenever possible. The example below shows a gradual evolution of a `users` table—starting with basic fields, adding a phone number, then address fields, and finally splitting a single `name` column into `first_name` and `last_name`. The split is a breaking change that requires a data backfill, which is handled in V4 with an `UPDATE` statement.
+
 ```sql
 -- V1: Initial schema
 CREATE TABLE users (
@@ -60,6 +62,8 @@ ALTER TABLE users ALTER COLUMN name DROP NOT NULL;
 
 ### Additive Changes (Safe)
 
+The safest versioning strategy is adding new optional fields. Old clients that do not know about the new fields can still read and write the existing columns without any code changes. In the entity below, `description`, `tags`, and `featured` were added after the initial release—they are all nullable or have defaults, so existing data remains valid and existing queries continue to work.
+
 ```java
 // Adding new optional fields is always backward compatible
 @Entity
@@ -83,6 +87,8 @@ public class Product {
 ```
 
 ### Read-Only Old Fields
+
+When you must rename or restructure a field, keep the old field around in a read-only or synchronized capacity. The pattern below retains the legacy `name` field while adding `firstName` and `lastName`. The `getName()` getter provides backward compatibility by returning the old field if it still exists, or composing from the new fields. The `@PreUpdate` and `@PrePersist` hooks keep the old field in sync so that legacy consumers still see the correct value.
 
 ```java
 @Entity
@@ -126,6 +132,8 @@ public class User {
 ## Data Migration Patterns
 
 ### Versioned Documents
+
+In document databases or even in relational databases with JSON columns, including a `schemaVersion` field in every document enables granular migration at read time. When a document is loaded from the database, the `@PostLoad` callback checks the version and applies migration logic incrementally. This approach is particularly useful for NoSQL databases where schema is not enforced at the database level.
 
 ```java
 // Document with version marker
@@ -175,6 +183,8 @@ public class ProductDocument {
 ```
 
 ### Background Migration Job
+
+For large datasets, running migrations synchronously at read time is impractical. A background job processes records in batches, updating the schema version as it goes. The scheduled service below runs daily, pages through unmigrated records, and applies the migration logic. Batching with `Pageable` prevents memory exhaustion and allows the job to be resumed if it is interrupted.
 
 ```java
 @Service
@@ -229,6 +239,8 @@ public class DataMigrationService {
 ## API Versioning for Data
 
 ### Response Versioning
+
+Data versioning is not limited to the database—it also affects the API contract. Serving different response versions based on the `Accept` header allows you to evolve the data model without breaking existing clients. V1 returns the minimal set of fields (id, name, email), while V2 adds phone and address. Both versions read from the same underlying database model but project different subsets of data. This pattern is essential for public APIs with external consumers that upgrade at their own pace.
 
 ```java
 @RestController
@@ -294,6 +306,8 @@ class UserV2 {
 ## Event Versioning
 
 ### Versioned Events
+
+In event-driven architectures, events are stored permanently and cannot be changed retroactively. When the schema of an event changes, you must preserve the ability to read old events. The pattern below uses a base class with an `eventVersion` field, separate event classes for each version, and an upcaster that converts old-format events to the current version during replay.
 
 ```java
 // Base event with version
@@ -397,6 +411,8 @@ public class EventUpcaster {
 9. **Test migration scenarios**: Test with production-like data
 10. **Plan for rollback**: Every migration must be reversible
 
+Monitoring migration progress is critical for large-scale data migrations. The scheduled check below logs the number of migrated versus pending records and warns when the backlog exceeds a threshold, allowing the team to intervene before the migration lag impacts operations.
+
 ```java
 // Migration health monitoring
 @Component
@@ -426,6 +442,8 @@ public class MigrationMonitor {
 
 ### Mistake 1: Breaking Changes Without Migration
 
+Removing a column that old code still references causes immediate production failures. Always follow the three-phase pattern: add the new column (expand), backfill data (migrate), then remove the old column (contract) only after all consumers have been updated.
+
 ```sql
 -- WRONG: Removing column without migration
 ALTER TABLE users DROP COLUMN name;
@@ -438,6 +456,8 @@ ALTER TABLE users DROP COLUMN name;
 ```
 
 ### Mistake 2: Not Versioning Schema Metadata
+
+Without an explicit schema version marker, you cannot distinguish between records that have been migrated and those that have not. This makes it impossible to safely add migration logic or to know which fields are available in each record.
 
 ```java
 // WRONG: No schema version - don't know document format
@@ -454,6 +474,8 @@ public class Product {
 ```
 
 ### Mistake 3: Ignoring Downstream Consumers
+
+Changing the schema of an event or API response without notifying consumers breaks their code. When you need to add or change fields, create a new version of the event or response and let consumers migrate on their own schedule.
 
 ```java
 // WRONG: Changing event schema without notifying consumers

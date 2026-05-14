@@ -22,7 +22,11 @@ WebSocket provides full-duplex communication over a single TCP connection after 
 
 ## WebSocket Protocol
 
+The WebSocket protocol begins with an HTTP upgrade handshake, then transitions to a persistent, full-duplex TCP connection. The handshake uses standard HTTP headers to negotiate the protocol upgrade. Once established, data is exchanged in frames rather than HTTP request-response pairs, eliminating HTTP overhead for each message. The protocol supports both text and binary frames, has built-in framing for message boundaries, and provides extensions for compression and multiplexing.
+
 ### Handshake
+
+The handshake starts with the client sending an HTTP GET request with the `Upgrade: websocket` and `Connection: Upgrade` headers. The `Sec-WebSocket-Key` is a random 16-byte value encoded in Base64 — the server concatenates this with a fixed GUID, computes a SHA-1 hash, and returns it as `Sec-WebSocket-Accept`. This proves that the server understands the WebSocket protocol. The client must validate this response to ensure the connection is legitimate. After the handshake (HTTP 101 Switching Protocols), both sides can send data at any time.
 
 ```java
 // Client sends HTTP upgrade request
@@ -63,7 +67,11 @@ Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
 
 ## Spring WebSocket Server
 
+Spring's WebSocket support provides a comprehensive framework for building WebSocket-based applications. The core components are the `WebSocketHandler` (processes incoming messages and connection events), the `HandshakeInterceptor` (intercepts the HTTP upgrade handshake for authentication and preprocessing), and the WebSocket configuration (registers handlers and configures endpoints). Spring also supports STOMP — a higher-level messaging protocol built on top of WebSocket that provides topic-based pub/sub messaging.
+
 ### WebSocket Handler
+
+The `ChatWebSocketHandler` extends `TextWebSocketHandler` and overrides lifecycle methods. `afterConnectionEstablished` is called when a client connects — authenticate, join a room, and send an acknowledgment. `handleTextMessage` processes incoming messages — parse JSON, dispatch by message type (chat message, typing indicator, ping). `afterConnectionClosed` cleans up when a client disconnects — remove from session map, leave the room. `handleTransportError` handles unexpected connection errors. The handler manages session lifecycle carefully: authenticate before allowing operations, validate message format, and clean up resources on disconnect.
 
 ```java
 @Component
@@ -226,6 +234,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     }
 }
 ```
+
+WebSocket configuration registers handlers at specific URL paths and configures interceptors for preprocessing. The `registerWebSocketHandlers` method maps the handler to a path and configures allowed origins for CORS protection. The `HandshakeInterceptor` runs before the WebSocket handshake completes, allowing you to validate authentication tokens, check origin headers, and reject unauthorized connections before the WebSocket connection is established. The `withSockJS()` enables SockJS fallback — a protocol that emulates WebSocket for browsers that don't support it natively.
 
 ### WebSocket Configuration
 

@@ -22,7 +22,11 @@ gRPC is a high-performance, language-agnostic RPC framework developed by Google.
 
 ## Protocol Buffers
 
+gRPC uses Protocol Buffers (protobuf) as its Interface Definition Language (IDL) and serialization format. The `.proto` file defines both the service interface (RPC methods) and the message structures. Protobuf's binary encoding is significantly smaller and faster than JSON, making gRPC ideal for high-performance, bandwidth-constrained, or polyglot environments. The `proto3` syntax is the current standard, providing a simpler field presence model and broader language support.
+
 ### Defining Services and Messages
+
+The `.proto` file starts with the `syntax = "proto3"` declaration and defines a package for namespace management. The `service` block declares the RPC methods and their request/response types. Each message defines fields with a name, type, and unique field number. Field numbers (1-15) use 1 byte in the wire format, while 16-2047 use 2 bytes — assign lower numbers to frequently-populated fields for optimal encoding size. The `option java_multiple_files = true` generates separate Java classes for each message rather than a single outer class, which improves code organization and import clarity.
 
 ```protobuf
 syntax = "proto3";
@@ -112,7 +116,11 @@ message DeleteUserResponse {
 
 ## Server Implementation
 
+A gRPC server implements the service interface generated from the `.proto` file. Each RPC method receives a request object and a `StreamObserver` for sending the response. The server must handle business logic, error conditions, and resource management for each RPC call. Error handling uses gRPC's built-in status codes (`NOT_FOUND`, `INVALID_ARGUMENT`, `INTERNAL`) which correspond to semantic HTTP status codes, providing consistent error signaling across language boundaries.
+
 ### gRPC Service Implementation
+
+The `UserGrpcService` extends the generated `UserServiceGrpc.UserServiceImplBase` class and overrides each RPC method. Each method receives the request object and a `StreamObserver` for sending responses. The pattern is always: process the request, call `responseObserver.onNext()` with the response, then `responseObserver.onCompleted()` to signal completion. For errors, call `responseObserver.onError()` with a `StatusRuntimeException` that includes the appropriate gRPC status code and description. Note the mapping between domain entities and protobuf messages — the `buildUserProto` method converts between the two representations, handling nullable fields and nested message construction.
 
 ```java
 @GrpcService
@@ -237,6 +245,8 @@ public class UserGrpcService extends UserServiceGrpc.UserServiceImplBase {
 }
 ```
 
+The gRPC server configuration builds and starts a `Server` instance that listens on a TCP port (typically 9090 for gRPC). Multiple services can be added to the same server, sharing the port and transport. Interceptors are added for cross-cutting concerns — logging, authentication, metrics — and apply to all services on the server. The executor configuration controls the thread pool for handling incoming requests; tune this based on your expected concurrency and whether your service implementations are blocking or non-blocking.
+
 ### gRPC Server Configuration
 
 ```java
@@ -291,7 +301,11 @@ public class GrpcServerManager {
 
 ## Client Implementation
 
+A gRPC client creates a channel to the server and uses generated stub classes to make RPC calls. gRPC provides three types of stubs: blocking (synchronous, waits for response), future (returns `CompletableFuture` for async composition), and reactive (based on reactive streams). The channel manages HTTP/2 connections, load balancing, and connection pooling. Client configuration includes timeouts, keepalive settings, and retry policies — critical for production reliability.
+
 ### gRPC Client
+
+The `UserGrpcClient` creates a `ManagedChannel` to connect to the gRPC server. Key configuration options include: `usePlaintext()` for development (production requires TLS), `keepAliveTime` for detecting dead connections, `keepAliveTimeout` for how long to wait for keepalive responses, and `maxRetryAttempts` for automatic retry on transient failures. The blocking stub makes synchronous calls that block until the response arrives or a deadline is exceeded. The future stub enables async patterns with `CompletableFuture` composition. Error handling checks specific `Status.Code` values to provide domain-appropriate exceptions rather than generic gRPC errors.
 
 ```java
 @Component
@@ -370,7 +384,11 @@ public class UserGrpcClient {
 
 ## Interceptors
 
+gRPC interceptors provide a powerful mechanism for adding cross-cutting functionality to all RPC calls without modifying individual service implementations. Server interceptors wrap every incoming RPC call, enabling authentication, logging, metrics collection, request validation, and rate limiting. Client interceptors wrap outgoing calls for tracing, retry logic, and client-side load balancing. Interceptors are composed in a chain, with each interceptor having the opportunity to process the request, modify headers, or short-circuit the call.
+
 ### Client and Server Interceptors
+
+The `GrpcLoggingInterceptor` demonstrates the interceptor pattern: it wraps the incoming call, logs the method name and status, and delegates to the next handler. The `ForwardingServerCall.SimpleForwardingServerCall` wraps the original call to intercept lifecycle events like `close()`. The `GrpcAuthInterceptor` extracts and validates JWT tokens from request metadata before allowing the call to proceed — if authentication fails, it closes the call with `UNAUTHENTICATED` status and returns an empty listener, preventing the request from reaching the service implementation.
 
 ```java
 @Component
@@ -446,6 +464,8 @@ public class GrpcAuthInterceptor implements ServerInterceptor {
 ---
 
 ## Best Practices
+
+gRPC's performance and productivity benefits are maximized when following established patterns for service design, error handling, client configuration, and production operations. The following practices are distilled from running gRPC in production at scale.
 
 1. **Use Protocol Buffers v3**: Clean, strongly-typed schema
 2. **Design for streaming**: Use streaming RPCs for large datasets

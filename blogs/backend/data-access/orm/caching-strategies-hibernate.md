@@ -24,6 +24,8 @@ Hibernate provides a multi-level caching architecture to reduce database load an
 
 ### How L1 Cache Works
 
+The first-level cache is the persistence context itself—every `EntityManager` has one, and it cannot be disabled. When `entityManager.find(Product.class, 1L)` is called, Hibernate first checks the persistence context (L1 cache). If the entity is already there, no SQL is executed. This provides the "identity map" guarantee: two calls to `find()` for the same ID return the same Java object instance. The L1 cache also enables automatic dirty checking—modifications to managed entities are detected during `flush()` and translated into SQL `UPDATE` statements automatically.
+
 ```java
 @Service
 public class FirstLevelCacheDemo {
@@ -87,6 +89,8 @@ public class FirstLevelCacheDemo {
 
 ### L1 Cache Best Practices
 
+A common performance pattern is to periodically `flush()` and `clear()` the persistence context during batch operations. Each managed entity in the L1 cache consumes heap memory, and the dirty checking cost grows linearly with the number of managed entities. Flushing pushes pending changes to the database and clearing detaches all entities, freeing memory for the next batch.
+
 ```java
 // L1 cache scope: Session/EntityManager
 // - EntityManager.find() checks L1 first
@@ -119,6 +123,8 @@ public void efficientBatchProcessing() {
 ## Second-Level Cache (L2 Cache)
 
 ### Configuration with Ehcache
+
+The L2 cache is shared across sessions (`SessionFactory`-scoped). Configuring it requires a cache provider (Ehcache, Redis, Hazelcast) and per-entity cache settings. The configuration below sets up Ehcache via JCache (JSR-107). The `ehcache.xml` defines region configurations: the `products` region has a 30-minute TTL with 1000 heap entries and 50MB of off-heap storage. The `com.example.entity.Product` region uses the fully qualified class name and has a 60-minute TTL.
 
 ```java
 @Configuration
@@ -173,6 +179,8 @@ public class L2CacheConfig {
 
 ### Entity Caching
 
+Entities marked with `@Cacheable` participate in the L2 cache. The `@Cache` annotation specifies the concurrency strategy. **READ_ONLY** is the most performant—it skips locking entirely but only works for immutable entities (reference data like countries, status codes). **READ_WRITE** uses soft locks for frequently read, occasionally updated entities. **NONSTRICT_READ_WRITE** uses a relaxed locking scheme with lower overhead but higher risk of stale reads. **TRANSACTIONAL** provides full transaction isolation but requires JTA.
+
 ```java
 @Entity
 @Cacheable  // Enable L2 caching for this entity
@@ -221,6 +229,8 @@ public class Product {
 ```
 
 ### L2 Cache Monitoring
+
+The `SessionFactory.getStatistics()` API provides detailed L2 cache metrics, including hit count, miss count, and per-region statistics. The hit ratio (`hits / (hits + misses)`) is the key performance indicator—a ratio above 80% indicates effective caching. Low hit ratios suggest that the cache is too small, the TTL is too short, or the cached data is not frequently accessed.
 
 ```java
 @Service
@@ -274,6 +284,8 @@ public class L2CacheMonitor {
 ## Query Cache
 
 ### Configuring Query Cache
+
+The query cache stores the results of JPQL/HQL queries. Unlike the entity cache, which stores individual entities by ID, the query cache stores sets of entity IDs that match a given query. This means the query cache is only effective when the entities themselves are also cached in the L2 cache. The query cache is invalidated whenever any entity in the result set is modified, so it works best for read-mostly, stable data.
 
 ```java
 @Service
@@ -332,6 +344,8 @@ public class QueryCacheDemo {
 ## Redis as L2 Cache
 
 ### Redis Cache Region Factory
+
+For distributed applications, a Redis-backed L2 cache provides a shared cache across all application instances. The custom `RedisRegionFactory` below creates per-region caches in Redis, each with its own TTL. Reference data (countries, status codes) might have a 24-hour TTL, while product data might have a 30-minute TTL. Using Redis as the L2 cache eliminates the cache inconsistency problem that arises when each application instance has its own local Ehcache.
 
 ```java
 @Configuration
@@ -409,6 +423,8 @@ public class RedisRegionFactory implements RegionFactory {
 9. **Warm cache on application startup**: Load reference data
 10. **Evict cache on data changes**: Manual eviction when needed
 
+When data is updated outside of Hibernate (direct SQL, batch jobs, another application), the L2 cache becomes stale. The cache eviction service below provides entity-level, region-level, and full cache eviction through Hibernate's `Cache` API.
+
 ```java
 // Manual cache eviction
 @Service
@@ -446,6 +462,8 @@ public class CacheEvictionService {
 
 ### Mistake 1: Caching Everything
 
+Not all entities benefit from caching. Entities that are frequently updated (like orders, inventory counts) cause constant cache invalidation, which creates overhead without any benefit. Cache only read-mostly data.
+
 ```java
 // WRONG: Caching frequently updated entities
 @Entity
@@ -460,6 +478,8 @@ public class Order {
 
 ### Mistake 2: Query Cache Without L2 Entity Cache
 
+The query cache stores only entity IDs. When a query result is served from the query cache, Hibernate still needs to load each entity by ID—which hits the L2 cache. If the entities are not in L2, every query cache hit triggers N individual database selects, defeating the purpose.
+
 ```java
 // WRONG: Query cache enabled but entities not cached
 // Query cache stores only entity IDs
@@ -469,6 +489,8 @@ public class Order {
 ```
 
 ### Mistake 3: Ignoring Cache Invalidation
+
+Direct database updates bypass Hibernate's cache. If a JDBC batch job updates product prices, the L2 cache still contains the old values. Always evict the affected cache regions after out-of-band updates.
 
 ```java
 // WRONG: Direct database updates bypass cache

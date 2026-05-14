@@ -18,23 +18,26 @@ There are two implementation approaches: choreography (event-driven) and orchest
 
 In orchestration, a saga orchestrator tells each service what to do. The orchestrator tracks the saga state and coordinates the flow, including compensations.
 
+```mermaid
+graph TD
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    O[Order Saga Orchestrator] --> I[Inventory Service<br/>Reserve Items]
+    I -->|success| P[Payment Service<br/>Charge Customer]
+    I -->|failure| CN[Compensate<br/>None needed]
+    P -->|success| S[Shipping Service<br/>Create Shipment]
+    P -->|failure| CI[Compensate<br/>Release Inventory]
+    S -->|success| N[Notification Service<br/>Send Confirmation]
+    S -->|failure| CP[Compensate<br/>Refund Payment<br/>Release Inventory]
+    class O green
+    class I,P,S,N blue
+    class CN,CI,CP pink
 ```
-Order Saga Orchestrator
-    |
-    |--> Inventory Service: Reserve Items
-    |       |--> success: continue
-    |       |--> failure: compensate (none needed yet)
-    |
-    |--> Payment Service: Charge Customer
-    |       |--> success: continue
-    |       |--> failure: compensate (release inventory)
-    |
-    |--> Shipping Service: Create Shipment
-    |       |--> success: continue
-    |       |--> failure: compensate (refund payment, release inventory)
-    |
-    |--> Notification Service: Send Confirmation
-```
+
+The orchestrator coordinates a sequence of steps. Each step has a forward action and a compensating action. If any step fails, the orchestrator invokes compensations for all previously completed steps in reverse order. Note that the inventory reservation needs no compensation on its own failure — nothing was committed.
 
 ## Saga Orchestrator Implementation
 
@@ -181,6 +184,8 @@ public class OrderSagaOrchestrator {
 }
 ```
 
+The orchestrator tracks each step by recording it in the saga state. The `compensate` method knows which compensations to run based on which step failed. For example, if shipment creation fails, it must refund the payment AND release the inventory. The compensation methods are wrapped in individual try-catch blocks — compensation failures are logged but do not prevent other compensations from running.
+
 ## Saga State Model
 
 Persisting saga state enables recovery from failures and provides visibility:
@@ -251,6 +256,8 @@ public enum SagaStep {
 
 public interface SagaStateRepository extends JpaRepository<SagaState, String> {}
 ```
+
+The saga state entity persists the current status and completed steps. The `@Version` field enables optimistic locking, preventing concurrent modification of the saga state. The status lifecycle is: STARTED → COMPLETED (success) or STARTED → COMPENSATING → COMPENSATED (failure) or STARTED → FAILED (if no compensation is possible).
 
 ## Asynchronous Orchestration
 
@@ -323,6 +330,8 @@ public class AsyncOrderSagaOrchestrator {
 }
 ```
 
+The asynchronous orchestrator sends messages to RabbitMQ instead of making direct HTTP calls. Each step handler receives the response on a dedicated queue and either advances to the next step or triggers compensation. This decouples the orchestrator from the participating services by time and space — if a service is down, the message waits in the queue and is delivered when the service recovers.
+
 ## Idempotency in Saga Steps
 
 Each step must be idempotent to handle retries safely:
@@ -376,6 +385,8 @@ public class InventoryServiceSagaParticipant {
     }
 }
 ```
+
+Idempotency is achieved by checking if the operation was already performed before proceeding. The `existsByOrderId` check ensures that duplicate reserve messages don't cause double reservations. Compensation (release) is also idempotent — if no reservation exists, the release is a no-op.
 
 ## Testing Sagas
 
@@ -435,6 +446,8 @@ class OrderSagaOrchestratorTest {
     }
 }
 ```
+
+Testing validates the full saga lifecycle. The success test verifies all steps complete and the saga reaches COMPLETED status. The failure test mocks a payment exception and verifies that the inventory is released (compensation) but payment refund is never called (because payment never succeeded).
 
 ## Common Mistakes
 

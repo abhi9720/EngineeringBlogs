@@ -18,25 +18,35 @@ The saga pattern manages distributed transactions across microservices through a
 
 ## Saga Flow Example: Order Processing
 
-An order saga involves Order Service, Payment Service, Inventory Service, and Shipping Service working together.
+An order saga involves Order Service, Payment Service, Inventory Service, and Shipping Service working together. The flow below shows how events cascade through the services: Order Service creates a pending order and emits `ORDER_CREATED`, which triggers Payment Service to reserve payment and emit `PAYMENT_RESERVED`, and so on. If any step fails, compensation events roll back the preceding steps.
 
-```
-Order Service: Create order (PENDING) -> emit ORDER_CREATED
-    |
-    v
-Payment Service: Reserve payment -> emit PAYMENT_RESERVED
-    |
-    v
-Inventory Service: Reserve inventory -> emit INVENTORY_RESERVED
-    |
-    v
-Shipping Service: Create shipment -> emit SHIPMENT_CREATED
-    |
-    v
-Order Service: Update order to CONFIRMED
+```mermaid
+flowchart TB
+    OS1[Order Service] -->|ORDER_CREATED| PS[Payment Service]
+    PS -->|PAYMENT_RESERVED| IS[Inventory Service]
+    IS -->|INVENTORY_RESERVED| SS[Shipping Service]
+    SS -->|SHIPMENT_CREATED| OS2[Order Service]
+
+    OS1 -.- CreateOrder[Create order PENDING]
+    PS -.- ReservePayment[Reserve payment]
+    IS -.- ReserveInventory[Reserve inventory]
+    SS -.- CreateShipment[Create shipment]
+    OS2 -.- ConfirmOrder[Update order to CONFIRMED]
+
+    linkStyle default stroke:#278ea5
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+
+    class OS1,PS,IS,SS,OS2 blue
+    class CreateOrder,ReservePayment,ReserveInventory,CreateShipment,ConfirmOrder green
 ```
 
 ## Event Definitions
+
+Each event type represents a successful step in the saga. Events carry the `orderId` for correlation across services — every event related to the same order instance shares this ID. The `timestamp` field allows ordering and deduplication. Events are immutable: once emitted, they represent a fact that cannot be undone (the compensation mechanism handles rollback separately).
 
 ```java
 public class OrderCreatedEvent {
@@ -68,6 +78,8 @@ public class ShipmentCreatedEvent {
 ```
 
 ## Order Service
+
+The `OrderSagaService` initiates the saga by creating a pending order and publishing `OrderCreatedEvent`. It then listens for subsequent events to advance the order through its lifecycle. When it receives `PaymentReservedEvent`, it updates the order's payment ID and status. On `ShipmentCreatedEvent`, the order is marked CONFIRMED. If a `CompensationEvent` arrives (from any downstream service failure), the order is cancelled with the provided reason. The order service acts as both the saga initiator and the final status tracker.
 
 ```java
 @Component
@@ -131,6 +143,8 @@ public class OrderSagaService {
 
 ## Payment Service
 
+The `PaymentSagaService` listens for `ORDER_CREATED` events on the `order-events` topic. On receiving one, it reserves the payment amount and publishes `PAYMENT_RESERVED` to continue the saga. If payment fails (e.g., insufficient funds), it publishes a `CompensationEvent` with `step="payment"`, which triggers rollback of any preceding steps (in this case, just cancelling the order). It also listens for compensation events — if a later step fails, the payment service releases the reserved payment.
+
 ```java
 @Component
 public class PaymentSagaService {
@@ -181,6 +195,8 @@ public class PaymentSagaService {
 ```
 
 ## Inventory Service
+
+The `InventorySagaService` listens for `PAYMENT_RESERVED` events — it runs after payment succeeds but before shipping. It checks each item's available quantity against the order's requested quantity. If sufficient stock exists, it reserves the items (incrementing `reservedQuantity`) and publishes `INVENTORY_RESERVED`. On stock shortage, it emits a compensation event. The compensation listener releases reserved inventory if the saga fails at the shipping step or if a global rollback is triggered.
 
 ```java
 @Component
@@ -242,6 +258,8 @@ public class InventorySagaService {
 
 ## Shipping Service
 
+The `ShippingSagaService` listens for `INVENTORY_RESERVED` events — it's the final step in the forward saga flow. It creates a shipment record with a generated tracking ID and publishes `SHIPMENT_CREATED`, which causes Order Service to mark the order as CONFIRMED. If shipping creation fails (e.g., invalid address), it emits a compensation that cascades back through payment and inventory to roll back all preceding steps.
+
 ```java
 @Component
 public class ShippingSagaService {
@@ -287,6 +305,8 @@ public class ShippingSagaService {
 
 ## Compensation Event
 
+The `CompensationEvent` carries information needed for rollback. The `step` field identifies which step failed, allowing downstream services to decide whether they need to compensate. The `globalRollback` flag signals that all preceding services should roll back regardless of which step failed. The static factory method `globalRollback()` makes it easy to create a compensation that cascades through all services.
+
 ```java
 public class CompensationEvent {
     private String orderId;
@@ -322,6 +342,8 @@ public class CompensationEvent {
 
 ### Mistake: Not handling duplicate events
 
+In at-least-once delivery, the same event may arrive multiple times. If your saga service isn't idempotent, a duplicate `PAYMENT_RESERVED` event could process payment twice. Always check if the operation was already performed before executing, using a unique transaction ID or business key.
+
 ```java
 // Wrong - duplicate events cause double processing
 @KafkaListener(topics = "payment-events")
@@ -341,6 +363,8 @@ public void onPaymentReserved(PaymentReservedEvent event) {
 ```
 
 ### Mistake: Missing compensation for all saga steps
+
+If only the failed step is compensated but preceding successful steps aren't rolled back, the system ends up in an inconsistent state (e.g., payment was deducted but inventory was not reserved). The compensation event should cascade: each service listens for compensation events and rolls back its own work if its step was before the failure.
 
 ```java
 // Wrong - only compensates the failed step, not previous successful steps

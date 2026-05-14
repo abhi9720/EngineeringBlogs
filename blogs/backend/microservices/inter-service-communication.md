@@ -36,6 +36,8 @@ In microservices architecture, services must communicate with each other to fulf
 
 ### REST with Feign Client
 
+Feign provides a declarative approach to REST clients — define a Java interface with annotations and the implementation is generated at runtime. Under the hood, it integrates with Eureka for service discovery and Ribbon for load balancing, so the actual service address is resolved dynamically.
+
 ```java
 // Feign client declaration
 @FeignClient(name = "order-service", url = "${services.order.url}")
@@ -71,6 +73,8 @@ feign:
 ```
 
 ### gRPC Implementation
+
+gRPC uses Protocol Buffers for type-safe, language-agnostic service definitions. The `.proto` file defines both the message schemas and the RPC service contract. Code generation produces strongly-typed stubs for both server and client, eliminating runtime serialization mismatches common with REST/JSON.
 
 ```java
 // Define proto file
@@ -124,6 +128,8 @@ public Product getProduct(Long id) {
 ## Asynchronous Communication
 
 ### Message Queue with RabbitMQ
+
+Message queues decouple producers from consumers — the producer publishes an event and continues immediately, while the consumer processes it asynchronously. The dead-letter exchange (`orders.dlx`) captures messages that cannot be processed, preventing data loss and enabling later reprocessing.
 
 ```java
 // Configuration
@@ -190,6 +196,8 @@ public class OrderEventHandler {
 ```
 
 ### Event-Driven Architecture
+
+Event-driven communication goes beyond simple messaging — it treats state changes as first-class events. The Transactional Outbox pattern shown here ensures reliable event publication: the event is stored in the same database transaction as the business data, and a separate processor publishes it to Kafka. This guarantees at-least-once delivery without distributed transactions.
 
 ```java
 // Event publishing
@@ -263,6 +271,8 @@ public class OutboxProcessor {
 
 ### 1. Distributed Tracing
 
+Trace headers (`X-B3-*`) must be manually propagated when using custom clients or interceptors. The Feign `RequestInterceptor` shown here ensures every outgoing REST call carries the current span context, enabling end-to-end trace correlation across service boundaries.
+
 ```java
 // Add trace ID to all calls
 @Component
@@ -301,6 +311,8 @@ public class TracingConfig {
 
 ### 2. Error Handling
 
+Error handling in distributed systems requires discriminating between recoverable and non-recoverable failures. A `404 Not Found` is a genuine client error that should propagate, while a `503 Service Unavailable` suggests a transient issue where fallback data or retry is appropriate.
+
 ```java
 // Handle service failures gracefully
 @Service
@@ -331,6 +343,8 @@ public class ResilientService {
 ```
 
 ### 3. Timeouts and Retries
+
+Timeouts are the first line of defense against cascading failures. Each service interaction should have a connect timeout (how long to wait for TCP connection) and a read timeout (how long to wait for response data). Values should reflect the service's SLA — a critical payment endpoint may tolerate 5s, while a cache lookup should fail in 200ms.
 
 ```java
 // Configure timeouts per service
@@ -464,4 +478,4 @@ Always implement circuit breakers, timeouts, and proper error handling.
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

@@ -65,6 +65,8 @@ class DatabaseTestcontainersTest {
 }
 ```
 
+The key trade-off here is speed vs. accuracy. Testcontainers provides exact PostgreSQL behavior (right down to PostgreSQL-specific constraint violations), but the container startup takes 5–10 seconds on first use. Setting `ddl-auto` to `validate` is a deliberate choice—it ensures your JPA entity mappings match the actual schema, catching misalignments early.
+
 ---
 
 ## Strategy 2: H2 (Embedded, Compatible Mode)
@@ -110,6 +112,8 @@ class H2LimitationsTest {
     }
 }
 ```
+
+H2's PostgreSQL compatibility mode is a pragmatic choice for fast CI feedback when your queries are all JPQL/HQL. The moment you introduce native queries or PostgreSQL-specific features, H2 will silently pass in tests but fail in production. Use H2 as a fast pre-filter and Testcontainers as the definitive validation.
 
 ---
 
@@ -383,6 +387,8 @@ class TestDataBuilderUsageTest {
     }
 }
 ```
+
+The Test Data Builder pattern is preferred over raw SQL fixtures because it is type-safe, refactorable, and composable. Each builder method returns `this` for fluent chaining, defaults ensure tests express only what matters (not every field), and `build()` constructs the final object with validated state.
 
 ---
 

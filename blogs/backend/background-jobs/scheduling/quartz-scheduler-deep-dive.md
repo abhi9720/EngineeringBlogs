@@ -24,6 +24,8 @@ Unlike Spring's `@Scheduled` annotation, Quartz offers persistence (jobs survive
 
 ## Setup and Configuration
 
+The configuration above sets up a clustered, JDBC-backed Quartz scheduler. `instanceId=AUTO` ensures each node in the cluster gets a unique ID automatically, which is required for Quartz's cluster coordination protocol. `clusterCheckinInterval=20000` controls how often each instance reports its health — if an instance fails to check in within this interval, another instance acquires its jobs. `misfireThreshold=60000` defines how long Quartz waits after a missed fire time before considering the trigger misfired. The thread pool size (`threadCount=10`) determines how many jobs can run concurrently per scheduler instance — this is separate from the application's own thread pools and must be tuned for your workload.
+
 ```java
 @Configuration
 public class QuartzConfiguration {
@@ -124,6 +126,8 @@ public class DataExportJob extends QuartzJobBean {
 ```
 
 ### Job Detail and Trigger Registration
+
+`storeDurably()` is a critical call — it tells Quartz to persist the job definition even if it has no associated triggers. Without this, a job is automatically deleted once all its triggers complete. Jobs registered here are matched to triggers via the `forJob(name, group)` call, which references the job's identity. The separation between JobDetail (what to run) and Trigger (when to run) is one of Quartz's key design decisions — it allows multiple triggers to fire the same job with different schedules, and enables dynamic rescheduling without modifying the job definition.
 
 ```java
 @Component

@@ -24,22 +24,26 @@ Authentication strategies fall into two broad categories: session-based (statefu
 
 In session-based authentication, the server stores session state and issues a session identifier to the client:
 
-```
-Client                          Server
-  |                                |
-  |--- POST /login (credentials) ->|
-  |                                |-- Verify credentials
-  |                                |-- Create session in HttpSession/Redis
-  |<-- Set-Cookie: JSESSIONID=abc -|
-  |                                |
-  |--- GET /api/data (Cookie) ---->|
-  |                                |-- Look up session by ID
-  |                                |-- Load user from session
-  |                                |-- Authorize and respond
-  |<-- Response -------------------|
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant S as Server
+
+    C->>S: POST /login (credentials)
+    S->>S: Verify credentials
+    S->>S: Create session in HttpSession/Redis
+    S-->>C: Set-Cookie: JSESSIONID=abc
+
+    C->>S: GET /api/data (Cookie)
+    S->>S: Look up session by ID
+    S->>S: Load user from session
+    S->>S: Authorize and respond
+    S-->>C: Response
 ```
 
 ### Implementation in Spring Boot
+
+Session-based configuration with `IF_REQUIRED` creation policy. The `sessionFixation().migrateSession()` call protects against session fixation attacks by issuing a new session ID after login. `maximumSessions(1)` limits concurrent logins per user:
 
 ```java
 @Configuration
@@ -86,6 +90,8 @@ server.servlet.session:
 
 **Redis for distributed sessions**:
 
+For production deployments, the default in-memory session storage does not scale beyond a single instance. Spring Session backed by Redis provides a shared session store that all application instances can access:
+
 ```xml
 <dependency>
     <groupId>org.springframework.session</groupId>
@@ -113,22 +119,26 @@ With Redis-backed sessions, any server in the cluster can serve any client's ses
 
 In token-based authentication, the authentication data is encoded directly into the token:
 
-```
-Client                          Server
-  |                                |
-  |--- POST /login (credentials) ->|
-  |                                |-- Verify credentials
-  |                                |-- Sign JWT with user claims
-  |<-- { "access_token": "eyJ..."} |
-  |                                |
-  |--- GET /api/data (Bearer) ---->|
-  |                                |-- Verify token signature
-  |                                |-- Extract claims
-  |                                |-- Authorize and respond
-  |<-- Response -------------------|
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant S as Server
+
+    C->>S: POST /login (credentials)
+    S->>S: Verify credentials
+    S->>S: Sign JWT with user claims
+    S-->>C: {"access_token": "eyJ..."}
+
+    C->>S: GET /api/data (Bearer token)
+    S->>S: Verify token signature
+    S->>S: Extract claims
+    S->>S: Authorize and respond
+    S-->>C: Response
 ```
 
 ### Implementation in Spring Boot
+
+Token-based configuration is stateless — no session is created or stored. CSRF protection is disabled because bearer tokens in headers are not subject to CSRF attacks (the browser does not automatically attach them to cross-origin requests):
 
 ```java
 @Configuration
@@ -159,6 +169,8 @@ public class TokenAuthSecurityConfig {
 
 ### Token Storage on Client
 
+For browser-based applications, store tokens in `httpOnly` cookies rather than `localStorage`. An `httpOnly` cookie is inaccessible to JavaScript, so an XSS vulnerability cannot steal the token:
+
 ```java
 // Storing in httpOnly cookie (recommended for web apps)
 @PostMapping("/auth/login")
@@ -184,9 +196,9 @@ public ResponseEntity<Void> login(@RequestBody LoginRequest request,
 
 ### 1. Performance Characteristics
 
-**Session-based**: Constant time per request (session lookup), but requires a network round-trip to Redis for distributed setups.
+Session-based lookup is constant time (O(1)) but requires a network round-trip to Redis in distributed setups. Token-based verification is CPU-bound (signature verification) but requires no network call:
 
-```
+```text
 Request latency (with Redis session):
   HTTP receive: 0.1ms
   Redis GET:   0.5ms
@@ -195,9 +207,7 @@ Request latency (with Redis session):
   Total:       5.7ms
 ```
 
-**Token-based**: Variable time per request (signature verification depends on algorithm), but no network call.
-
-```
+```text
 Request latency (with RS256 JWT):
   HTTP receive:       0.1ms
   JWT parse:          0.3ms
@@ -209,7 +219,7 @@ Request latency (with RS256 JWT):
 
 ### 2. Scalability
 
-**Session-based** requires sticky sessions or shared session storage:
+Session-based requires sticky sessions or shared session storage. Spring Cloud LoadBalancer can be configured with sticky sessions based on the `JSESSIONID` cookie:
 
 ```java
 // Spring Cloud LoadBalancer with sticky sessions
@@ -223,7 +233,7 @@ spring:
         cookie-name: "JSESSIONID"
 ```
 
-**Token-based** scales horizontally without any coordination:
+Token-based scales horizontally without any coordination — any instance can verify the token independently using the shared public key:
 
 ```java
 // Any instance can verify the token independently
@@ -246,7 +256,7 @@ public JwtDecoder jwtDecoder() {
 
 ### 4. Storage Requirements
 
-Session-based systems need storage proportional to active users:
+Session-based systems need storage proportional to active users. Redis must be sized to hold all active sessions:
 
 ```java
 // Session memory calculation
@@ -260,7 +270,7 @@ redis:
   maxmemory-policy: allkeys-lru  # Evict old sessions if memory full
 ```
 
-Token-based systems need no server-side storage:
+Token-based systems need no server-side storage, though a blocklist for revoked tokens may require some Redis capacity:
 
 ```java
 // No session storage infrastructure needed
@@ -273,7 +283,7 @@ redis:
 
 ## Hybrid Approach: Best of Both Worlds
 
-Use short-lived access tokens (stateless) with session-backed refresh tokens (stateful for revocation):
+Use short-lived access tokens (stateless) with session-backed refresh tokens (stateful for revocation). The access token provides fast stateless verification for most requests. The refresh token, stored server-side, enables immediate revocation:
 
 ```java
 @Service
@@ -320,6 +330,8 @@ public class HybridAuthService {
 
 ### Mistake 1: Using Default Session Storage in Production
 
+The default `ConcurrentHashMap`-based session storage does not survive restarts or scale across instances:
+
 ```java
 // WRONG: Default in-memory sessions don't scale
 @SpringBootApplication
@@ -340,6 +352,8 @@ public class SessionConfig {
 
 ### Mistake 2: Exposing JWT in Storage Vulnerable to XSS
 
+`localStorage` is accessible to any JavaScript running on the same origin, making it vulnerable to XSS attacks:
+
 ```javascript
 // WRONG: JWT in localStorage is readable by JavaScript
 localStorage.setItem('access_token', token);
@@ -351,6 +365,8 @@ document.cookie = "access_token=" + token +
 ```
 
 ### Mistake 3: Not Handling Token Refresh Gracefully
+
+Without a refresh mechanism, users are logged out abruptly when their short-lived token expires:
 
 ```java
 // WRONG: No refresh mechanism

@@ -26,11 +26,9 @@ But JWTs come with subtle pitfalls that cause security vulnerabilities in produc
 
 ### The JWT Structure
 
-A JWT is a three-part string separated by dots:
+A JWT is a three-part string separated by dots. Each part is base64url-encoded (URL-safe base64 without padding). The three parts are the header, the payload, and the signature.
 
-```
-xxxxx.yyyyy.zzzzz
-```
+The **header** typically contains the token type and the signing algorithm. The **payload** contains claims — statements about the user and metadata. The **signature** is a cryptographic hash that verifies the token hasn't been tampered with.
 
 **Header** (xxxxx): Base64URL-encoded JSON containing the algorithm type and token type. For most applications, this looks like:
 
@@ -64,9 +62,11 @@ A typical payload:
 
 ### How Signing Works
 
-When you create a JWT, the server signs it using one of these algorithms:
+When you create a JWT, the server signs it using one of these algorithms. The choice between symmetric (HMAC) and asymmetric (RSA/ECDSA) signing has profound implications for security architecture.
 
-**HMAC (HS256/HS384/HS512)**: Symmetric signing where the same secret key is used for both signing and verification:
+**HMAC (HS256/HS384/HS512)**: Symmetric signing where the same secret key is used for both signing and verification. This is simpler to set up but means any service that can verify tokens can also create them. This is fine when the verifier and issuer are the same service.
+
+The signature is computed as: `HMAC-SHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload), secret)`
 
 ```java
 // Creating signature with HMAC-SHA256
@@ -77,9 +77,7 @@ String jwt = Jwts.builder()
     .compact();
 ```
 
-The signature is computed as: `HMAC-SHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload), secret)`
-
-**RSA/ECDSA (RS256/ES256)**: Asymmetric signing where the server has a private key to sign, and clients use the corresponding public key to verify:
+**RSA/ECDSA (RS256/ES256)**: Asymmetric signing where the server has a private key to sign, and any service can verify using the corresponding public key. This enables a clean separation of concerns: the authentication service can sign tokens, and any downstream microservice can verify them without needing access to the private key.
 
 ```java
 // Server side: Sign with private key
@@ -99,7 +97,9 @@ Jwts.parserBuilder()
 
 ### Token Validation Flow in Spring Security
 
-When a request arrives with a JWT in the Authorization header, here's what happens:
+When a request arrives with a JWT in the Authorization header, a filter intercepts it and performs validation. The flow has six distinct steps. The most important detail is that the signature verification must happen before any claims are read — verifying the signature proves the token is authentic, and only then should you trust the claims inside it.
+
+The `SecurityContextHolder` stores the authentication result, making the user's identity available to the rest of the application via `SecurityContextHolder.getContext().getAuthentication()`.
 
 1. **Filter Interception**: `JwtAuthenticationFilter` (or `OncePerRequestFilter`) catches the request
 2. **Token Extraction**: Extract the token from `Authorization: Bearer <token>` header
@@ -146,7 +146,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 ### SecurityContextHolder Deep Dive
 
-Spring Security stores the authenticated principal in `SecurityContextHolder`, which by default uses a `ThreadLocal` strategy. This means each thread has its own security context:
+Spring Security stores the authenticated principal in `SecurityContextHolder`, which by default uses a `ThreadLocal` strategy. This means each thread has its own security context.
+
+A critical implication: in asynchronous processing (CompletableFuture, @Async, message listeners), the security context does NOT automatically propagate to the new thread. You must either use Spring's `DelegatingSecurityContextExecutor` or manually copy the context. Failure to do this results in `Authentication` being null in async handlers.
 
 ```java
 // How Spring stores authentication (simplified)
@@ -178,7 +180,11 @@ public class UserController {
 
 ### Case 1: Stateless Authentication for Mobile APIs
 
-When building mobile applications (iOS/Android), you need a scalable authentication system that doesn't require sticky sessions. Here's a typical pattern:
+When building mobile applications (iOS/Android), you need a scalable authentication system that doesn't require sticky sessions. The dual-token pattern — short-lived access token + long-lived refresh token — is the standard approach.
+
+The access token (15-minute lifespan) is sent with every API request. Its short lifespan limits the damage if it's stolen. The refresh token (7-day lifespan) is used only at the `/auth/refresh` endpoint to obtain new access tokens. This keeps the access token window small while maintaining a good user experience.
+
+The refresh endpoint should also rotate the refresh token: invalidating the old one and issuing a new one. This prevents replay attacks where a stolen refresh token is used multiple times.
 
 ```java
 // Mobile app login flow
@@ -213,7 +219,9 @@ public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest request)
 
 ### Case 2: Service-to-Service Authentication (Microservices)
 
-In a microservices architecture, services need to authenticate with each other without user credentials. JWTs are perfect for this:
+In a microservices architecture, services need to authenticate with each other without user credentials. JWTs are perfect for this because they carry the calling service's identity and can be validated without a database lookup.
+
+The token includes the service name, a role indicating it's a service account, and a very short TTL (5 minutes) to limit the impact of token leakage. The receiving service validates the token, verifies the calling service is authorized to access the specific endpoint, and sets the security context accordingly.
 
 ```java
 // Service A calling Service B
@@ -270,7 +278,9 @@ public class ServiceAuthenticationFilter extends OncePerRequestFilter {
 
 ### Case 3: API Gateway Token Validation
 
-In API Gateway patterns, the gateway validates JWTs so backend services don't need to:
+In API Gateway patterns, the gateway validates JWTs so backend services don't need to. This centralizes authentication logic and reduces duplication. The gateway extracts claims from the token and either passes them to downstream services as headers or enriches the request context.
+
+This pattern is particularly effective with Spring Cloud Gateway, where `JwtRoutePredicateFactory` can route requests based on JWT claims — for example, routing admin users to a different backend instance than regular users.
 
 ```java
 @Configuration
@@ -337,7 +347,7 @@ spring:
 
 ### 1. Token Size Management
 
-Large JWTs impact performance:
+Large JWTs impact performance because the token is sent with every request in the HTTP Authorization header. The mitigation strategy is straightforward: include only essential claims in the JWT. Reference IDs that can be used to look up details on demand are preferable to embedding entire objects.
 
 - **HTTP header bloat**: Every request carries the token. A 2KB token adds 4KB round-trip per request.
 - **Bandwidth costs**: Especially significant for high-traffic APIs.
@@ -368,6 +378,8 @@ public JwtAccessTokenConverter accessTokenConverter() {
 
 The `exp` and `nbf` claims rely on server time. A few seconds of clock drift can cause valid tokens to be rejected or invalid tokens to be accepted.
 
+The standard solution is to allow a clock skew of 60 seconds. This gives enough tolerance for typical NTP-synchronized server environments while keeping the window small enough for security. The `setAllowedClockSkewSeconds()` method on the JJWT parser builder handles this automatically.
+
 **Solution**:
 
 ```java
@@ -394,7 +406,9 @@ public class JwtTokenProvider {
 
 ### 3. Refresh Token Rotation
 
-To maintain security while providing good UX, implement refresh token rotation:
+To maintain security while providing good UX, implement refresh token rotation: each time a refresh token is used, invalidate it and issue a new one. This limits the window of opportunity for a stolen refresh token.
+
+Combine rotation with fingerprints or device identifiers. If a refresh token is used with an unexpected device or IP, you can reject the request and flag the account for security review.
 
 ```java
 public class RefreshTokenService {
@@ -421,7 +435,9 @@ public class RefreshTokenService {
 
 ### 4. Secret Rotation Strategy
 
-In production, you must be able to rotate signing keys without downtime:
+In production, you must be able to rotate signing keys without downtime. The key rotation strategy uses a key ID (`kid`) in the JWT header that identifies which signing key was used. The verifier maintains a set of valid keys — the current signing key plus a few previous ones that have not yet expired.
+
+When rotating, generate a new key pair, add it to the key store, and start signing new tokens with it. The `kid` in the JWT header tells verifiers which key to use. Old keys are kept until all tokens signed with them have expired.
 
 ```java
 @Configuration
@@ -454,11 +470,9 @@ Store keys in a secure location (AWS Secrets Manager, HashiCorp Vault) and imple
 
 ### 5. Memory and Performance
 
-For high-traffic applications:
+For high-traffic applications, avoid parsing the JWT multiple times per request. Cache the parsed claims in a request-scoped context — Spring's request scope is ideal for this. The `@RequestScope` annotation creates a bean instance per HTTP request, so the claims are parsed once and reused across the entire request processing chain.
 
-- **Parse token once**: Cache the parsed claims in a request-scoped context rather than parsing multiple times
-- **Use efficient algorithms**: HS256 is faster than RS256, but RS256 is required for cross-service scenarios
-- **Monitor token validation latency**: Add metrics for JWT validation time
+Algorithm choice also affects performance: HMAC (HS256) is significantly faster than RSA (RS256) because it's a simple hash operation, not asymmetric key math. Use HMAC for single-service applications and RSA only when you need the public key to be shared.
 
 ```java
 @Component
@@ -522,7 +536,7 @@ public JwtAccessTokenConverter accessTokenConverter() {
 
 ### Mistake 2: Not Validating the Signature
 
-Many developers only check if the token exists and isn't expired:
+Many developers only check if the token exists and isn't expired, bypassing signature verification entirely. This is the most critical security vulnerability in JWT implementations — an attacker can forge tokens by crafting any header and payload, leaving the signature empty or arbitrary.
 
 ```java
 // WRONG - No signature validation
@@ -559,7 +573,7 @@ public boolean validateToken(String token) {
 
 ### Mistake 3: Not Checking Issuer (iss) and Audience (aud)
 
-Without issuer/audience validation, attackers can forge tokens:
+Without issuer/audience validation, a token obtained from one service can be used against another service. For example, a token from `auth.example.com` could be used against `api.example.com` if the API doesn't check the `iss` claim. This is a common issue in microservice environments where each service independently validates JWTs.
 
 ```java
 // WRONG - Missing issuer/audience validation
@@ -584,7 +598,7 @@ public JwtDecoder jwtDecoder() {
 
 ### Mistake 4: Using JWT for Sessions Where Opaque Tokens Are Better
 
-For applications requiring immediate logout capability:
+For applications requiring immediate logout capability, JWTs are fundamentally unsuitable because they cannot be revoked server-side. A user clicking "logout" expects the session to be invalidated immediately. With JWTs, the token remains valid until expiration.
 
 ```java
 // WRONG - Using JWT for session-based app

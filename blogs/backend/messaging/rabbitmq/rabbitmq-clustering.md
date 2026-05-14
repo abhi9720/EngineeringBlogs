@@ -18,7 +18,7 @@ RabbitMQ clustering enables high availability and horizontal scaling by connecti
 
 ## Cluster Formation
 
-A RabbitMQ cluster connects nodes via Erlang distributed messaging. Nodes share metadata but not message data (unless using queues with replication).
+A RabbitMQ cluster connects nodes via Erlang distributed messaging. Nodes share metadata (exchanges, bindings, users) but not message data (unless using queues with replication). To join a new node to an existing cluster, stop the RabbitMQ app on the new node, reset its state, join the cluster, and restart. All nodes must share the same Erlang cookie, which is the secret key for inter-node authentication.
 
 ```bash
 # On node2, join the cluster
@@ -32,6 +32,8 @@ rabbitmqctl cluster_status
 ```
 
 ### Docker Compose Cluster
+
+The Docker Compose setup creates a 3-node RabbitMQ cluster with HAProxy for load balancing. Each node is configured with the same `RABBITMQ_ERLANG_COOKIE` for authentication. The `join_cluster` commands in the entrypoint scripts ensure nodes 2 and 3 join node 1 after starting. HAProxy provides a single endpoint for clients and distributes connections across the cluster.
 
 ```yaml
 version: '3.8'
@@ -85,7 +87,7 @@ services:
 
 ## Quorum Queues
 
-Quorum queues are the recommended queue type for HA in RabbitMQ 3.8+. They use the Raft consensus protocol for replication.
+Quorum queues are the recommended queue type for HA in RabbitMQ 3.8+. They use the Raft consensus protocol for replication, providing strong consistency and automatic leader election. Unlike mirrored queues, quorum queues ensure that once a message is acknowledged, it's durable across a majority of nodes. The `x-quorum-initial-group-size` sets the number of cluster members that participate in the Raft group (should be an odd number for quorum). `x-delivery-limit` limits redeliveries to prevent poison message loops.
 
 ```java
 @Configuration
@@ -118,6 +120,8 @@ public class QuorumQueueConfig {
 
 ### Quorum Queue Configuration via RabbitMQ CLI
 
+You can also create quorum queues via the CLI or management UI. The rabbitmqadmin command declaratively creates a queue with the required arguments. Monitoring commands help you track the quorum status, leader, and member nodes in the Raft group.
+
 ```bash
 # Declare a quorum queue with CLI
 rabbitmqadmin declare queue name=orders.quorum \
@@ -132,7 +136,7 @@ rabbitmqctl list_queues name quorum_leader quorum_members
 
 ## Mirrored Queues (Classic Queue Mirroring - Deprecated)
 
-Mirrored queues are the legacy HA approach. They are deprecated in favor of quorum queues.
+Mirrored queues are the legacy HA approach. They are deprecated in favor of quorum queues. Mirrored queues used asynchronous replication, which could lead to data loss during failover (if the master node died before changes were replicated to all mirrors). Always use quorum queues for new deployments.
 
 ```java
 Map<String, Object> args = new HashMap<>();
@@ -144,7 +148,7 @@ Queue mirroredQueue = new Queue("orders.mirrored", true, false, false, args);
 
 ## Network Partition Handling
 
-Configure automatic cluster recovery for network partitions.
+Configure automatic cluster recovery for network partitions. The `autoheal` mode automatically resolves partitions by winning a vote among cluster nodes — the winning side keeps its data and the losing side restarts. The `cluster_keepalive_interval` controls how often nodes ping each other to detect partitions. The client-side `ConnectionFactory` configures automatic recovery with multiple addresses, so if one node is unreachable, clients fail over to another.
 
 ```bash
 # rabbitmq.conf
@@ -185,6 +189,8 @@ public class RabbitConnectionConfig {
 ```
 
 ## HAProxy Configuration for RabbitMQ Cluster
+
+HAProxy provides load balancing and failover for the RabbitMQ cluster. The TCP health check sends an AMQP protocol header and expects the AMQP response — this verifies that RabbitMQ is truly accepting connections. The `leastconn` balancing algorithm distributes connections to the node with the fewest active connections, which works well for long-lived AMQP connections.
 
 ```cfg
 # haproxy.cfg
@@ -238,6 +244,8 @@ backend rabbitmq_management
 
 ### Mistake: Using mirrored queues in new deployments
 
+Mirrored queues use asynchronous replication and are susceptible to data loss during failover. They also lack the strong consistency guarantees of quorum queues. Always use quorum queues for new deployments requiring HA.
+
 ```java
 // Wrong - mirrored queues are deprecated
 Map<String, Object> args = new HashMap<>();
@@ -254,6 +262,8 @@ new Queue("orders", true, false, false, args);
 ```
 
 ### Mistake: Not configuring connection recovery in Spring Boot
+
+A single RabbitMQ address with default recovery settings means the application can't survive node failures. Always configure multiple addresses and appropriate recovery intervals so the client automatically reconnects to healthy nodes when a node goes down.
 
 ```yaml
 # Wrong - default recovery may not be sufficient

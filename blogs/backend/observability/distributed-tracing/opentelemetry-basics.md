@@ -51,6 +51,8 @@ OpenTelemetry is the industry standard for distributed tracing, providing APIs a
 </dependency>
 ```
 
+The `opentelemetry-api` module contains only interfaces—no implementation. This lets libraries and frameworks depend on the API without pulling in SDK dependencies. The `opentelemetry-sdk` module provides the default implementation and is configured by the application at startup. The Spring Boot Starter auto-configures the SDK from `application.yml` properties, making the manual programmatic setup optional.
+
 ### Application Configuration
 
 ```yaml
@@ -74,6 +76,8 @@ otel:
       environment: production
       region: us-east-1
 ```
+
+The `parentbased_always_on` sampler respects the sampling decision of the parent span. If the incoming request is sampled (e.g., the edge service decides to trace it), all downstream spans are also sampled, keeping the trace complete. The instance ID set from `HOSTNAME` enables operators to pinpoint exactly which container or pod generated a particular span.
 
 ### Programmatic Setup
 
@@ -113,6 +117,8 @@ public class OpenTelemetryConfig {
     }
 }
 ```
+
+The programmatic setup offers fine-grained control. The `BatchSpanProcessor.maxExportBatchSize` of 512 controls how many spans are sent in a single gRPC request—larger batches reduce network overhead but increase memory usage. The `SdkMeterProvider` is configured alongside the tracer provider to emit metrics (span counts, exporter latency, queue depth) about the tracing pipeline itself.
 
 ---
 
@@ -169,6 +175,8 @@ public class OrderTracingService {
 }
 ```
 
+`span.makeCurrent()` binds the span to the current thread via OpenTelemetry's `Context` storage, which is propagated automatically to any async operations that follow. The `@WithSpan` annotation on `validateRequest` automatically creates a child span—the annotation-based approach is preferred for simple cases because it eliminates boilerplate. Setting `SpanKind.SERVER` signals that this span represents an inbound request, which affects how the backend visualizes the trace (SERVER spans are typically shown as the first span in a service's timeline).
+
 ### Automatic Instrumentation
 
 ```java
@@ -198,6 +206,8 @@ public class OrderRepository {
 }
 ```
 
+The OpenTelemetry Java Agent auto-instruments dozens of libraries—Spring Web MVC, JDBC, Apache HttpClient, gRPC, Kafka, and more—by detecting them on the classpath and injecting bytecode at load time. This means a `@RestController` method automatically becomes a span without annotations or manual code. The database call via `JdbcTemplate` automatically captures the SQL query text (parameterized, not literals), execution duration, and the number of rows returned.
+
 ---
 
 ## Span Attributes and Events
@@ -217,6 +227,8 @@ span.setAttribute("customer.email", "user@example.com");
 span.setAttribute("item.ids", new long[]{1L, 2L, 3L});
 span.setAttribute("item.names", new String[]{"shirt", "pants"});
 ```
+
+Attributes are key-value pairs attached to a span. They are indexed by the tracing backend, enabling search queries like "find all traces where `order.id` = 12345". Primitive types (long, double, boolean, String) are supported natively, as are arrays of primitives. Avoid adding large objects or sensitive data (passwords, credit card numbers) as attributes—they are stored in the tracing backend and may be visible to anyone with query access.
 
 ### Adding Events
 
@@ -249,6 +261,8 @@ public class EventfulService {
     }
 }
 ```
+
+Events are timestamped annotations on a span—think of them as "log lines within a trace." Unlike attributes, events are not indexed for search (in most backends), but they appear in the span detail view as a timeline. This makes them ideal for recording milestones within long-running operations where you want to understand the sequence of steps without adding separate child spans.
 
 ---
 
@@ -315,6 +329,8 @@ public class TracingInterceptor extends HandlerInterceptorAdapter {
 }
 ```
 
+When using the OpenTelemetry Java Agent, this manual injection and extraction is handled automatically. The code above shows what happens under the hood: the client side serializes the span context into W3C `traceparent` and `tracestate` headers, and the server side deserializes them to create a child span. The `setParent(extracted)` call is what links the two sides into a single trace.
+
 ### W3C Trace Context
 
 ```java
@@ -335,6 +351,8 @@ public class W3CPropagationExample {
     }
 }
 ```
+
+The W3C Trace-Context header is the standard for cross-vendor trace propagation. The `traceFlags` byte indicates whether the trace is sampled (01) or not (00). This sampling flag is propagated across services, so if the edge service decides not to sample a request, downstream services honor that decision and avoid creating spans—saving compute and storage on every hop.
 
 ---
 
@@ -386,6 +404,8 @@ service:
       processors: [batch]
       exporters: [prometheus]
 ```
+
+The OpenTelemetry Collector is a vendor-agnostic proxy that receives, processes, and exports telemetry data. The `memory_limiter` processor prevents the collector from OOMing under load by dropping data when memory exceeds 512 MiB—a critical safeguard in production. The `attributes` processor adds an `environment: production` tag to every span and metric, centralizing enrichment that would otherwise need to be configured in every application. The `batch` processor groups spans into 1024-span batches before sending to Jaeger, amortizing network overhead.
 
 ---
 

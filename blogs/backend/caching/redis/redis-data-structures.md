@@ -33,6 +33,8 @@ Redis provides a rich set of data structures beyond simple key-value storage. Ch
 
 ### Basic Operations
 
+Strings are the most fundamental Redis data type. They can store text, numbers (for atomic increments), and binary data up to 512MB. Common uses include caching, distributed locks, and counters.
+
 ```java
 @Service
 public class RedisStringService {
@@ -91,6 +93,8 @@ public class RedisStringService {
 
 ### Object Storage
 
+Hashes are dictionaries of field-value pairs — perfect for representing objects. Unlike storing a serialized JSON string, hashes allow reading and writing individual fields without transferring the entire object.
+
 ```java
 @Service
 public class RedisHashService {
@@ -144,6 +148,8 @@ public class RedisHashService {
 ## Lists
 
 ### Queue Implementation
+
+Lists are ordered collections of strings. They support push/pop from both ends, making them suitable for queues (FIFO via rightPush/leftPop) and stacks (LIFO via leftPush/leftPop).
 
 ```java
 @Service
@@ -215,6 +221,8 @@ public class RedisListService {
 
 ### Unique Items
 
+Sets store unique, unordered strings. They excel at membership checks, intersections (common items), unions, and differences — all computed server-side without transferring data to the client.
+
 ```java
 @Service
 public class RedisSetService {
@@ -282,6 +290,8 @@ public class RedisSetService {
 ## Sorted Sets
 
 ### Leaderboard Implementation
+
+Sorted sets are like sets but with a score attached to each member. Members are ordered by score, enabling range queries (top N), rank lookups, and score-based operations.
 
 ```java
 @Service
@@ -354,6 +364,8 @@ public class RedisSortedSetService {
 
 ### Event Log
 
+Redis Streams are append-only log structures supporting consumer groups, acknowledgments, and message replay. They are more feature-rich than Pub/Sub (messages persist) and more flexible than lists (multiple consumers can read independently).
+
 ```java
 @Service
 public class RedisStreamService {
@@ -413,6 +425,8 @@ public class RedisStreamService {
 
 ### 1. Choose the Right Structure
 
+Strings for serialized objects work but lose the ability to read/update individual fields. Hashes preserve field-level access and are more memory-efficient for objects with many fields.
+
 ```java
 // WRONG: Using strings for objects
 redisTemplate.opsForValue().set("user:1", userJson);
@@ -424,6 +438,8 @@ redisTemplate.opsForHash().putAll("user:1", Map.of(
 ```
 
 ### 2. Use Appropriate TTLs
+
+Always set TTLs for ephemeral data. Without them, Redis memory grows indefinitely.
 
 ```java
 // WRONG: No expiration for time-sensitive data
@@ -438,6 +454,8 @@ redisTemplate.opsForValue().set("session:abc", "data", Duration.ofHours(1));
 ## Common Mistakes
 
 ### Mistake 1: Not Using Pipelines for Batch Operations
+
+Each Redis command incurs network round-trip latency. Pipelining sends multiple commands in a single request, dramatically improving throughput for batch operations.
 
 ```java
 // WRONG: Multiple round trips
@@ -457,6 +475,8 @@ List<Object> results = redisTemplate.executePipelined(
 ```
 
 ### Mistake 2: Ignoring Memory
+
+Lists and streams grow unbounded unless trimmed. Always set a maximum size or TTL.
 
 ```java
 // WRONG: Storing unbounded lists

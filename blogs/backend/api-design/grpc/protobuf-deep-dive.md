@@ -22,7 +22,11 @@ Protocol Buffers (Protobuf) is a language-neutral, platform-neutral extensible m
 
 ## Proto3 Syntax Deep Dive
 
+Protobuf's syntax may look similar to other IDLs, but several critical details affect schema evolution, wire format size, and language mappings. Understanding these details is essential for designing schemas that perform well and evolve gracefully over time.
+
 ### Field Types and Rules
+
+Protobuf provides a rich set of scalar types, each with specific performance characteristics. `int32` and `int64` use variable-length encoding (varint) — small positive values are encoded efficiently (1 byte for values 0-127), but large values or negative numbers use more space. For fields that frequently contain negative values, `sint32`/`sint64` use zig-zag encoding which maps negative numbers to positive varints efficiently. For values that are always large or always fixed-size, `fixed32`/`fixed64` use exactly 4 or 8 bytes regardless of value — this is faster to encode/decode at the cost of space. The field numbering rule (1-15 for frequent fields, 16+ for others) directly impacts message size because field numbers 1-15 use a 1-byte tag while 16-2047 use 2 bytes.
 
 ```protobuf
 syntax = "proto3";
@@ -61,6 +65,8 @@ message ScalarExamples {
 // 16-2047: 2 bytes tag, use for less frequent fields
 // 19000-19999: Reserved for Protocol Buffers implementation
 ```
+
+Beyond basic scalar fields, protobuf provides advanced features for modeling complex data structures. `oneof` allows a field to hold exactly one of several possible types, similar to a discriminated union. `map` provides key-value pairs with a specific key-value type constraint. Nested types and enums improve schema organization by grouping related definitions. These features enable expressive schema design while maintaining protobuf's efficiency guarantees.
 
 ### Advanced Field Features
 
@@ -112,6 +118,8 @@ message PaymentInfo {
   string currency = 3;
 }
 ```
+
+Google's well-known types provide standardized protobuf definitions for common patterns. `Timestamp` and `Duration` handle time with nanosecond precision and proper timezone handling — far superior to using raw `int64` or `string` fields. `Wrapper` types (StringValue, Int32Value, etc.) provide nullable scalar values since proto3 removed field presence for scalar types. `Struct`, `Value`, and `ListValue` enable representing arbitrary JSON-like structures, which is useful for extensible metadata fields. `Any` can hold any protobuf message, enabling dynamic typing at the cost of type safety.
 
 ### Well-Known Types
 
@@ -170,7 +178,11 @@ message UserRegisteredEvent {
 
 ## Serialization Internals
 
+Understanding protobuf's binary encoding is crucial for optimizing schema design and debugging serialization issues. Unlike JSON or XML which produce human-readable output, protobuf encodes data in a compact binary format using tag-length-value tuples. Each field in the encoded data consists of a tag (field number + wire type) followed by the value. The wire type determines how the value is encoded — varints use variable-length encoding, fixed-width types use a consistent number of bytes, and length-delimited types include a length prefix.
+
 ### Binary Format Explained
+
+The debug serialization example shows how a simple `User` message is encoded. Field 1 (id, int32) uses wire type 0 (varint) — the tag is `0x08` which is `(1 << 3) | 0`, and the value 150 is encoded as the varint bytes `0x96 0x01`. Field 2 (name, string) uses wire type 2 (length-delimited) — the tag is `0x12 = (2 << 3) | 2`, followed by the length (5) and the UTF-8 bytes of "Alice". Understanding this encoding helps you design schemas that minimize wire size: use field numbers 1-15 for frequently used fields (1 byte tag vs 2 bytes), choose appropriate types for your data range, and group related fields to minimize per-message overhead.
 
 ```java
 @Component
@@ -218,6 +230,8 @@ public class ProtobufSerializationDebug {
     }
 }
 ```
+
+Varint encoding is the foundation of protobuf's compact size for integers. Instead of using a fixed number of bytes (like 4 bytes for int32), varints use fewer bytes for smaller values by encoding only 7 data bits per byte, with the most significant bit indicating whether more bytes follow. Values 0-127 fit in 1 byte, 128-16383 fit in 2 bytes, and so on. Zig-zag encoding extends this to signed integers by mapping negative values to positive varints efficiently — `sint32` is more compact than `int32` for negative values because standard varint encoding treats negative `int32` as large unsigned values (all 10 bytes).
 
 ### Varint Encoding
 

@@ -34,6 +34,8 @@ Caching patterns define how applications interact with caches and databases. Cho
 
 ### Implementation
 
+Cache-aside is the most intuitive pattern: the application is responsible for both reading from and writing to the cache. On a read, the application checks the cache first (fast path), falling back to the database (slow path) on a miss, then populates the cache for future reads.
+
 ```java
 @Service
 public class CacheAsideService {
@@ -103,7 +105,11 @@ public class CacheAsideService {
 }
 ```
 
+For batch reads, `multiGet` retrieves all cached keys in a single round trip, then the remaining IDs are fetched from the database in one batch query. This minimizes network overhead compared to individual gets.
+
 ### Spring Cache-Aside with Annotations
+
+Spring's `@Cacheable` annotation implements cache-aside declaratively. The `unless` condition prevents caching null results. Multiple `@CacheEvict` annotations on delete handle keys from different lookup patterns.
 
 ```java
 @Service
@@ -141,6 +147,8 @@ public class AnnotatedCacheAsideService {
 ## Read-Through
 
 ### Caffeine Read-Through Cache
+
+Read-through shifts the caching logic to the cache provider. Caffeine's `CacheLoader` is called automatically on a cache miss — the application never directly accesses the database for reads.
 
 ```java
 @Configuration
@@ -184,7 +192,11 @@ public class ReadThroughService {
 }
 ```
 
+Caffeine's `recordStats()` enables hit rate, miss rate, and load time metrics. This is essential for tuning cache size and TTLs in production.
+
 ### Redis Read-Through with Lua Scripting
+
+Redis does not natively support read-through — the cache cannot trigger a database load. Spring's `@Cacheable` with `sync = true` provides read-through-like semantics by synchronizing concurrent cache misses.
 
 ```java
 // Redis doesn't natively support read-through
@@ -206,6 +218,8 @@ public class RedisReadThroughService {
 ## Write-Through
 
 ### Implementation
+
+Write-through ensures the cache is always synchronized with the database on writes. Every write updates both the database and the cache in the same transaction.
 
 ```java
 @Service
@@ -256,6 +270,8 @@ public class WriteThroughService {
 
 ### Write-Through with Write Invalidation
 
+There are two strategies on write: update the cache (write-through) or invalidate it (write-invalidate). Update is better for frequently-read data; invalidation is simpler for infrequently-read data.
+
 ```java
 @Service
 public class WriteThroughInvalidationService {
@@ -283,6 +299,8 @@ public class WriteThroughInvalidationService {
 ## Write-Behind (Write-Back)
 
 ### Implementation
+
+Write-behind provides the fastest write path: data is written to the cache immediately and asynchronously flushed to the database. The trade-off is potential data loss if the cache fails before the flush.
 
 ```java
 @Service
@@ -339,6 +357,8 @@ public class WriteBehindService {
 }
 ```
 
+The `@PreDestroy` hook is critical — it flushes the remaining queue before the application shuts down, preventing data loss during graceful deployments.
+
 ---
 
 ## Pattern Selection Guide
@@ -378,6 +398,8 @@ public Product getProduct(Long id) {
 
 ### 1. Handle Cache Stampede
 
+Without synchronization, concurrent cache misses all hit the database. The `sync = true` attribute ensures only one thread loads the data while others wait.
+
 ```java
 // When 100 concurrent requests miss the cache:
 // Without sync: 100 DB queries
@@ -390,6 +412,8 @@ public Product getProduct(Long id) {
 ```
 
 ### 2. Use Appropriate TTLs
+
+Different data types need different TTLs. Reference data can be cached for days, transactional data for minutes.
 
 ```java
 // Shorter TTL for frequently changing data
@@ -422,6 +446,8 @@ public class TtlConfig {
 
 ### Mistake 1: Inconsistent Invalidation
 
+Multiple write paths where some invalidate the cache and others don't lead to stale data.
+
 ```java
 // WRONG: Multiple write paths, only some invalidate
 public Product save(Product p) { repository.save(p); }
@@ -436,6 +462,8 @@ public Product saveProduct(Product product) {
 ```
 
 ### Mistake 2: Cache and DB Not in Same Transaction
+
+If the cache write succeeds but the database write fails, the cache contains phantom data.
 
 ```java
 // WRONG: Cache write succeeds, DB write fails
@@ -452,6 +480,8 @@ public Product save(Product product) {
 ```
 
 ### Mistake 3: Write-Behind Without Recovery
+
+Without retry logic, a flush failure means permanent data loss.
 
 ```java
 // WRONG: No retry on write-behind failure

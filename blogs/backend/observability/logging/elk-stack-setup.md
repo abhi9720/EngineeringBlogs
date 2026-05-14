@@ -21,9 +21,22 @@ The ELK stack—Elasticsearch, Logstash, Kibana—is the most popular open-sourc
 
 ### Architecture
 
-```
-Application → Filebeat → Logstash → Elasticsearch → Kibana
-                (ship)     (parse)      (store)      (visualize)
+```mermaid
+flowchart LR
+    App["Application"] --> FB["Filebeat<br/>(ship)"]
+    FB --> LS["Logstash<br/>(parse)"]
+    LS --> ES["Elasticsearch<br/>(store)"]
+    ES --> KI["Kibana<br/>(visualize)"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class App yellow
+    class FB,LS green
+    class ES,KI blue
 ```
 
 ---
@@ -106,6 +119,8 @@ networks:
     driver: bridge
 ```
 
+Memory allocation is the most critical configuration for Elasticsearch. Setting `bootstrap.memory_lock=true` prevents the JVM heap from being swapped to disk, which would cause catastrophic performance degradation. The heap size of 4 GB (`-Xms4g -Xmx4g`) is appropriate for a single-node development cluster; production clusters should allocate no more than 50% of available RAM to the heap, with the remainder reserved for the OS filesystem cache. Logstash also requires significant memory—the pipeline workers, persistent queues, and input/output plugins all operate within the JVM heap.
+
 ### Index Template Configuration
 
 ```json
@@ -141,6 +156,8 @@ networks:
   }
 }
 ```
+
+The index template applies settings and mappings to all indices matching `app-logs-*`. The `best_compression` codec trades a small CPU overhead for significantly reduced storage compared to the default `LZ4`. Setting `translog.durability: async` and `sync_interval: 5s` reduces write overhead by not flushing the transaction log on every request—acceptable for logging where a few seconds of data loss on crash is tolerable. The `refresh_interval: 5s` means newly indexed logs appear in search results within 5 seconds instead of the default 1 second, reducing indexing pressure.
 
 ### Lifecycle Policy
 
@@ -184,6 +201,8 @@ PUT _ilm/policy/app-logs-policy
   }
 }
 ```
+
+The Index Lifecycle Management policy automates index rotation and retention. The `hot` phase rolls over the write index when it reaches 50 GB or 24 hours, preventing any single index from growing too large. After 7 days in `warm`, the index is shrunk to a single shard and force-merged to one segment—optimizing for read performance at the cost of writeability. After 90 days the data is deleted entirely, matching common compliance requirements.
 
 ---
 
@@ -260,6 +279,8 @@ output {
 }
 ```
 
+Logstash accepts input from multiple sources in parallel. The Beats input receives logs from Filebeat (the primary path), while the TCP input allows applications to send JSON logs directly for testing. The `date` filter parses the application's timestamp and sets `@timestamp`, which Elasticsearch uses as the default time field for time-based queries. The `grok` filters extract structured fields (stack traces, duration) from unstructured message text without failing if the pattern does not match.
+
 ### Multiple Pipeline Support
 
 ```ruby
@@ -292,6 +313,8 @@ output {
   }
 }
 ```
+
+Multiple pipelines allow different log sources to have independent processing logic. The application pipeline parses standard Java log patterns with grok and attempts JSON parsing on the extracted message—supporting both legacy plain-text logs and modern structured logs from the same input stream.
 
 ---
 
@@ -331,6 +354,8 @@ output.logstash:
 
 logging.level: info
 ```
+
+The multiline configuration is essential for Java applications where stack traces span multiple lines. The pattern matches lines that start with a date (`YYYY-MM-DD`)—any line that does NOT match this pattern is considered a continuation of the previous log entry. This ensures that a 30-line stack trace is shipped as a single event rather than 30 separate log entries.
 
 ---
 

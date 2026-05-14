@@ -18,7 +18,7 @@ The sidecar pattern deploys auxiliary components (logging, monitoring, proxies) 
 
 ## Kubernetes Sidecar Deployment
 
-Deploy a sidecar container alongside the main application in the same pod.
+Sidecars share the same pod lifecycle and network namespace as the main application. Here, a log-sidecar (Fluentd) tails application logs from a shared volume and forwards them to a centralized logging system, while a metrics-sidecar scrapes the application's metrics endpoint and exposes them on port 9090 for Prometheus. Resource limits ensure sidecars don't starve the main container.
 
 ```yaml
 apiVersion: apps/v1
@@ -84,6 +84,8 @@ spec:
 
 ### Configuration Sidecar
 
+A configuration sidecar watches a source config file (e.g., from a ConfigMap or external service) and copies changes to a shared volume that the main application reads. This enables dynamic configuration updates without restarting the main application pod.
+
 ```java
 @SpringBootApplication
 public class ConfigSidecarApplication {
@@ -140,6 +142,8 @@ public class ConfigWatcher {
 
 ### Log Aggregation Sidecar
 
+The log aggregation sidecar tails application log files from a shared volume and ships them to a central logging service via HTTP. It tracks file positions to avoid resending already-shipped content. This pattern keeps the main application free of logging infrastructure dependencies.
+
 ```java
 @Component
 public class LogAggregationSidecar {
@@ -192,7 +196,7 @@ public class LogAggregationSidecar {
 
 ## Istio Sidecar
 
-Istio injects an Envoy proxy sidecar into every pod for traffic management, security, and observability.
+Istio's Envoy sidecar is the most widely deployed example of the sidecar pattern. With a single annotation (`sidecar.istio.io/inject: "true"`), Istio injects an Envoy proxy that handles all traffic management, mTLS, and observability. The exclude annotation prevents the sidecar from intercepting database traffic (port 3306), which doesn't benefit from mesh features.
 
 ```yaml
 apiVersion: apps/v1
@@ -220,6 +224,8 @@ spec:
 ```
 
 ### Istio Virtual Service for Sidecar
+
+With the Envoy sidecar in place, Istio's routing rules apply transparently. The VirtualService and DestinationRule shown here configure traffic splitting between v1 and v2, connection pooling, outlier detection, retries, and mTLS — all enforced by the sidecar without any application code awareness.
 
 ```yaml
 apiVersion: networking.istio.io/v1beta1
@@ -274,6 +280,8 @@ spec:
 ```
 
 ## Custom Health Check Sidecar
+
+A health check sidecar can implement sophisticated checks that Kubernetes probes cannot express — like multi-endpoint health aggregation or external dependency verification. The sidecar writes the health status to a shared volume that the liveness probe can read via `cat`.
 
 ```java
 @Component

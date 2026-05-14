@@ -187,6 +187,8 @@ public class OrderService {
 
 ### Case 1: Using Feign Client for Service Calls
 
+Feign integrates seamlessly with Eureka — declaring `@FeignClient(name = "user-service")` is enough for the client to discover available instances via Eureka and load-balance across them. The fallback factory pattern shown here provides graceful degradation when the discovered service is unhealthy or unreachable.
+
 ```java
 // Declare a Feign client - automatic service discovery
 @FeignClient(name = "user-service")
@@ -242,6 +244,8 @@ public class UserServiceFallback implements UserServiceClientWithFallback {
 
 ### Case 2: Load Balancing with Ribbon
 
+Ribbon provides client-side load balancing integrated with Eureka discovery. The `WeightedResponseTimeRule` dynamically adjusts routing based on observed response times — faster instances receive more traffic. Retry configuration (max 2 retries per server, 3 server attempts) adds resilience against transient failures.
+
 ```java
 // Ribbon is integrated with Feign for client-side load balancing
 @Configuration
@@ -270,6 +274,8 @@ user-service:
 ```
 
 ### Case 3: Registering Metadata for Custom Routing
+
+Instance metadata (version, environment, tier) enables sophisticated routing strategies — for example, routing requests to only v2 instances during a gradual migration, or preferring instances in the same availability zone to reduce latency and cross-AZ data transfer costs.
 
 ```java
 // Service instance metadata
@@ -305,6 +311,8 @@ public class MetadataBasedRouting {
 ```
 
 ### Case 4: Health Checks and Service Status
+
+Eureka uses heartbeats to track instance liveness, but a service that is running but functionally broken (e.g., cannot connect to its database) should be marked as DOWN. Custom health indicators allow services to report their true status, and Eureka's health check endpoint integration ensures the registry reflects actual service health.
 
 ```java
 // Custom health indicator for Eureka
@@ -362,6 +370,8 @@ public class HealthController {
 
 ### Case 5: Self-Registration Pattern
 
+Self-registration is the default in Spring Cloud — each service registers itself on startup and deregisters on graceful shutdown. The `@PreDestroy` hook ensures deregistration even during application shutdown, preventing the Eureka server from holding stale instance entries.
+
 ```java
 // Each service can handle its own registration
 @Configuration
@@ -388,6 +398,8 @@ public class EurekaRegistrationConfig {
 ## Production Considerations
 
 ### 1. Eureka Server High Availability
+
+A single Eureka server is a single point of failure. Production deployments use a cluster of 3+ nodes that replicate registry data among themselves. Each client points to all server URLs, so if one server goes down, clients can still register and discover services via the remaining nodes.
 
 ```yaml
 # application.yml for Eureka Server (3-node cluster)
@@ -419,6 +431,8 @@ eureka:
 
 ### 2. Zone-Aware Routing
 
+Zone-aware routing keeps traffic within the same availability zone by default, reducing latency and inter-AZ data transfer costs. If no healthy instances exist in the same zone, the client falls back to instances in other zones — a cost-vs-resilience trade-off.
+
 ```java
 // Configure availability zones
 spring:
@@ -436,6 +450,8 @@ eureka:
 ```
 
 ### 3. Monitoring Eureka
+
+Monitoring registered instance counts, heartbeat success rates, and expired instance counts helps operators detect network partitions or misconfigured clients early. Prometheus/Grafana dashboards should track these metrics alongside service-level health indicators.
 
 ```java
 // Expose Eureka metrics
@@ -463,6 +479,8 @@ management:
 ```
 
 ### 4. Handling Expired Instances
+
+Self-preservation mode prevents Eureka from evicting instances during network partitions — a critical safety mechanism. The trade-off is that truly dead instances may continue to receive traffic until the partition resolves. The lease duration (30s heartbeat, 90s expiration) balances detection speed against false-positive evictions.
 
 ```java
 // Eureka cleans up expired instances
@@ -654,4 +672,4 @@ Key considerations for production:
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

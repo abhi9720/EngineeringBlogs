@@ -68,6 +68,8 @@ public class PoolSizeCalculator {
 }
 ```
 
+The formula `cores × 2 + spindles` comes from PostgreSQL's architecture: each connection consumes a dedicated backend process that must compete for CPU and buffer-pool access. Beyond roughly 2× the core count, additional connections cause context-switching overhead that degrades overall throughput. For reactive applications using connection pools primarily for blocking JDBC calls (isolated on bounded elastic schedulers), even fewer connections suffice — `cores + 1` is the recommended starting point. The hard cap at 50 prevents runaway configurations; many production systems perform best with pools between 10 and 30.
+
 ### HikariCP Configuration
 
 ```yaml
@@ -90,6 +92,8 @@ spring:
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
 ```
+
+Each HikariCP property serves a specific purpose. `connection-timeout` (5000 ms) is the maximum time a caller waits for a connection before getting an exception — too high and requests pile up, too low and legitimate spikes cause false failures. `max-lifetime` (600000 ms = 10 minutes) should be shorter than the database server's connection timeout to avoid stale connections. `keepalive-time` (30000 ms) enables heartbeats on idle connections without the overhead of a full validation query. Statement caching (`cachePrepStmts`, `prepStmtCacheSize`) avoids re-parsing identical SQL on every execution and can reduce query latency by 30-50 % for repeated statements.
 
 ### Programmatic Configuration
 
@@ -144,6 +148,8 @@ spring:
       read-only: true
 ```
 
+Read-heavy workloads benefit from a larger pool because read queries are typically fast, release the connection quickly, and can be parallelized freely. The `read-only` hint allows PostgreSQL (and MySQL) to optimize query execution paths — for example, skipping transaction ID assignment.
+
 ### Write-Heavy Application
 
 ```yaml
@@ -154,6 +160,8 @@ spring:
       minimum-idle: 5
       # Also consider separate pools for read/write
 ```
+
+Write-heavy workloads need fewer connections because writes often hold locks, acquire transaction IDs, and wait for WAL flushes — more concurrent writers mean more lock contention and deadlock retries. A smaller pool throttles write concurrency naturally, improving overall throughput by reducing contention.
 
 ### Mixed Workload
 
@@ -193,6 +201,8 @@ public class MultiPoolConfig {
 # Example: 20 instances → pool size 10
 # Example: 5 instances → pool size 20
 ```
+
+The total connection load on the database is `instances × pool_size`. If 20 service instances each open 20 connections, the database must handle 400 concurrent connections — which may exceed its `max_connections` setting or cause context-switching thrash. Adjust per-instance pool size inversely with instance count. A useful heuristic: `per_instance_pool = (max_safe_db_connections / instance_count) × 0.8`.
 
 ---
 

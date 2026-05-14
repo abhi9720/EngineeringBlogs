@@ -30,11 +30,24 @@ RBAC defines three fundamental entities:
 - **Roles**: Job functions or responsibility levels (e.g., ADMIN, MANAGER, USER)
 - **Permissions**: Approvals to perform operations on resources (e.g., READ_ORDER, WRITE_ORDER)
 
-```
-User ---> Role ---> Permission
+```mermaid
+graph LR
+    U["User"] --> R["Role"]
+    R --> P["Permission"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class U blue
+    class R yellow
+    class P green
 ```
 
 ### Implementation in Spring Security
+
+RBAC in Spring Security maps roles to `GrantedAuthority` objects with the `ROLE_` prefix. The `hasRole("ADMIN")` method automatically checks for `ROLE_ADMIN`:
 
 ```java
 // 1. Define roles as simple enums or strings
@@ -66,6 +79,8 @@ public class RbacSecurityConfig {
 ```
 
 ### Hierarchical RBAC
+
+Role hierarchies allow senior roles to inherit permissions from junior roles. The `User` entity below loads roles with their inherited roles and builds the full set of granted authorities:
 
 ```java
 @Entity
@@ -118,6 +133,8 @@ public class Role {
 
 ### Role-User Assignment Table
 
+The database schema for RBAC is straightforward — junction tables link users to roles and roles to permissions:
+
 ```sql
 CREATE TABLE roles (
     id BIGINT PRIMARY KEY,
@@ -160,11 +177,33 @@ ABAC evaluates policies that consider multiple attributes:
 - **Action attributes**: Read, write, delete, approve
 - **Environment attributes**: Time of day, IP address, device type
 
-```
-Policy = f(subject_attrs, resource_attrs, action_attrs, environment_attrs)
+```mermaid
+graph TB
+    Policy["Policy Decision"]
+    SA["Subject Attributes<br/>(role, department, clearance)"]
+    RA["Resource Attributes<br/>(classification, owner, type)"]
+    AA["Action Attributes<br/>(read, write, delete)"]
+    EA["Environment Attributes<br/>(time, IP, device)"]
+
+    SA --> Policy
+    RA --> Policy
+    AA --> Policy
+    EA --> Policy
+    Policy --> Result["Allow / Deny"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class SA,RA,AA,EA blue
+    class Policy yellow
+    class Result green
 ```
 
 ### Policy Definition with Spring Security Method Security
+
+ABAC policies in Spring Security are typically expressed through custom `PermissionEvaluator` implementations or SpEL expressions. The evaluator below implements multiple policies: owners can do anything, managers can read department documents, confidential documents are blocked outside business hours:
 
 ```java
 @Configuration
@@ -247,6 +286,8 @@ public class DocumentPermissionEvaluator implements PermissionEvaluator {
 
 ### Using ABAC in Controllers
 
+The `@PreAuthorize("hasPermission(...)")` annotation integrates the custom evaluator with controller methods:
+
 ```java
 @RestController
 @RequestMapping("/documents")
@@ -277,7 +318,7 @@ public class DocumentController {
 
 ### Policy as Code: Using a Policy Engine
 
-For complex ABAC, use a dedicated policy engine:
+For complex ABAC, use a dedicated policy engine that evaluates rules dynamically. Each rule is a lambda that receives the full access context and returns allow or deny:
 
 ```java
 // Define policies as rules
@@ -342,7 +383,7 @@ public class PolicyEngine {
 
 ## Hybrid Approach: RBAC with ABAC Constraints
 
-Most production systems use a hybrid: RBAC for broad permissions, ABAC for fine-grained constraints:
+Most production systems use a hybrid: RBAC for broad permissions (fast path), ABAC for fine-grained constraints (slow path). The hybrid manager below first checks the role, then evaluates attribute-based constraints:
 
 ```java
 @Component
@@ -397,6 +438,8 @@ public class HybridAuthorizationManager {
 
 ### Mistake 1: Too Many Roles
 
+Creating a role for every permission combination leads to "role explosion" — dozens or hundreds of roles that are impossible to manage:
+
 ```java
 // WRONG: Proliferating roles for every permission combination
 // This leads to "role explosion"
@@ -421,6 +464,8 @@ enum Role {
 ```
 
 ### Mistake 2: Hardcoding Permission Logic
+
+Scattering permission checks across services makes the authorization model impossible to audit or modify:
 
 ```java
 // WRONG: Scattered permission checks

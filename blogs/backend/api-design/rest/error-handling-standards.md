@@ -22,6 +22,8 @@ RFC 7807 defines a standard format for HTTP API error responses called "Problem 
 
 ## RFC 7807 Problem Details Structure
 
+RFC 7807 defines a standard format for HTTP API error responses called "Problem Details." The structure includes five standard fields: `type` (a URI identifying the error type), `title` (a short, human-readable summary), `status` (the HTTP status code), `detail` (a human-readable explanation), and `instance` (a URI identifying the specific occurrence). Additional domain-specific fields can be added as extensions. Adopting this standard ensures that all errors across your API follow a consistent, machine-parseable format that clients can handle programmatically.
+
 ### Standard Fields
 
 ```java
@@ -47,6 +49,8 @@ public class ProblemDetail {
 }
 ```
 
+The JSON representation shows a complete Problem Details response. The `type` field points to documentation that clients can use to understand the error and how to handle it. The `detail` field provides enough context for developers to diagnose the issue without exposing internal implementation details. The `instance` field identifies exactly which request caused the error, making it easy to correlate errors with server logs. Extension fields like `balance` and `accounts` provide domain-specific context that helps clients handle the error appropriately — in this case, the client can inform the user that they need more credit.
+
 ### JSON Representation
 
 ```json
@@ -65,7 +69,11 @@ public class ProblemDetail {
 
 ## Spring Boot Implementation
 
+Spring 6 introduced built-in support for RFC 7807 through the `ProblemDetail` class. Using `@RestControllerAdvice` with `@ExceptionHandler` methods that return `ProblemDetail` centralizes error handling in one place while producing standard-compliant responses. This approach eliminates the need for custom error response DTOs and ensures all endpoints produce consistent error formats automatically.
+
 ### Using Spring 6 ProblemDetail
+
+The `GlobalExceptionHandler` demonstrates handling different exception types with appropriate Problem Details. Each handler sets the HTTP status, title, detail, and type URI specific to the error category. For validation errors, the handler extracts field-level errors from the binding result and adds them as an extension property. This provides rich, actionable error information that clients can use to highlight specific form fields or validation failures — far more useful than a generic "validation failed" message.
 
 ```java
 @RestControllerAdvice
@@ -111,6 +119,8 @@ public class GlobalExceptionHandler {
     }
 }
 ```
+
+A custom error catalog centralizes error type definitions, ensuring consistency across all error responses. Each error type has a unique URI (which can link to documentation) and a standard title. Using an enum prevents typos and makes error types discoverable through IDE autocompletion. The error types should be documented publicly so API consumers can write error-handling code against known, stable error identifications. Consider versioning your error catalog URIs to allow evolving error documentation without breaking existing client code.
 
 ### Custom Error Catalog
 
@@ -166,6 +176,8 @@ public enum ErrorType {
 ---
 
 ## Comprehensive Error Handler
+
+While the basic ProblemDetail approach works for simple cases, a domain exception hierarchy provides richer error context and cleaner separation of concerns. Each domain exception extends `ApiException` and carries metadata specific to its error type — `ResourceNotFoundException` includes the `resourcePath` for the instance URI, `ValidationFailedException` carries `fieldErrors` for detailed validation feedback, and `RateLimitException` includes `retryAfterSeconds` for the Retry-After header. This structured approach makes exception handling more expressive and testable.
 
 ### Domain Exception Hierarchy
 

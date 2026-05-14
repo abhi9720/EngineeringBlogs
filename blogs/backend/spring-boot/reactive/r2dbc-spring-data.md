@@ -16,6 +16,8 @@ draft: false
 
 R2DBC (Reactive Relational Database Connectivity) enables fully reactive, non-blocking database access for relational databases. Combined with Spring Data R2DBC, it provides a repository abstraction similar to Spring Data JPA but with reactive types (Mono/Flux).
 
+The key difference from JPA is that R2DBC does NOT manage a persistence context or provide lazy loading. Each query is an independent operation that returns its results reactively. This eliminates the N+1 problem and the LazyInitializationException, but it also means you must explicitly fetch all needed data in each query.
+
 ## Dependencies
 
 ```xml
@@ -40,6 +42,10 @@ R2DBC (Reactive Relational Database Connectivity) enables fully reactive, non-bl
 
 ## Configuration
 
+The configuration below sets up connection pooling for R2DBC. Unlike JDBC connection pools that block when all connections are busy, R2DBC pools return `Mono.error` with a connection acquisition timeout when the pool is exhausted. This keeps the event loop non-blocking.
+
+The `validation-query` is used to verify connections before they are borrowed from the pool. Some databases require this to detect stale connections after network interruptions.
+
 ```yaml
 spring:
   r2dbc:
@@ -54,6 +60,8 @@ spring:
 ```
 
 ### Programmatic Configuration
+
+For environments where YAML configuration isn't sufficient (e.g., SSL certificates, custom connection factory settings), define the `ConnectionFactory` programmatically. The `AbstractR2dbcConfiguration` provides a base for custom configuration.
 
 ```java
 @Configuration
@@ -89,6 +97,10 @@ public class R2dbcConfig extends AbstractR2dbcConfiguration {
 
 ## Entity Mapping
 
+R2DBC entities use property-based access and do not support lazy loading. The `@Id` annotation identifies the primary key. Constructor-based creation is recommended for immutability. Unlike JPA, R2DBC does not require a no-arg constructor if you use constructor-based mapping.
+
+Enums are mapped by their string name by default. Custom type converters are needed for complex types or when the database uses numeric codes for enums.
+
 ```java
 public class User {
     @Id
@@ -100,7 +112,6 @@ public class User {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // R2DBC uses property-based access, constructor injection is recommended
     public User() {}
 
     public User(String email, String name, UserRole role) {
@@ -126,7 +137,7 @@ public enum UserRole {
 public class LocalDateTimeReadConverter implements Converter<LocalDateTime, LocalDateTime> {
     @Override
     public LocalDateTime convert(LocalDateTime source) {
-        return source; // Default mapping works, example of custom converter
+        return source;
     }
 }
 
@@ -154,6 +165,8 @@ public class R2dbcConverterConfig {
 
 ### ReactiveCrudRepository
 
+`ReactiveCrudRepository` provides standard CRUD operations with reactive return types. Derive queries from method names just like in Spring Data JPA. The `@Query` annotation allows custom SQL queries.
+
 ```java
 public interface UserRepository extends ReactiveCrudRepository<User, Long> {
     Mono<User> findByEmail(String email);
@@ -173,6 +186,8 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
 ```
 
 ### Custom Queries
+
+For complex queries, use `DatabaseClient` directly. It provides a fluent API for building SQL statements, binding parameters, and mapping results to objects. `DatabaseClient` is fully reactive and integrates with connection pooling.
 
 ```java
 @Repository
@@ -226,6 +241,10 @@ public class CustomUserRepository {
 ## Transactions
 
 ### Transactional Operations
+
+Reactive transactions use `@Transactional` just like imperative ones, but the underlying mechanism is different. The `R2dbcTransactionManager` binds the connection to the reactive subscriber context rather than to a thread. This means the connection is available throughout the reactive pipeline even though processing happens on different threads.
+
+The `createOrder` method below demonstrates a multi-step transactional operation: validate the user exists, save the order, and deduct inventory. If any step fails, all previous database changes are rolled back.
 
 ```java
 @Service
@@ -292,7 +311,9 @@ public class TransactionConfig {
 
 ## Relationships and Joins
 
-### One-to-Many with Flat Mapping
+R2DBC does not support automatic relationship mapping like JPA. Instead, you write explicit JOIN queries and map the flat result rows to nested objects. The `OrderWithItemsRepository` below demonstrates a one-to-many mapping using `LEFT JOIN` and `collectList()`.
+
+The SQL query returns one row per order item. The Java code groups the items by order ID and constructs the nested `OrderWithItems` structure. This pattern is explicit, efficient, and avoids the N+1 problem.
 
 ```java
 public class OrderWithItems {
@@ -310,8 +331,6 @@ public class OrderWithItems {
         this.status = status;
         this.items = items;
     }
-
-    // Getters
 }
 
 @Repository
@@ -428,9 +447,7 @@ public class UserService {
         return userRepository.findById(id).block(); // BLOCKS the event loop
     }
 }
-```
 
-```java
 // Correct: Keep the chain reactive
 @Service
 public class UserService {
@@ -450,9 +467,7 @@ public Mono<Void> processBatch(List<Long> ids) {
         .flatMap(this::processOne) // All parallel - can exhaust pool
         .then();
 }
-```
 
-```java
 // Correct: Control concurrency
 @Transactional
 public Mono<Void> processBatch(List<Long> ids) {

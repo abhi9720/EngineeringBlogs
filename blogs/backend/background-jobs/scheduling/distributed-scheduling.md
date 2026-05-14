@@ -18,12 +18,29 @@ ShedLock uses a centralized lock store (database, Redis, ZooKeeper, etc.) to coo
 
 ShedLock adds a lightweight locking layer on top of Spring's scheduler:
 
-1. Before a task executes, ShedLock attempts to acquire a lock in the lock store.
-2. If the lock is acquired, the task executes.
-3. After execution (or after lock timeout), the lock is released.
-4. Other instances skip execution if they cannot acquire the lock.
+```mermaid
+graph TD
+    Start[Task Triggered by @Scheduled] --> LockAttempt{Attempt to<br/>acquire lock}
+    LockAttempt -->|Lock acquired| Execute[Execute task]
+    LockAttempt -->|Lock not acquired| Skip[Skip execution<br/>on this instance]
+    Execute --> Release[Release lock]
+    Release --> Done[Task complete]
 
-## ShedLock Configuration
+    subgraph LockStore[Centralized Lock Store]
+        Lock[(Database / Redis / ZooKeeper)]
+    end
+
+    LockAttempt -->|reads/writes| Lock
+    Release -->|updates| Lock
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+```
+
+The key insight is that ShedLock does not replace Spring's scheduler — it decorates it. Every instance still evaluates the cron expression and fires, but only the instance that wins the lock proceeds to the actual work. This means the lock store becomes a single point of coordination; if it is unavailable, all tasks skip execution on every instance, effectively pausing all scheduled work.
 
 ### Maven/Gradle Dependency
 

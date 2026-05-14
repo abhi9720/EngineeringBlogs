@@ -22,7 +22,11 @@ GraphQL is a query language for APIs that allows clients to request exactly the 
 
 ## Schema Definition Language
 
+A GraphQL schema is written in Schema Definition Language (SDL), which defines the types, relationships, and entry points for data access. Every GraphQL API starts with a schema that serves as the contract between client and server. The schema is strongly typed, meaning clients know exactly what data shape to expect and the server validates queries against the schema before execution.
+
 ### Type System
+
+The type system defines the shape of data in your API. Each type has fields with specific scalar types (String, Int, Float, Boolean, ID) or references to other custom types. The `!` suffix marks a field as non-nullable — GraphQL guarantees this field will always return a value. The `[Type!]!` syntax represents a non-nullable list of non-nullable items: the list itself cannot be null, and no item in the list can be null. This precise nullability modeling is one of GraphQL's key differentiators from REST.
 
 ```graphql
 # Core scalar types: String, Int, Float, Boolean, ID
@@ -54,6 +58,8 @@ type Comment {
 }
 ```
 
+The `Query` and `Mutation` types are the entry points for all operations in a GraphQL API — every request must start from one of these root types. Queries are used for reading data and execute in parallel by default. Mutations are used for writing data and execute sequentially to prevent race conditions. A well-designed schema organizes queries and mutations by domain (users, posts, orders) and provides meaningful pagination and filtering arguments for list fields. Note how each field returns nullable types appropriately — for example, `user(id: ID!): User` returns null if the user doesn't exist (no 404 error), while `users: [User!]!` always returns an array.
+
 ### Query and Mutation Types
 
 ```graphql
@@ -73,6 +79,8 @@ type Mutation {
   createPost(input: CreatePostInput!): Post!
 }
 ```
+
+Input types are GraphQL's mechanism for passing complex objects as arguments to mutations and queries. Unlike regular types (which use `type` keyword and can have resolvers), input types use the `input` keyword and consist only of scalar fields. They are essential for mutations with multiple parameters because they keep the argument list clean and allow field-level validation. Note the difference between `CreateUserInput` (all fields required) and `UpdateUserInput` (all fields optional) — this pattern reflects that creation typically requires all fields while updates only need changed fields.
 
 ### Input Types
 
@@ -100,7 +108,11 @@ input CreatePostInput {
 
 ## GraphQL Java Implementation
 
+GraphQL Java is the reference implementation for building GraphQL servers in Java. It provides a schema parser, execution engine, and data fetching infrastructure. The implementation involves three main components: the schema definition (`.graphqls` files), the runtime wiring that connects schema fields to data fetchers, and the execution engine that processes incoming queries. Spring Boot with `spring-boot-starter-graphql` simplifies this setup with auto-configuration and annotation-driven resolvers.
+
 ### Schema Configuration
+
+The `RuntimeWiring` builder maps schema fields to their corresponding data fetchers — the methods that actually fetch data. Each field in the `Query` and `Mutation` types needs a data fetcher that knows how to retrieve that data. The wiring is explicit: you connect the schema field name (e.g., `"user"`) to a method reference (e.g., `userFetcher::getUserById`). This explicit wiring gives you full control over data fetching logic and enables dependency injection of services into the data fetchers.
 
 ```java
 @Component
@@ -134,6 +146,8 @@ public class GraphQLProvider {
     public GraphQL getGraphQL() { return graphQL; }
 }
 ```
+
+Data fetchers are the resolver functions that populate each field in a GraphQL response. They receive the `DataFetchingEnvironment` which provides access to query arguments, context, and the parent object. Each data fetcher is responsible for a single field or query — this granularity enables parallel execution (fields at the same level are resolved concurrently) and selective fetching (only requested fields are resolved). A common pattern is to create dedicated data fetcher classes per domain (user, post, comment) that encapsulate the data access logic for that domain's fields.
 
 ### Data Fetchers
 
@@ -186,6 +200,8 @@ public class UserDataFetcher {
 }
 ```
 
+The resolver pattern is how GraphQL handles relationships between types. Instead of eagerly loading all related data (which causes over-fetching), resolvers lazily fetch related objects only when the client requests them. A `PostResolver` might fetch the `author` (a User) and `comments` only when the client's query includes those fields. This lazy resolution is what makes GraphQL efficient — but it also introduces the N+1 problem where resolving a list of posts triggers separate database queries for each post's author, which is why DataLoader (covered later) is essential for production systems.
+
 ### Resolver Pattern for Relationships
 
 ```java
@@ -227,6 +243,8 @@ public class UserResolver implements GraphQLResolver<User> {
 ---
 
 ## GraphQL Controller
+
+Unlike REST which exposes multiple endpoints for different resources, GraphQL uses a single endpoint (typically `/graphql`) for all queries and mutations. The controller receives a `GraphQLRequest` containing the query string, variables, and operation name, executes it through the GraphQL engine, and returns the response. Error handling in this controller returns both data and errors — GraphQL can return partial results with error information, allowing clients to display some data while handling specific failures.
 
 ### Single Endpoint
 
@@ -341,6 +359,8 @@ mutation CreateNewUser($input: CreateUserInput!) {
 }
 ```
 
+Aliases allow clients to request the same field multiple times with different arguments in a single query. This is useful for comparing data (e.g., fetching two users by different IDs). Fragments are reusable field selections that reduce query duplication — once defined, a fragment can be included in multiple queries or multiple places within the same query. Both features make GraphQL more expressive and help clients write concise, maintainable queries.
+
 ### Aliases and Fragments
 
 ```graphql
@@ -365,6 +385,8 @@ fragment UserFields on User {
 ---
 
 ## Best Practices
+
+Building production-grade GraphQL APIs requires attention to schema design, performance optimization, security, and operational concerns. The following practices help ensure your GraphQL API is efficient, maintainable, and safe.
 
 1. **Design schema around client needs**: Schema should reflect client use cases
 2. **Use pagination**: Always paginate list fields
@@ -403,6 +425,8 @@ public class GraphQLConfig {
 
 ### Mistake 1: Over-fetching Due to Poor Resolver Design
 
+The N+1 problem is the single most common performance issue in GraphQL. When a resolver fetches related data by calling the database once per parent record, a query for 100 posts with their authors results in 1 query for posts + 100 queries for authors = 101 database calls. DataLoader solves this by batching individual loads into a single batched query. Always use DataLoader for any field that resolves related data — especially for list fields where the N+1 problem multiplies quickly.
+
 ```graphql
 # WRONG: Each comment fetches author separately
 # This causes N+1 queries
@@ -411,6 +435,8 @@ public class GraphQLConfig {
 ```
 
 ### Mistake 2: Not Paginating List Fields
+
+Exposing unbounded list fields is dangerous — a query for `users { posts { comments } }` could trigger massive database queries and return enormous payloads. Every list field must have pagination parameters. The Relay Connection pattern (with `first`/`after` arguments, `edges` with cursors, and `pageInfo` with `hasNextPage`) is the industry standard for cursor-based pagination in GraphQL. It provides consistent, efficient pagination that works well with infinite scroll and prefetching.
 
 ```graphql
 # WRONG: No pagination
@@ -430,6 +456,8 @@ type UserConnection {
 ```
 
 ### Mistake 3: Exposing Internal IDs
+
+Using auto-increment database IDs as GraphQL identifiers exposes your data model internals and allows clients to infer business intelligence (total users, growth rate, etc.). Opaque IDs (UUIDs or base64-encoded composite keys) prevent information leakage and make it harder for attackers to enumerate resources. The `ID` scalar type in GraphQL is designed for opaque identifiers — consumers should treat them as opaque strings, not interpretable values.
 
 ```graphql
 # WRONG: Exposing database sequential IDs

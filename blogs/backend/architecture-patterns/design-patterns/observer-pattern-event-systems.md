@@ -77,6 +77,8 @@ public class AuditListener implements EventListener {
 }
 ```
 
+The classic observer pattern uses `CopyOnWriteArrayList` for thread-safe listener registration. `AuditListener` filters for order and payment events, logging every state change. This synchronous in-process approach works well within a single JVM, but the publisher blocks until all listeners complete — if one listener is slow, all others wait.
+
 ## Spring Application Events
 
 Spring provides a built-in observer implementation through ApplicationEvent and ApplicationListener:
@@ -163,6 +165,8 @@ public class HighValueOrderListener {
 }
 ```
 
+Spring's `@EventListener` annotation eliminates the need to implement `ApplicationListener`. Methods annotated with `@EventListener` are automatically discovered and registered. Adding `@Async` makes the listener execute on a separate thread, so the publisher doesn't block. The `HighValueOrderListener` uses conditional logic inside the handler to only process orders above $10,000 — this is cleaner than filtering in the publisher.
+
 ### Order Listener with Priority
 
 ```java
@@ -198,6 +202,8 @@ public class OrderNotificationListener {
     }
 }
 ```
+
+The `@Order` annotation controls listener execution order. Validation runs first to fail fast. Processing runs second. Notification runs last — there is no point notifying the customer if validation or processing failed. With `@Async` on the later listeners, validation can remain synchronous while notification becomes asynchronous.
 
 ## Event-Driven with Message Broker
 
@@ -270,6 +276,8 @@ public class RabbitMQEventConsumer {
 }
 ```
 
+Message brokers extend the observer pattern across service boundaries. The publisher serializes domain events to JSON and publishes them to a RabbitMQ exchange with a routing key. The consumer listens on a queue, deserializes events, and dispatches to registered handlers. Message headers carry metadata (event type, timestamp, message ID) for routing and deduplication. On failure, `basicNack` with `requeue=true` tells RabbitMQ to redeliver the message.
+
 ## Reactive Observer with Project Reactor
 
 ```java
@@ -336,6 +344,8 @@ public class OrderEventProcessor {
 }
 ```
 
+The reactive observer uses Project Reactor's `Sinks.Many` as an event bus. `flatMap` enables concurrent processing of multiple orders with backpressure handling. The `onErrorContinue` operator ensures one failed order doesn't crash the entire stream — the error is logged and processing continues with the next event.
+
 ## Custom Event Bus with Domain Events
 
 ```java
@@ -389,6 +399,8 @@ public class PaymentCompletedEvent extends DomainEvent {
 }
 ```
 
+Domain events carry only data relevant to the business event. The abstract `DomainEvent` base class handles common concerns: unique event ID (for deduplication), timestamp (for ordering), and exchange/routing key (for message broker routing). Concrete events add domain-specific data.
+
 ## Testing Observer Pattern
 
 ```java
@@ -429,6 +441,8 @@ class OrderEventListenerTest {
     }
 }
 ```
+
+Testing verifies that publishing an event triggers all registered listeners. The second test verifies that when a synchronous listener (inventory check) throws an exception, the transaction rolls back and the email is never sent. This is important for understanding the transactional semantics of Spring events.
 
 ## Common Mistakes
 

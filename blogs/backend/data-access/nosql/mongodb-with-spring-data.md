@@ -24,6 +24,8 @@ MongoDB is a document-oriented NoSQL database that stores data in flexible, JSON
 
 ### Entity Design
 
+MongoDB documents are embedded by default, which is the opposite of relational normalization. The `OrderDocument` below embeds `OrderItem`, `Address`, and `PaymentInfo` directly as nested subdocuments. Compound indexes on `userId` + `status` and `createdAt` support the most common query patterns. The `@Version` annotation enables optimistic locking at the document level, preventing concurrent overwrites.
+
 ```java
 @Document(collection = "orders")
 @CompoundIndexes({
@@ -113,6 +115,8 @@ public class Address {
 
 ### MongoDB Repository
 
+Spring Data MongoDB repositories derive queries from method names, just like JPA repositories. The key difference is that these queries operate on nested document fields using dot notation (e.g., `findByItemsProductId` queries inside the embedded `items` array). Sorting and pagination work identically to JPA.
+
 ```java
 @Repository
 public interface OrderRepository extends MongoRepository<OrderDocument, String> {
@@ -152,6 +156,8 @@ public interface OrderRepository extends MongoRepository<OrderDocument, String> 
 
 ### Custom Queries with @Query
 
+The `@Query` annotation uses MongoDB's JSON query syntax directly. The examples below demonstrate category + price range filtering, field projections to reduce data transfer, regex-based searches, and text search using MongoDB's built-in text indexes.
+
 ```java
 @Repository
 public interface ProductRepository extends MongoRepository<ProductDocument, String> {
@@ -185,6 +191,8 @@ public interface ProductRepository extends MongoRepository<ProductDocument, Stri
 ## MongoDBTemplate
 
 ### Template Usage
+
+`MongoTemplate` provides the imperative API for complex queries that cannot be expressed as derived methods. The examples below demonstrate multi-criteria queries with geospatial `$nearSphere` filtering, atomic `findAndModify` operations that return the updated document, bulk `updateMulti` operations for applying discounts to an entire category, and the aggregation pipeline for group-and-sort analytics.
 
 ```java
 @Service
@@ -280,6 +288,8 @@ public class ProductTemplateService {
 
 ### MongoDB Transactions
 
+MongoDB supports multi-document ACID transactions, but they require a replica set. The `@Transactional` annotation works identically to JPA transactions. In the example below, creating an order and decrementing inventory happen atomically—if either operation fails, both are rolled back. The inventory update uses `updateFirst` with a `$gte` condition on stock to atomically check and decrement in a single operation.
+
 ```java
 @Service
 public class OrderTransactionService {
@@ -345,12 +355,16 @@ spring.data.mongodb.auto-index-creation=true
 
 ### Mistake 1: Deeply Nested Documents
 
+Documents nested deeper than 2-3 levels become difficult to query and index. MongoDB's document size limit is 16MB, and deeply nested structures waste this budget on structure rather than data. If you need deep hierarchies, use references (manual or via DBRef) instead.
+
 ```java
 // WRONG: Deep nesting makes queries complex and indexing hard
 // CORRECT: Limit to 2-3 levels, use references for deeper hierarchies
 ```
 
 ### Mistake 2: Missing Indexes for Query Patterns
+
+Every query that does not use an index triggers a full collection scan. The `explain()` method in the MongoDB shell or the profiler should be used during development to verify that queries use the expected indexes.
 
 ```java
 // WRONG: No index for common query
@@ -362,6 +376,8 @@ db.orders.find({ userId: "123", status: "PENDING" })
 ```
 
 ### Mistake 3: Unbounded Arrays
+
+Embedded arrays that grow without limit push documents toward the 16MB limit and cause performance degradation. If an array is unbounded (e.g., a customer's order history), use a separate collection with a reference to the parent document.
 
 ```java
 // WRONG: Embedded array grows indefinitely

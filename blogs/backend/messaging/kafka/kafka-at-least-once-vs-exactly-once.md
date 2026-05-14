@@ -18,7 +18,7 @@ Delivery semantics define how Kafka guarantees message delivery between producer
 
 ## At-Most-Once Semantics
 
-Messages are delivered zero or one time. If the producer fails or times out, the message may be lost. Use when throughput is priority over data completeness.
+Messages are delivered zero or one time. If the producer fails or times out, the message may be lost. Use when throughput is priority over data completeness. The producer sets `acks=0` (fire-and-forget) and `retries=0` — it sends the message and doesn't wait for any confirmation. This gives maximum throughput but no delivery guarantee.
 
 ```java
 Properties props = new Properties();
@@ -30,7 +30,7 @@ At-most-once is typically used for metrics or logging where occasional data loss
 
 ## At-Least-Once Semantics
 
-Messages are delivered one or more times. The producer retries on failure, but retries may cause duplicates.
+Messages are delivered one or more times. The producer retries on failure, but retries may cause duplicates. The producer waits for all in-sync replicas to acknowledge (`acks=all`) and retries up to 5 times. On the consumer side, at-least-once is achieved by committing offsets only after successful processing — if the consumer crashes before committing, the message is redelivered.
 
 ```java
 Properties props = new Properties();
@@ -53,11 +53,11 @@ while (true) {
 
 ## Exactly-Once Semantics
 
-Exactly-once ensures messages are processed exactly one time, even in the presence of failures. Achieving exactly-once requires coordination across producers, brokers, and consumers.
+Exactly-once ensures messages are processed exactly one time, even in the presence of failures. Achieving exactly-once requires coordination across producers, brokers, and consumers. It involves three layers: an idempotent producer (prevents duplicates from retries), a transactional producer (atomic writes across partitions), and read-committed consumers (only see committed messages).
 
 ### Idempotent Producer
 
-Enable idempotence to prevent duplicate messages caused by producer retries.
+Enable idempotence to prevent duplicate messages caused by producer retries. When idempotence is enabled, Kafka assigns each producer a unique producer ID (PID) and attaches sequence numbers to each message. The broker deduplicates based on (PID, sequence), ensuring that retries don't create duplicates. Kafka automatically forces `acks=all` and `retries=Integer.MAX_VALUE` when idempotence is on.
 
 ```java
 Properties props = new Properties();
@@ -69,7 +69,7 @@ props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 5);
 
 ### Transactional Producer
 
-Kafka transactions enable atomic writes across multiple partitions and topics.
+Kafka transactions enable atomic writes across multiple partitions and topics. The producer is assigned a `transactional.id`, which it uses to fence out zombie instances (if two producers try to use the same `transactional.id`, the older one is fenced). The `beginTransaction()` / `commitTransaction()` pair ensures that either all messages across all specified partitions are committed, or none are. If the producer crashes mid-transaction, the broker waits for the transaction timeout to expire and then aborts the transaction.
 
 ```java
 Properties props = new Properties();
@@ -92,7 +92,7 @@ try {
 
 ### Exactly-Once Consumer
 
-Combine transactional producers with consumer offset management for end-to-end exactly-once.
+End-to-end exactly-once requires the consumer to process messages and produce results within the same transaction. The consumer sets `isolation.level=read_committed` to only see committed messages (not uncommitted or aborted). It processes records and sends results to an output topic, then atomically commits both the output messages and the consumer offsets in the same transaction via `sendOffsetsToTransaction()`. If the transaction is aborted, both the output messages and the offset commit are rolled back.
 
 ```java
 Properties consumerProps = new Properties();
@@ -137,7 +137,7 @@ while (true) {
 
 ## Idempotent Consumer Pattern
 
-When exactly-once EOS is not feasible, implement idempotent consumers that deduplicate messages.
+When exactly-once EOS is not feasible, implement idempotent consumers that deduplicate messages. This is the most practical approach for most systems — it provides exactly-once semantics at the application level without requiring Kafka's transactional API. Use PostgreSQL's `ON CONFLICT DO NOTHING` for atomic deduplication.
 
 ```java
 @Component
@@ -165,6 +165,8 @@ public class IdempotentOrderConsumer {
 
 ### Using Redis for Idempotency
 
+For higher throughput, use Redis with TTL-based expiry. The `setIfAbsent` operation atomically creates a key only if it doesn't exist, providing a distributed lock and deduplication check in one call. The 24-hour TTL automatically cleans up old keys.
+
 ```java
 @Component
 public class RedisIdempotencyChecker {
@@ -187,7 +189,7 @@ public class RedisIdempotencyChecker {
 
 ## EOS with Kafka Streams
 
-Kafka Streams provides exactly-once semantics with minimal configuration.
+Kafka Streams provides exactly-once semantics with minimal configuration — just set `processing.guarantee=exactly_once_v2`. The library handles producer fencing, transactional coordination, and offset management automatically. This is the simplest way to get exactly-once in Kafka: no manual transaction management, no separate producer needed.
 
 ```java
 Properties props = new Properties();
@@ -218,6 +220,8 @@ props.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 100);
 
 ### Mistake: Confusing idempotent producer with exactly-once delivery
 
+The idempotent producer prevents duplicates caused by producer retries at the broker level, but it doesn't prevent duplicates from consumer reprocessing or from producer crashes between sending and committing. End-to-end exactly-once requires the full transactional API: producer transactions combined with consumer `read_committed` isolation.
+
 ```java
 // Wrong - idempotent producer prevents duplicates on broker, not end-to-end
 props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
@@ -232,6 +236,8 @@ props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
 ```
 
 ### Mistake: Forgetting to set isolation level on consumer
+
+If a consumer doesn't set `isolation.level=read_committed`, it will see both committed and uncommitted (and possibly later aborted) messages. This can lead to processing data that was part of a rolled-back transaction, breaking exactly-once guarantees.
 
 ```java
 // Wrong - consumer sees uncommitted and aborted messages

@@ -18,6 +18,8 @@ Unlike dedicated vector databases, pgvector operates within PostgreSQL, eliminat
 
 ### Installing pgvector
 
+Enable the extension in your database. The `vector` extension adds the `vector` data type and the distance operators (`<=>` for cosine, `<->` for L2, `<#>` for inner product):
+
 ```sql
 -- Create the extension in your database
 CREATE EXTENSION vector;
@@ -27,6 +29,8 @@ SELECT extname, extversion FROM pg_extension WHERE extname = 'vector';
 ```
 
 ### Table Creation
+
+Define tables with a `vector` column sized to match your embedding model's output dimension. OpenAI's `text-embedding-ada-002` produces 1536-dimensional vectors, while Cohere or sentence-transformers models typically use 768 dimensions. The JSONB `metadata` column stores arbitrary structured data alongside each embedding:
 
 ```sql
 -- Create documents table with vector support
@@ -53,6 +57,8 @@ CREATE TABLE articles (
 ```
 
 ## Indexing for Vector Search
+
+pgvector offers two index types for Approximate Nearest Neighbor (ANN) search. **IVFFlat** divides the vector space into inverted file lists; it builds quickly and offers a good speed-recall trade-off with proper `lists` and `probes` tuning. **HNSW** builds a hierarchical navigable small-world graph; it provides superior recall at the cost of longer build times and higher memory usage during construction. Choose HNSW when query latency is critical and you can afford the initial build cost:
 
 ```sql
 -- Create indexes for approximate nearest neighbor search
@@ -81,6 +87,8 @@ CREATE INDEX ON articles USING hnsw (embedding vector_l2_ops)
 
 ## Spring Boot Integration
 
+Configure a `JdbcTemplate` bean to execute raw SQL queries against the PostgreSQL database. pgvector's query operators work directly in SQL, so no special ORM integration is needed:
+
 ```java
 @Configuration
 public class PgvectorConfiguration {
@@ -93,6 +101,8 @@ public class PgvectorConfiguration {
 ```
 
 ### Document Entity
+
+A plain Java class maps to the `documents` table. The `embedding` field is a `float[]` — pgvector accepts arrays formatted as `[x,y,z,...]` in SQL queries. The `metadata` field uses `Map<String, Object>` to store arbitrary JSON:
 
 ```java
 public class Document {
@@ -119,6 +129,8 @@ public class Document {
 ```
 
 ## Embedding Generation
+
+Embeddings transform text into dense vector representations. The following service calls OpenAI's embedding API with `text-embedding-ada-002`. It also demonstrates a local fallback using a model like `all-MiniLM-L6-v2` served via a REST endpoint. Using a local model reduces latency, eliminates API costs, and keeps data within your network — important for privacy-sensitive applications:
 
 ```java
 @Component
@@ -193,6 +205,8 @@ public class EmbeddingService {
 ## Vector Search Queries
 
 ### Nearest Neighbor Search
+
+pgvector provides three distance operators: `<=>` (cosine distance), `<->` (L2/Euclidean distance), and `<#>` (inner product). Cosine distance is the most common choice for semantic search because it measures the angle between vectors, ignoring magnitude. The query below converts cosine distance to a similarity score (`1 - distance`) so results can be ordered and filtered by a 0-to-1 score:
 
 ```java
 @Repository
@@ -288,6 +302,10 @@ public class DocumentRepository {
 
 ## Hybrid Search (Vector + Full-Text)
 
+Hybrid search combines semantic (vector) and keyword (full-text) signals for robust retrieval. The vector search catches conceptually similar results even when they share no common words, while full-text search ensures exact keyword matches are not missed. The `vectorWeight` parameter controls the balance — 0.7 favors semantic similarity, 0.3 favors keyword matching, and 0.5 weights them equally.
+
+The CTE (Common Table Expression) approach computes vector and text scores independently, then combines them with a weighted sum. The `LIMIT ? * 2` in the vector subquery ensures enough candidates survive the join:
+
 ```java
 @Service
 public class HybridSearchService {
@@ -366,6 +384,8 @@ public class HybridSearchService {
 ```
 
 ## RAG Pipeline (Retrieval-Augmented Generation)
+
+RAG pipelines retrieve relevant context from a knowledge base and feed it to an LLM for grounded answer generation. This addresses the two main limitations of pure LLMs: hallucination (making up facts) and knowledge cutoff (missing recent information). The pipeline below retrieves the top-3 most similar documents, concatenates them into a prompt, and sends it to GPT-4 with a system instruction to answer based strictly on the provided context:
 
 ```java
 @Service
@@ -472,6 +492,8 @@ public class RagPipelineService {
 
 ## Performance Tuning
 
+Index and query parameters heavily influence performance. The `ivfflat.probes` setting controls how many lists are searched during a query — more probes improve recall but increase latency. For HNSW, `hnsw.ef_search` controls the search breadth. The `EXPLAIN ANALYZE` command helps verify that the index is being used. For very large tables, partitioning by category reduces the search space per query:
+
 ```sql
 -- Tune IVFFlat index probes for recall vs speed tradeoff
 SET ivfflat.probes = 10;  -- More probes = better recall, slower
@@ -508,6 +530,8 @@ CREATE TABLE docs_science PARTITION OF documents_partitioned
 
 ### Wrong Index Type
 
+Each index type is tied to a specific distance operator. Using a L2 index for cosine queries will still return results, but the ranking will be incorrect:
+
 ```java
 // Wrong: Using L2 index for cosine distance
 CREATE INDEX ON documents USING ivfflat (embedding vector_l2_ops);
@@ -518,6 +542,8 @@ CREATE INDEX ON documents USING ivfflat (embedding vector_cosine_ops);
 ```
 
 ### Forgetting to Normalize Embeddings
+
+Cosine similarity computes the cosine of the angle between two vectors. If vectors are not unit-length, the result is affected by magnitude rather than just direction. Always normalize embeddings when using cosine similarity:
 
 ```java
 // Wrong: Not normalizing embeddings for cosine similarity

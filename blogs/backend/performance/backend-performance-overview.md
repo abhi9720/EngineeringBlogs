@@ -55,6 +55,8 @@ public class PerformanceMeasurementAspect {
 }
 ```
 
+The aspect uses Spring AOP and Micrometer's `Timer.Sample` to capture wall-clock duration for every method annotated with `@Measured`. The `Timer.start`/`stop` pattern measures the full synchronous execution time regardless of outcome, ensuring no slow path goes untracked. In production, tagging by operation and class lets you slice p50/p99 latency per endpoint in Grafana without adding manual instrumentation code across the codebase. This is the foundation of the "measure first" mantra — without this data, every optimization decision is guesswork.
+
 ### 2. Profiling
 
 Identify where time is spent:
@@ -69,6 +71,8 @@ asprof -e alloc -d 30 -f alloc-profile.html <PID>
 # JFR recording
 jcmd <PID> JFR.start duration=60s filename=recording.jfr
 ```
+
+CPU profiling (`-e cpu`) uses Linux `perf_events` to sample stack traces at a fixed rate, producing a flame graph where bar width directly represents CPU consumption. Allocation profiling (`-e alloc`) does the same for heap churn, revealing which code paths generate the most garbage. JFR complements both by recording a richer event stream — lock contention, I/O waits, code cache usage — with sub-1 % overhead, making it suitable for always-on production monitoring. A typical workflow starts with a 60-second JFR recording to spot anomalies, then drills into specific methods with async-profiler.
 
 ### 3. Optimization
 
@@ -95,6 +99,8 @@ public class OptimizedService {
     }
 }
 ```
+
+The contrast between the two methods captures the single most impactful database optimization: collapsing N+1 round-trips into one batched call. `findAllById` generates `WHERE id IN (...)` under the hood, which the database resolves with a single index scan. In production, also set `spring.jpa.properties.hibernate.default_batch_fetch_size` and enable Hibernate statistics to verify that batch fetching actually fires. Never assume the ORM is batching — instrument it.
 
 ---
 
@@ -126,6 +132,8 @@ public class MemoryEfficientService {
     private Map<Long, User> userCache = new ConcurrentHashMap<>(16_384, 0.75f, 16);
 }
 ```
+
+Beyond GC algorithm selection — ZGC delivers sub-millisecond pauses regardless of heap size — the data structure choice directly impacts allocation pressure and lock contention. A plain `HashMap` with default capacity (16) triggers expensive resizing as entries accumulate, while its lack of thread safety invites subtle corruption under concurrent access. `ConcurrentHashMap` with an explicit initial capacity (16_384, a power of two) and concurrency level (16) avoids both resize cost and lock striping contention. The capacity should roughly match the steady-state entry count; overallocating wastes memory but undersizing causes repeated rehash.
 
 ### 3. API Performance
 
@@ -160,6 +168,8 @@ public class OptimizedApiController {
     }
 }
 ```
+
+The shift from sequential to parallel `CompletableFuture` composition collapses the dashboard latency from 300 ms to roughly the slowest of the three independent calls. This works perfectly when dependencies are absent and calls are I/O-bound. In production you must supply a dedicated thread pool to `supplyAsync` — relying on `ForkJoinPool.commonPool` risks starvation because the common pool is shared across the entire JVM including parallel streams and framework internals. Spring's `@Async("taskExecutor")` with a custom `ThreadPoolTaskExecutor` is the recommended approach.
 
 ---
 
@@ -237,6 +247,8 @@ public class CorrectOptimization {
 }
 ```
 
+The wrong approach exhibits two classic anti-patterns: micro-optimizing a cheap string operation (saving ~0.1 ms) while ignoring N+1 queries that cost 500 ms, and performing two separate N+1 cycles per user inside a loop. The correct approach flattens all work into three round-trips by collecting IDs upfront and using `IN` clauses — this is the "gather keys, batch load" pattern. A production-ready version would also add `@QueryHints` for batch size tuning and log slow queries via Hibernate statistics to catch regressions.
+
 ### Mistake 2: Over-Engineering Early
 
 ```java
@@ -265,6 +277,8 @@ public class SimpleFirst {
 }
 ```
 
+The premature approach layers Redis (L2), Caffeine (L1), and a hedging cache (L0) before confirming the database is the actual bottleneck. This adds serialization overhead, cache-coherency complexity, and operational surface area — all for an optimization that may move the needle by only a few milliseconds. The correct approach uses Spring's declarative `@Cacheable`, backed by a single provider. Only after measuring cache-miss ratio and proving that the database is saturated should a multi-tier strategy be considered. "Make it work, make it right, make it fast — in that order."
+
 ### Mistake 3: Ignoring Database Performance
 
 ```sql
@@ -276,6 +290,8 @@ SELECT * FROM orders WHERE status = 'PENDING';
 CREATE INDEX idx_orders_status ON orders(status);
 -- Execution time: 5ms
 ```
+
+A missing index on a filtered column forces the database into a sequential scan — for a 10 million row table that means reading every page from disk. With a B-tree index on `status`, the database walks only the matching leaf entries (typically a few thousand rows) and fetches them via heap lookups. In PostgreSQL, always verify index usage with `EXPLAIN (ANALYZE, BUFFERS)`: look for "Seq Scan" on tables over a few thousand rows, and use `pg_stat_user_indexes` to find unused indexes that waste write throughput on every INSERT and UPDATE.
 
 ---
 

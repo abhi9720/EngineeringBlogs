@@ -18,46 +18,60 @@ In practice, Clean Architecture means your business rules are pure Java objects 
 
 A typical Clean Architecture Spring Boot project follows this structure:
 
+```mermaid
+graph TD
+    Root["com.example.orders"]
+    Root --> Domain["domain"]
+    Domain --> DomainModel["model"]
+    DomainModel --> OrderJava["Order.java"]
+    DomainModel --> OrderId["OrderId.java"]
+    DomainModel --> OrderLine["OrderLine.java"]
+    DomainModel --> OrderStatus["OrderStatus.java"]
+    DomainModel --> Money["Money.java"]
+    Domain --> DomainService["service"]
+    DomainService --> OrderDomainService["OrderDomainService.java"]
+    DomainService --> DiscountPolicy["DiscountPolicy.java"]
+    Root --> Application["application"]
+    Application --> Port["port"]
+    Port --> Inbound["inbound"]
+    Inbound --> CreateOrderUseCase["CreateOrderUseCase.java"]
+    Inbound --> GetOrderQuery["GetOrderQuery.java"]
+    Port --> Outbound["outbound"]
+    Outbound --> OrderRepositoryPort["OrderRepositoryPort.java"]
+    Outbound --> PaymentGatewayPort["PaymentGatewayPort.java"]
+    Application --> AppService["service"]
+    AppService --> CreateOrderService["CreateOrderService.java"]
+    AppService --> GetOrderService["GetOrderService.java"]
+    Root --> Adapter["adapter"]
+    Adapter --> AdapterInbound["inbound"]
+    AdapterInbound --> Web["web"]
+    Web --> OrderController["OrderController.java"]
+    Web --> OrderRequest["OrderRequest.java"]
+    AdapterInbound --> Messaging["messaging"]
+    Messaging --> OrderEventConsumer["OrderEventConsumer.java"]
+    Adapter --> AdapterOutbound["outbound"]
+    AdapterOutbound --> Persistence["persistence"]
+    Persistence --> OrderRepositoryAdapter["OrderRepositoryAdapter.java"]
+    Persistence --> JpaOrderRepository["JpaOrderRepository.java"]
+    AdapterOutbound --> Payment["payment"]
+    Payment --> PaymentGatewayAdapter["PaymentGatewayAdapter.java"]
+    Root --> Shared["shared"]
+    Shared --> Annotation["annotation"]
+    Annotation --> UseCase["UseCase.java"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class Root,Shared,Annotation green
+    class Domain,DomainModel,DomainService blue
+    class Application,Port,Inbound,Outbound,AppService pink
+    class Adapter,AdapterInbound,AdapterOutbound,Web,Messaging,Persistence,Payment yellow
 ```
-com.example.orders/
-├── domain/
-│   ├── model/
-│   │   ├── Order.java
-│   │   ├── OrderId.java
-│   │   ├── OrderLine.java
-│   │   ├── OrderStatus.java
-│   │   └── Money.java
-│   └── service/
-│       ├── OrderDomainService.java
-│       └── DiscountPolicy.java
-├── application/
-│   ├── port/
-│   │   ├── inbound/
-│   │   │   ├── CreateOrderUseCase.java
-│   │   │   └── GetOrderQuery.java
-│   │   └── outbound/
-│   │       ├── OrderRepositoryPort.java
-│   │       └── PaymentGatewayPort.java
-│   └── service/
-│       ├── CreateOrderService.java
-│       └── GetOrderService.java
-├── adapter/
-│   ├── inbound/
-│   │   ├── web/
-│   │   │   ├── OrderController.java
-│   │   │   └── OrderRequest.java
-│   │   └── messaging/
-│   │       └── OrderEventConsumer.java
-│   └── outbound/
-│       ├── persistence/
-│       │   ├── OrderRepositoryAdapter.java
-│       │   └── JpaOrderRepository.java
-│       └── payment/
-│           └── PaymentGatewayAdapter.java
-└── shared/
-    └── annotation/
-        └── UseCase.java
-```
+
+The directory structure mirrors the concentric layers of Clean Architecture. The `domain` package has zero framework dependencies — it contains only plain Java objects and domain services. The `application` package defines ports (interfaces) that declare boundaries, and use case services that orchestrate domain logic. The `adapter` package contains all the framework-specific code: controllers annotated with `@RestController`, repository implementations using JPA, and message consumers. This separation means you can upgrade Spring Boot, swap databases, or add a new delivery mechanism (like GraphQL or gRPC) by only touching adapter code.
 
 ## Domain Layer
 
@@ -132,6 +146,8 @@ public class Order {
 }
 ```
 
+The `Order` entity encapsulates all business rules related to an order's lifecycle. Notice the guard clauses in `addItem`, `confirm`, and `cancel` — these enforce invariants that must always hold true, regardless of the delivery mechanism or database. The `OrderId` value object (used instead of a raw `Long` or `String`) prevents primitive obsession and makes the domain's intent explicit. There are no Spring annotations, no JPA annotations — this class is pure Java, testable in milliseconds, and completely independent of frameworks.
+
 Value objects provide type safety and encapsulate validation:
 
 ```java
@@ -188,6 +204,8 @@ public class Money {
 }
 ```
 
+`Money` is a value object that wraps a `BigDecimal` amount and its `Currency`. It enforces currency consistency — you cannot add dollars to euros without an explicit conversion. The private constructor forces creation through the static factory method `Money.of`, which performs validation (e.g., ensuring the currency code is valid). The `HALF_EVEN` rounding mode (banker's rounding) avoids the bias inherent in `HALF_UP` and is the recommended default for financial calculations.
+
 ## Application Layer
 
 The application layer defines use cases and ports. Use cases orchestrate the domain layer.
@@ -208,6 +226,8 @@ public record CreateOrderCommand(String customerId, List<OrderItemCommand> items
 public record OrderItemCommand(String productId, String productName, int quantity, BigDecimal unitPrice) {}
 ```
 
+Inbound ports define how external actors (like HTTP controllers or message consumers) interact with the application. `CreateOrderUseCase` is an inbound port that accepts a `CreateOrderCommand` — a simple record with the data needed to create an order. Using records for commands keeps them immutable and focused. The interface is defined in the application layer, not the domain layer, because the use case orchestrates domain objects but is not itself a domain concept.
+
 ```java
 package com.example.orders.application.port.outbound;
 
@@ -221,6 +241,8 @@ public interface OrderRepositoryPort {
     void deleteById(OrderId id);
 }
 ```
+
+Outbound ports define how the application accesses external resources. `OrderRepositoryPort` is an outbound port — an abstraction over persistence. The use case depends on this interface, not on any concrete JPA or JDBC implementation. This is the Dependency Inversion Principle in action: the high-level application layer defines the contract, and the low-level adapter implements it.
 
 ```java
 package com.example.orders.application.service;
@@ -268,6 +290,8 @@ public class CreateOrderService implements CreateOrderUseCase {
 }
 ```
 
+`CreateOrderService` is the use case implementation. It depends only on `OrderRepositoryPort` (an interface), not on any specific database technology. It creates domain objects using their constructors and factory methods, calls domain methods like `order.confirm()`, and delegates persistence to the port. The `@Transactional` annotation is acceptable here because transaction management is an application-level concern — it governs when the unit of work begins and ends. The use case is deliberately thin: all business rules live in the `Order` entity. If the pricing rules change, you modify `Order.addItem` or `OrderLine`, not this service.
+
 ## Adapter Layer
 
 Adapters implement ports using specific technologies. Outbound adapters connect to databases and external services.
@@ -311,6 +335,8 @@ public class OrderRepositoryAdapter implements OrderRepositoryPort {
 }
 ```
 
+The `OrderRepositoryAdapter` implements the outbound port. It translates between the domain model (`Order`) and the persistence model (`OrderEntity`) using an `OrderMapper`. This translation layer is essential: the domain `Order` might have value objects like `Money` and `OrderId`, while the `OrderEntity` might use primitive `Long` IDs and `BigDecimal` amounts. The adapter is the only place where JPA-specific code exists — if you switch to MongoDB, you only need to rewrite this adapter and the mapper.
+
 Inbound adapters handle HTTP requests and messaging:
 
 ```java
@@ -349,6 +375,8 @@ public class OrderController {
 }
 ```
 
+The `OrderController` is an inbound adapter that converts HTTP requests into commands and delegates to the use case. It depends on `CreateOrderUseCase` (the inbound port interface), not on `CreateOrderService` directly. This allows you to swap the implementation without changing the controller. The controller also handles the response DTO mapping, keeping HTTP concerns (status codes, headers) out of the use case.
+
 ## Dependency Injection Configuration
 
 Clean Architecture uses DI to wire the layers together at the composition root:
@@ -384,6 +412,8 @@ public class OrderConfiguration {
 }
 ```
 
+The configuration class wires the dependency graph. Spring's DI container injects `JpaOrderRepository` and `OrderMapper` into the `OrderRepositoryAdapter`, which is registered as the implementation of `OrderRepositoryPort`. The `CreateOrderService` receives the port through constructor injection. This explicit wiring makes the dependency graph visible and testable — you can create a test configuration that wires an in-memory adapter instead.
+
 ## Testing Clean Architecture
 
 Domain logic is pure and easily testable without Spring:
@@ -411,6 +441,8 @@ class OrderTest {
     }
 }
 ```
+
+Domain tests need no Spring context, no database, and no mocking framework. They create domain objects directly, call methods, and assert on the results. These tests run in milliseconds and give immediate feedback when business rules break. In a typical Clean Architecture project, 70% of your tests should be at this level — fast, reliable, and independent of infrastructure.
 
 ## Common Mistakes
 
@@ -447,6 +479,8 @@ public class OrderEntity {
 }
 ```
 
+Mixing JPA annotations into domain objects is the most common Clean Architecture violation. The `@Entity` annotation couples your domain logic to JPA's requirements: a no-arg constructor, mutable fields through setters, and specific annotation processing at runtime. Instead, maintain two separate models: a rich, immutable domain model and a mutable, JPA-annotated entity model. The mapper bridges them.
+
 ### Leaking Infrastructure into Use Cases
 
 ```java
@@ -475,6 +509,8 @@ public class CreateOrderService {
     }
 }
 ```
+
+Field injection (`@Autowired`) hides the dependency — you can't tell from the constructor what this service needs. Constructor injection makes dependencies explicit and mandatory. More importantly, depending on `JpaOrderRepository` directly ties the use case to JPA, defeating the purpose of Clean Architecture.
 
 ## Best Practices
 

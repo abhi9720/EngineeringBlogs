@@ -1,4 +1,4 @@
----
+﻿---
 title: "Spring Bean Lifecycle"
 description: "Deep dive into the Spring bean lifecycle: instantiation, property setting, initialization, destruction, and customizing with BeanPostProcessors"
 date: "2026-05-11"
@@ -11,7 +11,6 @@ tags:
 coverImage: "/images/spring-bean-lifecycle.png"
 draft: false
 ---
-
 ## Overview
 
 The Spring bean lifecycle encompasses the entire journey of a bean from instantiation to destruction. Understanding this lifecycle is crucial for writing reliable initialization code, managing resources, and debugging bean-related issues. Spring provides multiple hooks to customize behavior at each stage.
@@ -20,28 +19,34 @@ The Spring bean lifecycle encompasses the entire journey of a bean from instanti
 
 ### Complete Lifecycle Diagram
 
-```
-1. Instantiation
-2. Populate Properties
-3. BeanNameAware.setBeanName()
-4. BeanClassLoaderAware.setBeanClassLoader()
-5. BeanFactoryAware.setBeanFactory()
-6. EnvironmentAware.setEnvironment()
-7. EmbeddedValueResolverAware.setEmbeddedValueResolver()
-8. ResourceLoaderAware.setResourceLoader()
-9. ApplicationEventPublisherAware.setApplicationEventPublisher()
-10. MessageSourceAware.setMessageSource()
-11. ApplicationContextAware.setApplicationContext()
-12. BeanPostProcessor.postProcessBeforeInitialization()
-13. @PostConstruct / InitializingBean.afterPropertiesSet() / @Bean(initMethod)
-14. BeanPostProcessor.postProcessAfterInitialization()
-15. Bean is ready for use
-16. @PreDestroy / DisposableBean.destroy() / @Bean(destroyMethod)
-```
+`mermaid
+flowchart TB
+    I[1. Instantiation] --> PP[2. Populate Properties]
+    PP --> BA[3-11. Aware Interfaces]
+    BA --> BP1[12. BeanPostProcessor<br/>postProcessBeforeInitialization]
+    BP1 --> INIT[13. @PostConstruct<br/>InitializingBean<br/>@Bean initMethod]
+    INIT --> BP2[14. BeanPostProcessor<br/>postProcessAfterInitialization]
+    BP2 --> READY[15. Bean Ready for Use]
+    READY --> DESTROY[16. @PreDestroy<br/>DisposableBean<br/>@Bean destroyMethod]
+
+    linkStyle default stroke:#278ea5
+
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+
+    class I,PP,BA blue
+    class BP1,BP2 green
+    class INIT,READY yellow
+    class DESTROY pink
+`
 
 ### Phase 1: Instantiation
 
-```java
+The constructor is called during instantiation. Spring uses reflection to create the bean instance. For classes with a single constructor, Spring automatically resolves and injects dependencies through that constructor. This is why constructor injection is preferred.
+
+`java
 @Component
 public class DatabaseHealthChecker {
     private DataSource dataSource;
@@ -58,11 +63,13 @@ public class DatabaseHealthChecker {
         this.dataSource = dataSource;
     }
 }
-```
+`
 
 ### Phase 2: Populate Properties
 
-```java
+After instantiation, Spring populates all bean properties. This includes both @Autowired fields/setters and @Value injections. For @ConfigurationProperties beans, the entire property hierarchy is bound at this stage. Properties are set before any initialization callbacks run.
+
+`java
 @Component
 @ConfigurationProperties(prefix = "app.database")
 public class DatabaseProperties {
@@ -77,11 +84,13 @@ public class DatabaseProperties {
         System.out.println("Phase 2: Properties populated - " + url);
     }
 }
-```
+`
 
 ### Phase 3: Aware Interfaces
 
-```java
+Aware interfaces inject framework infrastructure into beans. The most commonly used are ApplicationContextAware (to access the full application context), BeanNameAware (to know the bean's name in the container), and EnvironmentAware (to access environment properties). These are called in a specific order.
+
+`java
 @Component
 public class ApplicationAwareBean implements ApplicationContextAware,
                                              BeanNameAware,
@@ -113,11 +122,15 @@ public class ApplicationAwareBean implements ApplicationContextAware,
         return Arrays.toString(environment.getActiveProfiles());
     }
 }
-```
+`
 
 ### Phase 4: BeanPostProcessors
 
-```java
+BeanPostProcessor is the most powerful extension point in the Spring container. It intercepts every bean after instantiation, before and after initialization. Use it for cross-cutting concerns: validation, proxying, wrapping, or modifying beans.
+
+The postProcessBeforeInitialization call is ideal for validation or setting up infrastructure. postProcessAfterInitialization is where AOP proxies are typically created — Spring's AbstractAutoProxyCreator creates transaction, caching, and security proxies at this stage.
+
+`java
 @Component
 public class ValidationBeanPostProcessor implements BeanPostProcessor {
     private static final Logger log = LoggerFactory.getLogger(ValidationBeanPostProcessor.class);
@@ -156,11 +169,15 @@ public class ValidationBeanPostProcessor implements BeanPostProcessor {
         );
     }
 }
-```
+`
 
 ### Phase 5: Initialization
 
-```java
+Three approaches to initialization exist, and they run in the following order: @PostConstruct (most common), InitializingBean.afterPropertiesSet(), and @Bean(initMethod). Using @PostConstruct is recommended because it doesn't couple your code to Spring-specific interfaces.
+
+The initialization phase is where you perform setup that requires all properties to be set and all dependencies injected. Common use cases: opening connections, warming caches, validating configuration, registering shutdown hooks.
+
+`java
 @Component
 public class CacheInitializer implements InitializingBean {
     private final CacheManager cacheManager;
@@ -207,11 +224,15 @@ public class CacheInitializer implements InitializingBean {
         // Load frequently accessed data into cache
     }
 }
-```
+`
 
 ### Phase 6: Destruction
 
-```java
+Destruction callbacks are invoked during graceful shutdown. The same ordering as initialization applies in reverse: @PreDestroy, DisposableBean.destroy(), @Bean(destroyMethod). Use this phase to close connections, release thread pools, flush buffers, and clean up resources.
+
+Prototype-scoped beans do NOT trigger destroy callbacks. The Spring container creates them and hands them over — it doesn't track them afterward. For prototype beans with cleanup needs, use a custom destruction pattern or explicitly manage their lifecycle.
+
+`java
 @Component
 public class ConnectionPoolManager implements DisposableBean {
     private final List<Connection> connections = new CopyOnWriteArrayList<>();
@@ -252,13 +273,15 @@ public class ConnectionPoolManager implements DisposableBean {
         // Wait for active queries to complete
     }
 }
-```
+`
 
 ## Custom BeanPostProcessor Examples
 
 ### Timing PostProcessor
 
-```java
+A BeanPostProcessor that measures initialization time for every bean. This is useful for identifying slow-starting beans that delay application startup. Beans taking more than 1 second to initialize are flagged for optimization.
+
+`java
 @Component
 public class TimingBeanPostProcessor implements BeanPostProcessor {
     private final Map<String, Long> startTimes = new ConcurrentHashMap<>();
@@ -282,11 +305,15 @@ public class TimingBeanPostProcessor implements BeanPostProcessor {
         return bean;
     }
 }
-```
+`
 
 ### Proxy-Based PostProcessor
 
-```java
+A BeanPostProcessor that creates AOP proxies for beans with @Transactional annotations. This is essentially how Spring's own TransactionInterceptor works: it checks for @Transactional on the class or methods and wraps the bean in a JDK dynamic proxy or CGLIB proxy.
+
+The proxy intercepts all method calls, begins a transaction for annotated methods, commits on success, and rolls back on exception. Beans without @Transactional pass through unmodified.
+
+`java
 @Component
 public class TransactionalProxyPostProcessor implements BeanPostProcessor {
     @Override
@@ -324,11 +351,15 @@ public class TransactionalProxyPostProcessor implements BeanPostProcessor {
         );
     }
 }
-```
+`
 
 ## Ordering BeanPostProcessors
 
-```java
+When multiple BeanPostProcessor instances exist, control the execution order using @Order or the Ordered interface. Processors with higher precedence (lower order value) run first in postProcessBeforeInitialization and postProcessAfterInitialization.
+
+The SecurityPostProcessor with the highest precedence ensures security proxies are applied first. The LoggingPostProcessor with the lowest precedence runs last, wrapping the already-proxied bean in a logging layer.
+
+`java
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class SecurityPostProcessor implements BeanPostProcessor, Ordered {
@@ -364,19 +395,23 @@ public class LoggingPostProcessor implements BeanPostProcessor, Ordered {
         return Ordered.LOWEST_PRECEDENCE;
     }
 }
-```
+`
 
 ## Bean Definition Merging
 
-```java
+Parent-child bean definitions allow sharing common configuration. The ParentConfig defines a DataSource with common settings. The ChildConfig imports the parent and defines its own DataSource, inheriting any settings not explicitly overridden.
+
+This pattern is rarely used in modern Spring Boot (which favors auto-configuration), but it's useful when constructing bean definitions programmatically.
+
+`java
 @Configuration
 public class ParentConfig {
     @Bean
     public DataSource parentDataSource() {
         return DataSourceBuilder.create()
-            .url("${app.datasource.url}")
-            .username("${app.datasource.username}")
-            .password("${app.datasource.password}")
+            .url("")
+            .username("")
+            .password("")
             .build();
     }
 }
@@ -387,11 +422,11 @@ public class ChildConfig {
     @Bean
     public DataSource childDataSource() {
         return DataSourceBuilder.create()
-            .url("${app.child.datasource.url}")
+            .url("")
             .build();
     }
 }
-```
+`
 
 ## Best Practices
 
@@ -407,7 +442,7 @@ public class ChildConfig {
 
 ### Mistake 1: Accessing Uninitialized Dependencies
 
-```java
+`java
 // Wrong: Accessing dependency before it's fully initialized
 @Component
 public class EmailService {
@@ -424,9 +459,9 @@ public class EmailService {
         mailServer.send("admin@example.com", "Service started");
     }
 }
-```
+`
 
-```java
+`java
 // Correct: Use @PostConstruct for post-initialization logic
 @Component
 public class EmailService {
@@ -447,25 +482,25 @@ public class EmailService {
         mailServer.send("admin@example.com", "Service started");
     }
 }
-```
+`
 
 ### Mistake 2: Exception in PostProcessor
 
-```java
+`java
 // Wrong: Throwing exception from postProcessBeforeInitialization blocks all beans
 @Component
 public class StrictValidationPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) {
-        if (bean.getClass().getName().contains("$Proxy")) {
+        if (bean.getClass().getName().contains("")) {
             throw new RuntimeException("Cannot process proxy beans");
         }
         return bean;
     }
 }
-```
+`
 
-```java
+`java
 // Correct: Handle gracefully and skip beans that can't be processed
 @Component
 public class RobustValidationPostProcessor implements BeanPostProcessor {
@@ -486,11 +521,11 @@ public class RobustValidationPostProcessor implements BeanPostProcessor {
         // Validation logic
     }
 }
-```
+`
 
 ### Mistake 3: Forgetting Destroy Callbacks for Prototype Beans
 
-```java
+`java
 // Wrong: Prototype beans skip destroy lifecycle callbacks
 @Component
 @Scope("prototype")
@@ -506,9 +541,9 @@ public class ExpensiveResource implements DisposableBean {
         connection.close(); // This will NEVER be called for prototypes
     }
 }
-```
+`
 
-```java
+`java
 // Correct: Use custom destruction for prototype beans
 @Component
 @Scope("prototype")
@@ -544,7 +579,7 @@ public class ResourceManager {
         }
     }
 }
-```
+`
 
 ## Summary
 

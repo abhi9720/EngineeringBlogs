@@ -59,6 +59,8 @@ public class SimpleRedisLock {
 }
 ```
 
+The `SET NX EX` command (`setIfAbsent` with timeout) atomically creates the key only if it doesn't exist and sets a TTL to prevent deadlocks. The release method uses a Lua script to atomically check ownership before deleting — this prevents one process from releasing another process's lock. Without this atomic check, a race condition could occur where a lock expires, another process acquires it, and the original process deletes the new lock.
+
 ### Redlock Algorithm
 
 For stronger guarantees across multiple Redis instances, use the Redlock algorithm:
@@ -122,6 +124,8 @@ public class Redlock {
 }
 ```
 
+Redlock acquires the lock on a majority of Redis nodes (quorum = N/2 + 1). If the acquisition completes within the TTL, the lock is considered valid for the remaining duration. This is probabilistic — it works well in practice but does not guarantee absolute safety under all failure scenarios (e.g., clock drift, long GC pauses). The elapsed time check ensures you detect cases where acquiring the lock took too long (and the TTL on individual nodes may have already expired).
+
 ### Using Spring Integration Lock Registry
 
 ```java
@@ -169,6 +173,8 @@ public class ScheduledTaskService {
 }
 ```
 
+Spring Integration's `RedisLockRegistry` provides a higher-level abstraction. `tryLock` with a timeout is called, and if the lock cannot be acquired within that period, the task is skipped. The `finally` block ensures the lock is always released, even if the cleanup throws an exception. This pattern is ideal for scheduled tasks that should run on exactly one instance.
+
 ## Distributed Locks with ZooKeeper
 
 ZooKeeper provides strong consistency guarantees through its ZAB protocol:
@@ -206,6 +212,8 @@ public class ZooKeeperDistributedLock implements AutoCloseable {
     }
 }
 ```
+
+ZooKeeper locks use ephemeral sequential znodes. If the client disconnects (crashes, network partition), the ephemeral znode is automatically deleted by ZooKeeper, releasing the lock. This eliminates the deadlock risk inherent in time-based locks. Apache Curator provides `InterProcessSemaphoreMutex` as a production-ready implementation.
 
 ## Leader Election
 
@@ -295,6 +303,8 @@ public class ZooKeeperLeaderElection {
     }
 }
 ```
+
+The `LeaderSelector` from Curator handles leader election. When an instance becomes leader, `takeLeadership` is called. The instance holds leadership as long as the method is running — if the method exits, leadership is relinquished. `autoRequeue()` ensures the instance will compete for leadership again after losing it. The `onBecomeLeader`/`onLeadershipLost` callbacks start and stop leader-specific tasks like heartbeat monitoring and resource cleanup.
 
 ### Leader Election with Database
 
@@ -387,6 +397,8 @@ public class DatabaseLeaderElection {
 }
 ```
 
+Database-based leader election uses optimistic locking in a SQL `UPDATE` statement. The query atomically claims the leadership row if it's unclaimed or expired. The instance renews its lease every 1/3 of the lease duration to prevent expiration. If the instance crashes, the lease expires naturally and another instance can claim leadership. This is simpler than ZooKeeper but requires a database and introduces clock synchronization concerns.
+
 ### Using ShedLock for Scheduled Task Coordination
 
 ```java
@@ -420,6 +432,8 @@ public class CoordinatedTaskService {
     }
 }
 ```
+
+ShedLock is a library that ensures scheduled tasks execute at most once across multiple instances. `@SchedulerLock` marks a task for coordination. `lockAtMostFor` determines how long the lock is held (should be at least as long as the normal execution duration), and `lockAtLeastFor` prevents rapid re-execution if all instances wake up simultaneously.
 
 ## Common Mistakes
 

@@ -24,6 +24,8 @@ Event-driven architecture (EDA) is a software architecture paradigm promoting th
 
 ### 1. Event Notification
 
+The event notification pattern is the simplest form of EDA. A service emits an event after completing an action, and other services react to it without knowing about each other. The `OrderService` publishes an `OrderCreatedEvent` via Spring's `ApplicationEventPublisher`, while the `NotificationService` listens asynchronously using `@EventListener` and `@Async`. This keeps services decoupled — the order service doesn't need to know about email notifications or push alerts.
+
 ```java
 // Simple: Service emits event, others react
 @Service
@@ -59,6 +61,8 @@ public class NotificationService {
 ```
 
 ### 2. Event Sourcing
+
+Instead of storing only the current state, event sourcing persists every state change as an individual event. The `BankAccount` entity never stores a `balance` column directly — it derives the balance by replaying all `AccountEvent` records in chronological order. This approach provides a complete audit trail and enables temporal queries (what was the balance at any point in time?). The trade-off is increased storage and replay complexity for long-lived aggregates.
 
 ```java
 // Store all state changes as events
@@ -106,6 +110,8 @@ public class AccountService {
 
 ### 3. CQRS (Command Query Responsibility Segregation)
 
+CQRS separates write operations (commands) from read operations (queries) into different models. The write model uses a normalized database (PostgreSQL) optimized for integrity, while the read model uses a denormalized store (Elasticsearch) optimized for queries. The `OrderCommandService` handles mutations and publishes events; `OrderViewUpdater` consumes those events to refresh the read model. The `OrderQueryService` then queries the read model without touching the write database. This separation allows independent scaling and optimization of each path.
+
 ```mermaid
 flowchart TB
 
@@ -122,6 +128,7 @@ flowchart TB
     classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
     classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
     classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
 
     class WriteModel,ReadModel green
     class CmdHandler,QueryHandler blue
@@ -180,6 +187,8 @@ public class OrderViewUpdater {
 ```
 
 ### 4. Saga Pattern
+
+The saga pattern manages distributed transactions without a two-phase commit. In the orchestrated variant, a central `OrderSagaOrchestrator` coordinates steps across services, calling each in sequence and invoking compensating actions if a step fails. In the choreographed variant, each service listens for events and emits its own — the `OrderSagaChoreography` class listens for order creation and publishes `inventory-reserved` or `inventory-failed`. The trade-off: orchestration centralizes coordination logic but creates a single point of failure; choreography distributes responsibility but makes the flow harder to trace.
 
 ```java
 // Orchestrated saga for distributed transactions
@@ -245,6 +254,8 @@ public class OrderSagaChoreography {
 
 ### Event Schema Evolution
 
+As events evolve over time, downstream consumers may break. The solution is schema versioning: each event carries an explicit `@Schema(version)` annotation. New fields like `currency` include a `defaultValue` so consumers on older versions can still deserialize. An `EventRouter` can dispatch events to different handlers based on version, ensuring a rolling upgrade path without downtime.
+
 ```java
 // Version events for backward compatibility
 @Event
@@ -275,6 +286,8 @@ public class EventRouter {
 
 ### Idempotency
 
+In at-least-once delivery systems, the same event may arrive multiple times. The `IdempotentProcessor` uses a `ConcurrentHashMap` (backed by the event's unique ID) to detect and skip duplicates. In production, this set should be backed by a database or Redis so the deduplication state survives restarts. Always process events idempotently to avoid double-charging, duplicate notifications, or inconsistent state.
+
 ```java
 // Process events idempotently to handle duplicates
 @Service
@@ -300,6 +313,8 @@ public class IdempotentProcessor {
 ## Common Mistakes
 
 ### Mistake 1: Synchronous Event Handling
+
+By default, Spring's `ApplicationEventPublisher` invokes listeners synchronously in the publishing thread. This means the `create()` method will block until all listeners finish, making the event pattern behave like a direct method call. The fix is to annotate listeners with `@Async` (and enable async support with `@EnableAsync`) so the publisher returns immediately and listeners run on a separate thread pool.
 
 ```java
 // WRONG: Block waiting for event processing
@@ -332,6 +347,8 @@ public class GoodService {
 ```
 
 ### Mistake 2: No Transactional Outbox
+
+Publishing a Kafka message after a database save in the same `@Transactional` method looks safe, but the message send happens before the transaction commits. If the commit fails, the message was already sent — leading to phantom events. The solution is the transactional outbox pattern: write the event to an `outbox` table in the same database transaction, then a separate `OutboxProcessor` polls and publishes reliably. This guarantees that either both the business data and the event are persisted, or neither is.
 
 ```java
 // WRONG: Database and message not in sync
@@ -405,4 +422,4 @@ public class OutboxProcessor {
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

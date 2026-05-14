@@ -16,6 +16,8 @@ draft: false
 
 Testing security concerns is critical for any application. Spring Security provides powerful test annotations and utilities to test authentication, authorization, CSRF protection, and method-level security without needing to mock complex security contexts.
 
+Security tests should cover three scenarios: authenticated access (the user has the right permissions), unauthenticated access (no user), and unauthorized access (the user lacks required permissions). Testing all three ensures your security configuration is correct.
+
 ## Dependencies
 
 ```xml
@@ -35,6 +37,8 @@ Testing security concerns is critical for any application. Spring Security provi
 
 ### Basic Usage
 
+`@WithMockUser` creates a `SecurityContext` with a mock `UsernamePasswordAuthenticationToken`. It's the fastest way to test security because it doesn't load any `UserDetails` or call any services. The `roles` attribute is automatically prefixed with `ROLE_`.
+
 ```java
 @WebMvcTest(UserController.class)
 class UserControllerTest {
@@ -48,47 +52,41 @@ class UserControllerTest {
     @WithMockUser(roles = "USER")
     void shouldReturnUserForAuthenticatedUser() throws Exception {
         when(userService.findById(1L)).thenReturn(Optional.of(
-            new User(1L, "john@example.com", "John")
-        ));
-
-        mockMvc.perform(get("/api/users/1"))
-            .andExpect(status().isOk());
+            new User(1L, "john@example.com", "John")));
+        mockMvc.perform(get("/api/users/1")).andExpect(status().isOk());
     }
 
     @Test
     void shouldReturn401ForUnauthenticatedUser() throws Exception {
-        mockMvc.perform(get("/api/users/1"))
-            .andExpect(status().isUnauthorized());
+        mockMvc.perform(get("/api/users/1")).andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockUser(username = "manager", roles = "MANAGER")
     void managerCanAccessAdminEndpoints() throws Exception {
-        mockMvc.perform(get("/api/admin/reports"))
-            .andExpect(status().isOk());
+        mockMvc.perform(get("/api/admin/reports")).andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(username = "user", roles = "USER")
     void userCannotAccessAdminEndpoints() throws Exception {
-        mockMvc.perform(get("/api/admin/reports"))
-            .andExpect(status().isForbidden());
+        mockMvc.perform(get("/api/admin/reports")).andExpect(status().isForbidden());
     }
 }
 ```
 
 ### Custom User Details
 
+Create reusable meta-annotations to reduce boilerplate. The `@WithAdminUser` and `@WithStandardUser` annotations encapsulate the mock user configuration.
+
 ```java
 @Retention(RetentionPolicy.RUNTIME)
 @WithMockUser(username = "admin", roles = {"ADMIN", "USER"})
-public @interface WithAdminUser {
-}
+public @interface WithAdminUser {}
 
 @Retention(RetentionPolicy.RUNTIME)
 @WithMockUser(username = "john", roles = "USER")
-public @interface WithStandardUser {
-}
+public @interface WithStandardUser {}
 
 @WebMvcTest(AdminController.class)
 class AdminControllerTest {
@@ -98,15 +96,13 @@ class AdminControllerTest {
     @Test
     @WithAdminUser
     void adminCanDeleteUsers() throws Exception {
-        mockMvc.perform(delete("/api/admin/users/1"))
-            .andExpect(status().isNoContent());
+        mockMvc.perform(delete("/api/admin/users/1")).andExpect(status().isNoContent());
     }
 
     @Test
     @WithStandardUser
     void standardUserCannotDeleteUsers() throws Exception {
-        mockMvc.perform(delete("/api/admin/users/1"))
-            .andExpect(status().isForbidden());
+        mockMvc.perform(delete("/api/admin/users/1")).andExpect(status().isForbidden());
     }
 }
 ```
@@ -115,24 +111,17 @@ class AdminControllerTest {
 
 ### Using Custom UserDetailsService
 
+`@WithUserDetails` loads the user from a `UserDetailsService`. This is useful when your method security expressions reference specific user properties (name, email, department). The user is fully loaded with all attributes and authorities.
+
 ```java
 @Service
 public class TestUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         return switch (username) {
-            case "admin" -> User.withUsername("admin")
-                .password("password")
-                .roles("ADMIN", "USER")
-                .build();
-            case "user" -> User.withUsername("user")
-                .password("password")
-                .roles("USER")
-                .build();
-            case "premium" -> User.withUsername("premium")
-                .password("password")
-                .roles("PREMIUM_USER")
-                .build();
+            case "admin" -> User.withUsername("admin").password("password").roles("ADMIN", "USER").build();
+            case "user" -> User.withUsername("user").password("password").roles("USER").build();
+            case "premium" -> User.withUsername("premium").password("password").roles("PREMIUM_USER").build();
             default -> throw new UsernameNotFoundException("User not found");
         };
     }
@@ -147,27 +136,26 @@ class SubscriptionControllerTest {
     @Test
     @WithUserDetails("admin")
     void adminCanAccessAllSubscriptions() throws Exception {
-        mockMvc.perform(get("/api/subscriptions"))
-            .andExpect(status().isOk());
+        mockMvc.perform(get("/api/subscriptions")).andExpect(status().isOk());
     }
 
     @Test
     @WithUserDetails("premium")
     void premiumUserCanAccessPremiumFeatures() throws Exception {
-        mockMvc.perform(get("/api/subscriptions/premium"))
-            .andExpect(status().isOk());
+        mockMvc.perform(get("/api/subscriptions/premium")).andExpect(status().isOk());
     }
 
     @Test
     @WithUserDetails("user")
     void standardUserCannotAccessPremiumFeatures() throws Exception {
-        mockMvc.perform(get("/api/subscriptions/premium"))
-            .andExpect(status().isForbidden());
+        mockMvc.perform(get("/api/subscriptions/premium")).andExpect(status().isForbidden());
     }
 }
 ```
 
 ## Testing CSRF
+
+Spring Security Test's `.with(csrf())` request post processor adds a valid CSRF token to the request. Test with and without the token to verify CSRF protection works.
 
 ```java
 @WebMvcTest(UserController.class)
@@ -195,16 +183,6 @@ class CsrfTest {
 
     @Test
     @WithMockUser
-    void shouldAcceptPostWithCsrfTokenAsHeader() throws Exception {
-        mockMvc.perform(post("/api/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"test\"}")
-                .with(csrf().asHeader()))
-            .andExpect(status().isCreated());
-    }
-
-    @Test
-    @WithMockUser
     void shouldRejectPutWithInvalidCsrfToken() throws Exception {
         mockMvc.perform(put("/api/users/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -219,6 +197,8 @@ class CsrfTest {
 
 ### OAuth2 Resource Server Testing
 
+Use `.with(jwt())` to simulate authenticated requests with a JWT token. The `.jwt()` callback lets you customize claims, subject, and scope.
+
 ```java
 @WebMvcTest(OrderController.class)
 class OAuth2ResourceServerTest {
@@ -228,37 +208,27 @@ class OAuth2ResourceServerTest {
     @Test
     void shouldAllowAccessWithValidToken() throws Exception {
         mockMvc.perform(get("/api/orders")
-                .with(jwt().jwt(jwt -> jwt
-                    .subject("user123")
-                    .claim("scope", "read:orders")
-                )))
+                .with(jwt().jwt(jwt -> jwt.subject("user123").claim("scope", "read:orders"))))
             .andExpect(status().isOk());
     }
 
     @Test
     void shouldRejectAccessWithoutToken() throws Exception {
-        mockMvc.perform(get("/api/orders"))
-            .andExpect(status().isUnauthorized());
+        mockMvc.perform(get("/api/orders")).andExpect(status().isUnauthorized());
     }
 
     @Test
     void shouldRejectAccessWithInsufficientScope() throws Exception {
         mockMvc.perform(get("/api/orders")
-                .with(jwt().jwt(jwt -> jwt
-                    .subject("user123")
-                    .claim("scope", "read:users")
-                )))
+                .with(jwt().jwt(jwt -> jwt.subject("user123").claim("scope", "read:users"))))
             .andExpect(status().isForbidden());
     }
 
     @Test
     void shouldAllowAdminAccess() throws Exception {
         mockMvc.perform(get("/api/admin/orders")
-                .with(jwt().jwt(jwt -> jwt
-                    .subject("admin")
-                    .claim("scope", "admin")
-                    .claim("realm_access", Map.of("roles", List.of("ADMIN")))
-                )))
+                .with(jwt().jwt(jwt -> jwt.subject("admin").claim("scope", "admin")
+                    .claim("realm_access", Map.of("roles", List.of("ADMIN"))))))
             .andExpect(status().isOk());
     }
 }
@@ -269,13 +239,11 @@ class OAuth2ResourceServerTest {
 ```java
 @Retention(RetentionPolicy.RUNTIME)
 @WithMockUser(authorities = "SCOPE_read:orders")
-public @interface WithReadOrdersScope {
-}
+public @interface WithReadOrdersScope {}
 
 @Retention(RetentionPolicy.RUNTIME)
 @WithMockUser(authorities = {"SCOPE_admin", "ROLE_ADMIN"})
-public @interface WithAdminScope {
-}
+public @interface WithAdminScope {}
 
 @WebMvcTest(InventoryController.class)
 class InventoryControllerTest {
@@ -285,16 +253,14 @@ class InventoryControllerTest {
     @Test
     @WithReadOrdersScope
     void shouldAccessWithReadScope() throws Exception {
-        mockMvc.perform(get("/api/inventory"))
-            .andExpect(status().isOk());
+        mockMvc.perform(get("/api/inventory")).andExpect(status().isOk());
     }
 
     @Test
     @WithAdminScope
     void adminCanManageInventory() throws Exception {
         mockMvc.perform(post("/api/inventory/items")
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON).with(csrf())
                 .content("{\"name\":\"New Item\",\"quantity\":10}"))
             .andExpect(status().isCreated());
     }
@@ -302,8 +268,7 @@ class InventoryControllerTest {
     @Test
     @WithAnonymousUser
     void anonymousCannotAccessInventory() throws Exception {
-        mockMvc.perform(get("/api/inventory"))
-            .andExpect(status().isUnauthorized());
+        mockMvc.perform(get("/api/inventory")).andExpect(status().isUnauthorized());
     }
 }
 ```
@@ -325,7 +290,6 @@ class DocumentServiceSecurityTest {
     void userCanReadOwnDocument() {
         Document doc = new Document(1L, "My Doc", "owner", false);
         when(documentRepository.findById(1L)).thenReturn(Optional.of(doc));
-
         Document result = documentService.getDocument(1L);
         assertThat(result).isNotNull();
     }
@@ -335,9 +299,7 @@ class DocumentServiceSecurityTest {
     void userCannotReadOthersPrivateDocument() {
         Document doc = new Document(1L, "Private Doc", "owner", false);
         when(documentRepository.findById(1L)).thenReturn(Optional.of(doc));
-
-        assertThrows(AccessDeniedException.class,
-            () -> documentService.getDocument(1L));
+        assertThrows(AccessDeniedException.class, () -> documentService.getDocument(1L));
     }
 
     @Test
@@ -345,62 +307,8 @@ class DocumentServiceSecurityTest {
     void adminCanReadAnyDocument() {
         Document doc = new Document(1L, "Private Doc", "owner", false);
         when(documentRepository.findById(1L)).thenReturn(Optional.of(doc));
-
         Document result = documentService.getDocument(1L);
         assertThat(result).isNotNull();
-    }
-}
-```
-
-## Testing Authentication Events
-
-```java
-@SpringBootTest
-class AuthenticationEventTest {
-    @Autowired
-    private ApplicationEventPublisher eventPublisher;
-
-    @Autowired
-    private AuthenticationEventLogger eventLogger;
-
-    @Test
-    void shouldFireAuthenticationSuccessEvent() {
-        Authentication auth = new UsernamePasswordAuthenticationToken(
-            "user", "password", List.of(new SimpleGrantedAuthority("ROLE_USER"))
-        );
-        eventPublisher.publishEvent(new AuthenticationSuccessEvent(auth));
-
-        assertThat(eventLogger.getLastSuccess()).isNotNull();
-        assertThat(eventLogger.getLastSuccess().getAuthentication().getName())
-            .isEqualTo("user");
-    }
-
-    @Test
-    void shouldFireAuthenticationFailureEvent() {
-        AuthenticationException exception = new BadCredentialsException("Bad credentials");
-        eventPublisher.publishEvent(new AuthenticationFailureBadCredentialsEvent(
-            new UsernamePasswordAuthenticationToken("user", "password"),
-            exception
-        ));
-
-        assertThat(eventLogger.getLastFailure()).isNotNull();
-        assertThat(eventLogger.getLastFailure().getException().getMessage())
-            .isEqualTo("Bad credentials");
-    }
-
-    @Test
-    @WithMockUser
-    void shouldFireAuthorizationEvent() {
-        AuthorizationDecision decision = new AuthorizationDecision(false);
-        AuthorizationEvent event = new AuthorizationEvent(
-            SecurityContextHolder.getContext().getAuthentication(),
-            new SecurityExpressionRoot(SecurityContextHolder.getContext().getAuthentication()) {},
-            decision
-        );
-        eventPublisher.publishEvent(event);
-
-        assertThat(eventLogger.getLastAuthorization()).isNotNull();
-        assertThat(eventLogger.getLastAuthorization().isGranted()).isFalse();
     }
 }
 ```
@@ -438,31 +346,21 @@ class SecurityHeadersTest {
 public class SecurityTestUtils {
 
     public static Authentication createAuthentication(String username, String... roles) {
-        return new UsernamePasswordAuthenticationToken(
-            username,
-            "password",
-            Arrays.stream(roles)
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                .collect(Collectors.toList())
-        );
+        return new UsernamePasswordAuthenticationToken(username, "password",
+            Arrays.stream(roles).map(role -> new SimpleGrantedAuthority("ROLE_" + role)).toList());
     }
 
     public static void runAs(String username, String... roles) {
-        SecurityContextHolder.getContext()
-            .setAuthentication(createAuthentication(username, roles));
+        SecurityContextHolder.getContext().setAuthentication(createAuthentication(username, roles));
     }
 
     public static void runAsAnonymous() {
-        SecurityContextHolder.getContext()
-            .setAuthentication(new AnonymousAuthenticationToken(
-                "key", "anonymous",
-                List.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))
-            ));
+        SecurityContextHolder.getContext().setAuthentication(
+            new AnonymousAuthenticationToken("key", "anonymous",
+                List.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))));
     }
 
-    public static void clearContext() {
-        SecurityContextHolder.clearContext();
-    }
+    public static void clearContext() { SecurityContextHolder.clearContext(); }
 }
 ```
 
@@ -474,7 +372,6 @@ public class SecurityTestUtils {
 4. **Test CSRF protection** for state-changing HTTP methods
 5. **Use custom meta-annotations** to reduce test boilerplate
 6. **Test OAuth2 scopes and authorities separately** from roles
-7. **Test security at both web and method level** for defense in depth
 
 ## Common Mistakes
 
@@ -489,13 +386,10 @@ class DocumentServiceTest {
 
     @Test
     void testMethodSecurity() {
-        // This will fail - no authentication context
-        documentService.getDocument(1L);
+        documentService.getDocument(1L); // Will fail - no authentication
     }
 }
-```
 
-```java
 // Correct: Set up security context
 @SpringBootTest
 class DocumentServiceTest {
@@ -519,68 +413,28 @@ class AdminControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void adminCanAccess() throws Exception {
-        mockMvc.perform(get("/api/admin"))
-            .andExpect(status().isOk());
+        mockMvc.perform(get("/api/admin")).andExpect(status().isOk());
     }
-    // Missing: test unauthorized access
 }
-```
 
-```java
 // Correct: Test both positive and negative cases
 @WebMvcTest(AdminController.class)
 class AdminControllerTest {
     @Test
     @WithMockUser(roles = "ADMIN")
     void adminCanAccess() throws Exception {
-        mockMvc.perform(get("/api/admin"))
-            .andExpect(status().isOk());
+        mockMvc.perform(get("/api/admin")).andExpect(status().isOk());
     }
 
     @Test
     @WithMockUser(roles = "USER")
     void userCannotAccess() throws Exception {
-        mockMvc.perform(get("/api/admin"))
-            .andExpect(status().isForbidden());
+        mockMvc.perform(get("/api/admin")).andExpect(status().isForbidden());
     }
 
     @Test
     void unauthenticatedUserCannotAccess() throws Exception {
-        mockMvc.perform(get("/api/admin"))
-            .andExpect(status().isUnauthorized());
-    }
-}
-```
-
-### Mistake 3: Forgetting CSRF in State-Changing Tests
-
-```java
-// Wrong: POST without CSRF
-@WebMvcTest(UserController.class)
-class UserControllerTest {
-    @Test
-    @WithMockUser
-    void createUser() throws Exception {
-        mockMvc.perform(post("/api/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"test\"}"))
-            .andExpect(...);  // Will fail with 403
-    }
-}
-```
-
-```java
-// Correct: Include CSRF token
-@WebMvcTest(UserController.class)
-class UserControllerTest {
-    @Test
-    @WithMockUser
-    void createUser() throws Exception {
-        mockMvc.perform(post("/api/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"test\"}")
-                .with(csrf()))
-            .andExpect(status().isCreated());
+        mockMvc.perform(get("/api/admin")).andExpect(status().isUnauthorized());
     }
 }
 ```

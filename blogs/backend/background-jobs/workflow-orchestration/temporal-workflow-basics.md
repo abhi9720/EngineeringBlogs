@@ -46,6 +46,8 @@ The server persists workflow state and coordinates task distribution to workers.
 
 ### Worker Configuration
 
+The worker is the bridge between your code and the Temporal server. `WorkflowClient` establishes a gRPC connection to the Temporal server. `WorkerFactory` manages one or more workers — each worker polls a specific task queue and executes any workflow type or activity implementation registered with it. The `"order-task-queue"` name must match the task queue name that workflow starters use when calling the workflow. A single worker process can host multiple workers on different task queues, but it is common to have one worker per queue for operational clarity.
+
 ```java
 @Configuration
 public class TemporalConfiguration {
@@ -78,6 +80,8 @@ public class TemporalConfiguration {
 ## Defining a Workflow
 
 ### Order Processing Workflow
+
+This workflow implements the saga pattern with Temporal's constructs. Activities are defined as a Java interface and implemented separately — Temporal uses the interface to generate proxies that handle retries, timeouts, and state persistence automatically. Two activity stubs are created with different `ActivityOptions`: standard order activities have a 10-second timeout with exponential backoff (5 retries max), while payment activities have a 30-second timeout and only 3 retries, reflecting the higher latency and lower tolerance for duplicate payment attempts. Compensation logic is explicit: if payment fails, inventory is released; if shipment fails, both payment and inventory are rolled back. Temporal ensures that activity executions and compensations survive worker crashes.
 
 ```java
 // Workflow interface
@@ -266,6 +270,8 @@ public class PaymentActivitiesImpl implements PaymentActivities {
 
 ## Workflow with Timers and Delays
 
+Temporal's `Workflow.sleep()` is not a thread sleep — it is a durable timer. When the workflow calls `Workflow.sleep(Duration.ofDays(14))`, the Temporal server records the timer and the workflow execution pauses. If the worker crashes during those 14 days, the workflow is reconstructed from the event history when a new worker picks it up, and the timer continues counting from where it left off. This makes Temporal ideal for long-running business processes with waits: trial periods, billing cycles, reminder escalations. The monthly billing loop below shows a real-world pattern — a 12-month subscription with automatic retry and a single reminder before suspension. In a traditional cron-based approach, you would need to persist the month counter and handle failures across ticks; Temporal preserves the loop state natively.
+
 ```java
 public interface SubscriptionWorkflow {
     void manageSubscription(SubscriptionInput input);
@@ -320,6 +326,8 @@ public class SubscriptionWorkflowImpl implements SubscriptionWorkflow {
 ```
 
 ## Workflow Signals and Queries
+
+Signals and queries are Temporal's mechanism for interacting with running workflows. A `@SignalMethod` can be called from outside the workflow (e.g., from an HTTP handler) to mutate workflow state — `cancelOrder` sets a flag that the workflow checks at safe points, and `updateShippingAddress` changes the address used for a pending shipment. Signals are durably recorded in the workflow event history, so even if the workflow is mid-execution on a different worker, the signal is replayed when the workflow recovers. `@QueryMethod` is synchronous and side-effect-free — it returns the current workflow state without advancing the workflow. The `isCancelled()` checks between steps implement cooperative cancellation: the workflow completes the current activity before honouring the cancellation at the next safe point.
 
 ```java
 public interface OrderWorkflow {
@@ -420,6 +428,8 @@ public class OrderWorkflowImpl implements OrderWorkflow {
 ```
 
 ## Workflow with Child Workflows
+
+Child workflows enable fan-out parallelism — each item in an order gets its own workflow instance that runs independently and can be distributed across different workers. The `Async.function` call starts the child workflow asynchronously and returns a `Promise`, allowing the parent to launch many children concurrently. `Promise.allOf().get()` blocks until all children complete, collecting results. The `ParentClosePolicy.ABANDON` setting means the child continues running even if the parent completes — useful for long-running fulfilment that outlives the order validation workflow. Each child gets a unique workflow ID combining the order ID and product ID, ensuring idempotent start: if the parent crashes and replays, the child workflow is not duplicated.
 
 ```java
 public interface OrderFulfillmentWorkflow {

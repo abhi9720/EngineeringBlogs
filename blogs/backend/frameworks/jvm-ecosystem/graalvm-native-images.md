@@ -18,6 +18,8 @@ GraalVM Native Image compiles Java applications ahead-of-time (AOT) into standal
 
 ## Benefits of Native Images
 
+GraalVM Native Image changes the deployment characteristics of Java applications fundamentally. By compiling bytecode ahead-of-time into a native executable, it eliminates JVM startup overhead and reduces memory footprint by an order of magnitude. These properties are particularly valuable in containerized and serverless environments where cold starts and memory limits directly impact cost.
+
 | Metric | JVM Deploy | Native Image |
 |--------|-----------|--------------|
 | Startup Time | 3-5 seconds | 10-50ms |
@@ -27,6 +29,8 @@ GraalVM Native Image compiles Java applications ahead-of-time (AOT) into standal
 | Build Time | Seconds | Minutes (AOT compilation) |
 
 ## Installation
+
+GraalVM can be installed via SDKMAN for easy version management. The `native-image` tool is a separate component that must be installed via `gu` (GraalVM Updater) after the base GraalVM JDK is installed. The native-image tool itself is a substantial download — it includes the GraalVM compiler and supporting libraries for AOT compilation.
 
 ```bash
 # Install GraalVM using SDKMAN
@@ -41,6 +45,8 @@ native-image --version
 ```
 
 ## Spring Boot Native Image
+
+Spring Boot 3.x provides built-in support for GraalVM native images via the Spring AOT (Ahead-of-Time) module. The `native-maven-plugin` from GraalVM and the Spring Boot Maven plugin's build-image goal are the two primary build paths. The AOT engine processes Spring configurations at build time, generating reflection hints and initialization code that would otherwise need manual configuration.
 
 ### Dependencies
 
@@ -85,6 +91,8 @@ mvn spring-boot:build-image
 
 ## Reflection Configuration
 
+The biggest challenge with native images is the closed-world assumption — GraalVM's static analysis must know at build time every class, method, and field that will be accessed at runtime. Reflection, dynamic class loading, serialization, and JNI all break this assumption. Configuration files in `META-INF/native-image/` tell the native-image tool about these dynamic accesses.
+
 ### For Spring Boot
 
 ```java
@@ -104,6 +112,8 @@ public class ReflectionConfig {
     // Register types for reflection access
 }
 ```
+
+Spring Boot's `@Reflective` and `@RegisterReflectionForBinding` annotations provide a type-safe way to generate reflection hints at compile time. The `@Reflective` annotation marks individual methods or types, while `@RegisterReflectionForBinding` registers entire classes used in serialization (JSON, XML). These annotations are processed by Spring's AOT infrastructure, eliminating the need for manual JSON configuration.
 
 ### Manual Reflection Hints
 
@@ -132,6 +142,8 @@ public class ReflectionConfig {
 ]
 ```
 
+Manual reflection configuration in JSON format is the fallback when annotations are insufficient. Each entry specifies the fully qualified class name and which fields, methods, and constructors should be accessible. The tracing agent (`-agentlib:native-image-agent`) can generate these files automatically by observing runtime behavior during a test run of the application.
+
 ### Proxy Configuration
 
 ```json
@@ -141,6 +153,8 @@ public class ReflectionConfig {
   ["org.springframework.data.jpa.repository.JpaRepository", "com.example.UserRepository"]
 ]
 ```
+
+Proxy configuration is specifically for JDK dynamic proxies, which create new classes at runtime via `java.lang.reflect.Proxy`. Spring and Jakarta EE use dynamic proxies extensively for transaction management, security, and dependency injection. Without explicit proxy configuration, these features will fail with `ClassNotFoundException` in native images.
 
 ### Resource Configuration
 
@@ -160,6 +174,8 @@ public class ReflectionConfig {
 }
 ```
 
+Resource configuration ensures that files on the classpath (YAML, properties, bundles) are included in the native executable. Without this, `getClass().getResourceAsStream()` returns `null` at runtime. The resource patterns use Java regex syntax, and resource bundles for internationalization require separate `bundles` entries.
+
 ## Creating Native Images without Framework
 
 ```java
@@ -175,6 +191,8 @@ public class HelloWorld {
 // Run: ./helloworld
 // Output: Hello from Native Image!
 ```
+
+A simple `HelloWorld` class demonstrates the basic native-image workflow. Compile with `javac`, then run `native-image HelloWorld` to produce an executable. The resulting binary has no JVM dependency — it runs directly on the OS, starts in milliseconds, and uses minimal memory. This is the same process that Spring Boot and Quarkus automate through their build plugins.
 
 ### Native Image with GraalVM SDK
 
@@ -215,6 +233,8 @@ public class NativeFeatures {
 }
 ```
 
+The GraalVM SDK provides APIs for advanced native image features. The `Feature` interface hooks into the native image build lifecycle — `duringSetup`, `beforeAnalysis`, `afterAnalysis` — enabling custom build-time processing. Static fields initialized at build time (like `BuildTimeInit.CONFIG`) are compiled directly into the binary, reducing runtime work but requiring that the initialization is side-effect free and doesn't depend on runtime state.
+
 ## Serialization Configuration
 
 ```json
@@ -229,6 +249,8 @@ public class NativeFeatures {
   }
 ]
 ```
+
+Java serialization is inherently dynamic — classes are loaded and instantiated by name during deserialization. In native images, the set of serializable classes must be declared upfront. Each entry specifies the class name and optionally a custom constructor target class. Without serialization configuration, `java.io.ObjectInputStream` will fail with `ClassNotFoundException` for any dynamically deserialized class.
 
 ## JNI Configuration
 
@@ -248,6 +270,8 @@ public class NativeFeatures {
   }
 ]
 ```
+
+JNI (Java Native Interface) calls into native C/C++ libraries must also be declared. If your application calls `System.loadLibrary()` or uses JNA/JNR, every native method and field accessed via JNI needs an entry in `jni-config.json`. Frameworks that rely on JNI for platform-specific features (like file watching or process management) require special attention during native image migration.
 
 ## Quarkus Native Image
 
@@ -279,6 +303,8 @@ mvn package -Pnative
 mvn package -Pnative -Dquarkus.native.container-build=true
 ```
 
+Quarkus was designed with native image support from day one. Its build-time processing — bytecode recording, compile-time proxy generation, and Hibernate integration — means far fewer manual configuration files are needed compared to Spring Boot. The `quarkus-maven-plugin` handles both JAR packaging and native image compilation, with the `container-build` option enabling native compilation inside a Docker container (useful when GraalVM isn't installed locally).
+
 ## Performance Comparison
 
 ```java
@@ -301,6 +327,8 @@ public class StartupTest {
 // Binary: JAR ~20MB vs Native ~60MB
 ```
 
+The performance gains from native images come with trade-offs. Startup time drops from seconds to milliseconds, and memory usage drops by 80-90%. However, peak throughput under sustained load is often comparable to JVM mode since the JIT compiler (C2) can optimize hot paths more aggressively than GraalVM's AOT compilation. The primary benefits are in startup-sensitive environments — serverless functions, auto-scaling containers, and CLI tools.
+
 ## Debugging Native Images
 
 ```bash
@@ -316,6 +344,8 @@ native-image -H:-DeleteLocalSymbols -H:+SourceLevelDebug
 # Run with native image debugging
 ./my-app -agentlib:native-image-agent=config-output-dir=config/
 ```
+
+Debugging native images requires different tools than JVM debugging. The `-H:+ReportExceptionTraces` flag provides stack traces for build-time errors. The `-Ob` flag enables quick build mode, skipping optimizations for faster iteration during development. The tracing agent (`native-image-agent`) records all reflection, resource, and JNI access during a test run and outputs configuration files — this is the single most useful tool for getting native images working with existing applications.
 
 ## Testing Native Images
 

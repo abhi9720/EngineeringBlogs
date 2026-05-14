@@ -22,22 +22,59 @@ Backend security encompasses every layer of protecting server-side systems: auth
 
 ## The Four Layers of Backend Security
 
-```
-┌─────────────────────────────────────────────┐
-│          Authentication Layer                │
-│  JWT · Sessions · SSO/SAML · OIDC · Passwords│
-├─────────────────────────────────────────────┤
-│          Authorization Layer                 │
-│  RBAC · ABAC · OAuth2 · Permissions · ACLs  │
-├─────────────────────────────────────────────┤
-│        Application Security Layer            │
-│  OWASP Top 10 · SQL Injection · API Security │
-│  Secrets · Dependency Scanning · XSS · CSRF  │
-├─────────────────────────────────────────────┤
-│        Operational Security Layer            │
-│  TLS · WAF · Rate Limiting · Audit Logs     │
-│  Incident Response · Compliance (SOC2, GDPR) │
-└─────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph Authentication["Authentication Layer"]
+        direction TB
+        A1["JWT"]
+        A2["Sessions"]
+        A3["SSO/SAML"]
+        A4["OIDC"]
+        A5["Passwords"]
+    end
+
+    subgraph Authorization["Authorization Layer"]
+        direction TB
+        Z1["RBAC"]
+        Z2["ABAC"]
+        Z3["OAuth2"]
+        Z4["Permissions"]
+        Z5["ACLs"]
+    end
+
+    subgraph AppSec["Application Security Layer"]
+        direction TB
+        S1["OWASP Top 10"]
+        S2["SQL Injection"]
+        S3["API Security"]
+        S4["Secrets Management"]
+        S5["Dependency Scanning"]
+        S6["XSS / CSRF"]
+    end
+
+    subgraph OpsSec["Operational Security Layer"]
+        direction TB
+        O1["TLS"]
+        O2["WAF"]
+        O3["Rate Limiting"]
+        O4["Audit Logs"]
+        O5["Incident Response"]
+        O6["Compliance (SOC2, GDPR)"]
+    end
+
+    Authentication --> Authorization
+    Authorization --> AppSec
+    AppSec --> OpsSec
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class Authentication blue
+    class Authorization green
+    class AppSec yellow
+    class OpsSec pink
 ```
 
 ---
@@ -75,6 +112,8 @@ Authorization answers "what can you do?" It controls access to resources.
 - **ReBAC**: Relationship-based (e.g., "user is member of team that owns document").
 
 ### Where Authorization Happens
+
+The authorization pipeline runs multiple checks in sequence: pre-authorization (is the user even authenticated?), fast-path role check (admins bypass fine-grained checks), permission verification, and finally instance-level ABAC policy evaluation. Early rejection of unauthorized requests avoids expensive resource lookups:
 
 ```java
 public class AuthorizationPipeline {
@@ -126,6 +165,8 @@ Application security focuses on preventing exploits in application code.
 
 ### Defense in Depth
 
+Spring Security's filter chain is the perfect vehicle for defense in depth. The configuration below layers five security mechanisms — TLS enforcement, security headers (CSP, X-Frame-Options, HSTS), OAuth2 login, URL-pattern-based authorization, and CSRF protection — in a single fluent chain:
+
 ```java
 @Configuration
 public class DefenseInDepthConfig {
@@ -171,7 +212,7 @@ public class DefenseInDepthConfig {
 
 ### Secrets Management
 
-Do not hardcode secrets. Use a secrets management solution:
+Do not hardcode secrets. Use a secrets management solution. Static credentials in configuration files or CI/CD variables are a common attack vector — they are visible to many team members and never rotate. A vault-based approach with dynamic, short-lived credentials and automatic rotation eliminates these risks:
 
 ```
 Bad:  config.properties with plaintext credentials in Git
@@ -180,6 +221,8 @@ Better: Automatic credential rotation with lease management
 ```
 
 ### Secure Communication
+
+TLS 1.3 with modern cipher suites (AES-256-GCM, ChaCha20-Poly1305) provides confidentiality and integrity for data in transit. Disable older protocols (TLS 1.0/1.1) and weak ciphers:
 
 ```yaml
 # TLS configuration
@@ -218,6 +261,8 @@ Perform threat modeling during design, not after implementation:
 
 ### 2. Security Testing
 
+Integrate multiple testing methodologies into your pipeline. SAST catches vulnerabilities early in the development cycle, DAST finds runtime issues, dependency scanning identifies known CVEs, and penetration testing validates the overall security posture:
+
 ```
 Static Analysis (SAST)   - Find vulnerabilities in source code
 Dynamic Analysis (DAST)  - Find vulnerabilities in running application
@@ -227,6 +272,8 @@ Bug Bounty               - Crowdsourced vulnerability discovery
 ```
 
 ### 3. Incident Response
+
+A well-defined incident response plan with severity-based response times ensures consistent handling of security events:
 
 ```yaml
 # Incident response plan

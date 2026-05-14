@@ -18,6 +18,8 @@ Python's async/await syntax enables concurrent code using coroutines. FastAPI le
 
 ## Python Async Fundamentals
 
+Python's `async`/`await` syntax enables cooperative multitasking. A coroutine (`async def`) is a function that can suspend its execution via `await`, yielding control back to the event loop. When the awaited operation completes, the coroutine resumes from where it paused. This model enables thousands of concurrent I/O operations within a single OS thread, each suspended while waiting for IO and resumed when data arrives.
+
 ### Coroutines and Await
 
 ```python
@@ -48,6 +50,8 @@ async def main_concurrent():
 
 asyncio.run(main_concurrent())
 ```
+
+The key difference between sequential and concurrent execution: sequential `await` calls run one after another (each blocking until completion), while `asyncio.create_task()` schedules coroutines for concurrent execution and `asyncio.gather()` collects all results. The concurrent version completes in the time of the slowest operation, not the sum of all operations. This is the fundamental performance advantage of async I/O.
 
 ### Async Generators
 
@@ -80,6 +84,8 @@ async def stream_endpoint():
 
     return StreamingResponse(generate(), media_type="text/event-stream")
 ```
+
+Async generators (`async for`) enable streaming data without loading everything into memory. FastAPI's `StreamingResponse` leverages this for Server-Sent Events (SSE) and large file streaming. The generator yields values as they become available, and the response sends each chunk to the client incrementally. This pattern is essential for real-time data feeds, progress updates, and large dataset streaming.
 
 ## Async Database Access
 
@@ -131,6 +137,8 @@ async def get_user_endpoint(user_id: int):
     return user
 ```
 
+Async database access requires drivers that support the async protocol. The `databases` library provides a lightweight async wrapper around SQL queries using `asyncpg` for PostgreSQL. The `database.execute()` and `database.fetch_one()` methods are awaitable, yielding control to the event loop while the database processes the query. FastAPI's startup/shutdown events manage the connection lifecycle.
+
 ### SQLAlchemy Async
 
 ```python
@@ -158,6 +166,8 @@ async def create_user_async(user_data: dict) -> User:
         await session.refresh(user)
         return user
 ```
+
+SQLAlchemy's async support (since version 1.4) uses `create_async_engine` and `AsyncSession`. The `async with` statement manages session lifecycle — the session is acquired, used, and automatically closed via the context manager. This pattern is similar to synchronous SQLAlchemy but uses `await session.execute()` instead of `session.execute().fetchall()`. The `async_sessionmaker` factory creates new `AsyncSession` instances per request.
 
 ### Redis Async
 
@@ -213,6 +223,8 @@ async def get_user(user_id: int):
     return user
 ```
 
+Async Redis via `aioredis` follows the same connection lifecycle pattern. The cache service is initialized at startup and closed at shutdown. Async cache lookups with `await cache.get()` enable non-blocking caching — the event loop processes other requests while waiting for Redis. The `invalidate` method with `keys` pattern supports cache invalidation by prefix, a common pattern for clearing related cache entries.
+
 ## HTTP Client
 
 ```python
@@ -260,6 +272,8 @@ async def shutdown():
     await client.close()
 ```
 
+`httpx.AsyncClient` provides a fully async HTTP client. The `asyncio.gather(*tasks)` pattern sends multiple HTTP requests concurrently, reducing the total time to the slowest response rather than the sum. The `return_exceptions=True` parameter prevents one failing request from cancelling others — useful when individual failures should be handled gracefully rather than failing the entire batch request.
+
 ## Background Tasks
 
 ```python
@@ -296,6 +310,8 @@ async def heavy_processing(data: dict):
     print(f"Processed: {data}")
 ```
 
+Background tasks run after the response is sent, making them ideal for non-critical operations like log processing, analytics events, or email sending. FastAPI's `BackgroundTasks` type is injection-friendly and managed by the framework. More complex background processing (with cancellation, error handling, and monitoring) benefits from a dedicated task manager that tracks running `asyncio.Task` objects for graceful shutdown.
+
 ## Concurrency Patterns
 
 ### Async Context Manager
@@ -323,6 +339,8 @@ async def create_order(order_data: OrderCreate):
         await update_inventory(order.items)
         return order
 ```
+
+Async context managers (created with `@asynccontextmanager`) wrap resource setup and teardown. The `database_transaction` context manager starts a transaction on enter, commits on success, and rolls back on exception. Using `async with database_transaction()` in FastAPI ensures database transactions are properly scoped and cleaned up, even when exceptions occur.
 
 ### Rate Limiting with Async
 
@@ -366,6 +384,8 @@ async def rate_limit_middleware(request: Request, call_next):
         )
     return await call_next(request)
 ```
+
+The async rate limiter demonstrates that not everything needs database-backed storage. This in-memory implementation uses a dictionary of timestamps per client, pruning expired entries on each check. While adequate for single-process deployments, production systems typically use Redis-based rate limiting to share state across multiple server instances.
 
 ## Testing Async Code
 

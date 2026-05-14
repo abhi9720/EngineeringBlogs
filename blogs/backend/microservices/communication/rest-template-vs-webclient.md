@@ -20,6 +20,8 @@ RestTemplate and WebClient are Spring's HTTP client abstractions. RestTemplate i
 
 ### Configuration
 
+The default `RestTemplate` uses simple connection management with no pooling and default timeouts — unsuitable for production. The custom configuration shown here adds a connection pool (200 max connections, 50 per route), explicit timeouts (2s connect, 5s read), and logging interceptors. The pool prevents connection exhaustion under high concurrency.
+
 ```java
 @Configuration
 public class RestTemplateConfig {
@@ -69,6 +71,8 @@ public class RestTemplateConfig {
 ```
 
 ### Usage
+
+RestTemplate calls are synchronous and block the calling thread until the response arrives. The `@Retryable` annotation from Spring Retry adds resilience — failed requests due to timeouts are retried up to 3 times with exponential backoff. Error handling relies on try-catch blocks around each call.
 
 ```java
 @Service
@@ -122,6 +126,8 @@ public class OrderService {
 
 ### Configuration
 
+WebClient is built on Reactor Netty with non-blocking I/O. Its builder-based API allows configuring base URLs, default headers, connection timeouts, and filters in a declarative style. The `wiretap` option provides low-level Netty debugging, while the response timeout ensures the reactive pipeline doesn't hang indefinitely.
+
 ```java
 @Configuration
 public class WebClientConfig {
@@ -170,6 +176,8 @@ public class WebClientConfig {
 ```
 
 ### Usage
+
+WebClient's reactive API chains operators to build a processing pipeline. `.timeout()` sets a maximum wait, `.retryWhen()` handles transient failures with backoff, and `.onErrorResume()` provides fallback responses. Parallel calls are composed with `Mono.zip` — all three requests execute concurrently, unlike RestTemplate's sequential blocking.
 
 ```java
 @Service
@@ -242,6 +250,8 @@ public class ReactiveOrderService {
 ```
 
 ## Migration from RestTemplate to WebClient
+
+Migration can happen incrementally — existing synchronous code stays on RestTemplate while new reactive endpoints use WebClient. The `.block()` method bridges the reactive world to synchronous callers, useful during transitional periods. Long-term, the goal is end-to-end non-blocking for better resource utilization.
 
 ```java
 @Service

@@ -22,27 +22,23 @@ Test-Driven Development (TDD) is a software development methodology where tests 
 
 ## The TDD Cycle: Red-Green-Refactor
 
+```mermaid
+graph TD
+    R["RED: Write Test (that fails)"] --> G["GREEN: Write Minimum Code to Pass"]
+    G --> RF["REFACTOR: Clean up code, tests still pass"]
+    RF --> R
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class R pink
+    class G green
+    class RF blue
 ```
-┌─────────────────┐
-│   Write Test    │  RED: Test fails (no implementation)
-│  (that fails)   │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Write Minimum  │  GREEN: Test passes
-│  Code to Pass   │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│    Refactor     │  REFACTOR: Clean up code, tests still pass
-│  (keep tests    │
-│   passing)      │
-└────────┬────────┘
-         │
-         └─────────►  Repeat
-```
+
+The TDD cycle is a tight feedback loop that typically runs in minutes. In the **Red** phase, you write a test that fails—usually because the production code doesn't exist yet. In the **Green** phase, you write the simplest possible code to make the test pass, even if it's just returning a constant. In the **Refactor** phase, you clean up the code while the tests keep passing, ensuring you never break working functionality.
 
 ---
 
@@ -311,6 +307,8 @@ public class OrderService {
     }
 }
 ```
+
+Notice how the test for the happy path (inventory available, payment succeeds) and the failure path (no inventory) were written before a single line of production code. This ensures the `OrderService` design emerges from the test requirements rather being guessed upfront. The mock-based tests also forced the `OrderService` to accept its dependencies through the constructor—a clean DI-friendly design that emerged naturally from TDD.
 
 ---
 

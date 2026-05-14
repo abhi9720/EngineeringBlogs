@@ -31,6 +31,8 @@ Flask and FastAPI are two popular Python web frameworks. Flask is known for its 
 
 ## Code Comparison
 
+The core difference between Flask and FastAPI is visible in their simplest form. Flask uses `@app.route` decorators with explicit `methods` lists and returns `jsonify()` calls. FastAPI uses HTTP-verb-specific decorators, async handlers, and returns plain Python objects that are automatically serialized. Flask's design reflects its WSGI origins (sync-only), while FastAPI's design embraces ASGI (async-native).
+
 ### Basic Application
 
 ```python
@@ -70,6 +72,8 @@ async def get_user(user_id: int):
     return user
 ```
 
+Flask's parameter parsing is manual — `request.args.get('page', 1, type=int)` requires explicit type conversion. Error handling is also manual: the 404 case checks for `None` and returns a tuple `(error_json, status_code)`. FastAPI uses type hints for automatic parsing and validation — `page: int = Query(1, ge=1)` both documents the parameter and validates it. Errors are raised as exceptions and handled by the framework.
+
 ### Request Validation
 
 ```python
@@ -108,6 +112,8 @@ async def create_user(user: UserCreate):
     return saved
 ```
 
+Validation in Flask requires separate schema libraries like Marshmallow. The `UserSchema` class defines fields and validation rules, and `schema.load()` must be called explicitly with try/except error handling. FastAPI's Pydantic integration makes validation automatic — the `UserCreate` model class defines the schema, and FastAPI validates the request body before the handler runs. Invalid requests are rejected with structured error responses without any handler code.
+
 ### Dependency Injection
 
 ```python
@@ -137,6 +143,8 @@ async def profile(current_user: User = Depends(get_current_user)):
     return current_user
 ```
 
+Flask uses `g` (a global request context) for request-scoped data. Data attached to `g` by `before_request` handlers is accessible throughout the request lifecycle but is not type-safe and can be modified anywhere. FastAPI's `Depends()` function provides explicit, type-safe dependency injection with clear scoping — a dependency is declared as a function parameter, and the framework manages its lifecycle.
+
 ### Async Support
 
 ```python
@@ -158,6 +166,8 @@ async def get_data():
     result = await async_io()
     return result
 ```
+
+Async support is the most fundamental architectural difference. Flask 3.0+ added async support but it runs async views on a separate thread pool — it's async-compatible but not async-native. FastAPI is built on Starlette, which is fully ASGI-native — every request handler can be async without thread overhead. For I/O-bound workloads (database queries, HTTP calls, file reads), FastAPI's approach can serve orders of magnitude more concurrent connections.
 
 ### Error Handling
 
@@ -193,6 +203,8 @@ async def app_error_handler(request: Request, exc: AppError):
     )
 ```
 
+Error handling follows similar patterns in both frameworks — custom exception classes and handler registration. Flask uses `@app.errorhandler` decorators with the exception class as the argument. FastAPI uses `@app.exception_handler` with the exception type. Both support returning JSON error responses, but FastAPI's handlers can be async and integrate with the dependency injection system.
+
 ## Ecosystem and Extensions
 
 ```python
@@ -214,6 +226,8 @@ async def app_error_handler(request: Request, exc: AppError):
 # - Redis (caching)
 # - Celery/BackgroundTasks
 ```
+
+Flask's ecosystem is more mature with dedicated extensions for almost every need (Flask-SQLAlchemy, Flask-Login, Flask-Migrate, etc.). FastAPI's ecosystem is younger but benefits from being able to use any ASGI-compatible library directly (SQLAlchemy, Starlette middleware, etc.). The trade-off is between Flask's polished, framework-specific extensions and FastAPI's broader ASGI ecosystem interoperability.
 
 ## Performance Characteristics
 

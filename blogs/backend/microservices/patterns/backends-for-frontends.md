@@ -18,7 +18,7 @@ The Backends for Frontends (BFF) pattern creates separate backend services for e
 
 ## Why BFF?
 
-Mobile and web clients have different requirements:
+Mobile clients need lightweight payloads (thumbnails, not full-resolution images) and optimized endpoints for battery life and bandwidth. Web clients need richer data for SEO, structured data, and complex UI rendering. A single API serving both results in either over-fetching (bad for mobile) or under-fetching (bad for web).
 
 ```java
 // Web client needs full product details
@@ -53,6 +53,8 @@ public MobileProductResponse getProduct(@PathVariable String id) {
 
 ### Web BFF
 
+The Web BFF route configuration rewrites paths (`/api/web/products/**` → `/products/**`) and adds a `X-BFF-Type: web` header so downstream services can tailor responses if needed. Rate limiting is configured independently per BFF — web clients may have higher limits than mobile clients.
+
 ```java
 @Configuration
 public class WebBffConfig {
@@ -80,6 +82,8 @@ public class WebBffConfig {
 ```
 
 ### Mobile BFF
+
+The Mobile BFF doubles the rate limit compared to web BFF (200 replenish rate vs 100), reflecting the higher request volume typical of mobile clients polling for updates. The `Content-Type` header is explicitly set to ensure consistent response formatting across mobile OS versions.
 
 ```java
 @Configuration
@@ -109,6 +113,8 @@ public class MobileBffConfig {
 ```
 
 ## Mobile BFF Implementation
+
+The Mobile BFF controller aggregates data from multiple downstream services into a mobile-optimized response. It fetches product, inventory, and pricing data in parallel (`Mono.zip`), then constructs a minimal payload — only thumbnail, price, stock status, and delivery estimate. The `X-Client-Version` header enables version-specific formatting.
 
 ```java
 @RestController
@@ -167,6 +173,8 @@ public class MobileBffController {
 
 ## Web BFF Implementation
 
+The Web BFF returns a richer response — reviews, SEO metadata, related products, breadcrumbs, and structured data for search engines. Parallel execution (`CompletableFuture.allOf`) ensures all upstream calls happen concurrently, keeping response latency as low as possible despite the larger payload.
+
 ```java
 @RestController
 @RequestMapping("/api/web")
@@ -214,6 +222,8 @@ public class WebBffController {
 
 ## GraphQL BFF
 
+A GraphQL BFF combines the flexibility of client-driven queries with the BFF pattern's optimization layer. The resolver customizes response fields based on `clientType` — mobile clients get truncated descriptions and thumbnails, while web clients receive full data. This avoids maintaining separate REST endpoints per client type.
+
 ```java
 @Component
 public class ProductGraphQLFetcher implements GraphQLQueryResolver {
@@ -251,6 +261,8 @@ public class ProductGraphQLFetcher implements GraphQLQueryResolver {
 ```
 
 ## BFF Security
+
+Each BFF requires a different security configuration. The web BFF uses OAuth2 login with session-based CSRF protection (cookies). The mobile BFF uses stateless JWT bearer tokens with CSRF disabled (mobile apps cannot store CSRF tokens securely). Separating security per BFF avoids compromising one client type's security model for another's convenience.
 
 ```java
 @Component

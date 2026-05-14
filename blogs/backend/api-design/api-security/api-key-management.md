@@ -24,6 +24,8 @@ API keys are a simple yet effective authentication mechanism for machine-to-mach
 
 ### Secure Key Generation
 
+API keys must be cryptographically random and unpredictable. Using `SecureRandom` (not `Random`) ensures the keys have sufficient entropy to resist brute-force attacks. A common pattern is the `prefix.secret` format: a short, identifiable prefix (like `sk_live_abc123`) that allows the server to identify the key type and client without exposing the full secret, followed by a high-entropy secret (at least 32 bytes / 256 bits). The prefix is stored in plain text for lookup, while the secret portion is hashed with SHA-256 before storage — the raw secret is never persisted.
+
 ```java
 @Component
 public class ApiKeyGenerator {
@@ -78,6 +80,8 @@ class ApiKey {
     private String hashedKey; // SHA-256 of secret
 }
 ```
+
+The key service manages the full lifecycle of API keys — creation, validation, and caching. On creation, the raw key is returned exactly once to the client with a warning to store it securely. The service validates incoming requests by extracting the prefix for lookup, hashing the secret, and comparing with the stored hash. Caching validated keys (using Redis or Caffeine) dramatically reduces database load on frequently-used keys — but must be invalidated immediately when a key is revoked or rotated. Notice that the validation logic never stores or returns the raw key; it only compares hashes.
 
 ### Key Service
 
@@ -168,6 +172,8 @@ public class ApiKeyService {
 
 ## Key Rotation
 
+Key rotation is the practice of periodically replacing API keys to limit the window of exposure if a key is compromised. Automated rotation ensures that keys do not live beyond their useful lifespan without manual intervention. A 90-day rotation interval is standard for most systems, though high-security environments may require more frequent rotation (30 days or less). The rotation process should include a grace period where both old and new keys are accepted, allowing clients to update their configuration without service disruption.
+
 ### Automatic Key Rotation
 
 ```java
@@ -240,6 +246,8 @@ public class KeyRotationService {
 
 ## Key Revocation
 
+Immediate key revocation is critical when a key is suspected to be compromised — whether through a security incident, employee departure, or exposed credentials. The revocation service marks keys as inactive in the database, evicts them from all caches to prevent stale validations, and publishes revocation events so that distributed services can update their local deny lists. In a microservice architecture, revocation events should propagate quickly (within seconds) through a message queue or pub/sub system to prevent authorization gaps.
+
 ### Revocation Service
 
 ```java
@@ -287,6 +295,8 @@ public class KeyRevocationService {
 ---
 
 ## Audit Logging
+
+Comprehensive audit logging is essential for security compliance and incident response. Every key-related event — creation, validation, revocation, rotation — should be logged with sufficient detail to reconstruct the timeline of an incident. Log entries should include the key prefix (never the full key or secret), the client identifier, the action performed, the source IP address, and the timestamp. For security-sensitive environments like financial services or healthcare, audit logs must be immutable and stored separately from application logs to prevent tampering.
 
 ### Key Usage Audit
 
@@ -337,6 +347,8 @@ enum KeyEventType {
 
 ## Best Practices
 
+Effective API key management combines secure generation, safe storage, regular rotation, and comprehensive monitoring. The following practices form a defense-in-depth strategy that protects against common attack vectors including key leakage, brute-force guessing, and compromised credentials.
+
 1. **Use prefix.secret format**: Easy to identify key type without exposing secret
 2. **Hash the secret part**: Never store raw keys in database
 3. **Show key once**: Return raw key only at creation time
@@ -362,6 +374,8 @@ public boolean hasPermission(KeyEntity key, String requiredPermission) {
 
 ### Mistake 1: Storing Keys in Plain Text
 
+Storing raw API keys in the database is equivalent to storing passwords in plain text. If the database is breached, every API key is immediately usable. Always hash the secret portion of the key using a cryptographic hash function (SHA-256 is standard) before storage. The prefix can be stored in plain text because it only identifies the key owner and type — it cannot be used for authentication without the secret.
+
 ```java
 // WRONG: Raw key stored in database
 keyEntity.setRawKey("sk_live_abc...xyz");  // Security risk!
@@ -371,6 +385,8 @@ keyEntity.setKeyHash(ApiKeyGenerator.hashKey(secret));
 ```
 
 ### Mistake 2: Keys That Never Expire
+
+API keys that never expire are a significant security liability. A key embedded in a mobile app, committed to a public repository, or leaked through logs remains usable indefinitely. Regular rotation forces key renewal and limits the damage from undiscovered leaks. Implement automatic rotation with a configurable interval (90 days is standard) and a grace period during which both old and new keys are accepted. Notify key owners before rotation so they can update their systems.
 
 ```java
 // WRONG: No expiration on keys
@@ -384,6 +400,8 @@ public void rotateOldKeys() {
 ```
 
 ### Mistake 3: Showing Key After Creation
+
+Never return full API keys in list responses, logs, or error messages. The raw key should be displayed exactly once — at creation time — with a prominent warning to store it securely. Subsequent API responses should only include the prefix, which identifies the key without compromising security. If a user loses their key, they must rotate it (generate a new key) rather than retrieve the old one.
 
 ```java
 // WRONG: Key visible in list responses

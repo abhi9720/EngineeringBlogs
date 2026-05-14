@@ -27,17 +27,35 @@ This guide covers module design principles, dependency management, build optimiz
 
 ### Layered Architecture
 
-```
-order-management/
-    ├── order-common/           # Shared DTOs, constants, utilities
-    ├── order-domain/           # Business logic, domain models
-    ├── order-repository/       # Data access, repositories
-    ├── order-service/          # Service layer with business logic
-    ├── order-web/              # REST controllers, request/response
-    └── order-bootstrap/        # Spring Boot application entry point
+The directory tree below shows a typical layered module structure. Each arrow indicates a dependency direction — dependencies flow inward, with the innermost modules having zero framework dependencies.
+
+```mermaid
+graph TD
+    subgraph "order-management"
+        OC["order-common<br/>Shared DTOs, constants, utilities"]
+        OD["order-domain<br/>Business logic, domain models"]
+        OR["order-repository<br/>Data access, repositories"]
+        OS["order-service<br/>Service layer with business logic"]
+        OW["order-web<br/>REST controllers, request/response"]
+        OB["order-bootstrap<br/>Spring Boot application entry point"]
+    end
+
+    OW --> OS
+    OS --> OR
+    OS --> OD
+    OR --> OD
+    OD --> OC
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
 ```
 
 ### Key Principles
+
+The domain module should be pure Java with no framework annotations. This makes it testable, portable, and free from framework coupling. The code below demonstrates this principle — `Order` is a plain Java class with business rules that can be unit tested without Spring.
 
 ```java
 // Module A: order-common (no Spring dependencies)
@@ -103,6 +121,8 @@ public class Order {
 ## Maven Multi-Module Setup
 
 ### Parent POM Configuration
+
+The parent POM lists all modules, manages shared dependency versions, and configures plugins for all children. Notice `packaging: pom` — this tells Maven this is a parent, not a deployable artifact.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -181,6 +201,8 @@ public class Order {
 ```
 
 ### Child Module POM
+
+Child modules inherit version and plugin configuration from the parent. The `order-bootstrap` module is the application entry point — it depends on `order-web` and `order-service` which transitively bring in all other modules.
 
 ```xml
 <!-- order-service/pom.xml -->
@@ -264,6 +286,8 @@ public class Order {
 ## Gradle Multi-Module Setup
 
 ### Settings and Root Build
+
+Gradle uses `settings.gradle.kts` to include modules, and the root `build.gradle.kts` to apply shared configuration to all subprojects. The `TYPESAFE_PROJECT_ACCESSORS` feature preview enables compile-time safe access to project dependencies.
 
 ```kotlin
 // settings.gradle.kts
@@ -359,6 +383,8 @@ spring-dependency-management = { id = "io.spring.dependency-management", version
 
 ### Submodule Build Files
 
+Each submodule has its own `build.gradle.kts` with its specific dependencies. The `java-library` plugin exposes dependencies to consumers via `api` (transitive) vs `implementation` (not transitive).
+
 ```kotlin
 // order-common/build.gradle.kts
 plugins {
@@ -452,6 +478,8 @@ dependencies {
 
 ### Enforcing Module Boundaries
 
+ArchUnit tests enforce module boundaries at the bytecode level. These tests run as part of the build and prevent architectural drift (e.g., a web controller directly accessing a repository).
+
 ```java
 // ArchUnit test to enforce module boundaries
 @RunWith(ArchUnitRunner.class)
@@ -511,6 +539,8 @@ public class ModuleArchitectureTest {
 
 ### Version Alignment Strategy
 
+Resolution strategies ensure all modules use the same version of transitive dependencies. Force specific versions to override conflicting transitive dependencies.
+
 ```kotlin
 // Gradle: Enforce consistent versions across all modules
 // build.gradle.kts (root)
@@ -550,6 +580,8 @@ dependencyLocking {
 
 ### Parallel Build Configuration
 
+Maven and Gradle both support parallel builds. The configuration below enables multi-threaded compilation and test execution.
+
 ```xml
 <!-- Maven: .mvn/maven.config -->
 -T 4
@@ -577,6 +609,8 @@ org.gradle.workers.max=4
 
 ### Selective Build
 
+When working on a specific module, build only that module and its dependencies rather than the entire project.
+
 ```bash
 # Maven: Build only specific modules
 mvn install -pl order-service,order-web -am
@@ -592,6 +626,8 @@ mvn install -pl order-service,order-web -am
 ```
 
 ### Build Cache Configuration
+
+The remote build cache shares compiled outputs across CI jobs. When one job builds a module, others download the cached result instead of rebuilding.
 
 ```kotlin
 // Gradle: settings.gradle.kts
@@ -618,6 +654,8 @@ buildCache {
 ## Testing in Multi-Module Projects
 
 ### Test Configuration
+
+Consistent test configuration across all modules ensures uniform test reporting and execution. The shared test support module provides base classes for integration tests.
 
 ```kotlin
 // Gradle: Configure test tasks consistently
@@ -694,6 +732,8 @@ public abstract class AbstractIntegrationTest {
 
 ### Mistake 1: Fat Module (Kitchen Sink Pattern)
 
+A single module that contains everything breaks separation of concerns, disables parallel builds, and makes it impossible to reuse individual components.
+
 ```java
 // WRONG: Single massive module
 // order-service (contains everything!)
@@ -721,6 +761,8 @@ public abstract class AbstractIntegrationTest {
 
 ### Mistake 2: Circular Dependencies Between Modules
 
+Circular dependencies break Maven's reactor build and create tight coupling. Dependencies must flow in one direction.
+
 ```xml
 <!-- WRONG: Module A depends on B, B depends on A -->
 <!-- order-service depends on order-web -->
@@ -731,6 +773,8 @@ public abstract class AbstractIntegrationTest {
 ```
 
 ### Mistake 3: Duplicating Dependency Versions
+
+Repeating versions across modules creates drift — one module may get updated while another is not. Use the parent POM or version catalog as the single source of truth.
 
 ```xml
 <!-- WRONG: Version repeated in each module -->
@@ -748,6 +792,8 @@ public abstract class AbstractIntegrationTest {
 
 ### Mistake 4: Not Using Test Fixtures Module
 
+Duplicating test infrastructure across modules creates inconsistency and maintenance overhead. A shared test support module is the solution.
+
 ```kotlin
 // WRONG: Copying test utilities across modules
 // order-service/src/test has @SpringBootTest config
@@ -761,6 +807,8 @@ dependencies {
 ```
 
 ### Mistake 5: Ignoring Build Order
+
+Building a module in isolation without its dependencies fails. Always build from the root with dependency awareness.
 
 ```bash
 # WRONG: Building modules independently
@@ -796,7 +844,5 @@ Key rules: dependencies flow one way, no cycles, fat modules are bad, versions a
 - [ArchUnit Documentation](https://www.archunit.org/)
 
 ---
-
-Happy Coding 👨‍💻
 
 Happy Coding

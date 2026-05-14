@@ -83,6 +83,8 @@ public class LazyLoadingService {
 }
 ```
 
+The `LazyInitializationException` occurs when a lazy association is accessed outside an active Hibernate session. Inside `@Transactional`, the session stays open and can issue the extra query on demand. Without the annotation, the session is closed when the repository method returns, and the proxy collection throws an exception. The fix is either to keep the transaction open (simple but leaks connections) or to eagerly fetch the needed data before the session closes — the recommended approach. Never rely on Open Session in View to mask this error; it only delays the problem and hides N+1 queries until production load.
+
 ---
 
 ## N+1 Query Problem
@@ -178,6 +180,8 @@ spring:
 // For 100 orders: 2 queries instead of 101
 ```
 
+Batch fetching is the least invasive N+1 fix — it requires no query changes. When Hibernate detects a lazy collection access, it groups the pending identifiers into batches of `default_batch_fetch_size`. The `padded` style rounds batch sizes up to the nearest multiple, ensuring consistent SQL plans. A reasonable default is 100; setting it too high (1000+) can generate very large `IN` lists that degrade performance on both the database and the network.
+
 #### 4. DTO Projections
 
 ```java
@@ -248,6 +252,8 @@ Customer customer = customerRepository.findById(1L).orElseThrow();
 
 // Recommendation: Keep @OneToMany and @ManyToMany as LAZY
 ```
+
+Eager loading is insidious because the cost is hidden: a simple `findById` that looks like a single-row lookup suddenly triggers a second query fetching potentially thousands of child rows. This is especially dangerous in list endpoints where `findAll()` on `Customer` loads every order for every customer — a textbook Cartesian product explosion. The rule of thumb: `@ManyToOne` and `@OneToOne` defaults to EAGER for a reason (the FK is in the same row), but `@OneToMany` and `@ManyToMany` should always be LAZY and fetched explicitly when needed.
 
 ---
 

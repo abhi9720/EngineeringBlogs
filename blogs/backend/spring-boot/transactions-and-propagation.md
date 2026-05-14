@@ -26,11 +26,9 @@ Understanding transaction propagation and isolation levels is critical for build
 
 ### The Transaction Abstraction Architecture
 
-Spring's transaction abstraction consists of three layers:
+Spring's transaction abstraction consists of three layers. The `PlatformTransactionManager` is the core SPI that handles getting transactions, committing, and rolling back. `TransactionDefinition` carries the configuration (propagation, isolation, timeout, read-only flag). `TransactionStatus` represents the runtime state of a transaction and provides methods to check if it's completed, rolled back, or has savepoints.
 
-1. **PlatformTransactionManager interface**: The core abstraction defining transaction operations
-2. **TransactionDefinition**: Defines transaction properties (propagation, isolation, timeout, read-only)
-3. **TransactionStatus**: Represents the current state of a transaction
+Spring provides implementations for each persistence technology: `DataSourceTransactionManager` for JDBC, `JpaTransactionManager` for JPA/Hibernate, `HibernateTransactionManager` for native Hibernate, and `ReactiveTransactionManager` for R2DBC.
 
 ```java
 // PlatformTransactionManager interface - the core abstraction
@@ -77,7 +75,9 @@ public abstract class TransactionDefinition {
 
 ### How @Transactional Works Under the Hood
 
-When you annotate a method with `@Transactional`, Spring creates a proxy that wraps your method with transaction management code:
+When you annotate a method with `@Transactional`, Spring creates a proxy that wraps your method with transaction management code. The proxy is created via AOP: Spring's `TransactionInterceptor` intercepts the method call, obtains or creates a transaction according to the propagation setting, executes the method, and then commits or rolls back.
+
+The critical detail is that rollback is triggered automatically for `RuntimeException` and `Error` but NOT for checked exceptions. This is because checked exceptions are considered part of the normal business flow (e.g., `PaymentDeclinedException`), and the transaction should commit so that the failure can be recorded in the database.
 
 ```java
 // What Spring generates (simplified)
@@ -128,7 +128,9 @@ public class TransactionConfig {
 
 ### The Proxy Chain
 
-When a transactional method calls another transactional method within the same class, the proxy is bypassed (this is a common source of bugs):
+When a transactional method calls another transactional method within the same class, the proxy is bypassed (this is a common source of bugs). Because the call goes through `this` (the actual object, not the proxy), the `@Transactional` annotation on the inner method is not applied.
+
+To work around this, self-inject the proxy using `AopContext.currentProxy()` or inject the `ApplicationContext` and look up the bean. The self-injection pattern is cleaner and doesn't depend on exposing the proxy via `@EnableAspectJAutoProxy(exposeProxy = true)`.
 
 ```java
 @Service
@@ -176,6 +178,8 @@ public class OrderService implements ApplicationContextAware {
 ## Transaction Propagation Explained
 
 ### Propagation Types and Their Behavior
+
+Propagation defines how a transactional method behaves when called from another transactional context. The most common values are REQUIRED (join existing or create new), REQUIRES_NEW (always suspend and create new), and NESTED (savepoint-based rollback within existing transaction). Choosing the wrong propagation leads to transaction boundaries that are too broad or too narrow.
 
 ```java
 @Service
@@ -258,6 +262,8 @@ public class TransferService {
 
 **Scenario 1: REQUIRED (default)**
 
+When both methods use REQUIRED, they share the same transaction. Method1 starts transaction A, and when it calls method2, the call joins the existing transaction A. If either method throws a runtime exception, the entire transaction A rolls back, including all changes from both methods.
+
 ```mermaid
 flowchart TB
 
@@ -272,6 +278,8 @@ flowchart TB
 ```
 
 **Scenario 2: REQUIRES_NEW**
+
+When method2 uses REQUIRES_NEW, it suspends the existing transaction A and starts a new transaction B. Method2 commits independently of method1. If method2 succeeds but method1 later throws an exception, transaction A rolls back but transaction B remains committed.
 
 ```mermaid
 flowchart TB
@@ -294,7 +302,7 @@ flowchart TB
 
 ## Transaction Isolation Levels
 
-Isolation levels control how transactions interact with each other. Understanding these is crucial for preventing concurrency issues:
+Isolation levels control how transactions interact with each other. Understanding these is crucial for preventing concurrency issues. Each isolation level prevents a different class of read phenomena: dirty reads (reading uncommitted data from another transaction), non-repeatable reads (reading different data from the same query within a transaction), and phantom reads (seeing new rows inserted by another transaction).
 
 ```java
 // Isolation levels
@@ -346,6 +354,8 @@ public class ReportingService {
 
 ### Understanding Isolation Problems
 
+The phenomena that isolation levels prevent are best understood through concrete examples. A dirty read occurs when a transaction reads data written by another uncommitted transaction — if that other transaction rolls back, the first transaction has read data that never existed. READ_COMMITTED prevents this. Non-repeatable reads occur when the same query within a transaction returns different results because another transaction committed changes between the two reads. REPEATABLE_READ prevents this. Phantom reads are when a re-executed query sees rows that were inserted by another transaction. SERIALIZABLE prevents all three but is extremely expensive.
+
 ```java
 // Dirty Read: Transaction A reads uncommitted changes from Transaction B
 // ISOLATION_READ_UNCOMMITTED allows this
@@ -387,7 +397,9 @@ public class AccountService {
 
 ### Case 1: Bank Money Transfer
 
-The classic example requiring atomicity:
+The classic example requiring atomicity. The transfer method must debit one account and credit another in the same transaction. If the credit fails (e.g., due to a constraint violation), the debit must also roll back. Without `@Transactional`, the debit would have already been committed when the credit fails, and money would be lost.
+
+The `@Transactional` annotation ensures both operations execute in a single database transaction. The `findById` calls and `save` calls all use the same connection and the same transaction context. If the `InsufficientFundsException` is thrown before any save, the transaction is marked as rollback-only.
 
 ```java
 @Service
@@ -443,7 +455,9 @@ public class TransferController {
 
 ### Case 2: Saga Pattern for Distributed Transactions
 
-When services need to coordinate across multiple microservices:
+When services need to coordinate across multiple microservices, a saga provides a way to maintain data consistency without distributed transactions (which don't work well across different databases). The saga orchestrator calls each service's local transaction in sequence. If a step fails, the saga runs compensating transactions in reverse order.
+
+Each step in the saga uses `REQUIRES_NEW` to ensure it commits independently. This is essential because the saga may take minutes to complete — holding a single database transaction open across microservice calls is impractical and dangerous.
 
 ```java
 // Saga orchestration
@@ -519,7 +533,9 @@ public class SagaCompensationService {
 
 ### Case 3: Optimistic Locking for Concurrent Updates
 
-Prevent lost updates in high-concurrency scenarios:
+Prevent lost updates in high-concurrency scenarios using the `@Version` annotation. Every time Hibernate updates an entity with `@Version`, it automatically increments the version number. The UPDATE statement includes a `WHERE version = :oldVersion` clause. If another transaction modified the same entity in the meantime, the version won't match, the row won't be updated, and Hibernate throws `OptimisticLockException`.
+
+This is the foundation of optimistic locking — transactions don't acquire locks upfront but verify consistency at commit time. It works well when contention is low and retries are acceptable.
 
 ```java
 @Entity
@@ -605,7 +621,9 @@ public class InventoryController {
 
 ### Case 4: Read-Only Transaction Optimization
 
-Use read-only transactions for query performance:
+Use read-only transactions for query performance. When Hibernate knows a transaction is read-only, it can disable dirty checking (no need to compare entity snapshots at commit time), skip flush calls, and use a more efficient JDBC fetch strategy. The optimization is small for individual queries but significant for batch processing.
+
+Set `readOnly = true` on all service methods that only query data. This also serves as documentation: developers reading the code know immediately that this method doesn't modify data.
 
 ```java
 @Configuration
@@ -650,6 +668,8 @@ public class ReportService {
 
 ### Isolation Level Trade-offs
 
+The four standard isolation levels represent different points on the consistency-vs-performance spectrum. READ_UNCOMMITTED allows all read phenomena but offers the best performance because it acquires no read locks. READ_COMMITTED is the default for most databases and balances consistency and performance. REPEATABLE_READ and SERIALIZABLE offer stronger guarantees at increasing performance costs.
+
 | Isolation Level | Dirty Reads | Non-Repeatable Reads | Phantom Reads | Performance |
 |-----------------|-------------|----------------------|---------------|-------------|
 | READ_UNCOMMITTED | Possible | Possible | Possible | Best |
@@ -691,6 +711,10 @@ public class TransactionDecisionService {
 ## Production Considerations
 
 ### 1. Handling Deadlocks
+
+Deadlocks occur when two transactions each hold a lock that the other needs. The database detects this and kills one of the transactions (the victim), rolling it back. The application must retry the killed transaction.
+
+Preventing deadlocks is better than handling them. The key technique is consistent lock ordering: always access tables and rows in the same order. The `safeTransfer` method below sorts account IDs to ensure both calls to `transfer` always update accounts in the same order, preventing the classic A→B / B→A deadlock.
 
 ```java
 @Configuration
@@ -744,7 +768,9 @@ public class SafeTransactionService {
 
 ### 2. Programmatic Transaction Management
 
-For complex scenarios where declarative transactions don't work:
+For complex scenarios where declarative transactions don't work, use `TransactionTemplate`. This is useful when you need to control transaction boundaries programmatically — for example, when processing a batch of independent items where each item should be in its own transaction, or when you need conditional commit/rollback within a loop.
+
+The `TransactionTemplate` executes the callback within a transaction. If the callback throws an exception, the transaction rolls back. If it returns normally, the transaction commits.
 
 ```java
 @Service
@@ -798,6 +824,10 @@ public class ProgrammaticTransactionService {
 
 ### 3. Testing Transactions
 
+Use `@Transactional` on test methods to automatically roll back after each test. This prevents test data from leaking between tests and keeps the test database clean. For tests that need to verify the actual committed state, use `@Commit` or `@Rollback(false)`.
+
+When testing transaction rollback behavior, verify that the data was NOT committed after the exception. This requires checking the database outside of the test's transaction boundary.
+
 ```java
 @SpringBootTest
 @TestPropertySource(properties = {
@@ -844,6 +874,8 @@ class TransactionTest {
 ```
 
 ### 4. Monitoring Transactions
+
+Monitor transaction performance to detect slow transactions, deadlocks, and excessive rollbacks. An AOP aspect around `@Transactional` methods can measure execution time and log warnings for long-running transactions. Long transactions hold database locks longer, increasing contention and reducing concurrency.
 
 ```java
 @Configuration
@@ -1122,4 +1154,4 @@ Understanding these concepts and their implications allows you to build applicat
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

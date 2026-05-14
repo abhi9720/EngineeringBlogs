@@ -23,20 +23,49 @@ Consumer groups enable parallel processing in Kafka. Each group shares the workl
 
 ### Basic Group Behavior
 
-```
-Topic: orders (3 partitions)
+A topic with 3 partitions can be consumed by multiple consumers in the same group. Kafka assigns each partition to exactly one consumer within the group — if you have more consumers than partitions, the extra consumers remain idle. The diagram below shows how two different groups (A and B) each receive every message, but within a group the work is divided.
 
-Group A (2 consumers):
-  Consumer 1: partitions 0, 1
-  Consumer 2: partition 2
+```mermaid
+flowchart TB
+    subgraph Topic[Topic: orders]
+        P0[partition 0]
+        P1[partition 1]
+        P2[partition 2]
+    end
 
-Group B (3 consumers):
-  Consumer 1: partition 0
-  Consumer 2: partition 1
-  Consumer 3: partition 2
+    subgraph GroupA[Group A - 2 consumers]
+        A1[Consumer 1]
+        A2[Consumer 2]
+    end
+
+    subgraph GroupB[Group B - 3 consumers]
+        B1[Consumer 1]
+        B2[Consumer 2]
+        B3[Consumer 3]
+    end
+
+    P0 --> A1
+    P1 --> A1
+    P2 --> A2
+    P0 --> B1
+    P1 --> B2
+    P2 --> B3
+
+    linkStyle default stroke:#278ea5
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+
+    class P0,P1,P2 green
+    class A1,A2,B1,B2,B3 blue
+    class Topic yellow
 ```
 
 ### Implementation
+
+When multiple instances of a service share the same `groupId`, Kafka distributes partitions among them. Here, all instances of `OrderProcessor` use the group `order-processor-group`, so partitions 0 and 1 go to one instance and partition 2 to another. This is how horizontal scaling works in Kafka — add more instances to increase throughput, up to the number of partitions.
 
 ```java
 // All consumers in same group share partitions
@@ -63,6 +92,8 @@ public class OrderProcessor {
 
 ### 1. Scaling Consumers
 
+Setting `concurrency = "3"` tells Spring Kafka to create 3 consumer threads within the same JVM, each acting as a separate consumer in the group. This is useful for vertically scaling a single service instance. Each thread gets its own partition assignment, and Kafka automatically rebalances when threads are added or removed.
+
 ```java
 // Scale by adding consumer instances
 // Kafka automatically rebalances partitions
@@ -82,6 +113,8 @@ public class ScaledProcessor {
 ```
 
 ### 2. Different Processing Paths
+
+Different consumer groups can process the same topic independently. Here, `NotificationService` and `AnalyticsService` both subscribe to the `orders` topic but use different group IDs (`notifications` and `analytics`). Each group gets a full copy of every message, enabling independent processing for different concerns like email notifications and usage analytics.
 
 ```java
 // Same events, different consumers with different groups
@@ -112,6 +145,8 @@ public class AnalyticsService {
 
 ### Rebalancing
 
+Rebalancing is the process of reassigning partitions when consumers join, leave, or are considered dead. During a rebalance, all consumers in the group stop processing (stop-the-world) until the new assignment is complete. To minimize disruptions, tune `session.timeout.ms` (the time before a consumer is declared dead) and `heartbeat.interval.ms` (how often the consumer pings the coordinator). Longer timeouts reduce false rebalances but delay failure detection.
+
 ```java
 // Rebalance occurs when:
 // - Consumer joins/leaves group
@@ -137,6 +172,8 @@ public class RebalanceConfig {
 ```
 
 ### Offset Management
+
+By default, Kafka commits offsets automatically, which can lead to at-most-once delivery if the consumer crashes between an auto-commit and message processing. Manual offset management with `Acknowledgment.acknowledge()` gives you control: commit only after the message is fully processed. If processing fails, don't acknowledge — the message will be redelivered (subject to the consumer's `max.poll.interval.ms`).
 
 ```java
 // Manual offset management
@@ -168,6 +205,8 @@ public class ManualOffsetService {
 
 ### Mistake 1: Too Many Partitions
 
+More partitions increase parallelism but also increase the overhead of leader election, file handle usage, and rebalance time. A common guideline is to size partitions based on `target_throughput / consumer_throughput`. Start conservatively — you can always add partitions later (though partition reduction is not supported).
+
 ```java
 // WRONG: More partitions than needed
 // Each partition means a potential processing bottleneck
@@ -178,6 +217,8 @@ public class ManualOffsetService {
 ```
 
 ### Mistake 2: Not Handling Rebalances
+
+Without explicit rebalance handling, in-flight processing during a rebalance can cause duplicate processing or data loss. Implementing a `ConsumerSeekCallback` or registering a `ConsumerRebalanceListener` lets you commit offsets before partitions are revoked, ensuring a clean state for the consumer taking over the partition.
 
 ```java
 // WRONG: No handling of rebalance events
@@ -212,4 +253,4 @@ public void handle(
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

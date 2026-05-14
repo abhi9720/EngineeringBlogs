@@ -27,6 +27,8 @@ Choosing between them affects your build performance, dependency management, CI/
 
 ### Maven POM.xml
 
+Maven's POM file is declarative — you describe what you want (dependencies, plugins) and Maven's lifecycle handles the how. The XML format is verbose but predictable, making it easy to understand for newcomers.
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -105,7 +107,11 @@ Choosing between them affects your build performance, dependency management, CI/
 </project>
 ```
 
+Maven uses `dependencyManagement` and parent POMs to centralize versions. The `spring-boot-starter-parent` provides pre-configured dependency versions, plugin configurations, and default settings — most Spring Boot projects need only specify group/artifact/version for custom dependencies.
+
 ### Gradle build.gradle.kts (Kotlin DSL)
+
+Gradle's Kotlin DSL is a programming language, not just a configuration format. This enables conditional logic, custom task definitions, and reusable functions directly in the build file.
 
 ```kotlin
 plugins {
@@ -159,11 +165,15 @@ springBoot {
 }
 ```
 
+Gradle's `kapt` plugin handles annotation processors like MapStruct without needing to configure `annotationProcessorPaths` in the compiler plugin. The `useJUnitPlatform()` call enables JUnit 5 across all test tasks in one concise statement.
+
 ---
 
 ## Performance Comparison
 
 ### Incremental Build Support
+
+Gradle's incremental build tracks inputs and outputs of every task. If nothing changed, the task is skipped. This is the single biggest performance difference between Maven and Gradle at scale.
 
 ```kotlin
 // Gradle: Incremental compilation by default
@@ -211,7 +221,11 @@ buildCache {
 </plugin>
 ```
 
+The remote build cache is particularly powerful for CI — when developer A builds a module, developer B's CI can download the cached output instead of rebuilding it. This is a significant advantage in monorepo setups with many shared modules.
+
 ### Build Time Benchmarks
+
+For large projects, the performance gap widens significantly. Gradle's build cache, incremental compilation, and parallel execution provide order-of-magnitude improvements for incremental builds.
 
 ```
 Large Multi-Module Project (50 modules, 500k LOC)
@@ -233,6 +247,8 @@ Improvement factors:
 ## Dependency Management
 
 ### Maven Dependency Resolution
+
+Maven uses "nearest definition" conflict resolution — if two dependencies bring different versions of the same library, the one declared closest in the dependency tree wins. This can be unpredictable in deep dependency graphs.
 
 ```xml
 <!-- Maven uses conflict resolution based on nearest definition -->
@@ -265,6 +281,8 @@ Improvement factors:
 ```
 
 ### Gradle Dependency Resolution
+
+Gradle's rich version constraints provide precise control over dependency versions. You can require a minimum, reject a range, or force a strict version that fails the build if conflicts exist.
 
 ```kotlin
 // Gradle uses conflict resolution with rich version constraints
@@ -314,11 +332,15 @@ testing = ["testcontainers", "testcontainers-postgresql"]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 ```
 
+Gradle's version catalog (`libs.versions.toml`) is a single source of truth for dependency versions across all modules. Unlike Maven's `dependencyManagement` which is XML-based, the TOML format is cleaner and supports bundles (groups of related dependencies) and version references.
+
 ---
 
 ## Task/Goal Configuration
 
 ### Maven Lifecycle and Plugins
+
+Maven's lifecycle phases (validate, compile, test, package, verify, install, deploy) are fixed. Plugins bind to specific phases — you cannot create custom phases or reorder the lifecycle.
 
 ```xml
 <!-- Maven phases: validate -> compile -> test -> package -> verify -> install -> deploy -->
@@ -375,6 +397,8 @@ spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 ```
 
 ### Gradle Task Configuration
+
+Gradle tasks are composable and reusable. You define inputs, outputs, and actions — Gradle automatically determines task ordering based on dependencies and only executes tasks whose inputs changed.
 
 ```kotlin
 // Gradle tasks are explicit and composable
@@ -436,6 +460,8 @@ tasks.register<GenerateApiClient>("generatePaymentClient") {
 
 ### Maven Reactor Build
 
+Maven's reactor build compiles and links modules together. Running `mvn install` from the root builds all modules in dependency order.
+
 ```xml
 <!-- Parent pom.xml -->
 <project>
@@ -469,6 +495,8 @@ tasks.register<GenerateApiClient>("generatePaymentClient") {
 
 ### Gradle Multi-Project Build
 
+Gradle's `settings.gradle.kts` defines which projects to include, and the root `build.gradle.kts` applies shared configuration to all subprojects.
+
 ```kotlin
 // settings.gradle.kts
 rootProject.name = "parent-project"
@@ -480,22 +508,43 @@ include(
     "web"
 )
 
+// Give modules descriptive names
+project(":common").name = "common"
+project(":domain").name = "domain"
+project(":repository").name = "repository"
+project(":service").name = "service"
+project(":web").name = "web"
+project(":bootstrap").name = "bootstrap"
+
+// Enable parallel execution and caching
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
+```
+
+```kotlin
 // build.gradle.kts (root)
 plugins {
     id("org.springframework.boot") version "3.2.0" apply false
     id("io.spring.dependency-management") version "1.1.4" apply false
-    kotlin("jvm") version "1.9.21" apply false
+    java
 }
 
-// subprojects/build.gradle.kts (shared configuration)
+group = "com.example"
+version = "1.0.0-SNAPSHOT"
+
 subprojects {
     apply(plugin = "java")
     apply(plugin = "io.spring.dependency-management")
 
-    group = "com.example"
-    version = "1.0.0"
+    group = rootProject.group
+    version = rootProject.version
 
-    java.sourceCompatibility = JavaVersion.VERSION_21
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(21))
+        }
+    }
 
     repositories {
         mavenCentral()
@@ -504,19 +553,128 @@ subprojects {
     the<io.spring.gradle.dependencymanagement.DependencyManagementExtension>().apply {
         imports {
             mavenBom("org.springframework.boot:spring-boot-dependencies:3.2.0")
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:2023.0.0")
         }
     }
 }
 
-// web/build.gradle.kts
+// Version catalog
+// gradle/libs.versions.toml
+[versions]
+spring-boot = "3.2.0"
+spring-cloud = "2023.0.0"
+mapstruct = "1.5.5.Final"
+testcontainers = "1.19.3"
+lombok = "1.18.30"
+
+[libraries]
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers" }
+testcontainers-postgresql = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+testcontainers-junit-jupiter = { module = "org.testcontainers:junit-jupiter", version.ref = "testcontainers" }
+
+[bundles]
+spring-web = ["spring-boot-starter-web", "spring-boot-starter-validation"]
+testing = ["testcontainers-postgresql", "testcontainers-junit-jupiter"]
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+```
+
+### Submodule Build Files
+
+Each submodule declares only its specific dependencies — shared configuration comes from the root project. This keeps individual build files small and consistent.
+
+```kotlin
+// order-common/build.gradle.kts
+plugins {
+    `java-library`
+}
+
+dependencies {
+    api("com.fasterxml.jackson.core:jackson-databind")
+    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    api("jakarta.validation:jakarta.validation-api")
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+}
+
+tasks.jar {
+    enabled = true
+}
+
+// order-domain/build.gradle.kts
+plugins {
+    `java-library`
+}
+
+dependencies {
+    api(project(":order-common"))
+    api("jakarta.validation:jakarta.validation-api")
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+}
+
+// order-repository/build.gradle.kts
+plugins {
+    `java-library`
+}
+
+dependencies {
+    api(project(":order-domain"))
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    runtimeOnly("org.postgresql:postgresql")
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+}
+
+// order-service/build.gradle.kts
+plugins {
+    `java-library`
+}
+
+dependencies {
+    api(project(":order-domain"))
+    implementation(project(":order-repository"))
+    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.testcontainers:postgresql")
+    testImplementation("org.testcontainers:junit-jupiter")
+}
+
+// order-web/build.gradle.kts
+plugins {
+    `java-library`
+}
+
+dependencies {
+    api(project(":order-service"))
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+}
+
+// order-bootstrap/build.gradle.kts
 plugins {
     id("org.springframework.boot")
     id("io.spring.dependency-management")
 }
 
 dependencies {
-    implementation(project(":service"))
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation(project(":order-web"))
+    implementation(project(":order-service"))
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 }
 ```
 
@@ -525,6 +683,8 @@ dependencies {
 ## CI/CD Integration
 
 ### Maven Commands
+
+Maven's build commands are predictable and well-documented, making it straightforward to configure in CI/CD pipelines.
 
 ```bash
 # Common Maven CI commands
@@ -541,6 +701,8 @@ mvn -T 1C clean install             # 1 thread per core
 ```
 
 ### Gradle Commands
+
+Gradle's commands are more concise and support the Gradle daemon for faster subsequent builds.
 
 ```bash
 # Common Gradle CI commands
@@ -564,6 +726,8 @@ mvn -T 1C clean install             # 1 thread per core
 
 ### Mistake 1: Mixing Plugin DSL Formats in Gradle
 
+Gradle supports both Groovy and Kotlin DSL, but mixing them in the same file causes syntax errors. Choose one and stick with it.
+
 ```kotlin
 // WRONG: Mixing Groovy and Kotlin DSL in same file
 plugins {
@@ -579,6 +743,8 @@ plugins {
 ```
 
 ### Mistake 2: Hardcoding Versions in Dependencies
+
+Hardcoded versions create maintenance burden and inconsistency. Use `dependencyManagement` (Maven) or version catalogs (Gradle) to centralize versions.
 
 ```xml
 <!-- WRONG: Versions scattered everywhere -->
@@ -609,6 +775,8 @@ plugins {
 
 ### Mistake 3: Not Using Maven Wrapper or Gradle Wrapper
 
+Wrappers ensure that everyone (developers and CI) uses the exact same build tool version. They are small shell scripts committed to the repository.
+
 ```bash
 # WRONG: Assuming build tool is installed on CI server
 mvn clean install  # What version? Is it installed?
@@ -619,6 +787,8 @@ mvn clean install  # What version? Is it installed?
 ```
 
 ### Mistake 4: Slow Maven Builds Without Parallelism
+
+Maven's default is sequential. Adding parallel flags can dramatically reduce build time, especially on multi-core CI machines.
 
 ```xml
 <!-- WRONG: Sequential build, no parallelism -->
@@ -643,6 +813,8 @@ mvn clean install  # What version? Is it installed?
 ```
 
 ### Mistake 5: Gradle Configuration Cache Issues
+
+The configuration cache speeds up builds by caching the build configuration. But using non-cacheable values like `System.currentTimeMillis()` invalidates the cache on every run.
 
 ```kotlin
 // WRONG: Using system properties in build logic that change per invocation
@@ -683,7 +855,5 @@ Choose Maven for simplicity, stability, and team familiarity. Choose Gradle when
 - [Gradle vs Maven Comparison](https://gradle.org/maven-vs-gradle/)
 
 ---
-
-Happy Coding 👨‍💻
 
 Happy Coding

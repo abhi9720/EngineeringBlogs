@@ -52,6 +52,8 @@ Modern logging uses structured formats like JSON to enable machine parsing and s
 </configuration>
 ```
 
+The Logstash encoder above automatically serializes every log event into a JSON object—each field (timestamp, level, logger, message, MDC) becomes a separate JSON key. This eliminates the need for grok patterns or regex parsing on the ingest side. Setting `includeContext` to false avoids bloating events with Logback's internal context; instead, we inject only what matters via `customFields`. The trade-off is a small CPU overhead per log call compared to plain-text formatting, but in high-throughput systems the ability to filter, aggregate, and alert on specific fields far outweighs the cost.
+
 ```java
 // Logging best practices
 @Service
@@ -74,6 +76,8 @@ public class OrderService {
     }
 }
 ```
+
+Using SLF4J parameterized placeholders (`{}`) instead of string concatenation is a deliberate performance choice—the message is only assembled when the log level is enabled, avoiding unnecessary object allocation on hot paths. Notice that exceptions are passed as the last argument so the framework captures the full stack trace rather than just calling `e.getMessage()`. This subtle pattern is critical in production: without the throwable reference, error analysis pipelines lose the root cause chain.
 
 ### Log Levels in Production
 
@@ -146,6 +150,8 @@ public class OrderMetricsService {
 }
 ```
 
+Common tags are appended to every metric automatically, enabling cross-cutting filters without per-metric boilerplate. The `Timer` publishes percentile approximations (p50, p95, p99) using HDR histogram resampling—this gives accurate latency distribution insight without storing every individual value. The trade-off is increased memory footprint proportional to the number of unique tag combinations, which is why cardinality management (covered later) is essential. Using `Timer.Sample` (returned by `Timer.start()`) rather than `System.currentTimeMillis()` ensures nanosecond precision on platforms that support it and avoids common off-by-one errors.
+
 ### The Four Golden Signals
 
 1. **Latency**: Time to service requests
@@ -212,6 +218,8 @@ public class CheckoutService {
 }
 ```
 
+The `BatchSpanProcessor` buffers spans in memory and exports them in batches on a background thread—this keeps request-serving overhead to a minimum (typically microseconds per span). Using `makeCurrent()` inside a `try-with-resources` ensures that any downstream instrumentation (like HTTP client or database calls) automatically picks up the correct parent context without manual propagation. The `finally` block is critical: forgetting `span.end()` creates memory leaks in the span processor and results in broken traces that never complete.
+
 ---
 
 ## Correlating the Three Pillars
@@ -261,6 +269,8 @@ public class CorrelatedService {
 }
 ```
 
+Here all three pillars converge within a single method. The trace ID is injected into logs via the span context, so correlating a log entry to its trace waterfall is a single click in any modern observability backend. The same duration is recorded both as a timing metric (for percentile dashboards) and as a span attribute (for trace-level analysis). The counter increment for errors provides the alerting signal, while the span's `recordException` preserves the full diagnostic context. This pattern—emit a log, increment a metric, and annotate a span—gives operators three independent paths to discover and diagnose a problem.
+
 ---
 
 ## Best Practices
@@ -298,6 +308,8 @@ public class ObservabilityAspect {
 }
 ```
 
+Using AOP with a custom `@Observable` annotation provides a single point of control for instrumentation. Every annotated method automatically gets a span, a timer, and an error counter. The downside is that AOP operates at the method boundary, so fine-grained intra-method instrumentation still requires manual spans. A pragmatic approach is to use AOP for service-layer boundaries and manual instrumentation for hot paths where granularity matters.
+
 ### 2. Use Correlation IDs
 
 Ensure every log line has a trace ID for correlation:
@@ -330,6 +342,8 @@ public class CorrelationIdFilter extends OncePerRequestFilter {
 }
 ```
 
+Propagating the correlation ID through MDC means every log line emitted during the request automatically carries the identifier—no need to pass it manually to every logger call. The `finally` block that clears MDC is essential to prevent context leaking between requests in shared-thread environments.
+
 ### 3. Define Service Level Objectives
 
 Use all three pillars to define SLOs:
@@ -358,7 +372,11 @@ public class OnlyLogsService {
         // Cannot see historical trends
     }
 }
+```
 
+Counting on log parsing alone for performance data is fragile—logs can be dropped, sampled, or their format changed without notice, breaking any alerting that depends on text pattern matching. Metrics and traces provide lossless aggregation and structural context that text parsing cannot match.
+
+```java
 // CORRECT: Use all three pillars
 @Observable
 public class CorrectService {

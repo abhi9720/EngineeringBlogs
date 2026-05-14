@@ -18,6 +18,8 @@ Both libraries use Redis as a backing store, ensuring jobs survive server restar
 
 ### Basic Queue and Worker
 
+The Bull pattern follows a three-part structure: a Queue to enqueue work, a processor function to handle jobs, and event listeners for observability. Notice the `defaultJobOptions` block — setting `attempts: 3` with exponential backoff means that transient failures (network timeouts, database deadlocks) are retried automatically, while `removeOnComplete: 100` caps Redis memory usage by keeping only the last 100 completed results. The `jobId` parameter in `sendWelcomeEmail` is critical for idempotency: Bull will reject a second add with the same jobId, preventing duplicate welcome emails on retry.
+
 ```javascript
 const Queue = require('bull');
 
@@ -84,7 +86,11 @@ emailQueue.on('progress', (job, progress) => {
 });
 ```
 
+The event-driven approach to monitoring (`.on('completed')`, `.on('failed')`) is idiomatic Bull — rather than polling, your monitoring code reacts to lifecycle events. The `job.progress()` calls serve a dual purpose: they expose progress in the UI (Bull Board) and they act as a heartbeat, telling Bull that the worker is still alive and processing. If a worker crashes without calling `progress` for a prolonged period, Bull marks the job as stalled and reassigns it to another worker.
+
 ## BullMQ (Modern Approach)
+
+BullMQ addresses several limitations of Bull: full TypeScript support with generics for job data and result types, a dedicated `QueueScheduler` that moves delayed jobs to wait status, and per-worker rate limiting. The most important architectural difference is that BullMQ separates the connection pool from the queue configuration via an explicit `IORedis` instance — this gives you fine-grained control over Redis connection behavior, such as `maxRetriesPerRequest: null` which tells BullMQ to handle reconnection itself rather than using ioredis's built-in retry.
 
 ### Queue and Worker with TypeScript
 

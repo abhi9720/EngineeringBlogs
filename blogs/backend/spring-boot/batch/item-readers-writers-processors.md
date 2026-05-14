@@ -16,9 +16,15 @@ draft: false
 
 ItemReader, ItemProcessor, and ItemWriter are the three core interfaces in Spring Batch's chunk-oriented processing. Spring Batch provides numerous built-in implementations for reading from and writing to various data sources. This guide covers custom implementations, composite patterns, and advanced techniques.
 
+The contract is simple: the reader provides items one at a time (returning null when exhausted), the processor transforms each item (returning null to filter it out), and the writer receives a list of processed items to persist. Understanding how to customize each stage is essential for building production-grade batch pipelines.
+
 ## ItemReader Implementations
 
 ### Custom ItemReader
+
+A custom reader is needed when the data source doesn't have a built-in implementation — for example, consuming a REST API with pagination. The `ApiItemReader` below handles paginated API responses, maintaining internal state for the current page and position within the page.
+
+The reader must be thread-safe if used in a multi-threaded step. The `currentIndex` and `page` fields are mutable state; in a multi-threaded context, these should be protected with synchronization or stored in step execution context.
 
 ```java
 @Component
@@ -67,6 +73,10 @@ public class ApiItemReader implements ItemReader<ApiRecord> {
 
 ### Composite ItemReader
 
+A composite reader sequences multiple sources: read all items from the first reader, then move to the second, and so on. This is useful when loading data from multiple files or APIs that share the same target format.
+
+The implementation below uses a `Queue` of readers. When the current reader is exhausted (returns null), the next reader in the queue takes over. When all readers are exhausted, the composite returns null, ending the chunk step.
+
 ```java
 @Component
 public class CompositeItemReader implements ItemReader<Object> {
@@ -100,6 +110,10 @@ public class CompositeItemReader implements ItemReader<Object> {
 ```
 
 ### Multi-Resource Reader
+
+Spring Batch's built-in `MultiResourceItemReader` processes multiple files as if they were one continuous stream. It wraps a delegate reader and feeds it resources one at a time. The `strict(true)` flag throws an exception if no resources match the pattern, which is useful for catching configuration errors early.
+
+This is ideal for processing daily log files or batch feed files from multiple sources. Each file is processed completely before moving to the next, so the chunk boundaries don't cross file boundaries.
 
 ```java
 @Component
@@ -138,6 +152,10 @@ public class MultiResourceItemReader {
 ## ItemProcessor Patterns
 
 ### Composite ItemProcessor
+
+A composite processor chains multiple transformations: validate, enrich, deduplicate, format. Each processor in the chain either returns a transformed item or null to filter it out. This pattern follows the Single Responsibility Principle — each processor handles one concern.
+
+The composite iterates through all processors. If any processor returns null (indicating the item should be filtered), the composite returns null and processing stops for that item. The remaining processors in the chain are not executed.
 
 ```java
 @Component
@@ -203,6 +221,10 @@ class FormattingProcessor implements ItemProcessor<User, User> {
 
 ### Conditional Processing
 
+A conditional processor combines filtering and transformation in a single class. Returning null from `process()` tells Spring Batch to skip that item — it won't be counted in writes or passed to the writer. This is the idiomatic way to filter items in chunk-oriented processing.
+
+The example below filters out zero-amount and cancelled orders, then enriches valid orders with a priority based on amount thresholds. The priority determination logic is separated into its own method for testability.
+
 ```java
 @Component
 public class ConditionalItemProcessor implements ItemProcessor<Order, Order> {
@@ -246,6 +268,10 @@ public class ConditionalItemProcessor implements ItemProcessor<Order, Order> {
 
 ### Custom ItemWriter
 
+A custom writer lets you send each chunk to an external system that Spring Batch doesn't support natively. The `BatchEmailWriter` below creates email messages from notification items and sends them as a batch using JavaMailSender.
+
+The writer receives a `Chunk` which extends `List`. It iterates through the items, creates `MimeMessage` objects, and sends them all at once. The `Chunk` class also provides utility methods like `getErrors()` for tracking items that failed during writing.
+
 ```java
 @Component
 public class BatchEmailWriter implements ItemWriter<Notification> {
@@ -280,6 +306,10 @@ public class BatchEmailWriter implements ItemWriter<Notification> {
 
 ### Classifier Composite Writer
 
+A classifier writer routes each item to a different writer based on a classifier. This is useful when a single step processes multiple record types. The classifier maps each record type to a specific writer, with a dead-letter writer for unrecognized types.
+
+The classifier is evaluated per item, so different items in the same chunk can be written by different writers. If any writer fails, the entire chunk rolls back, including items already written to other destinations.
+
 ```java
 @Component
 public class ClassifierCompositeWriter implements ItemWriter<DataRecord> {
@@ -308,6 +338,8 @@ public class ClassifierCompositeWriter implements ItemWriter<DataRecord> {
 
 ### Multi-Resource Writer
 
+`MultiResourceItemWriter` splits output across multiple files, creating a new file when the current one reaches `itemCountLimitPerResource`. This is useful for generating partitioned output files that are easier to transfer or process downstream. Each file gets a sequential suffix (e.g., `users-1.csv`, `users-2.csv`).
+
 ```java
 @Component
 public class MultiResourceItemWriter {
@@ -334,6 +366,10 @@ public class MultiResourceItemWriter {
 ```
 
 ## XML Processing
+
+Spring Batch provides StAX-based XML readers and writers that process XML efficiently without loading the entire document into memory. The `StaxEventItemReader` uses an XStream or JAXB marshaller to unmarshal each fragment element. This streaming approach handles gigabytes-sized XML files.
+
+The `StaxEventItemWriter` writes each item as an XML element wrapped in a root tag. Both reader and writer support namespaces and complex XML schemas through marshaller configuration.
 
 ```java
 @Bean
@@ -370,6 +406,10 @@ public XStreamMarshaller productMarshaller() {
 
 ## JSON Processing
 
+JSON processing follows the same streaming pattern as XML. `JsonItemReader` reads JSON arrays or newline-delimited JSON (JSON Lines), parsing each element with Jackson. `JsonFileItemWriter` writes the items as a JSON array.
+
+For large JSON files, avoid reading the entire array into memory. `JsonItemReader` processes items one at a time, maintaining a cursor through the JSON stream. The underlying Jackson `JsonParser` is efficient for large documents.
+
 ```java
 @Bean
 public JsonItemReader<Event> jsonEventReader() {
@@ -394,6 +434,10 @@ public JsonFileItemWriter<Event> jsonEventWriter() {
 
 ### JPA ItemReader/Writer
 
+For JPA-based processing, `JpaPagingItemReader` reads entities in pages. Each page issues a `SELECT` query with `LIMIT` and `OFFSET` (or equivalent). The page size should match the chunk size for consistency. The `JpaItemWriter` persists entities using the entity manager.
+
+JPA readers are slower than JDBC readers because of the overhead of entity management (dirty checking, identity map resolution). For high-throughput batch processing with simple data, consider using `JdbcCursorItemReader` instead.
+
 ```java
 @Bean
 public JpaPagingItemReader<User> jpaUserReader(EntityManagerFactory emf) {
@@ -415,6 +459,10 @@ public JpaItemWriter<User> jpaUserWriter(EntityManagerFactory emf) {
 ```
 
 ## Testing Item Processing
+
+Test processors in isolation before integrating with the full step. The `CompositeUserProcessor` test below verifies three behaviors: valid users are processed correctly, invalid emails result in null (filtered out), and enrichment transformations work (name capitalization, email domain extraction).
+
+Testing at the processor level catches logic errors early, before they're buried in job executions. Use mocks for external dependencies (repositories, APIs) that the processor might call.
 
 ```java
 @SpringBootTest
@@ -477,6 +525,8 @@ public class UnsafeReader implements ItemReader<Record> {
 }
 ```
 
+In a multi-threaded step, multiple threads call `read()` concurrently on the same reader instance. The unsynchronized `currentIndex++` causes race conditions: two threads may read the same item, or items may be skipped. The `currentIndex` may also become corrupted due to non-atomic increment.
+
 ```java
 // Correct: Thread-safe using synchronized or step scope
 @Component
@@ -517,6 +567,8 @@ public class LeakyReader implements ItemReader<Record> {
     // Never closes inputStream!
 }
 ```
+
+A reader that opens file handles, network connections, or database cursors must close them when processing completes. The `ItemStream` interface provides `open()`, `close()`, and `update()` lifecycle methods that Spring Batch calls automatically. Without proper cleanup, the application leaks file descriptors and eventually fails with "Too many open files".
 
 ```java
 // Correct: Implement ItemStream for cleanup

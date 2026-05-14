@@ -18,22 +18,39 @@ Testing microservices requires a multi-layered strategy combining unit, integrat
 
 ## Testing Pyramid for Microservices
 
-```
-        /\
-       /  \
-      / E2E \
-     /--------\
-    / Contract \
-   /------------\
-  / Integration  \
- /----------------\
-/    Unit Tests    \
-/--------------------\
+```mermaid
+flowchart TB
+
+    subgraph TestingPyramid[Testing Pyramid for Microservices]
+        direction TB
+        E2E[E2E Tests]
+        Contract[Contract Tests]
+        Integration[Integration Tests]
+        Unit[Unit Tests]
+    end
+
+    E2E --> Contract
+    Contract --> Integration
+    Integration --> Unit
+
+    linkStyle default stroke:#278ea5
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+
+    class E2E pink
+    class Contract yellow
+    class Integration blue
+    class Unit green
 ```
 
 ## Unit Tests
 
 ### Service Layer Tests
+
+Unit tests for the service layer mock all external dependencies (repositories and clients) to isolate the business logic under test. This test covers the happy path (inventory available → order created), the failure path (inventory unavailable → exception), and pure computation (total calculation).
 
 ```java
 @ExtendWith(MockitoExtension.class)
@@ -98,6 +115,8 @@ class OrderServiceTest {
 
 ### Repository Unit Tests
 
+Repository tests verify that custom queries, constraints, and data access logic work correctly. `@DataJpaTest` starts an embedded database and configures only the JPA infrastructure — faster than a full Spring Boot test but still exercises real SQL against a real database schema.
+
 ```java
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -149,6 +168,8 @@ class OrderRepositoryTest {
 ```
 
 ## Integration Tests with Testcontainers
+
+Integration tests with Testcontainers spin up real infrastructure (PostgreSQL + Kafka) in Docker containers. The test validates the full service flow — database persistence and event publishing — against real dependencies. The `@DynamicPropertySource` override ensures Spring connects to the test containers rather than production databases.
 
 ```java
 @SpringBootTest
@@ -211,6 +232,8 @@ class OrderServiceIntegrationTest {
 ```
 
 ## WireMock for External Dependencies
+
+WireMock simulates HTTP services that the system-under-test depends on. This test stubs the inventory and payment services, then verifies the order service handles both success and failure scenarios correctly. The `Scenario` API models multi-step retry behavior — first call fails, second call succeeds — without needing a real payment gateway.
 
 ```java
 @SpringBootTest
@@ -293,6 +316,8 @@ class OrderServiceWireMockTest {
 ```
 
 ## End-to-End Tests
+
+End-to-end tests validate the full request-response flow through the HTTP layer. `TestRestTemplate` sends real HTTP requests to the embedded server, exercising controllers, validation, serialization, and error handling. Keep E2E tests focused on critical user journeys — too many E2E tests become a maintenance burden.
 
 ```java
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

@@ -34,6 +34,8 @@ Mocking frameworks are essential for isolating units under test. Mockito and Eas
 2. **Execute phase**: Run the code under test
 3. **Verify phase**: Assert interactions (when needed)
 
+The key philosophical difference is that EasyMock requires you to set expectations *before* execution, while Mockito allows you to set them *after*. This makes Mockito tests easier to read and refactor because the "arrange" section reads more naturally: "when X is called, then return Y."
+
 ---
 
 ## Setup and Mock Creation

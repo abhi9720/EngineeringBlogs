@@ -18,6 +18,8 @@ Django REST Framework (DRF) is a powerful and flexible toolkit for building Web 
 
 ## Setup
 
+DRF integrates into Django as an installed app. The `REST_FRAMEWORK` settings dict configures global behaviors — authentication classes, permission policies, pagination defaults, renderers, and versioning. These settings cascade: individual views can override them, but sensible defaults reduce boilerplate across the API surface.
+
 ```python
 # settings.py
 INSTALLED_APPS = [
@@ -52,6 +54,8 @@ REST_FRAMEWORK = {
 
 ## Serializers
 
+Serializers are DRF's core abstraction. They handle deserialization (parsing incoming data into Python objects) and serialization (converting objects to JSON). DRF serializers are roughly analogous to Django Forms — they validate data, define field behavior, and support nested relationships. `ModelSerializer` auto-generates fields and validation based on a Django model's fields and constraints.
+
 ### ModelSerializer
 
 ```python
@@ -77,6 +81,8 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Email already exists")
         return value
 ```
+
+`ModelSerializer` provides sensible defaults: `fields` lists which model fields to include, `read_only_fields` prevents modification on write, and `SerializerMethodField` enables computed values like `full_name`. Field-level validators like `validate_email` run after type coercion but before object-level validation. The `create()` and `update()` methods are auto-generated but can be overridden for custom save logic.
 
 ### Nested Serializers
 
@@ -107,6 +113,8 @@ class OrderSerializer(serializers.ModelSerializer):
     def get_total(self, obj):
         return sum(item.subtotal for item in obj.items.all())
 ```
+
+Nested serializers handle related models. The `source` argument maps a field to a related model attribute — `source='product.name'` fetches the product name through a foreign key. The `subtotal` computed field uses `SerializerMethodField` for runtime calculation. Nested writes require explicit handling via overriding `create()` or `update()` in the parent serializer, as DRF doesn't automatically handle nested writes.
 
 ### Custom Validation
 
@@ -141,7 +149,11 @@ class CreateOrderSerializer(serializers.Serializer):
         return data
 ```
 
+Custom serializers (not tied to a Model) enable complex validation logic. The `CreateOrderSerializer` validates that product IDs and quantities match, checks product existence and stock, and attaches the fetched products to validated data. The `validate()` method (note: not `validate_<field>`) handles cross-field validation, while `validate_<field>` handles single-field validation.
+
 ## Views
+
+DRF offers three levels of view abstraction. Function-based views give maximum control through decorators. `APIView` subclasses add class-based organization. ViewSets combine multiple views into a single class with automatic routing. The right choice depends on complexity — use the simplest one that meets your needs.
 
 ### Function-Based Views
 
@@ -168,6 +180,8 @@ def user_list(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 ```
+
+The `@api_view` decorator restricts which HTTP methods a function-based view accepts. Combined with `@permission_classes`, it provides declarative access control. Pagination is applied manually using `PageNumberPagination`, which wraps the serializer output with `count`, `next`, `previous`, and `results` fields. This function-based approach is straightforward for simple endpoints with unique behavior.
 
 ### Class-Based Views
 
@@ -202,6 +216,8 @@ class UserDetail(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 ```
+
+`APIView` subclasses organize methods by HTTP verb — `get`, `put`, `delete` map directly to handler methods. This structure is cleaner than function-based views for standard CRUD but still requires manual implementation of each operation. The `get_object` helper extracts common object lookup logic, and the `Http404` exception triggers DRF's error handling.
 
 ### Viewsets
 
@@ -247,6 +263,8 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 ```
 
+ViewSets are the most powerful DRF view abstraction. `ModelViewSet` provides `list`, `create`, `retrieve`, `update`, `partial_update`, and `destroy` actions automatically. The `@action` decorator adds custom endpoints — `detail=True` creates per-object actions (e.g., `/users/{id}/deactivate`), while `detail=False` creates collection actions (e.g., `/users/admins`). Filter backends (`DjangoFilterBackend`, `SearchFilter`, `OrderingFilter`) add query parameter-based filtering, search, and sorting.
+
 ## Authentication and Permissions
 
 ### Custom Permission
@@ -273,6 +291,8 @@ class IsAdminUser(BasePermission):
     def has_permission(self, request, view):
         return request.user and request.user.role == 'admin'
 ```
+
+Custom permission classes extend `BasePermission` and implement `has_permission` (view-level) and/or `has_object_permission` (object-level). `IsAdminOrReadOnly` allows read access to all but restricts writes to staff users. `IsOwnerOrAdmin` checks object ownership before granting modification. Permissions compose — multiple classes in `permission_classes` must all pass for access to be granted.
 
 ### Applying Permissions
 
@@ -306,6 +326,8 @@ def admin_dashboard(request):
     return Response(stats)
 ```
 
+Permissions apply at view-level via `permission_classes` attribute. The `get_queryset` override in `OrderViewSet` ensures users only see their own orders unless they're staff — this is object-level filtering combined with view-level authorization. Decorator-based permissions on function views provide the same security for non-viewset endpoints.
+
 ## Routing
 
 ```python
@@ -323,6 +345,8 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
 ]
 ```
+
+`DefaultRouter` automatically generates URL patterns for ViewSets — `/users/`, `/users/{id}/`, and any `@action` endpoints. The `register` call maps a prefix to a ViewSet. `DefaultRouter` also generates the API root view listing all registered endpoints. Manual URL patterns can be added alongside router URLs for custom endpoints.
 
 ## Testing
 

@@ -72,6 +72,8 @@ public class OrderMetricsService {
 }
 ```
 
+Counters are the simplest metric type—they only ever increase (or reset to zero on application restart). The `increment(double)` variant on `recordOrderRefunded` supports fractional increments, useful for tracking monetary amounts or quantities where each event has a non-unit weight. Metrics should be registered once in the constructor and reused, not created per-request.
+
 ### Counter with Tags
 
 ```java
@@ -103,6 +105,8 @@ public class TaggedCounterService {
     }
 }
 ```
+
+Tags enable multi-dimensional slicing of metrics. A payment counter tagged by `method`, `currency`, and `status` can answer queries like "what is the success rate for credit card payments in USD?" However, every unique combination of tag values creates a new time series in the monitoring backend. If `method` has 3 values, `currency` has 10, and `status` has 2, that is 60 time series—manageable. But adding a `userId` tag with millions of values would create millions of time series, overwhelming the system.
 
 ### Rate-Limited Counter
 
@@ -167,6 +171,8 @@ public class QueueMetricsService {
     }
 }
 ```
+
+Unlike counters, gauges are sampled—Micrometer calls the `Queue::size` method reference each time Prometheus scrapes `/actuator/prometheus`. This means the gauge value reflects the queue depth at the instant of scraping, not a time-weighted average. For metrics that oscillate rapidly (like queue depth), consider using a histogram or recording the value more frequently with a separate recording mechanism.
 
 ### Gauge with Custom Object
 
@@ -306,6 +312,8 @@ public class PerformanceTimingService {
 }
 ```
 
+The Timer records duration distributions and exposes count, total time, max, and percentile approximations. `publishPercentileHistogram()` enables Prometheus-compatible histogram buckets, allowing server-side percentile calculation across aggregated instances. The `sla` values define custom histogram buckets at 50ms, 100ms, 200ms, and 500ms—useful for tracking SLI compliance (e.g., percentage of requests under 200ms) without server-side computation.
+
 ### Long Task Timer
 
 ```java
@@ -367,6 +375,8 @@ public class DistributionMetricsService {
     }
 }
 ```
+
+Distribution summaries are like Timers but for arbitrary value distributions rather than time durations. The `minimumExpectedValue` and `maximumExpectedValue` hints tell Micrometer where to focus histogram bucket resolution. For order values between $1 and $10,000, the histogram will have finer granularity at the lower end where most orders cluster.
 
 ---
 

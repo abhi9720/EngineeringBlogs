@@ -18,15 +18,23 @@ This comparison examines each architecture through code examples, dependency man
 
 The traditional layered architecture organizes code into horizontal tiers. Each layer has a specific responsibility and depends only on the layer directly below it.
 
+```mermaid
+graph TD
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    A[Presentation Layer<br/>Controllers] --> B[Business Logic Layer<br/>Services]
+    B --> C[Data Access Layer<br/>Repositories]
+    C --> D[(Database)]
+    class A green
+    class B blue
+    class C pink
+    class D yellow
 ```
-Presentation Layer (Controllers)
-       |
-Business Logic Layer (Services)
-       |
-Data Access Layer (Repositories)
-       |
-Database
-```
+
+Each layer has a clear responsibility, and dependencies flow downward. The presentation layer handles HTTP and serialization. The business logic layer orchestrates operations and enforces rules. The data access layer communicates with the database.
 
 ```java
 @RestController
@@ -74,6 +82,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 }
 ```
 
+In layered architecture, `UserService` depends directly on `UserRepository` (a JPA interface) and `EmailService`. The dependencies are concrete — you can see at a glance how the data flows. However, `UserService` is coupled to Spring Data JPA (through `UserRepository`) and to a specific email implementation. Testing requires either a real database or complex mocking of concrete types.
+
 ### Strengths
 
 - Simple and intuitive for small to medium applications.
@@ -91,10 +101,26 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 Hexagonal architecture, or Ports and Adapters, inverts the dependency direction. The core business logic defines ports (interfaces), and external systems implement adapters.
 
+```mermaid
+graph LR
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    WA[Web Adapter] --> IP[Inbound Port]
+    MQA[MQ Adapter] --> IP
+    IP --> AC[Application Core]
+    AC --> OP[Outbound Port]
+    OP --> DBA[DB Adapter]
+    OP --> APIA[API Adapter]
+    class WA,IP green
+    class AC blue
+    class OP,APIA pink
+    class DBA yellow
 ```
-[Web Adapter] --> [Inbound Port] --> [Application Core] --> [Outbound Port] --> [DB Adapter]
-[MQ Adapter] --> [Inbound Port] --> [Application Core] --> [Outbound Port] --> [API Adapter]
-```
+
+The core is surrounded by ports. Inbound adapters (web, message queue) connect to inbound ports. Outbound adapters (database, external API) implement outbound ports. The core has no knowledge of which adapters are connected — it only knows the port interfaces.
 
 ```java
 // Core: Inbound port
@@ -183,16 +209,29 @@ public class UserJpaAdapter implements UserRepositoryPort {
 }
 ```
 
+In hexagonal architecture, `CreateUserService` depends on `UserRepositoryPort` and `NotificationPort` — both interfaces defined by the core. The web controller (`UserWebAdapter`) is an inbound adapter that depends on the `CreateUserUseCase` port. The JPA adapter is an outbound adapter that implements `UserRepositoryPort`. The core contains no imports from Spring, JPA, or any web framework.
+
 ## Clean Architecture
 
 Clean Architecture extends hexagonal concepts with explicit layers: Entities, Use Cases, Interface Adapters, and Frameworks & Drivers.
 
+```mermaid
+graph RL
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    FD[Frameworks & Drivers<br/>Web, DB, MQ] --> IA[Interface Adapters<br/>Controllers, Presenters, Gateways]
+    IA --> UC[Application Business Rules<br/>Use Cases]
+    UC --> ENT[Enterprise Business Rules<br/>Entities]
+    class FD green
+    class IA blue
+    class UC pink
+    class ENT yellow
 ```
-Frameworks & Drivers (Web, DB, MQ)
-    Interface Adapters (Controllers, Presenters, Gateways)
-        Application Business Rules (Use Cases)
-            Enterprise Business Rules (Entities)
-```
+
+Clean Architecture adds a fourth layer: enterprise business rules (entities) at the center, surrounded by application business rules (use cases), then interface adapters, and finally frameworks and drivers. Dependencies flow strictly inward.
 
 ```java
 // Layer 0: Enterprise Business Rules (Entities)
@@ -296,6 +335,8 @@ public class UserRepositoryImpl implements UserRepository {
 }
 ```
 
+Clean Architecture distinguishes between entities (enterprise-wide business rules) and use cases (application-specific business rules). A `User` entity might be shared across multiple applications in an organization, while `CreateUserUseCase` is specific to one application. The `UserPresenter` is another Clean Architecture concept — it formats the response, keeping HTTP concerns out of the use case.
+
 ## Comparison Table
 
 | Aspect | Layered | Hexagonal | Clean |
@@ -347,6 +388,8 @@ public class UserRepositoryAdapter implements UserRepository {
 }
 ```
 
+Migration can be incremental. Start by extracting interfaces for the repository layer, then move the business logic into pure services that depend on those interfaces. Each step can be deployed independently.
+
 ### From Hexagonal to Clean
 
 1. Separate entities from use cases into distinct packages.
@@ -381,6 +424,8 @@ public class ProductService {
 }
 ```
 
+Not every application needs Clean Architecture. If your application is primarily CRUD with simple business rules, the overhead of ports, use cases, adapters, and mappers outweighs the benefits.
+
 ### Mixing Patterns
 
 ```java
@@ -391,6 +436,8 @@ public class OrderService implements OrderUseCase {
     private OrderRepositoryPort orderRepository; // "port" but service still has framework deps
 }
 ```
+
+Using hexagonal naming conventions without enforcing dependency inversion gives the illusion of isolation without the actual benefit.
 
 ## Best Practices
 

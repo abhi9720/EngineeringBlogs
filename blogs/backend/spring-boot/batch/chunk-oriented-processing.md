@@ -16,22 +16,46 @@ draft: false
 
 Chunk-oriented processing is the core processing model in Spring Batch. Items are read one at a time, processed, and accumulated into a chunk. When the chunk reaches the configured size, it is written as a single unit within a transaction. This approach provides efficient, transaction-safe batch processing.
 
+The chunk model is fundamentally different from tasklet processing: chunks amortize the cost of transaction overhead across multiple items. A commit per item would be disastrous for performance when processing millions of records. By grouping items into chunks (typically 10-100), Spring Batch reduces transaction commits by a factor equal to the chunk size.
+
 ## How Chunk Processing Works
 
-```
-Read  ->  Read  ->  Read  ->  ...  ->  Chunk Full
-                                           |
-                                           v
-                                     Process -> Process -> ... (within transaction)
-                                           |
-                                           v
-                                     Write (entire chunk)
-                                           |
-                                           v
-                                     Commit Transaction
+The diagram below shows the lifecycle of a single chunk. Items are read individually until the chunk is full. Then the processor transforms each item, the entire chunk is written atomically, and the transaction commits. If any step fails within the chunk, the entire chunk's work is rolled back.
+
+```mermaid
+flowchart LR
+    subgraph Read[Read Phase]
+        R1[Read Item 1] --> R2[Read Item 2]
+        R2 --> R3[Read ...]
+        R3 --> RFull[Chunk Full<br/>e.g. 50 items]
+    end
+
+    RFull --> Proc[Process Phase<br/>within transaction]
+    Proc --> P1[Process Item 1]
+    P1 --> P2[Process Item 2]
+    P2 --> P3[Process ...]
+    P3 --> Write[Write Phase<br/>entire chunk]
+
+    Write --> WT[Write Items]
+    WT --> Commit[Commit Transaction]
+
+    linkStyle default stroke:#278ea5
+
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+
+    class R1,R2,R3,RFull blue
+    class P1,P2,P3,Proc green
+    class Write,WT yellow
+    class Commit green
 ```
 
 ## Basic Chunk Configuration
+
+The chunk size is the most important performance tuning parameter. Too small (e.g., 1-5) and transaction overhead dominates. Too large (e.g., 10,000+) and the transaction holds locks for too long, increasing contention and risking memory exhaustion from the persistence context. A chunk size of 50 is a safe starting point for database operations. For file processing, larger chunks (100-1000) work well because there's no locking contention.
+
+The `chunk()` method takes the chunk size and a `PlatformTransactionManager`. Each chunk executes in its own transaction. If the transaction manager is a `JpaTransactionManager`, each chunk also flushes the persistence context and clears it, providing a natural memory boundary.
 
 ```java
 @Configuration
@@ -61,6 +85,10 @@ public class ChunkProcessingConfig {
 ```
 
 ## Chunk Listeners
+
+Chunk listeners let you hook into the chunk lifecycle: before a chunk starts, after it completes, and when it errors. The `afterChunk` event is fired every time a chunk commits, making it the ideal place to log progress or increment counters. `afterChunkError` gives you a chance to capture error context before the rollback removes the in-memory state.
+
+Listeners are called within the chunk's transaction boundary. If a listener throws an exception, the chunk is marked for rollback.
 
 ```java
 @Component
@@ -103,6 +131,10 @@ public Step chunkStep(JobRepository jobRepository,
 
 ### Dynamic Commit Interval
 
+A static chunk size may not suit all data patterns. The dynamic commit interval policy adjusts chunk sizes based on processing time. If chunks are completing quickly (under 100ms), it doubles the chunk size to improve throughput. If they're taking too long (over 1 second), it halves the size to reduce the cost of a potential rollback.
+
+This adaptive strategy is useful when data complexity varies — some records may be simple to process while others require heavy computation or multiple database lookups.
+
 ```java
 @Component
 public class DynamicCommitIntervalPolicy extends DefaultCompletionPolicy {
@@ -141,6 +173,10 @@ public Step dynamicCommitStep(JobRepository jobRepository,
 
 ### Complete Chunk Tolerant Configuration
 
+Fault tolerance in chunk processing lets you skip bad items and retry transient failures without rolling back the entire chunk. The `skipLimit` sets the maximum number of items that can be skipped per step. Individual exception types can be designated as skippable or non-skippable.
+
+Retry is different from skip: a retry tries the same item again immediately (with a configurable backoff policy). Retry is appropriate for transient failures like database deadlocks or network timeouts. Skip is appropriate for permanent data quality issues like invalid records.
+
 ```java
 @Bean
 public Step faultTolerantChunk(JobRepository jobRepository,
@@ -175,6 +211,10 @@ public BackOffPolicy backOffPolicy() {
 ```
 
 ### Custom Skip Policy
+
+A custom `SkipPolicy` gives fine-grained control over which exceptions cause skips and how many skips are allowed per type. The `ThresholdSkipPolicy` below maintains per-exception-type counters with different limits: transient data access exceptions get more retries (10), validation errors fewer (5), and parsing errors fewer still (3).
+
+Fatal exceptions like `FatalBatchException` are never skipped — processing should stop immediately.
 
 ```java
 @Component
@@ -211,6 +251,10 @@ public class ThresholdSkipPolicy implements SkipPolicy {
 
 ## Multi-Threaded Chunk Processing
 
+Multi-threaded chunk processing processes multiple chunks concurrently using a task executor. The `throttleLimit` controls maximum concurrency. Be careful: multi-threaded steps require thread-safe readers (use `StepScope` with synchronization) and the database must handle concurrent access.
+
+The reader must be thread-safe because multiple threads call `read()` concurrently. The processor and writer should also be stateless. Database deadlock risk increases with concurrency, so start with a low throttle limit (4-8) and increase gradually.
+
 ```java
 @Configuration
 public class MultiThreadedChunkConfig {
@@ -243,6 +287,10 @@ public class MultiThreadedChunkConfig {
 ## Partitioning
 
 ### Master-Slave Partitioning
+
+Partitioning divides the data into multiple independent ranges, each processed by a separate "slave" step running in its own thread. The master step creates the partition contexts and distributes them to the slaves. Each slave processes its own data range independently and reports results back to the master.
+
+Use partitioning when the data source supports efficient range queries (e.g., a table with a numeric primary key). The `Partitioner` implementation below divides the total record count into `gridSize` ranges.
 
 ```java
 @Configuration
@@ -313,6 +361,10 @@ public class PartitionedChunkConfig {
 
 ## Reprocessing Failed Chunks
 
+Sometimes you need to isolate and reprocess only the chunks that failed, rather than re-running the entire step. The `ChunkReprocessor` iterates through failed step executions, finds the failure exceptions, and creates a new job instance that processes only the failed chunk's data range.
+
+This pattern is useful in financial batch processing where most data is correct and only a few problematic transactions need attention. The reprocessor can be exposed as a separate admin endpoint.
+
 ```java
 @Component
 public class ChunkReprocessor {
@@ -352,6 +404,10 @@ public class ChunkReprocessor {
 ```
 
 ## Chunk Metrics
+
+Micrometer integration for chunk processing provides real-time visibility into throughput, chunk sizes, and error rates. The `ChunkMetricsListener` records a counter for each completed chunk, a gauge for chunk size, and tracks errors separately.
+
+Monitor these metrics in production to detect slowdowns, increasing error rates, or abnormal chunk sizes that may indicate data quality issues or resource contention.
 
 ```java
 @Component
@@ -416,6 +472,8 @@ public Step bigChunkStep(JobRepository jobRepository,
 }
 ```
 
+A chunk size of 100,000 would hold 100,000 items in memory. For complex objects, this can exhaust the heap and cause OutOfMemoryError. The transaction also holds locks for all 100,000 rows, dramatically increasing deadlock probability.
+
 ```java
 // Correct: Balanced chunk size
 @Bean
@@ -446,6 +504,8 @@ public Step noSkipStep(JobRepository jobRepository,
     // Any error rolls back ALL 50 items
 }
 ```
+
+Without skip configuration, any error in any of the 50 items rolls back ALL 50. For example, if item 48 has invalid data and the writer throws an exception, items 1-47 (which were already written) are also rolled back. This wastes significant processing time.
 
 ```java
 // Correct: Use skip to avoid full rollback

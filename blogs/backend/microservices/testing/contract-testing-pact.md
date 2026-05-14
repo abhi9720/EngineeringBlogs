@@ -18,19 +18,21 @@ Contract testing with Pact ensures that microservices can communicate correctly 
 
 ## How Pact Works
 
-```
-Consumer Service         Pact Broker         Provider Service
-     |                       |                     |
-     |--- Create Pact -------|---> Store Pact      |
-     |    (Consumer Test)    |                     |
-     |                       |                     |
-     |                       |--- Verify Pact ---->|
-     |                       |   (Provider Test)   |
-     |                       |<--- Result ---------|
-     |                       |                     |
+```mermaid
+sequenceDiagram
+    participant CS as Consumer Service
+    participant PB as Pact Broker
+    participant PS as Provider Service
+
+    CS->>PB: Create Pact (Consumer Test)
+    PB->>PB: Store Pact
+    PB->>PS: Verify Pact (Provider Test)
+    PS->>PB: Result
 ```
 
 ## Maven Dependencies
+
+Pact JVM provides both consumer and provider testing libraries. The consumer library runs tests against a mock server, generating Pact contract files. The provider library reads those contracts and verifies them against the actual provider implementation.
 
 ```xml
 <dependency>
@@ -50,6 +52,8 @@ Consumer Service         Pact Broker         Provider Service
 ## Consumer Side Tests
 
 ### Order Service Consumer Test
+
+The consumer test defines the expected interaction using Pact's DSL — the request payload, expected response status, headers, and body. Running this test starts a mock server on port 8089 that validates the actual client code against the contract. The generated Pact file is then shared with the provider team.
 
 ```java
 @ExtendWith(PactConsumerTestExt.class)
@@ -138,6 +142,8 @@ class OrderServiceConsumerPactTest {
 
 ### Inventory Service Consumer Test
 
+A consumer may have multiple contracts with different providers. Each contract focuses only on the interactions relevant to that consumer — the Order Service only tests the inventory and payment APIs it actually calls, not the entire provider surface.
+
 ```java
 @ExtendWith(PactConsumerTestExt.class)
 @PactTestFor(providerName = "InventoryService", port = "8090")
@@ -184,6 +190,8 @@ class InventoryServiceConsumerPactTest {
 
 ### Payment Service Provider Test
 
+The provider test fetches contracts from the Pact Broker and verifies them against the running provider. The `@State` methods set up the necessary test data (e.g., "payment exists" creates a payment record). If the provider changes its API in a way that breaks a consumer contract, this test fails and prevents deployment.
+
 ```java
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Provider("PaymentService")
@@ -227,6 +235,8 @@ class PaymentServiceProviderPactTest {
 
 ### Inventory Service Provider Test
 
+Provider tests can load pacts from a local folder (during development) or from the Pact Broker (in CI). The `MockMvcTestTarget` allows testing at the controller level without starting a full HTTP server, making provider verification fast enough to run on every commit.
+
 ```java
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Provider("InventoryService")
@@ -262,6 +272,8 @@ class InventoryServiceProviderPactTest {
 
 ## Pact Broker Configuration
 
+The Pact Broker is the central coordination point for contracts. Consumers publish contracts, providers verify them, and the `can-i-deploy` CLI checks whether a given version is compatible with its consumers/providers before allowing deployment. Postgres is the recommended database backend for production use.
+
 ```yaml
 # docker-compose.yml for Pact Broker
 version: '3'
@@ -288,6 +300,8 @@ services:
 ```
 
 ## CI/CD Integration
+
+CI/CD integration makes contract testing a gating step in the deployment pipeline. The `pact:publish` goal uploads contracts after consumer tests pass. The `pact:verify` goal validates that the provider still satisfies all consumer contracts. The `can-i-deploy` check prevents incompatible versions from reaching production.
 
 ```xml
 <!-- Maven plugin for pact verification -->

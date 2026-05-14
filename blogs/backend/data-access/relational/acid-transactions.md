@@ -24,6 +24,8 @@ ACID (Atomicity, Consistency, Isolation, Durability) properties define the funda
 
 ### Atomicity
 
+Atomicity guarantees that a transaction is treated as a single, indivisible unit. In the `transfer()` method below, either all operations succeed (debit from source, credit to target, log the transaction) or none do. If the `transactionRepository.save(log)` fails, the balance changes are rolled back—the money is neither lost nor created. Spring's `@Transactional` annotation declaratively manages this atomicity.
+
 ```java
 @Service
 public class TransferService {
@@ -62,6 +64,8 @@ public class TransferService {
 ```
 
 ### Consistency
+
+Consistency ensures that a transaction brings the database from one valid state to another, preserving all defined rules. Below, the `@Min(0)` constraint on `balance` enforces a business rule: account balances cannot go negative. The `@Version` field enables optimistic locking, preventing two concurrent transactions from overwriting each other's changes. If a concurrent update is detected, an `OptimisticLockException` is thrown, and the client can retry.
 
 ```java
 @Entity
@@ -111,6 +115,8 @@ public class TransactionConsistencyHandler {
 
 ### Isolation
 
+Isolation controls how transaction changes are visible to other concurrent transactions. `REPEATABLE_READ` guarantees that all reads within the transaction see a consistent snapshot, even if another transaction modifies and commits changes to the same rows. `SERIALIZABLE` provides the strictest isolation—transactions execute as if they were serialized one after another. The trade-off is performance: higher isolation levels hold locks longer and increase the chance of deadlocks.
+
 ```java
 @Transactional(isolation = Isolation.REPEATABLE_READ)
 public BigDecimal calculateTotalBalance(Long userId) {
@@ -141,6 +147,8 @@ public void processBatchPayments(List<PaymentInstruction> payments) {
 
 ### Durability
 
+Durability guarantees that once a transaction commits, the changes survive system failures. This is achieved through the database's Write-Ahead Log (WAL). In PostgreSQL, `wal_level = replica` and `synchronous_commit = on` ensure that the WAL is flushed to disk before the commit returns to the client. Spring's `DataSourceTransactionManager` delegates to the underlying database's durability mechanisms.
+
 ```java
 @Configuration
 public class DurabilityConfig {
@@ -167,6 +175,8 @@ public class DurabilityConfig {
 ## Spring Transaction Management
 
 ### Declarative Transactions
+
+Spring's `@Transactional` is the primary tool for declarative transaction management. The example below uses `Propagation.REQUIRED` (the default, joining the existing transaction or creating a new one) for the outer `createOrder` method, and `Propagation.REQUIRES_NEW` for `processPayment`, ensuring that payment processing commits independently even if the order creation fails. This is useful when you want to audit payment attempts regardless of the overall order outcome.
 
 ```java
 @Service
@@ -206,6 +216,8 @@ public class OrderService {
 ```
 
 ### Transaction Propagation Levels
+
+Spring supports seven propagation behaviors. **REQUIRED** (default) joins the current transaction or creates a new one. **REQUIRES_NEW** suspends the current transaction and creates a new one, allowing independent commit/rollback. **NESTED** uses a savepoint within the current transaction for partial rollback. **MANDATORY** throws an exception if no transaction exists. **SUPPORTS** joins if one exists, runs non-transactionally otherwise. **NOT_SUPPORTED** suspends the current transaction. **NEVER** throws if a transaction exists.
 
 ```java
 @Service
@@ -286,6 +298,8 @@ public class PropagationDemoService {
 
 ### Declarative Rollback
 
+By default, Spring rolls back the transaction for unchecked exceptions (`RuntimeException` and `Error`) but not for checked exceptions. The `rollbackFor` and `noRollbackFor` attributes override this. Below, `BusinessValidationException` and `EmailSendException` are excluded from rollback, allowing the order to be created even if the confirmation email fails.
+
 ```java
 @Service
 @Transactional(rollbackFor = Exception.class, noRollbackFor = {BusinessValidationException.class, EmailSendException.class})
@@ -322,6 +336,8 @@ public class RollbackStrategyService {
 ```
 
 ### Programmatic Rollback
+
+For complex business logic, you can trigger a rollback programmatically using `TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()`. This is useful when the decision to rollback depends on computed business rules rather than exceptions.
 
 ```java
 @Service
@@ -367,6 +383,8 @@ public class ProgrammaticRollbackService {
 9. **Use read-only hint**: `@Transactional(readOnly = true)` for queries
 10. **Avoid `this` method calls**: Spring proxy won't apply transaction
 
+Marking a transaction as `readOnly = true` tells Hibernate to skip dirty checking for all entities loaded within the transaction, reducing memory and CPU overhead. It is safe for any operation that only reads data.
+
 ```java
 // Read-only transaction optimization
 @Transactional(readOnly = true)
@@ -382,6 +400,8 @@ public List<Product> searchProducts(String query) {
 ## Common Mistakes
 
 ### Mistake 1: Self-Invocation Without Proxy
+
+Calling `this.createOrder()` from within the same class bypasses the Spring AOP proxy, so the `@Transactional` annotation is never processed. The fix is to inject the service as a self-reference, ensuring the method call goes through the proxy.
 
 ```java
 // WRONG: this.method() bypasses transaction proxy
@@ -412,6 +432,8 @@ public class OrderService {
 
 ### Mistake 2: Catching and Swallowing Exceptions
 
+If a `@Transactional` method catches an exception without rethrowing it, Spring assumes the transaction completed successfully and commits—even if the logic errored. Let exceptions propagate to trigger the rollback.
+
 ```java
 // WRONG: Transaction won't rollback
 @Transactional
@@ -432,6 +454,8 @@ public void createOrder(OrderRequest request) {
 ```
 
 ### Mistake 3: Long Transactions with External API Calls
+
+Holding a database connection and transaction open while making an external HTTP call wastes a connection for the duration of the network request and risks transaction timeout. Extract external calls outside the transaction boundary.
 
 ```java
 // WRONG: External API call inside transaction

@@ -24,6 +24,8 @@ Database migrations provide version control for your database schema. Tools like
 
 ### Configuration
 
+Flyway works by applying versioned SQL scripts in order. The configuration below shows programmatic setup with `Flyway.configure()`. Key settings include `baselineOnMigrate(true)`, which tells Flyway to create its schema history table on an existing database without failing, and `validateOnMigrate(true)`, which checks that applied migrations have not been modified. `outOfOrder(false)` enforces strict sequential ordering.
+
 ```java
 @Configuration
 public class FlywayConfig {
@@ -54,6 +56,8 @@ public class FlywayConfig {
 ```
 
 ### Migration Files
+
+Each migration file is a versioned SQL script named with a convention like `V<version>__<description>.sql`. The sequence below builds an e-commerce schema incrementally. Note how early migrations create core tables (`users`, `orders`), later ones add columns (`tracking_number`, `discount_amount`), and the final migration seeds reference data. Each migration should be small, focused, and independently reversible.
 
 ```sql
 -- V1__create_users_table.sql
@@ -119,6 +123,8 @@ INSERT INTO categories (name, slug) VALUES
 
 ### Java-Based Migrations
 
+Not all migrations can be expressed in pure SQL. Data migrations—transforming existing values, calling external APIs, or applying complex business logic—are better written in Java. Flyway's `BaseJavaMigration` gives you access to the JDBC `Connection` directly. The examples below migrate legacy email data and create a PostgreSQL full-text search index that requires procedural logic.
+
 ```java
 // V7__migrate_user_data.java
 public class V7__migrate_user_data extends BaseJavaMigration {
@@ -175,6 +181,8 @@ public class V8__add_fulltext_index extends BaseJavaMigration {
 
 ### Configuration
 
+Liquibase takes a database-agnostic approach using XML (or YAML/JSON) changelogs. The `include` directives assemble a master changelog from individual changeset files. This separation allows different teams to work on different schema areas without conflicts.
+
 ```xml
 <!-- liquibase-config.xml -->
 <databaseChangeLog
@@ -188,6 +196,8 @@ public class V8__add_fulltext_index extends BaseJavaMigration {
 ```
 
 ### Liquibase Changelogs
+
+Each changeset in Liquibase is a self-contained schema change with an explicit `rollback` section. The XML below creates the `users` table with a rollback that drops the table, and the `orders` table with a foreign key constraint. The rollback sections are not optional—they must be written for every changeset to support safe production rollbacks.
 
 ```xml
 <!-- changelog-master.xml -->
@@ -284,6 +294,8 @@ public class V8__add_fulltext_index extends BaseJavaMigration {
 
 ### Liquibase with Spring Boot
 
+Integrating Liquibase with Spring Boot requires a `SpringLiquibase` bean. The `contexts` property allows you to run different changesets in different environments (e.g., seed data only in development), and `dropFirst(false)` prevents accidental data loss.
+
 ```java
 @Configuration
 public class LiquibaseConfig {
@@ -308,6 +320,8 @@ public class LiquibaseConfig {
 
 ### Expand-Contract Pattern
 
+The expand-contract pattern (also known as parallel change) enables zero-downtime schema migrations. In Phase 1 (Expand), you add the new column alongside the old one and write to both. In Phase 2 (Migrate), you backfill historical data in a background job. In Phase 3 (Contract), you remove the old column after verifying that all code paths have been updated to use the new one. This phased approach prevents breaking changes during deployment.
+
 ```java
 // Phase 1: Expand - Add new column alongside old
 // V9__add_new_email_column.sql
@@ -330,6 +344,8 @@ ALTER TABLE users DROP COLUMN email_migrated;
 ```
 
 ### Online Schema Migration
+
+For large tables, even adding a column can block writes. Online schema migration uses a shadow table approach: create a new table with the desired schema, set up dual-writes in the application, backfill historical data from the old table, switch reads to the new table, remove dual-writes, and finally drop the old table. This technique is essential for high-traffic production systems.
 
 ```java
 // Zero-downtime migration approach
@@ -376,6 +392,8 @@ ALTER TABLE orders_v2 RENAME TO orders;
 
 ### Flyway Undo (Pro feature)
 
+Flyway's undo functionality is only available in the paid edition. For community edition users, the recommended approach is to create a separate rollback migration script that reverses the changes of a specific version. This script is not automatically applied—it must be run manually when a rollback is needed.
+
 ```java
 // For community edition, use versioned rollback scripts
 // V2_1__undo_add_tracking.sql (applied if V2 needs rollback)
@@ -385,6 +403,8 @@ ALTER TABLE orders DROP COLUMN shipped_at;
 ```
 
 ### Liquibase Rollback
+
+Liquibase has first-class rollback support. Every changeset can (and should) include a `<rollback>` section that defines how to reverse it. When a rollback is triggered, Liquibase runs these rollback instructions in reverse order, undoing the most recent changeset first.
 
 ```xml
 <!-- Each changeset includes rollback -->
@@ -416,6 +436,8 @@ ALTER TABLE orders DROP COLUMN shipped_at;
 9. **Monitor migration execution time**: Alert on slow migrations
 10. **Use schema version table**: Track applied migrations
 
+Repeatable migrations (prefixed with `R__` in Flyway) are re-applied every time their checksum changes. They are ideal for views, functions, and stored procedures that evolve alongside the application code.
+
 ```sql
 -- Repeatable migration (Flyway R__)
 -- R__create_revenue_report_view.sql
@@ -436,6 +458,8 @@ GROUP BY DATE_TRUNC('day', o.created_at);
 
 ### Mistake 1: Modifying Existing Migrations
 
+Once a migration has been applied to any environment, it must never be edited. Flyway and Liquibase calculate a checksum of each migration and fail validation if it changes. Instead of editing, create a new migration that corrects or extends the previous change.
+
 ```java
 // WRONG: Editing V1 after it's been deployed
 // Causes checksum mismatch errors
@@ -445,6 +469,8 @@ GROUP BY DATE_TRUNC('day', o.created_at);
 ```
 
 ### Mistake 2: Long-Running Migrations in Production
+
+Migrations that lock tables for extended periods cause application downtime. For large data migrations, break the work into batches, use online schema change tools, or run the migration during a maintenance window.
 
 ```sql
 -- WRONG: Blocks writes for extended period
@@ -456,6 +482,8 @@ UPDATE orders SET fulltext_index = to_tsvector(...);  -- Minutes/hours
 ```
 
 ### Mistake 3: No Rollback Plan
+
+Every migration is a risk. Without a tested rollback plan, a failed migration can leave the database in an inconsistent state that takes hours to resolve manually. Always write and test the rollback before applying the forward migration.
 
 ```xml
 <!-- WRONG: No rollback defined -->

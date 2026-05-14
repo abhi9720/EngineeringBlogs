@@ -179,6 +179,8 @@ public class ReplicationLagAwareService {
 }
 ```
 
+Replication lag is the central challenge of read-replica architectures. PostgreSQL's streaming replication is asynchronous by default — a transaction committed on the primary may take milliseconds (or seconds under load) to reach replicas. The "read-your-writes" consistency pattern shown here uses Redis to track write timestamps per entity: within a 5-second window after a write, reads for that entity are routed to the primary. An alternative approach is session-level stickiness: route all reads from a session that performed a write to the primary for the duration of the session. In practice, measure lag with `pg_stat_replication` and set your window to `p99_replication_lag × 2`.
+
 ---
 
 ## Database Sharding
@@ -216,6 +218,8 @@ public class ShardRouter {
     }
 }
 ```
+
+Both modulo and range-based sharding have trade-offs. Modulo (`customer_id % SHARD_COUNT`) distributes evenly if the IDs are uniformly distributed, but changing the shard count (resharding) requires moving most data. Range-based sharding makes resharding simpler — splitting a range requires touching only the split shard — but can cause hot spots if one range (e.g., IDs 1–1,000,000) gets disproportionately active customers. Consistent hashing (the third major approach) minimizes data movement during topology changes: only `1/n` of keys are remapped when a shard is added or removed.
 
 ### Spring Sharding with AbstractRoutingDataSource
 

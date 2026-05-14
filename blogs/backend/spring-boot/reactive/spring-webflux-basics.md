@@ -16,6 +16,8 @@ draft: false
 
 Spring WebFlux is the reactive web framework in Spring, providing fully non-blocking, backpressure-ready APIs. It supports both annotation-based controllers (similar to Spring MVC) and functional routing. This guide covers building reactive REST APIs with WebFlux and Project Reactor.
 
+WebFlux runs on Netty (by default), which uses an event loop model rather than the thread-per-request model of Tomcat. This makes WebFlux ideal for applications with high concurrency requirements, streaming endpoints, or long-lived connections like Server-Sent Events.
+
 ## Dependencies
 
 ```xml
@@ -33,6 +35,10 @@ Spring WebFlux is the reactive web framework in Spring, providing fully non-bloc
 ## Reactive Controllers
 
 ### Basic Controller
+
+The controller below defines a standard CRUD API with reactive return types. `Flux<User>` is used for multiple items (list, search), and `Mono<User>` for single items (get, create, update). The `Mono<Void>` return for delete indicates no response body.
+
+Note that controller method parameters for the request body can also be reactive (`Mono<CreateUserRequest>`). This gives the framework full control over when to subscribe and deserialize, enabling backpressure on the request body itself.
 
 ```java
 @RestController
@@ -79,6 +85,8 @@ public class UserController {
 ```
 
 ### Reactive Service Layer
+
+The service layer composes reactive operations. The `createUser` method saves the user and then sends a welcome email, both non-blocking operations. The `flatMap` ensures the email is only sent after the user is saved. `thenReturn` preserves the saved user as the result after the email operation completes.
 
 ```java
 @Service
@@ -138,20 +146,15 @@ public interface UserRepository extends ReactiveCrudRepository<User, Long> {
     Flux<User> findByActiveTrue();
     Mono<Long> countByRole(UserRole role);
 }
-
-// With R2DBC
-public interface UserR2dbcRepository extends ReactiveCrudRepository<User, Long> {
-    @Query("SELECT * FROM users WHERE email = :email")
-    Mono<User> findByEmail(@Param("email") String email);
-
-    @Query("SELECT * FROM users WHERE name LIKE '%' || :name || '%'")
-    Flux<User> searchByName(@Param("name") String name);
-}
 ```
 
 ## Functional Endpoints
 
+Functional endpoints provide an alternative to annotation-based controllers. Instead of annotations, you define routes using `RouterFunction` and handler functions using `HandlerFunction`. This approach is more explicit and composable, making it easier to test and debug.
+
 ### Router Configuration
+
+The router builder organizes routes by path prefix. Each HTTP method and path maps to a handler method. The builder supports nesting (`path()`) for cleaner route grouping, and you can add additional paths for admin endpoints or other concerns.
 
 ```java
 @Configuration
@@ -179,6 +182,8 @@ public class UserRouterConfig {
 
 ### Handler Functions
 
+Handlers receive a `ServerRequest` and return `Mono<ServerResponse>`. The `ServerResponse` class provides static methods for building responses with status codes, headers, and bodies. The `bodyValue()` method sets the response body directly, while `body()` streams a reactive type.
+
 ```java
 @Component
 public class UserHandler {
@@ -191,8 +196,7 @@ public class UserHandler {
     }
 
     public Mono<ServerResponse> getAllUsers(ServerRequest request) {
-        return ServerResponse.ok()
-            .body(userService.findAllUsers(), User.class);
+        return ServerResponse.ok().body(userService.findAllUsers(), User.class);
     }
 
     public Mono<ServerResponse> getUserById(ServerRequest request) {
@@ -208,8 +212,7 @@ public class UserHandler {
             .flatMap(userService::createUser)
             .flatMap(user -> ServerResponse
                 .created(URI.create("/api/users/" + user.getId()))
-                .bodyValue(user)
-            );
+                .bodyValue(user));
     }
 
     public Mono<ServerResponse> updateUser(ServerRequest request) {
@@ -229,13 +232,11 @@ public class UserHandler {
     public Mono<ServerResponse> searchUsers(ServerRequest request) {
         String query = request.queryParam("q")
             .orElseThrow(() -> new IllegalArgumentException("Query parameter 'q' is required"));
-        return ServerResponse.ok()
-            .body(userService.search(query), User.class);
+        return ServerResponse.ok().body(userService.search(query), User.class);
     }
 
     public Mono<ServerResponse> getStats(ServerRequest request) {
-        return ServerResponse.ok()
-            .body(userService.getStats(), UserStats.class);
+        return ServerResponse.ok().body(userService.getStats(), UserStats.class);
     }
 }
 ```
@@ -243,6 +244,10 @@ public class UserHandler {
 ## WebClient
 
 ### Reactive HTTP Client
+
+`WebClient` is the reactive equivalent of `RestTemplate`. It supports non-blocking request/response with backpressure. The `retrieve()` method is the simplest way to get a response; `exchangeToMono()` gives more control over response handling.
+
+The client below demonstrates error handling with `onStatus` to convert 4xx responses into business exceptions, timeouts, and retries with exponential backoff.
 
 ```java
 @Component
@@ -309,17 +314,12 @@ public class WebClientConfig {
                     .responseTimeout(Duration.ofSeconds(5))
                     .doOnConnected(conn -> conn
                         .addHandlerLast(new ReadTimeoutHandler(5))
-                        .addHandlerLast(new WriteTimeoutHandler(5))
-                    )
+                        .addHandlerLast(new WriteTimeoutHandler(5)))
             ))
             .filter(ExchangeFilterFunction.ofRequestProcessor(request ->
                 Mono.just(ClientRequest.from(request)
-                    .header("X-Request-Id", UUID.randomUUID().toString())
-                    .build())
-            ))
-            .filter(logRequest())
-            .filter(logResponse())
-            .build();
+                    .header("X-Request-Id", UUID.randomUUID().toString()).build())))
+            .filter(logRequest()).filter(logResponse()).build();
     }
 
     private ExchangeFilterFunction logRequest() {
@@ -340,6 +340,8 @@ public class WebClientConfig {
 
 ## Reactive Security
 
+Security in WebFlux uses `SecurityWebFilterChain` instead of `SecurityFilterChain`. The DSL is similar but operates on `ServerHttpSecurity`. JWT validation works the same way, with `oauth2ResourceServer` expecting reactive token validators.
+
 ```java
 @Configuration
 @EnableWebFluxSecurity
@@ -352,11 +354,8 @@ public class SecurityConfig {
                 .pathMatchers(HttpMethod.GET, "/api/public/**").permitAll()
                 .pathMatchers("/api/admin/**").hasRole("ADMIN")
                 .pathMatchers("/api/users/**").hasAuthority("SCOPE_read:users")
-                .anyExchange().authenticated()
-            )
-            .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(withDefaults())
-            )
+                .anyExchange().authenticated())
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
             .csrf(csrf -> csrf.disable())
             .build();
     }
@@ -371,15 +370,13 @@ public class ReactiveExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public Mono<ServerResponse> handleUserNotFound(UserNotFoundException ex) {
-        return ServerResponse
-            .status(HttpStatus.NOT_FOUND)
+        return ServerResponse.status(HttpStatus.NOT_FOUND)
             .bodyValue(new ErrorResponse("USER_NOT_FOUND", ex.getMessage()));
     }
 
     @ExceptionHandler(ValidationException.class)
     public Mono<ServerResponse> handleValidation(ValidationException ex) {
-        return ServerResponse
-            .status(HttpStatus.BAD_REQUEST)
+        return ServerResponse.status(HttpStatus.BAD_REQUEST)
             .bodyValue(new ErrorResponse("VALIDATION_ERROR", ex.getMessage()));
     }
 
@@ -387,16 +384,16 @@ public class ReactiveExceptionHandler {
     public Mono<ServerResponse> handleConstraintViolation(ConstraintViolationException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getConstraintViolations().forEach(violation ->
-            errors.put(violation.getPropertyPath().toString(), violation.getMessage())
-        );
-        return ServerResponse
-            .status(HttpStatus.BAD_REQUEST)
+            errors.put(violation.getPropertyPath().toString(), violation.getMessage()));
+        return ServerResponse.status(HttpStatus.BAD_REQUEST)
             .bodyValue(Map.of("error", "VALIDATION_ERROR", "details", errors));
     }
 }
 ```
 
 ## Testing WebFlux
+
+`@WebFluxTest` is the reactive equivalent of `@WebMvcTest`. It auto-configures `WebTestClient` and loads only the controller layer. Use `@MockBean` for mocked dependencies.
 
 ```java
 @WebFluxTest(UserController.class)
@@ -411,54 +408,39 @@ class UserControllerTest {
     void shouldReturnAllUsers() {
         when(userService.findAllUsers()).thenReturn(Flux.just(
             new User(1L, "john@example.com", "John"),
-            new User(2L, "jane@example.com", "Jane")
-        ));
+            new User(2L, "jane@example.com", "Jane")));
 
-        webTestClient.get().uri("/api/users")
-            .exchange()
+        webTestClient.get().uri("/api/users").exchange()
             .expectStatus().isOk()
-            .expectBody()
-            .jsonPath("$.length()").isEqualTo(2)
+            .expectBody().jsonPath("$.length()").isEqualTo(2)
             .jsonPath("$[0].email").isEqualTo("john@example.com");
     }
 
     @Test
     void shouldReturnUserById() {
         when(userService.findById(1L)).thenReturn(Mono.just(
-            new User(1L, "john@example.com", "John")
-        ));
+            new User(1L, "john@example.com", "John")));
 
-        webTestClient.get().uri("/api/users/{id}", 1L)
-            .exchange()
+        webTestClient.get().uri("/api/users/{id}", 1L).exchange()
             .expectStatus().isOk()
             .expectBody(User.class)
-            .consumeWith(response -> {
-                assertThat(response.getResponseBody().getEmail())
-                    .isEqualTo("john@example.com");
-            });
+            .consumeWith(response -> assertThat(response.getResponseBody().getEmail()).isEqualTo("john@example.com"));
     }
 
     @Test
     void shouldReturn404ForMissingUser() {
         when(userService.findById(99L)).thenReturn(Mono.empty());
-
-        webTestClient.get().uri("/api/users/{id}", 99L)
-            .exchange()
+        webTestClient.get().uri("/api/users/{id}", 99L).exchange()
             .expectStatus().isNotFound();
     }
 
     @Test
     void shouldCreateUser() {
         CreateUserRequest request = new CreateUserRequest("new@example.com", "New User");
-        when(userService.createUser(any())).thenReturn(Mono.just(
-            new User(3L, "new@example.com", "New User")
-        ));
+        when(userService.createUser(any())).thenReturn(Mono.just(new User(3L, "new@example.com", "New User")));
 
-        webTestClient.post().uri("/api/users")
-            .bodyValue(request)
-            .exchange()
-            .expectStatus().isCreated()
-            .expectHeader().exists("Location");
+        webTestClient.post().uri("/api/users").bodyValue(request).exchange()
+            .expectStatus().isCreated().expectHeader().exists("Location");
     }
 }
 ```
@@ -480,12 +462,10 @@ class UserControllerTest {
 ```java
 // Wrong: Blocking call inside reactive pipeline
 public Flux<User> findAllUsers() {
-    List<User> users = userRepository.findAll().collectList().block(); // BLOCKS
+    List<User> users = userRepository.findAll().collectList().block();
     return Flux.fromIterable(users);
 }
-```
 
-```java
 // Correct: Keep everything reactive
 public Flux<User> findAllUsers() {
     return userRepository.findAll();
@@ -497,16 +477,12 @@ public Flux<User> findAllUsers() {
 ```java
 // Wrong: Nothing happens without subscribe
 public void sendWelcomeEmail(User user) {
-    emailService.sendEmail(user.getEmail(), "Welcome!")
-        .subscribe(); // Missing - no one sends the email
+    emailService.sendEmail(user.getEmail(), "Welcome!").subscribe();
 }
-```
 
-```java
 // Correct: Subscribe to trigger execution
 public Mono<Void> sendWelcomeEmail(User user) {
     return emailService.sendEmail(user.getEmail(), "Welcome!");
-    // Framework subscribes when returned from controller
 }
 ```
 

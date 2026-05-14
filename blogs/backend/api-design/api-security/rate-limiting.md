@@ -24,6 +24,8 @@ Rate limiting controls the number of requests a client can make to an API within
 
 ### 1. Token Bucket Algorithm
 
+The token bucket algorithm is one of the most widely used rate limiting approaches because it handles bursts gracefully. The bucket starts with a fixed number of tokens (the capacity) and refills at a steady rate over time. Each request consumes one token; if no tokens remain, the request is rejected. The key benefit is that it allows short bursts of traffic up to the bucket capacity while enforcing a long-term average rate. This makes it ideal for APIs where clients may have occasional spikes but should stay within a sustainable average. The algorithm requires synchronization in multi-threaded environments — the synchronized block in this implementation ensures thread-safe token accounting at the cost of some throughput.
+
 ```java
 @Component
 public class TokenBucketRateLimiter {
@@ -86,6 +88,8 @@ public class TokenBucketRateLimiter {
 
 ### 2. Sliding Window Log
 
+The sliding window log algorithm provides the most accurate rate limiting by maintaining a timestamp log of every request. When a new request arrives, entries older than the window duration are removed, and the remaining count is compared against the limit. This approach eliminates the boundary problem of fixed window algorithms (where traffic spikes at window boundaries can double throughput). The trade-off is higher memory consumption — each request's timestamp is stored for the duration of the window — making it less suitable for high-throughput systems with long windows.
+
 ```java
 @Component
 public class SlidingWindowRateLimiter {
@@ -144,6 +148,8 @@ public class SlidingWindowRateLimiter {
 ```
 
 ### 3. Sliding Window Counter
+
+The sliding window counter algorithm balances accuracy with memory efficiency. Instead of storing every request timestamp, it tracks counters for the current window and the previous window. The current request count is estimated by weighting the previous window's count based on how much of the current window has elapsed. This provides smooth rate limiting without the memory overhead of the sliding window log, making it suitable for high-throughput production systems. The accuracy trade-off is minimal — typically within a few percent of the true sliding window count — and well within acceptable bounds for most rate limiting use cases.
 
 ```java
 @Component
@@ -214,6 +220,8 @@ public class SlidingWindowCounterRateLimiter {
 ---
 
 ## Distributed Rate Limiting with Redis
+
+In-memory rate limiting works well for single-instance deployments, but fails in distributed environments where requests for the same client can hit different server instances. Each instance's counter is independent, so a client could exceed the intended limit by spreading requests across instances. Redis provides an atomic, distributed counter that all instances share, ensuring consistent rate limiting regardless of which instance handles a request. The key design decision is choosing between Redis' atomic `INCR` with expiry (simple) versus Lua scripts or Redis streams for more sophisticated algorithms.
 
 ### Redis-Based Rate Limiter
 
@@ -288,6 +296,8 @@ class RateLimitStatus {
 ---
 
 ## Spring Boot Rate Limiting Filter
+
+A servlet filter provides a clean integration point for rate limiting in Spring Boot applications. The filter intercepts every request before it reaches the controller, extracts the client identity (API key, bearer token, or IP address), checks the rate limit, and either allows the request through or returns a 429 Too Many Requests response. The filter also sets rate limit headers (`X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset`) that inform clients of their current quota, enabling intelligent client-side backoff. Tiered rate limiting — where different clients get different limits based on their plan or trust level — is implemented through a configuration-driven tier system.
 
 ### Rate Limiting Interceptor
 
@@ -398,6 +408,8 @@ public class RateLimitConfig {
 
 ## Best Practices
 
+Rate limiting protects your API from abuse, ensures fair resource allocation, and maintains stability under load. Effective rate limiting goes beyond simply rejecting excess requests — it provides visibility, clear feedback, and actionable information that helps clients self-regulate.
+
 1. **Always return rate limit headers**: X-RateLimit-Limit, Remaining, Reset
 2. **Return 429 with Retry-After**: Standard rate limit response
 3. **Use sliding window**: More accurate than fixed window
@@ -430,6 +442,8 @@ public ResponseEntity<ProblemDetail> handleRateLimit(RateLimitExceededException 
 
 ### Mistake 1: Fixed Window at Boundaries
 
+Fixed window rate limiting (resetting the counter at the start of each window) has a well-known boundary problem. A client can send requests at the very end of one window and the very beginning of the next, effectively doubling their throughput in a short period. For example, with a 100-requests-per-minute limit, a client could send 100 requests at 00:59:59 and another 100 at 01:00:00, achieving 200 requests in two seconds. Sliding window algorithms (log or counter) eliminate this spike by smoothing the rate measurement across continuous time rather than discrete windows.
+
 ```java
 // WRONG: Fixed window allows 2x burst at boundaries
 // Requests at 00:59:59 and 01:00:00 both get full quota
@@ -438,6 +452,8 @@ public ResponseEntity<ProblemDetail> handleRateLimit(RateLimitExceededException 
 ```
 
 ### Mistake 2: Not Handling Distributed State
+
+Using in-memory rate limiting in a multi-instance deployment creates a false sense of security. Each instance maintains its own independent counter, so a client can exhaust the limit on each instance separately. With 5 instances and a limit of 10 requests/minute, a client could make 50 requests before being blocked. The solution is a centralized counter using Redis, which provides atomic increments that span all instances. For very high-throughput systems, consider using Redis clusters or a tiered approach where local counters provide a first line of defense and Redis provides global enforcement.
 
 ```java
 // WRONG: In-memory rate limiting doesn't work across instances
@@ -448,6 +464,8 @@ public ResponseEntity<ProblemDetail> handleRateLimit(RateLimitExceededException 
 ```
 
 ### Mistake 3: Blocking Without Warning
+
+Sudden 429 responses without prior warning create a poor developer experience and can cause cascading failures as clients retry aggressively. Rate limit headers give clients visibility into their consumption and enough information to implement intelligent backoff. The `X-RateLimit-Remaining` header allows clients to slow down proactively when their quota is low, and the `Retry-After` header tells them exactly when to retry after being blocked. This cooperative approach reduces both rejected requests and server load from pointless retries.
 
 ```java
 // WRONG: Client gets 429 without warning

@@ -18,7 +18,7 @@ Dead Letter Queues (DLQ) provide a mechanism for handling messages that cannot b
 
 ## DLQ Configuration
 
-Configure a queue with a dead letter exchange (DLX) that routes rejected messages to a DLQ.
+A dead letter exchange (DLX) is a regular RabbitMQ exchange that receives messages rejected from the main queue. The main queue is configured with `deadLetterExchange` and `deadLetterRoutingKey` — when a message is nack'd with `requeue=false`, or expires, RabbitMQ routes it to this exchange with the specified routing key. The DLQ then binds to the DLX to receive these failed messages. The `maxLength` and `overflow` settings prevent the main queue from growing unboundedly.
 
 ```java
 @Configuration
@@ -68,7 +68,7 @@ public class DeadLetterConfig {
 
 ## TTL-Based Retry with Delayed Requeue
 
-Implement retry by setting a TTL on the DLQ and routing expired messages back to the original queue.
+A common retry pattern uses TTL (Time-To-Live) on the retry queue. When a message fails processing, it's sent to a retry queue with a TTL of 30 seconds. After the TTL expires, RabbitMQ automatically routes the message back to the original exchange (via the dead letter configuration on the retry queue), which sends it back to the original queue for reprocessing. This creates a delay without any consumer-side polling or sleeping. The `x-max-length` and `x-overflow` settings prevent unbounded retry queue growth.
 
 ```java
 @Configuration
@@ -105,6 +105,8 @@ public class RetryWithDelayConfig {
 ```
 
 ## Delayed Retry with Multiple Levels
+
+For exponential backoff, configure multiple retry queues with increasing TTLs. The first retry waits 10 seconds, the second 60 seconds, and the third 5 minutes. The `RetryService` tracks retry count via a message header (`x-retry-count`). On the first failure, it routes to the 10-second queue; on the second failure, to the 60-second queue; and on the third, to the 5-minute queue. After exhausting all retries, the message is sent to the final DLQ for manual inspection.
 
 ```java
 @Configuration
@@ -149,6 +151,8 @@ public class MultiLevelRetryConfig {
 ```
 
 ### Retry Service
+
+The `RetryService` reads the `x-retry-count` header from the failed message to determine which retry queue to use. It increments the count, adds metadata about the failure reason and timestamp, and routes the message to the appropriate delay queue. After `MAX_RETRIES` (3) attempts, the message is sent to the final DLQ. This approach ensures that transient failures are retried with backoff while persistent failures are isolated for investigation.
 
 ```java
 @Component
@@ -199,7 +203,7 @@ public class RetryService {
 
 ## Delayed Message Exchange Plugin
 
-RabbitMQ delayed message exchange plugin provides a more elegant retry mechanism.
+RabbitMQ delayed message exchange plugin provides a more elegant retry mechanism. Instead of multiple TTL-based queues, a single delayed exchange can delay messages by configurable durations. The `x-delayed-type` argument specifies the underlying exchange type (usually `direct`). The producer sets a `delay` header in milliseconds, and the exchange holds the message until the delay expires before routing it to the bound queue. This simplifies the retry architecture significantly.
 
 ```yaml
 # Docker compose with delayed exchange plugin
@@ -263,6 +267,8 @@ public class DelayedRetryProducer {
 
 ## Consumer with Retry Handling
 
+The consumer uses manual acknowledgment for reliable processing. On success, it acknowledges the message (`basicAck`). On failure, it negatively acknowledges (`basicNack`) with `requeue=false` to prevent redelivery to the original queue, and delegates to `RetryService` for retry routing. The consumer validates business rules before processing — invalid amounts or fraudulent orders are caught early and sent to the retry mechanism rather than crashing the consumer.
+
 ```java
 @Component
 public class OrderConsumerWithRetry {
@@ -295,6 +301,8 @@ public class OrderConsumerWithRetry {
 ```
 
 ## Monitoring DLQ
+
+A scheduled monitor checks DLQ depths and alerts when messages accumulate. Growing DLQ size indicates a systemic issue — the consumer is consistently failing on certain messages. The monitor logs warnings and sends alerts (PagerDuty, Slack, email) so operators can investigate. This is critical for production: if a DLQ grows unboundedly, it can cause disk space issues and signal a broken pipeline.
 
 ```java
 @Component
@@ -331,6 +339,8 @@ public class DlqMonitor {
 
 ### Mistake: Retrying infinitely in the consumer
 
+A `while(true)` retry loop in the consumer blocks the consumer thread, preventing it from processing other messages. It also creates a tight retry loop with no backoff, potentially overwhelming downstream systems. Always nack and route to a TTL-based retry queue instead.
+
 ```java
 // Wrong - infinite retry blocks the consumer
 @RabbitListener(queues = "orders.queue")
@@ -361,6 +371,8 @@ public void handleOrder(OrderEvent event, Channel channel, Message message) {
 ```
 
 ### Mistake: Not configuring DLQ on the main queue
+
+Without a dead letter exchange, messages that are nack'd with `requeue=false` are simply dropped — they disappear forever. Always configure a DLQ so that failed messages can be analyzed, reprocessed, or alerted on.
 
 ```java
 // Wrong - rejected messages are lost

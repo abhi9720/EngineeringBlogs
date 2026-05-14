@@ -20,6 +20,8 @@ Modern backend systems must balance concerns like maintainability, scalability, 
 
 The traditional layered architecture organizes code into horizontal layers such as presentation, business logic, and data access. Each layer depends only on the layer directly below it.
 
+The controller layer handles HTTP concerns — request parsing, response formatting, and HTTP status codes. It delegates to the service layer without containing any business logic itself. This keeps controllers thin and focused on their sole responsibility: translating between the HTTP protocol and your application's domain.
+
 ```java
 @RestController
 public class OrderController {
@@ -55,9 +57,13 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 }
 ```
 
+The service layer orchestrates business logic. Here, `OrderService` checks inventory before creating an order — a cross-cutting concern that touches both the inventory system and the database. The `@Transactional` annotation ensures that the save operation is atomic: if anything fails, the order won't be persisted in an inconsistent state. Note that `OrderService` depends directly on `JpaRepository` through `OrderRepository`, coupling the business layer to Spring Data JPA. This is the primary trade-off of layered architecture: simplicity at the cost of framework coupling.
+
 ### Hexagonal Architecture
 
 Hexagonal architecture, or ports and adapters, places the domain model at the center with inbound and outbound ports defining boundaries. Adapters implement these ports for specific technologies.
+
+The key difference from layered architecture is the inversion of dependencies. Instead of the service layer depending on a concrete repository (JPA), the application core defines a port interface. The adapter then implements that port. This means the core has zero knowledge of the database technology — you could swap JPA for JDBC, MongoDB, or an in-memory store without touching a single line of business logic.
 
 ```java
 public interface OrderRepositoryPort {
@@ -76,6 +82,8 @@ public class OrderRepositoryAdapter implements OrderRepositoryPort {
 }
 ```
 
+In production, you would inject `OrderRepositoryAdapter` wired to your database. In tests, you inject an in-memory implementation. This makes the core testable without a database, and it makes database changes safe because the adapter is the only file that needs modification.
+
 ### Microservices Architecture
 
 Microservices decompose a system into independently deployable services that communicate over a network. Each service owns its data and encapsulates its business capability.
@@ -89,6 +97,8 @@ public class OrderServiceApplication {
     }
 }
 ```
+
+Microservices offer independent deployability and team autonomy, but they introduce network latency, distributed data management, and operational complexity. A typical microservice might use 5–15 external dependencies (service discovery, config server, circuit breakers, tracing), each adding operational overhead. Reserve microservices for systems where team scaling or independent deployment velocity justifies the complexity.
 
 ## Architectural Decision Framework
 
@@ -129,6 +139,8 @@ public class Order {
 }
 ```
 
+The wrong example mixes JPA annotations (`@Entity`, `@Table`, `@Id`) with domain logic (`calculateTotal`). It also assumes persistence state (`id == null` means "not persisted"), which is a JPA-specific concern leaking into the domain. This makes the domain object untestable without a database and couples it to a specific persistence technology.
+
 ```java
 // Correct: Pure domain object
 public class Order {
@@ -142,6 +154,8 @@ public class Order {
     }
 }
 ```
+
+The correct approach uses a pure Java object with no annotations. `OrderId` is a value object that encapsulates identity semantics. `Money` handles currency-aware arithmetic. This class can be unit-tested in milliseconds and migrated to any persistence technology without modification.
 
 ### God Package
 

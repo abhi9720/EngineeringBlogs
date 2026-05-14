@@ -24,11 +24,7 @@ Gatling and JMeter are the two most popular open-source performance testing tool
 
 ### JMeter Architecture
 
-```
-UI-based: .jmx (XML) files
-Thread-based: Each virtual user runs in a separate thread
-Blocking I/O: Each thread blocks during request/response
-```
+JMeter is thread-based and GUI-driven. Each virtual user runs in a separate OS thread, which limits scalability:
 
 ```xml
 <!-- JMeter works with XML configuration -->
@@ -41,11 +37,7 @@ Blocking I/O: Each thread blocks during request/response
 
 ### Gatling Architecture
 
-```
-Code-based: Scala/Java DSL files
-Event-based: Uses Akka actors (asynchronous)
-Non-blocking I/O: Single thread handles multiple virtual users
-```
+Gatling is event-based and code-first. It uses Akka actors under the hood, allowing a single thread to handle thousands of virtual users asynchronously:
 
 ```scala
 class BasicSimulation extends Simulation {
@@ -74,21 +66,9 @@ class BasicSimulation extends Simulation {
 
 ### Thread Model
 
-JMeter:
-```
-1000 virtual users = 1000 OS threads
-Each thread: ~1MB stack memory
-Memory required: ~1GB for 1000 users
-Context switching overhead with high user count
-```
+JMeter's thread-per-user model means 1000 virtual users = 1000 OS threads, each consuming ~1MB of stack memory, leading to ~1GB memory usage and significant context switching overhead.
 
-Gatling:
-```
-1000 virtual users = Event loop + actors
-Memory per user: ~few KB
-Memory required: ~50MB for 1000 users
-No context switching (asynchronous)
-```
+Gatling's event-driven model uses a single event loop with actors. 1000 virtual users consume only ~50MB total with no context switching overhead, making it far more resource-efficient at scale.
 
 ### Resource Comparison Table
 
@@ -230,7 +210,7 @@ public class OrderSimulationJava extends Simulation {
 ### Gatling Report (Built-in)
 
 ```
-================================================================================
+===============================================================================
 ---- Global Information ---------------------------------------------------------
 > request count                                       5000 (OK=4900 KO=100)
 > min response time                                     45 ms
@@ -247,7 +227,7 @@ public class OrderSimulationJava extends Simulation {
 > 800 ms < t < 1200 ms                                 500 (10%)
 > t > 1200 ms                                          200 (4%)
 > failed                                               100 (2%)
-================================================================================
+===============================================================================
 ```
 
 ### JMeter Report (via Plugins)

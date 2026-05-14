@@ -92,6 +92,8 @@ flowchart TB
 
 ### Case 1: E-commerce Platform Migration
 
+A typical e-commerce monolith can be decomposed into independently deployable services, each owning its own database. The API Gateway becomes the single entry point, routing requests to the appropriate service. Each team owns a service end-to-end — from database to API.
+
 A typical e-commerce monolith broken into microservices:
 
 ```mermaid
@@ -120,6 +122,8 @@ flowchart TB
 class UserDB,OrderDB,ProductDB,PaymentDB,ShippingDB,ReviewDB green
     class Gateway,UserService,OrderService,ProductService,PaymentService,ShippingService,ReviewService blue
 ```
+
+The code below shows how separate services collaborate — the Order Service calls User Service and Product Service via Feign clients, validating data across service boundaries before persisting an order. Each service operates within its own database transaction.
 
 ```java
 // User Service - handles user management
@@ -178,7 +182,7 @@ public class OrderService {
 
 ### Case 2: Team Autonomy in Large Organizations
 
-Microservices enable parallel development by different teams:
+Microservices enable parallel development by different teams — each team can independently choose its technology stack, deployment cadence, and scaling strategy. The API contract becomes the only coordination point between teams.
 
 ```java
 // Service A owned by Team A - uses Java/Spring
@@ -207,7 +211,7 @@ type ServiceC struct {
 
 ### Case 3: Independent Scaling
 
-Scale specific services based on demand:
+Different services have different resource profiles — user service might be CPU-bound while order service is I/O-bound. Kubernetes HorizontalPodAutoscaler allows each service to scale independently based on custom metrics like requests per second, memory usage, or queue depth.
 
 ```yaml
 # Kubernetes deployment configurations
@@ -288,7 +292,7 @@ spec:
 
 ### 1. Service Boundaries
 
-Defining service boundaries is the most critical design decision:
+Defining service boundaries is the most critical design decision in a microservices architecture. Boundaries should align with business capabilities (Domain-Driven Design bounded contexts), not technical layers. Splitting by technology (e.g., having separate services for repository, mapper, and validator) creates a distributed monolith with none of the benefits.
 
 ```java
 // BAD: Technology-based boundary (creates unnecessary complexity)
@@ -315,7 +319,7 @@ service OrderService {
 
 ### 2. Data Management
 
-Each service owns its data:
+Each service owns its data exclusively — no direct database access from other services. The Order Service stores `userId` as a foreign key reference but never queries the User Service's database directly. Any data needed from another service must be fetched through its API, preserving encapsulation and independent evolvability.
 
 ```java
 // User Service owns user data
@@ -353,7 +357,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
 ### 3. Communication Patterns
 
-Choose appropriate communication patterns:
+Choose appropriate communication patterns based on consistency requirements and latency tolerance. Synchronous calls (REST/gRPC) provide immediate responses but couple caller and callee temporally. Asynchronous messaging (events/queues) decouples services at the cost of eventual consistency.
 
 ```java
 // Synchronous communication (REST/gRPC)
@@ -402,7 +406,7 @@ public class OrderEventHandler {
 
 ### 4. Observability
 
-Distributed systems require comprehensive observability:
+Distributed systems require comprehensive observability across three pillars: logging (with trace IDs), metrics (counters and histograms for service calls), and tracing (end-to-end request flows). Without this investment, debugging production issues in a microservices environment becomes nearly impossible.
 
 ```java
 // Distributed tracing with Spring Cloud Sleuth
@@ -647,4 +651,4 @@ The decision to adopt microservices should be driven by your team's size, the co
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

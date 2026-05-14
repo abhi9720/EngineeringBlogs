@@ -83,6 +83,8 @@ public class SliCalculator {
 }
 ```
 
+An SLI must be both precise and practical. The availability SLI divides successful requests by total requests—simple, but note that it counts every HTTP response, so timeouts that never reach the application are invisible. The latency SLI uses Prometheus-style histogram buckets (`le` = less than or equal) rather than recording each individual latency, because histograms can be aggregated across instances while raw values cannot. The trade-off is that histograms lose precision—you know the count under a threshold but not the exact distribution.
+
 ### Business SLIs
 
 ```java
@@ -113,6 +115,8 @@ public class BusinessSliService {
     }
 }
 ```
+
+Technical SLIs (latency, errors) are table stakes. Business SLIs—order completion rate, payment success, search click-through—directly measure user-facing outcomes. A service with perfect technical metrics (0 errors, 50ms latency) can still have a broken checkout flow. Business SLIs are your canary for logic bugs that technical metrics miss.
 
 ---
 
@@ -149,6 +153,8 @@ services:
         window: 1d
         description: "Minimum throughput"
 ```
+
+SLO targets and windows must be chosen together. A 30-day window on 99.9% availability allows roughly 43 minutes of downtime—enough to absorb a brief incident without exhausting the budget. The 7-day latency SLO has a tighter window because latency degradation is often shorter-lived and more sensitive to deployment changes. Using multiple windows for the same metric (p95 with 30d, p99 with 7d) gives both a long-term trend and a short-term alert.
 
 ### SLO Calculation
 
@@ -191,6 +197,8 @@ public record SloStatus(
     double burnRate
 ) {}
 ```
+
+The burn rate is the key leading indicator. A burn rate of 1.0 means you are consuming error budget exactly at the rate the SLO allows. Above 1.0 means you are burning through budget faster than expected. At burn rate 2.0, a 30-day budget would exhaust in 15 days. Most alerting strategies trigger at burn rates of 2-10 depending on the time window, giving the team time to respond before the budget is fully consumed.
 
 ---
 
@@ -251,6 +259,8 @@ record ErrorBudgetState(
 }
 ```
 
+Error budget tracking is a stateful process—the budget starts at 100% and is consumed over time by errors. The `AtomicReference` wrappers are not just for thread safety; they allow the state to be atomically read and updated from multiple concurrent consumers. The monthly reset aligns with the common SLO window, giving teams a clean slate each period. Critically, when the budget is exhausted, all non-critical deployments should halt—this is the mechanism that prevents velocity from compromising reliability.
+
 ### Burn Rate Alerts
 
 ```yaml
@@ -287,6 +297,8 @@ groups:
           severity: warning
 ```
 
+The multi-window, multi-burn-rate approach is the industry standard for SLO-based alerting. The fast burn window (1 hour) catches acute outages that rapidly consume budget—these get the `critical` label and page immediately. The slow burn window (6 hours) catches gradual degradation that would exhaust the budget over several hours or days. Together they ensure operators are alerted regardless of whether the failure is sudden or creeping.
+
 ---
 
 ## SLO Monitoring Dashboard
@@ -316,6 +328,8 @@ groups:
             slo:error_budget:ratio_30d - 0.999
           ) / (1 - 0.999)
 ```
+
+Recording rules precompute expensive PromQL expressions on a schedule, storing the results as new time series. The `slo:error_budget:ratio_30d` rule recomputes the rolling 30-day error ratio every few minutes. Without this optimization, every dashboard load would need to scan 30 days of raw data—an expensive query that could timeout on large deployments.
 
 ### Grafana SLO Panel
 
@@ -348,6 +362,8 @@ groups:
 }
 ```
 
+The gauge panel gives an at-a-glance view of budget health: green above 50%, yellow between 20-50%, red below 20%. The burn rate graph shows whether the trend is accelerating. A single panel showing both remaining budget and burn rate is the most effective SLO monitoring setup—it answers both "how much do we have left?" and "how fast are we using it?"
+
 ---
 
 ## Error Budget Policies
@@ -378,6 +394,8 @@ public class DeploymentGateService {
     }
 }
 ```
+
+Deployment gates are the practical application of error budgets. When less than 50% of the budget remains, the team should focus on stability rather than new features. A burn rate above 2.0 means the budget is being consumed twice as fast as the SLO allows—deploying more changes would likely accelerate the burn. This creates a cultural feedback loop: teams that ship reliable code earn the right to deploy more frequently.
 
 ### On-Call Priority
 

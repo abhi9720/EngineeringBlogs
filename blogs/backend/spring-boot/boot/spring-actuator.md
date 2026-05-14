@@ -16,6 +16,8 @@ draft: false
 
 Spring Boot Actuator provides production-ready monitoring and management capabilities for your application. It exposes operational information via HTTP endpoints and JMX MBeans, including health checks, metrics, environment properties, thread dumps, and more.
 
+Actuator is the foundation of observability in Spring Boot. Combined with Micrometer (the metrics facade), it integrates with Prometheus, Datadog, New Relic, and dozens of other monitoring systems. Without Actuator, operations teams have no insight into application health, performance, or configuration in production.
+
 ## Enabling Actuator
 
 ```xml
@@ -44,6 +46,10 @@ management:
 ## Core Endpoints
 
 ### Health Endpoint
+
+The `/health` endpoint aggregates the health of all dependencies. Each `HealthIndicator` returns either UP, DOWN, or DEGRADED. The overall status is the most severe of all components. A database that can't be reached causes the overall status to be DOWN, which load balancers detect and stop routing traffic to this instance.
+
+The example below shows a healthy application with PostgreSQL, Redis, and general system health all reporting UP. The `show-details: always` setting exposes component details. In production, use `show-details: when-authorized` to protect infrastructure details.
 
 ```yaml
 # /internal/actuator/health
@@ -79,6 +85,10 @@ management:
 ```
 
 ### Custom Health Indicator
+
+Custom health indicators let you report the health of application-specific dependencies like external APIs, message queues, or proprietary services. Implement `HealthIndicator` and return `Health.up()` or `Health.down()` based on the dependency's status.
+
+The `ExternalApiHealthIndicator` below pings an external API's health endpoint. If the response is 2xx, the indicator reports UP with response time details. On failure, it reports DOWN with the status code and error message. The `responseTime` metric helps ops teams detect slow external dependencies before they cause user-facing problems.
 
 ```java
 @Component
@@ -123,6 +133,8 @@ public class ExternalApiHealthIndicator implements HealthIndicator {
 
 ### Composite Health Indicator
 
+A `HealthAggregator` determines the overall health status from multiple component healths. The default aggregator uses the least healthy status (e.g., if any component is DOWN, the overall status is DOWN). Custom aggregators can implement more nuanced logic, like a `DEGRADED` status when fewer than half of components are down.
+
 ```java
 @Component
 public class DatabaseHealthAggregator implements HealthAggregator {
@@ -150,6 +162,8 @@ public class DatabaseHealthAggregator implements HealthAggregator {
 ```
 
 ### Info Endpoint
+
+The `/info` endpoint exposes arbitrary application metadata. Use `InfoContributor` beans to add build version, Git commit, Java version, and environment information. This is invaluable for verifying which version of a service is deployed across environments.
 
 ```java
 @Component
@@ -195,6 +209,10 @@ public class GitInfoContributor implements InfoContributor {
 
 ### Metrics Endpoint
 
+The `/metrics` endpoint exposes all registered Micrometer metrics. The root endpoint lists available metric names. Individual metric endpoints (e.g., `/metrics/http.server.requests`) show measurements and available tags for drill-down.
+
+The `http.server.requests` metric is one of the most useful: it shows request count, total time, and maximum time, filtered by URI, status, and method. A sudden increase in 5xx responses or a spike in response time identifies problems immediately.
+
 ```yaml
 # /internal/actuator/metrics
 {
@@ -228,6 +246,10 @@ public class GitInfoContributor implements InfoContributor {
 ```
 
 ### Custom Metrics
+
+Micrometer provides four core metric types: `Counter` (incrementing count), `Timer` (duration distribution), `DistributionSummary` (value distribution), and `Gauge` (point-in-time value). The `OrderMetrics` component below uses all four to track order processing.
+
+`Timer` records request latency with percentile distributions (`p50`, `p95`, `p99`) that reveal tail latency. `Gauge` for pending orders lets ops teams monitor queue depth. PublishPercentiles enables accurate SLO tracking without storing raw data.
 
 ```java
 @Component
@@ -279,6 +301,10 @@ public class OrderMetrics {
 
 ### Environment Endpoint
 
+The `/env` endpoint exposes all property sources and their values. This is invaluable for debugging configuration issues: you can verify which property source provided a particular value and check for typos or incorrect overrides.
+
+Sensitive values like passwords and connection strings are automatically masked with `***` in the response. The `show-values` setting controls whether values are visible at all. In production, set `show-values: never` for `env` and `configprops` endpoints.
+
 ```yaml
 # /internal/actuator/env
 {
@@ -291,6 +317,10 @@ public class OrderMetrics {
 ```
 
 ### Thread Dump Endpoint
+
+The `/threaddump` endpoint captures the current state of all application threads. Thread dumps are essential for diagnosing deadlocks, thread starvation, and long-running requests. The response shows each thread's name, ID, state, and stack trace.
+
+Analyzing thread dumps over time can reveal patterns: an increasing number of `BLOCKED` threads suggests lock contention, while growing `WAITING` threads may indicate a connection pool or thread pool that's undersized.
 
 ```yaml
 # /internal/actuator/threaddump
@@ -306,6 +336,7 @@ public class OrderMetrics {
       "lockName": null,
       "lockOwnerId": -1,
       "lockOwnerName": null,
+      "lockName": null,
       "stackTrace": [
         {
           "methodName": "doFilter",
@@ -321,6 +352,10 @@ public class OrderMetrics {
 ## Custom Endpoints
 
 ### @Endpoint Annotation
+
+Custom endpoints use `@Endpoint` with the `id` that defines the URL path. Operations are annotated with `@ReadOperation` (GET), `@WriteOperation` (POST), or `@DeleteOperation` (DELETE). The `@Selector` annotation maps path variables.
+
+The `FeatureFlagsEndpoint` below provides a dynamic feature flag system that can be queried and updated at runtime without redeployment. This enables canary deployments, A/B testing, and emergency feature toggles.
 
 ```java
 @Endpoint(id = "feature-flags")
@@ -358,6 +393,8 @@ public class FeatureFlagsEndpoint {
 
 ### @WebEndpoint (HTTP only)
 
+Use `@WebEndpoint` when you want an endpoint to be available only over HTTP, not JMX. This is useful for endpoints that return HTML or have web-specific logic. The `SystemInfoEndpoint` below exposes system properties that are relevant for web-based monitoring consoles.
+
 ```java
 @WebEndpoint(id = "system-info")
 @Component
@@ -385,6 +422,8 @@ public class SystemInfoEndpoint {
 ```
 
 ### @JmxEndpoint (JMX only)
+
+`@JmxEndpoint` creates endpoints visible only through JMX, not HTTP. JMX is useful for operations that shouldn't be exposed over the network, such as cache eviction or log level changes. The `CacheManagementEndpoint` below lets operators clear caches via JConsole or other JMX clients.
 
 ```java
 @JmxEndpoint(id = "cache-management")
@@ -415,6 +454,10 @@ public class CacheManagementEndpoint {
 
 ### Role-Based Access
 
+Actuator endpoints expose sensitive information and should be secured. The configuration below permits unauthenticated access to `/health` and `/info` (needed by load balancers and monitoring systems) while restricting `/metrics`, `/env`, and other endpoints to users with the `ACTUATOR_ADMIN` role.
+
+Use a separate security filter chain for actuator paths to avoid conflicts with your main application security configuration. The `securityMatcher` method restricts this chain to `/internal/actuator/**` only.
+
 ```java
 @Configuration
 @ConditionalOnClass(WebSecurityConfigurerAdapter.class)
@@ -439,6 +482,8 @@ public class ActuatorSecurityConfig {
 
 ### Separate Port
 
+Running actuator on a separate port isolates monitoring traffic from application traffic. This prevents accidental exposure of sensitive endpoints to the public internet and makes it easier to apply network-level restrictions (e.g., only allow internal IPs to access port 8081).
+
 ```yaml
 management:
   server:
@@ -449,6 +494,10 @@ management:
 ```
 
 ## Actuator in Production
+
+A production-ready Actuator configuration should expose only essential endpoints, use a separate management port or path prefix, show health details only to authorized users, hide sensitive property values, and export metrics to an external monitoring system like Prometheus.
+
+The configuration below secures the actuator, enables Prometheus export, and tags all metrics with the application name and environment for aggregation across multiple instances.
 
 ```yaml
 management:

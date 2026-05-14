@@ -18,7 +18,7 @@ The Strangler Fig pattern enables incremental migration from a monolithic applic
 
 ## Architecture
 
-A proxy or gateway intercepts requests and routes them either to the monolith or the new microservice based on the functionality being migrated.
+A proxy or gateway intercepts requests and routes them either to the monolith or the new microservice based on the functionality being migrated. The filter maintains a set of migrated paths — any request matching a migrated path is forwarded to the new microservice, while all other traffic continues hitting the monolith.
 
 ```java
 @Component
@@ -69,7 +69,7 @@ public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
 
 ## Feature Flag Integration
 
-Use feature flags for fine-grained control over migration.
+Feature flags allow per-user or per-request routing decisions. You could route 1% of users to the new microservice, internal testers always, or specific tenant IDs. This granular control enables safe testing in production and instant rollback by toggling the flag off.
 
 ```java
 @Component
@@ -107,7 +107,7 @@ public class MigrationAwareService {
 
 ## Data Migration Strategy
 
-Gradually migrate data from monolith database to microservice database.
+Data migration is the riskiest part of strangler fig migration. The batch migration approach copies orders in chunks of 1000, using `ON CONFLICT DO NOTHING` for idempotent re-runs. A scheduled job incrementally migrates recent data (last 24 hours) to keep the microservice's database reasonably current.
 
 ```java
 @Component
@@ -160,6 +160,8 @@ public class DataMigrationService {
 
 ## Dual Writes During Migration
 
+Dual writes keep both systems in sync during the migration window. Every write operation goes to both the monolith and the microservice database. This adds write latency but ensures that when the cutover happens, the microservice has all the data it needs.
+
 ```java
 @Component
 public class DualWriteService {
@@ -186,6 +188,8 @@ public class DualWriteService {
 ```
 
 ## Verification and Reconciliation
+
+Reconciliation is the safety net for dual writes. A scheduled job compares IDs between the monolith and microservice, detects discrepancies, and replays missing records. Without reconciliation, silent data loss can accumulate during the migration window.
 
 ```java
 @Component

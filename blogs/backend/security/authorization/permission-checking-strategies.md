@@ -22,7 +22,7 @@ Permission checking is the process of determining whether an authenticated user 
 
 ## Strategy 1: URL-Based Security (Filter Level)
 
-The simplest strategy—define permissions at the URL pattern level in the security configuration:
+The simplest strategy — define permissions at the URL pattern level in the security configuration. This approach is centralized, performant, and easy to audit. However, it cannot express instance-level permissions — you cannot say "user can only delete their own orders" at the URL level:
 
 ```java
 @Configuration
@@ -52,6 +52,8 @@ public class UrlSecurityConfig {
 
 ## Strategy 2: Method Security Annotations
 
+Method security moves authorization into the business layer, where instance-level checks are possible. Enable it with `@EnableMethodSecurity`:
+
 ```java
 @Configuration
 @EnableMethodSecurity
@@ -61,6 +63,8 @@ public class MethodSecurityConfig {
 ```
 
 ### @PreAuthorize with SpEL
+
+Spring Expression Language (SpEL) in `@PreAuthorize` can reference method parameters, authentication objects, and bean methods. The `@P("order")` annotation binds the parameter for SpEL access. `@PostFilter` filters returned collections, and `@PostAuthorize` checks the return value:
 
 ```java
 @Service
@@ -86,6 +90,8 @@ public class OrderService {
 ```
 
 ### Custom Method Security Expression
+
+For complex logic, create a custom security evaluator bean. The SpEL expression `@securityEvaluator.isOwnerOrAdmin(#id, authentication)` delegates to the bean method, keeping the annotation concise:
 
 ```java
 @Component
@@ -117,7 +123,7 @@ public class CustomSecurityEvaluator {
 
 ## Strategy 3: Permission Evaluator (ACL-Style)
 
-Spring Security's PermissionEvaluator provides a more structured approach:
+Spring Security's `PermissionEvaluator` provides a structured approach for domain-object-level permissions. The evaluator below handles different resource types (`Document`, `Project`) and actions (`READ`, `WRITE`, `DELETE`) with type-specific logic:
 
 ```java
 @Component
@@ -201,6 +207,8 @@ public class AclPermissionEvaluator implements PermissionEvaluator {
 
 ### Enabling in Security Config
 
+Register the custom `PermissionEvaluator` with the method security expression handler:
+
 ```java
 @Configuration
 public class AclConfig {
@@ -217,6 +225,8 @@ public class AclConfig {
 ```
 
 ### Usage
+
+With the evaluator registered, `@PreAuthorize("hasPermission(#id, 'Document', 'READ')")` invokes the custom evaluation logic, loading the document by ID and checking READ access:
 
 ```java
 @RestController
@@ -241,7 +251,7 @@ public class DocumentController {
 
 ## Strategy 4: AOP-Based Authorization
 
-For complex cross-cutting permission logic:
+For complex cross-cutting permission logic that cannot be expressed through SpEL, use a custom annotation and AOP aspect. The `@RequiresPermission` annotation below carries the action, resource type, and a SpEL-like expression for extracting the resource ID from method parameters:
 
 ```java
 @Target(ElementType.METHOD)
@@ -317,6 +327,8 @@ public class AuthorizationAspect {
 
 ### Usage
 
+The annotation makes authorization declarative, keeping business logic clean:
+
 ```java
 @Service
 public class PaymentService {
@@ -340,7 +352,7 @@ public class PaymentService {
 
 ## Strategy 5: Policy-Based Authorization (Centralized)
 
-For complex, multi-attribute decisions, use a centralized policy service:
+For complex, multi-attribute decisions, use a centralized policy service. Policies are evaluated in order: an explicit deny overrides all allows, and the last matching allow wins. This pattern decouples authorization logic from application code and supports dynamic rule updates:
 
 ```java
 @Component
@@ -453,6 +465,8 @@ public class AttributeCondition implements Condition {
 
 ### Mistake 1: Scattered Permission Logic
 
+Repeating the same authorization checks across multiple services leads to inconsistencies and maintenance burden:
+
 ```java
 // WRONG: Permission checks scattered across services
 @Service
@@ -489,6 +503,8 @@ public void deleteInvoice(Long id) { ... }
 
 ### Mistake 2: Mixing Authentication and Authorization
 
+Authentication (who you are) and authorization (what you can do) are separate concerns. The security filter chain handles authentication; method annotations handle authorization:
+
 ```java
 // WRONG: Combining authn and authz in same check
 if (auth != null && auth.isAuthenticated() && 
@@ -502,6 +518,8 @@ if (auth != null && auth.isAuthenticated() &&
 ```
 
 ### Mistake 3: Caching Permissions Incorrectly
+
+Cached permissions must be invalidated when the underlying permission data changes. Use `@CacheEvict` to clear the relevant cache entries:
 
 ```java
 // WRONG: Caching without invalidation

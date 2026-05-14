@@ -24,6 +24,8 @@ JPA provides JPQL (Java Persistence Query Language) for database-independent que
 
 ### Basic JPQL Queries
 
+JPQL queries work at the entity level—you query Java class names and field names, not table and column names. This provides database portability and automatic result mapping. Below are examples of common JPQL patterns: simple filtering, `JOIN FETCH` to eagerly load associations and prevent N+1, aggregate functions, subqueries, `CASE` expressions for in-query conditional logic, and constructor expressions that project results directly into DTOs.
+
 ```java
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -62,6 +64,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 ```
 
 ### JPQL Service Layer
+
+When a repository does not provide the right abstraction, you can use `EntityManager` directly to create `TypedQuery` instances. The service below implements pagination with `setFirstResult`/`setMaxResults` and a separate count query—the same pattern Spring Data JPA uses internally. JPQL pagination is database-portable, while native SQL pagination syntax varies between databases.
 
 ```java
 @Service
@@ -107,6 +111,8 @@ public class OrderQueryService {
 ## Native SQL Queries
 
 ### When to Use Native Queries
+
+Native SQL comes into its own when you need database-specific features that JPQL cannot express. The examples below demonstrate PostgreSQL-specific features: window functions (`RANK() OVER`), full-text search (`to_tsvector`/`to_tsquery`), recursive CTEs for tree traversal, and the `ON CONFLICT DO UPDATE` upsert. None of these are expressible in JPQL.
 
 ```java
 @Repository
@@ -171,6 +177,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 ```
 
 ### Native Query with Entity Mapping
+
+Native queries can map results to entities (when the `SELECT *` returns all columns the entity expects) or to custom result sets via `@SqlResultSetMapping`. The service below demonstrates three use cases: a native query mapping to existing entities for custom join logic, a native query with a named result mapping for DTO projection, and a bulk update that uses native SQL to bypass entity management overhead.
 
 ```java
 @Service
@@ -238,6 +246,8 @@ public class NativeQueryService {
 
 ### Native Query Performance Advantages
 
+JPQL adds a translation step—Hibernate parses the JPQL string and generates SQL. For simple queries, this overhead is negligible. For complex queries, the generated SQL may not use the optimal join strategy or index. Native SQL gives you full control over the execution plan. Below, both approaches are shown side by side for the same logical query: JPQL's `JOIN FETCH` adds entities to the persistence context (enabling lazy loading and caching), while the native query is pure SQL with no entity management overhead.
+
 ```java
 @Service
 public class PerformanceComparisonService {
@@ -287,6 +297,8 @@ public class PerformanceComparisonService {
 
 ### When JPQL is Better
 
+JPQL is the better choice for the majority of queries because it integrates with Hibernate's caching, lazy loading, and automatic dirty checking. Native queries return detached entities (or raw data), bypassing the persistence context. Use JPQL unless you specifically need a database feature that JPQL cannot express, or you have profiled and identified a native query as a necessary optimization.
+
 ```java
 // JPQL advantages:
 // 1. Database portability
@@ -314,6 +326,8 @@ public class PerformanceComparisonService {
 ## Result Mapping
 
 ### SqlResultSetMapping
+
+`@SqlResultSetMapping` provides type-safe mapping for native query results. The first mapping, `ProductSummaryMapping`, combines an `@EntityResult` (for the `Product` entity columns) with additional scalar columns (`order_count`, `revenue`). The second mapping, `OrderReportMapping`, uses `@ConstructorResult` to map columns directly to a DTO constructor, avoiding fragile positional index access on `Object[]`.
 
 ```java
 // Define result mapping on an entity
@@ -368,6 +382,8 @@ public class OrderReport {
 9. **Consider query plan caching**: JPQL benefits from Hibernate's query plan cache
 10. **Use @QueryHints for optimization**: Query-specific hints
 
+`@QueryHints` provide fine-grained control over query execution. The hints below enable caching, set fetch size, mark the query as read-only (skipping dirty checking), and add a comment to the generated SQL for DBA debugging.
+
 ```java
 // JPQL with query hints for optimization
 @QueryHints({
@@ -386,6 +402,8 @@ List<Product> findActiveProducts();
 
 ### Mistake 1: Using Native SQL for Simple Queries
 
+Writing native SQL for a simple query like `findByEmail` adds database coupling and maintenance overhead with no benefit. JPQL handles this with less code and full portability.
+
 ```java
 // WRONG: Native query for simple JPQL query
 @Query(value = "SELECT * FROM users WHERE email = :email", nativeQuery = true)
@@ -397,6 +415,8 @@ User findByEmail(@Param("email") String email);
 ```
 
 ### Mistake 2: Not Using DTO Projections
+
+Loading full entities when only a few fields are needed wastes memory and bandwidth. DTO projections in both JPQL (constructor expressions) and native SQL (result set mappings) transfer only the required columns.
 
 ```java
 // WRONG: Loading full entities when only few fields needed
@@ -410,6 +430,8 @@ List<OrderSummary> findSummariesByStatus(@Param("status") OrderStatus status);
 ```
 
 ### Mistake 3: Native Queries Without Result Mapping
+
+Accessing native query results as `Object[]` and casting by position is fragile—adding or reordering columns in the SQL silently breaks the code.
 
 ```java
 // WRONG: Working with Object[] - fragile

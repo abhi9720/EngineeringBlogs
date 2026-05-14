@@ -24,6 +24,8 @@ Hardcoding secrets in configuration files, environment variables, or code reposi
 
 ### What's Wrong with Environment Variables?
 
+Using environment variables for secrets is better than hardcoding, but still has significant drawbacks: secrets are visible in CI/CD configuration, there is no audit trail for access, no automatic rotation, and secrets can leak through error messages, logs, or debugging endpoints:
+
 ```yaml
 # application.yml - checked into git
 spring:
@@ -40,6 +42,8 @@ Problems:
 
 ### Example: Secret Leak in Logs
 
+Logging secrets is a common mistake. If the connection fails, the exception stack trace will include the password string:
+
 ```java
 // VULNERABLE: Secret can appear in logs
 log.info("Connecting to database with password: {}", password);
@@ -50,20 +54,21 @@ log.info("Connecting to database with password: {}", password);
 
 ## Vault Architecture
 
-```
-Application                     Vault Server                    Database
-    |                               |                              |
-    |--- Authenticate (JWT) ------->|                              |
-    |<-- Token ---------------------|                              |
-    |                               |                              |
-    |--- Read Secret (token) ------>|                              |
-    |<-- Dynamic DB credentials ----|                              |
-    |                               |                              |
-    |--- Connect to DB ------------|----------------------------->|
-    |   with temp credentials       |                              |
-    |                               |                              |
-    |--- TTL expires ---------------|                              |
-    |                               |-- Revoke lease ------------->|
+The flow below shows how an application authenticates to Vault, receives a token, and uses that token to request dynamic database credentials with a time-limited lease:
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Vault as Vault Server
+    participant DB as Database
+
+    App->>Vault: Authenticate (JWT / AppRole)
+    Vault-->>App: Token
+    App->>Vault: Read Secret (token)
+    Vault-->>App: Dynamic DB Credentials
+    App->>DB: Connect with temp credentials
+    Note over App,DB: TTL expires
+    Vault->>DB: Revoke lease
 ```
 
 ### Vault Key Concepts
@@ -78,6 +83,8 @@ Application                     Vault Server                    Database
 ## Installing and Configuring Vault
 
 ### Docker Setup
+
+The development server below runs Vault in dev mode with an in-memory storage backend and a root token for easy experimentation. For production, you would use a Raft or Consul storage backend, enable TLS, and configure auto-unseal:
 
 ```yaml
 # docker-compose.yml
@@ -100,6 +107,8 @@ services:
 ```
 
 ### Production Configuration
+
+In production, Vault requires a highly available storage backend (Raft), TLS encryption for all communication, and an auto-unseal mechanism (here using AWS KMS). The `seal` block configures auto-unseal so the cluster can restart without manual intervention:
 
 ```hcl
 # vault-config.hcl
@@ -132,6 +141,8 @@ seal "awskms" {
 
 ### KV (Key-Value) Secrets Engine
 
+The KV engine stores arbitrary secrets as key-value pairs with versioning. Use it for static secrets like API keys, certificates, or configuration values that change infrequently:
+
 ```bash
 # Enable KV engine
 vault secrets enable -version=2 kv
@@ -155,6 +166,8 @@ vault kv metadata delete kv/database/postgres
 
 ### Dynamic Database Secrets Engine
 
+Dynamic secrets are the most secure pattern — credentials do not exist until requested, are valid for a limited time, and are automatically revoked when the lease expires. The database role below creates a PostgreSQL user with a time-limited password and grants SELECT, INSERT, UPDATE on all tables:
+
 ```bash
 # Enable database engine
 vault secrets enable database
@@ -177,6 +190,8 @@ vault write database/roles/app-role \
 ```
 
 ### Java Client for Dynamic Secrets
+
+The `VaultTemplate` reads dynamic database credentials from the `database/creds/app-role` path. Each call returns a new username and password with a 1-hour lease:
 
 ```java
 @Service
@@ -216,6 +231,8 @@ public class DatabaseCredentials {
 
 ### Dependency
 
+Add the Spring Cloud Vault starter for automated configuration. The bootstrap context loads vault properties before the application context, making secrets available for `@Value` injection:
+
 ```xml
 <dependency>
     <groupId>org.springframework.cloud</groupId>
@@ -229,6 +246,8 @@ public class DatabaseCredentials {
 ```
 
 ### Bootstrap Configuration
+
+The bootstrap configuration uses AppRole authentication — the role ID and secret ID are provided via environment variables (still a secret, but now only one credential to manage instead of many). Multiple KV contexts can be configured for environment-specific secrets:
 
 ```yaml
 # bootstrap.yml (Bootstrap context loads before application context)
@@ -257,6 +276,8 @@ spring:
 ```
 
 ### Application Configuration Using Vault Secrets
+
+With `@RefreshScope`, the `DataSource` bean is recreated when secrets are rotated, without restarting the application. The `HikariConfig` uses the dynamic credentials fetched from Vault:
 
 ```java
 @SpringBootApplication
@@ -293,6 +314,8 @@ public class DatabaseConfig {
 ```
 
 ### Using VaultTemplate Directly
+
+For programmatic access beyond property injection — such as reading API keys by service name or rotating secrets — `VaultTemplate` provides direct read/write operations against Vault's KV engine:
 
 ```java
 @Service
@@ -339,6 +362,8 @@ public class ApiKeySecret {
 
 ### Policy Definition
 
+Policies follow a least-privilege model. The service below can read its own KV secrets, request database credentials, and renew leases — but cannot access other services' secrets or modify policies:
+
 ```hcl
 # policy-my-service.hcl
 # Allow reading KV secrets for the service
@@ -364,6 +389,8 @@ path "*" {
 
 ### Apply Policy
 
+Policies are created on the Vault server and associated with authentication methods (tokens, AppRole, Kubernetes):
+
 ```bash
 # Create the policy
 vault policy write my-service policy-my-service.hcl
@@ -383,6 +410,8 @@ vault write auth/approle/role/my-service \
 ## Secret Rotation Strategies
 
 ### Automatic Rotation with Dynamic Secrets
+
+Dynamic database credentials are automatically revoked when their lease expires. The `RotatingDataSource` below refreshes credentials before the lease expires — 45 minutes into a 1-hour lease. When new credentials are obtained, the old connection pool is gracefully closed:
 
 ```java
 @Component
@@ -436,6 +465,8 @@ public class RotatingDataSource {
 
 ### Static Secret Rotation
 
+For secrets that cannot be dynamic (e.g., encryption keys), schedule regular rotation. The rotator below runs daily at 3 AM, checks if the key was rotated within the last 30 days, and generates a new AES-256 key if not:
+
 ```java
 @Component
 public class StaticSecretRotator {
@@ -487,6 +518,8 @@ public class StaticSecretRotator {
 
 ### Mistake 1: Hardcoding Vault Tokens
 
+If an attacker obtains the Vault token, they have the same access as the application. Never hardcode tokens — use AppRole, Kubernetes auth, or another dynamic authentication method:
+
 ```java
 // WRONG: Hardcoded token
 @Bean
@@ -504,6 +537,8 @@ spring.cloud.vault.app-role.secret-id=${VAULT_SECRET_ID}
 ```
 
 ### Mistake 2: Not Handling Lease Renewal
+
+Dynamic credentials expire. If you fetch credentials once and never refresh, the application will fail when the lease expires. Spring Cloud Vault's `@RefreshScope` handles this automatically:
 
 ```java
 // WRONG: Assuming credentials never expire
@@ -524,6 +559,8 @@ public DataSource dataSource() {
 ```
 
 ### Mistake 3: Logging Secrets
+
+Logging secret values defeats the purpose of using Vault. If log files are compromised, the secrets are exposed:
 
 ```java
 // WRONG: Logging secret values

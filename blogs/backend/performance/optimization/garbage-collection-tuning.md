@@ -94,6 +94,8 @@ public class G1TuningGuide {
 }
 ```
 
+G1's pause-time control works by adjusting the young generation size: a lower `MaxGCPauseMillis` target forces G1 to shrink the young generation, reducing the amount of live data to copy during evacuation pauses. `G1HeapRegionSize` determines the granularity of the heap partition — smaller regions (8 MB) give finer-grained collection but more remembered-set overhead. For batch processing with larger heaps, a higher `G1MixedGCCountTarget` spreads concurrent marking over more cycles, reducing per-cycle CPU impact. The reserve percent (`G1ReservePercent`) sets aside free regions for "to-space" during evacuation, preventing a full GC when promotion fails.
+
 ### G1 Log Analysis
 
 ```java
@@ -206,6 +208,8 @@ public class ZgcTuningService {
 }
 ```
 
+ZGC achieves sub-millisecond pause times by making nearly all GC work concurrent to the application — only the initial mark and final remap phases require a short stop-the-world pause. `SoftMaxHeapSize` is a unique ZGC capability: it tells the GC to prefer staying under that threshold but allows temporary overshoot during allocation spikes, avoiding premature GC cycles. `ZAllocationSpikeTolerance` controls how much headroom ZGC reserves; the default 2.0 means it assumes allocation rate can double at any moment. Generational ZGC (Java 17+) adds a young/old separation that reduces CPU overhead by ~30 % because most objects die young and are collected without scanning the old generation.
+
 ---
 
 ## Shenandoah GC
@@ -280,6 +284,8 @@ public class GcComparisonService {
     }
 }
 ```
+
+The trade-off between collectors centers on the pause-time vs. throughput curve. Parallel GC maximizes throughput by stopping the world to collect in parallel — great for batch jobs where nobody waits for a response. G1 trades ~4 % throughput for bounded pause targets, making it the default for server applications. ZGC and Shenandoah sacrifice another ~5-10 % throughput for sub-10 ms pauses — necessary when p99 latency is a contractual SLA. The selection guide can be simplified: default to G1, switch to ZGC if your GC pause budget is under 10 ms, stay with Parallel only for pure batch processing.
 
 ---
 

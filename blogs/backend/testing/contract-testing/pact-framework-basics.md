@@ -114,6 +114,8 @@ class InventoryServiceConsumerTest {
 }
 ```
 
+The consumer test defines a pact for a GET endpoint using Pact's fluent DSL. The `given()` clause sets up the provider state, `uponReceiving()` describes what the consumer is doing, and `willRespondWith()` defines the expected response. The `@PactTestFor` annotation on the test method ties it to the specific pact and starts a mock server that the consumer's HTTP client talks to.
+
 ### POST Request Pact
 
 ```java
@@ -211,6 +213,8 @@ class InventoryServiceProviderTest {
     }
 }
 ```
+
+The provider side uses `@TestTemplate` with `@ExtendWith(PactVerificationInvocationContextProvider.class)` to dynamically generate a test for each interaction in every published pact. For each interaction, Pact reads the consumer's request, replays it against the real Spring Boot application, and compares the actual response against the expected one using the matching rules.
 
 ### Verifying with Provider States
 
@@ -368,6 +372,8 @@ pact-broker can-i-deploy \
     --to-environment staging \
     --latest
 ```
+
+The `can-i-deploy` command is the key integration point between Pact and CI/CD. It queries the Pact Broker to verify that every consumer of a given provider has verified the current provider version. If any consumer contract fails verification, the deployment is blocked automatically.
 
 ---
 

@@ -24,6 +24,8 @@ REST (Representational State Transfer) is an architectural style for designing n
 
 ### Resources and URIs
 
+REST organizes APIs around resources — the nouns of your system. Each resource is identified by a unique URI, and standard HTTP methods provide the verbs for operating on them. A well-designed URI hierarchy reflects the relationships between resources: `/users/{id}/orders` expresses that orders belong to a specific user. Consistent URI patterns (plural nouns, kebab-case for multi-word resources, lowercase) make the API predictable and intuitive for clients.
+
 Every resource in REST is identified by a unique URI. Resources represent entities in your system.
 
 ```java
@@ -59,7 +61,7 @@ public class UserController {
 
 ### HTTP Methods
 
-Each HTTP method maps to a specific operation on resources.
+Choosing the correct HTTP method for each operation is fundamental to REST API design. GET is for safe, idempotent retrieval. POST creates new resources and is neither safe nor idempotent. PUT completely replaces a resource and should be idempotent — sending the same PUT request multiple times should result in the same resource state. PATCH applies partial modifications and is not necessarily idempotent. DELETE removes a resource and should be idempotent in effect: deleting a resource that doesn't exist still results in the same outcome (the resource no longer exists). Following these semantics correctly makes your API predictable and compatible with HTTP tooling.
 
 ```
 Method   | Operation              | Idempotent | Safe
@@ -122,7 +124,11 @@ public class ProductController {
 
 ## HTTP Status Codes
 
+HTTP status codes communicate the result of an API request. Using the correct status code for each scenario makes your API more communicative and allows clients to implement generic error handling. The categories are: 2xx for success, 3xx for redirection, 4xx for client errors, and 5xx for server errors.
+
 ### 2xx Success Codes
+
+Success codes communicate the outcome of different operations. 200 OK is the standard response for successful GET, PUT, and PATCH requests. 201 Created should be returned for POST operations that create a resource — it includes a `Location` header pointing to the new resource's URL. 204 No Content is appropriate for DELETE operations or other requests where the response body is intentionally empty. Using the semantically correct status code allows clients to implement generic success handling without parsing response bodies.
 
 ```java
 // 200 OK - Successful GET, PUT, PATCH
@@ -147,6 +153,8 @@ public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
     return ResponseEntity.noContent().build();
 }
 ```
+
+Client error codes (4xx) indicate that the request was malformed, unauthorized, or otherwise cannot be processed. Each 4xx code has a specific meaning: 400 for validation failures, 401 for missing/invalid authentication, 403 for insufficient permissions, 404 for non-existent resources, 409 for state conflicts, and 429 for rate limiting. Using the correct 4xx code helps clients implement proper error handling — a 401 triggers re-authentication, a 429 triggers backoff, and a 404 is handled as a missing resource.
 
 ### 4xx Client Error Codes
 

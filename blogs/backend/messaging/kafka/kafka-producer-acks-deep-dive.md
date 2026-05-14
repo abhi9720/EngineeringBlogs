@@ -19,11 +19,11 @@ Kafka producer acknowledgment settings determine the durability and consistency 
 
 ## Producer Acks Configuration
 
-The `acks` parameter controls how many partition replicas must acknowledge a write before the producer considers it successful.
+The `acks` parameter controls how many partition replicas must acknowledge a write before the producer considers it successful. Understanding this trade-off is essential: lower acks means higher throughput but higher risk of data loss; higher acks provides stronger durability at the cost of latency.
 
 ### acks=0 (Fire-and-Forget)
 
-The producer does not wait for any acknowledgment. Throughput is maximized but data loss is possible if the broker goes down.
+The producer does not wait for any acknowledgment. Throughput is maximized but data loss is possible if the broker goes down. The producer sends the message and immediately continues — it has no idea if the broker received it. Use this only for metrics, logs, or other data where occasional loss is acceptable.
 
 ```java
 Properties props = new Properties();
@@ -39,7 +39,7 @@ producer.flush();
 
 ### acks=1 (Leader Acknowledgment)
 
-The producer waits for the leader replica to acknowledge. This provides a good balance between durability and latency.
+The producer waits for the leader replica to acknowledge. This provides a good balance between durability and latency. If the leader acknowledges but crashes before replicating to followers, the message could be lost during a leader election. This is the default setting and is suitable for most general-purpose use cases where a small window of data loss is acceptable.
 
 ```java
 props.put(ProducerConfig.ACKS_CONFIG, "1");
@@ -47,7 +47,7 @@ props.put(ProducerConfig.ACKS_CONFIG, "1");
 
 ### acks=all (or -1) (All In-Sync Replicas)
 
-The producer waits for all in-sync replicas to acknowledge. This provides the strongest durability guarantee.
+The producer waits for all in-sync replicas to acknowledge. This provides the strongest durability guarantee. Combined with `min.insync.replicas=2`, the producer ensures that at least 2 replicas have the message before considering the write successful. If the leader crashes, another in-sync replica has the data, so no messages are lost (assuming the minimum is met).
 
 ```java
 props.put(ProducerConfig.ACKS_CONFIG, "all");
@@ -56,7 +56,7 @@ props.put(ProducerConfig.MIN_INSYNC_REPLICAS_CONFIG, "2");
 
 ## Retries and Retry Backoff
 
-Retries handle transient broker failures. The `retries` and `retry.backoff.ms` settings control retry behavior.
+Retries handle transient broker failures. The `retries` and `retry.backoff.ms` settings control retry behavior. With `retries=Integer.MAX_VALUE` and `delivery.timeout.ms=120000`, the producer retries indefinitely within the delivery timeout window, giving the maximum chance of delivery. The `retry.backoff.ms` sets the time between retries to avoid overwhelming the broker. However, retries can cause duplicates unless idempotence is also enabled.
 
 ```java
 props.put(ProducerConfig.RETRIES_CONFIG, Integer.MAX_VALUE);
@@ -68,7 +68,7 @@ With `retries=Integer.MAX_VALUE` and `delivery.timeout.ms=120000`, the producer 
 
 ## Idempotent Producer
 
-Idempotent producers prevent duplicate messages caused by retries. Enable idempotence by setting `enable.idempotence=true`.
+Idempotent producers prevent duplicate messages caused by retries. Enable idempotence by setting `enable.idempotence=true`. When idempotence is enabled, Kafka automatically sets `acks=all` and `retries=Integer.MAX_VALUE`. The producer assigns a unique producer ID (PID) and sequence numbers to each message. The broker deduplicates based on (PID, sequence number), ensuring that even if a retry is sent, the broker recognizes it as a duplicate and discards it. This is a critical production setting.
 
 ```java
 props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
@@ -119,6 +119,8 @@ public class IdempotentProducerExample {
 
 ### Mistake: Using acks=0 with critical financial transactions
 
+Fire-and-forget has no delivery guarantee — if the broker crashes before persisting the message, the payment data is lost. Financial transactions require the strongest durability: `acks=all` with idempotence enabled.
+
 ```java
 // Wrong - data loss risk
 Properties props = new Properties();
@@ -134,6 +136,8 @@ producer.send(new ProducerRecord<>("payments", orderId, paymentJson));
 ```
 
 ### Mistake: Enabling retries without idempotence
+
+Retries without idempotence can cause duplicate messages: the producer sends a message, the broker acknowledges it, but the ack is lost in transit. The producer retries (thinking it failed), and the broker accepts the duplicate. Always enable idempotence when retries are configured.
 
 ```java
 // Wrong - potential duplicates on retry

@@ -26,6 +26,8 @@ This guide covers Dockerfile creation, image optimization, docker-compose for lo
 
 ### Container vs JVM
 
+Java 10+ includes container support that detects cgroup limits automatically. Without this, the JVM would see the host's total memory and CPUs, potentially exceeding container limits and triggering OOM kills.
+
 ```java
 // Understanding container-aware JVM
 // Java 10+ automatically detects container limits
@@ -48,7 +50,11 @@ public class OrderApplication {
 // -XX:MinRAMPercentage=N
 ```
 
+The `UseContainerSupport` flag (enabled by default since Java 10) allows the JVM to read CPU and memory limits from cgroups. `MaxRAMPercentage` lets you control how much of the container's memory the JVM heap uses — 75% is a good starting point, leaving headroom for off-heap and native memory.
+
 ### Docker Build Context
+
+The `.dockerignore` file is essential for keeping the build context small. Every file in the context is sent to the Docker daemon — a large context slows builds and increases network transfer in CI/CD.
 
 ```dockerfile
 # The build context determines what files are available
@@ -74,6 +80,8 @@ Dockerfile
 ## Dockerfile for Spring Boot
 
 ### Basic Dockerfile
+
+The basic Dockerfile uses Alpine Linux for a minimal base image and runs the application as a non-root user for security. The `HEALTHCHECK` instruction tells Docker how to verify the container is functioning.
 
 ```dockerfile
 FROM eclipse-temurin:21-jre-alpine AS base
@@ -103,7 +111,11 @@ ENV JAVA_OPTS="-XX:+UseContainerSupport \
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
 ```
 
+Using `-XX:+ExitOnOutOfMemoryError` ensures the JVM exits when it can't allocate memory, allowing Docker or Kubernetes to restart the container. The `HeapDumpOnOutOfMemoryError` flag generates a heap dump for post-mortem analysis. Setting the entropy source to `/dev/./urandom` avoids blocking on entropy pool starvation during startup.
+
 ### Optimized Multi-Layer Dockerfile
+
+Spring Boot's layered JAR feature separates dependencies, framework classes, and application code into distinct layers. This enables Docker layer caching — only the layer that changes needs to be rebuilt.
 
 ```dockerfile
 # Build stage
@@ -147,7 +159,11 @@ ENV JAVA_OPTS="-XX:+UseContainerSupport \
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS org.springframework.boot.loader.launch.JarLauncher"]
 ```
 
+The layers are copied in order of change frequency: dependencies change least often, application code changes most often. This means Docker caches the dependency layer across builds — only the application layer rebuilds when you change code, drastically reducing rebuild time in CI.
+
 ### Gradle Jib Plugin (No Dockerfile)
+
+Jib is a Maven/Gradle plugin that builds optimized Docker images without requiring Docker to be installed. It handles layering, base image selection, and multi-architecture builds automatically.
 
 ```kotlin
 // build.gradle.kts with Jib plugin
@@ -203,11 +219,15 @@ jib {
 // Build to daemon: ./gradlew jibDockerBuild
 ```
 
+Jib's key advantage is that it does not need a Docker daemon — it builds the image directly via the registry protocol. The `platforms` block enables multi-architecture builds (amd64 + arm64) in a single command, which is essential for mixed Kubernetes node pools.
+
 ---
 
 ## Docker Compose for Local Development
 
 ### docker-compose.yml
+
+Docker Compose orchestrates all the services a backend needs locally. Each service includes health checks so dependent services wait for dependencies to be ready before starting.
 
 ```yaml
 version: "3.8"
@@ -318,7 +338,11 @@ volumes:
   redis_data:
 ```
 
+Using `depends_on` with `condition: service_healthy` is far more reliable than just `depends_on` without conditions — the application only starts after PostgreSQL, Redis, and Kafka are fully ready. Named volumes (`postgres_data`, `redis_data`) persist data across restarts.
+
 ### application-docker.properties
+
+The Docker profile externalizes all configuration through environment variables. This is the twelve-factor app approach: configuration varies across deployments, code does not.
 
 ```properties
 # src/main/resources/application-docker.properties
@@ -342,6 +366,8 @@ management.health.kafka.enabled=true
 ## Image Optimization
 
 ### Size Reduction Techniques
+
+Smaller images mean faster deployments, less storage, and a smaller attack surface. The techniques below reduce image size from ~500MB (full JDK) to under 100MB.
 
 ```dockerfile
 # 1. Use slim base images
@@ -371,7 +397,11 @@ RUN apk add --no-cache binutils && \
 # 4. Use Docker squash (--squash flag) to combine layers
 ```
 
+`jlink` creates a JRE with only the modules your application actually uses. Running `jdeps` on your JAR first identifies required modules, which can shrink the JRE to under 40MB. The trade-off is longer build time and the need to re-run `jdeps` when dependencies change.
+
 ### Layer Caching Strategy
+
+Docker caches each layer independently. By copying files that change least often first (POM files, then dependencies, then source code), you maximize cache reuse.
 
 ```dockerfile
 # Optimize layer caching by ordering COPY commands
@@ -401,6 +431,8 @@ RUN mvn package -DskipTests -B
 
 ### Multi-Architecture Builds
 
+With ARM-based Macs and ARM nodes in Kubernetes, multi-architecture images are essential. Docker BuildX handles this natively.
+
 ```dockerfile
 # Dockerfile cross-platform
 FROM --platform=$TARGETPLATFORM eclipse-temurin:21-jre-alpine
@@ -423,6 +455,8 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 ## Production Considerations
 
 ### Security Hardening
+
+Running as root inside a container is a major security concern — if an attacker exploits the application, they gain root access to the container. The non-root user pattern combined with read-only filesystems and dropped capabilities creates defense in depth.
 
 ```dockerfile
 FROM eclipse-temurin:21-jre-alpine
@@ -454,7 +488,11 @@ services:
       - ALL
 ```
 
+The `no-new-privileges` flag prevents privilege escalation via `suid` binaries. Setting the filesystem to `read_only` and using `tmpfs` for writable directories limits the blast radius of any compromise.
+
 ### Resource Limits
+
+Without resource limits, a single container can consume all host resources and starve other containers. CPU and memory limits also provide predictable performance.
 
 ```yaml
 # docker-compose.yml resource constraints
@@ -479,6 +517,8 @@ services:
 
 ### Logging Configuration
 
+JSON-structured logs are essential for log aggregation systems like ELK, Splunk, or Datadog. Spring Boot's logging pattern can output JSON directly, avoiding the need for sidecar log parsers.
+
 ```dockerfile
 # Dockerfile logging
 ENV LOGGING_CONFIG="-Dlogging.config=/config/logback-spring.xml"
@@ -489,6 +529,8 @@ logging.pattern.console={"timestamp":"%d{ISO8601}","level":"%p","thread":"%t","l
 ```
 
 ### Graceful Shutdown
+
+Kubernetes sends a SIGTERM to containers before forcefully killing them. The application must handle this signal to complete in-flight requests and close resources cleanly.
 
 ```java
 @Configuration
@@ -523,6 +565,8 @@ spring:
 ## CI/CD Integration
 
 ### GitHub Actions Docker Build
+
+The CI workflow integrates with GitHub Container Registry (GHCR) and uses Docker BuildX for caching and multi-platform builds. Layer caching with `type=gha` stores cache in GitHub Actions' own storage.
 
 ```yaml
 # .github/workflows/docker-build.yml
@@ -577,6 +621,8 @@ jobs:
 
 ### Mistake 1: Running as Root
 
+Running as root inside a container is a security anti-pattern. If the application is compromised, the attacker has root access to the container and potentially the host.
+
 ```dockerfile
 # WRONG: Running as root
 FROM eclipse-temurin:21-jre-alpine
@@ -593,6 +639,8 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 ### Mistake 2: No Health Check
 
+Without health checks, Docker and Kubernetes cannot determine if the application is actually serving traffic. A process may be running but the application could be in a bad state.
+
 ```dockerfile
 # WRONG: No health check
 FROM eclipse-temurin:21-jre-alpine
@@ -606,6 +654,8 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
 
 ### Mistake 3: Not Setting Container-Aware JVM Flags
 
+Without `UseContainerSupport`, the JVM sees the host's total memory and CPUs. It may request more memory than the container allows, getting OOM-killed.
+
 ```dockerfile
 # WRONG: JVM ignores container limits
 ENTRYPOINT ["java", "-jar", "app.jar"]
@@ -617,6 +667,8 @@ ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
 ```
 
 ### Mistake 4: Building Image in Runtime Stage
+
+Including the JDK and build tools in the final image adds hundreds of megabytes and increases the attack surface.
 
 ```dockerfile
 # WRONG: Using JDK in production image
@@ -636,6 +688,8 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
 
 ### Mistake 5: Hardcoding Environment-Specific Values
+
+Hardcoded values make the image non-portable across environments. Externalize configuration through environment variables.
 
 ```dockerfile
 # WRONG: Hardcoded database URL
@@ -673,7 +727,5 @@ Proper containerization makes deployments predictable, scalable, and secure acro
 - [Dockerfile Best Practices](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
 
 ---
-
-Happy Coding 👨‍💻
 
 Happy Coding

@@ -18,7 +18,7 @@ Event-driven architectures commonly use two patterns: event notification (refere
 
 ## Event Notification Pattern
 
-Event notification sends minimal data in the event, typically just a reference (ID) and event type. Consumers must fetch additional data from the source service.
+Event notification sends minimal data in the event, typically just a reference (ID) and event type. Consumers must fetch additional data from the source service. This keeps the event schema stable — the source service can change its internal data model without breaking consumers — but at the cost of an additional network call per event (the N+1 problem). It also means consumers always get the latest data from the source rather than potentially stale snapshot data.
 
 ```java
 // Event notification - minimal payload with just reference
@@ -36,6 +36,8 @@ public class OrderCreatedEvent {
 ```
 
 ### Producer
+
+The producer saves the order in the database, then publishes an event containing only the order ID. The event is small, fast to serialize, and cheap to transmit. The producer doesn't need to decide what data downstream consumers need — it just announces "something happened to this entity."
 
 ```java
 @Component
@@ -59,6 +61,8 @@ public class OrderService {
 
 ### Consumer
 
+The consumer receives the event, extracts the order ID, and makes a synchronous call to `OrderServiceClient.getOrder()` to fetch the full data. This means the consumer always works with the latest state from the source service — no stale data. However, this tight coupling means that if `OrderService` is down, the consumer can't process the event at all.
+
 ```java
 @Component
 public class NotificationConsumer {
@@ -77,7 +81,7 @@ public class NotificationConsumer {
 
 ## Event-Carried State Transfer Pattern
 
-Events include all relevant data, making consumers self-sufficient.
+Events include all relevant data, making consumers self-sufficient. The consumer can process the event without calling any other service — it has all the information it needs right in the payload. This eliminates the N+1 problem and makes consumers more resilient to source service outages. The trade-off: larger event payloads, tighter schema coupling, and the risk of stale data (the consumer sees the state at event creation time, not current state).
 
 ```java
 // Event-carried state transfer - full data in payload
@@ -110,6 +114,8 @@ public class OrderCreatedEvent {
 
 ### Producer
 
+The producer builds a rich event from the full order object after saving. The event contains everything a consumer might need — customer details, line items, pricing, and shipping address. This requires the producer to understand what data downstream services need, creating a shared schema contract.
+
 ```java
 @Component
 public class OrderServiceWithState {
@@ -129,6 +135,8 @@ public class OrderServiceWithState {
 ```
 
 ### Consumer
+
+The consumer builds its domain objects directly from the event payload without any external API calls. This makes the consumer fast and resilient — even if the source service is unavailable, the consumer can still process the event. The downside is that the consumer sees the data as it was when the event was created; if the order was updated after the event, the consumer won't see the latest state.
 
 ```java
 @Component
@@ -163,7 +171,7 @@ public class StateCarriedConsumer {
 
 ## Hybrid Approach
 
-Combine both patterns for flexibility and autonomy.
+Combine both patterns for flexibility and autonomy. Include core fields (IDs, status, total) that most consumers need, making them self-sufficient for common use cases. But keep optional expanded fields (items, address) that can be null — consumers that need that data can fetch it from the source service, while others don't pay the cost. The `dataVersion` and `serviceSource` fields give consumers metadata about when and where the data came from.
 
 ```java
 public class OrderEvent {
@@ -197,6 +205,8 @@ public class OrderEvent {
 
 ### Mistake: Undersized events with too many follow-up calls
 
+Sending only an order ID forces every consumer to make a synchronous call back to the source service. If you have 5 consumers, each order creation triggers 5 additional HTTP calls — the N+1 problem at scale. Include commonly needed fields like customer ID and status so that simple consumers can work independently.
+
 ```java
 // Wrong - every consumer must call back for data
 public class OrderEvent {
@@ -215,6 +225,8 @@ public class OrderEvent {
 ```
 
 ### Mistake: Oversized events with service-internal data
+
+Including internal implementation details (discount rules, fraud check results, inventory reservation IDs) in events creates coupling between the producer's internals and all consumers. If the producer changes its internal data model, every consumer breaks. Only include data that consumers genuinely need.
 
 ```java
 // Wrong - internal implementation detail exposed

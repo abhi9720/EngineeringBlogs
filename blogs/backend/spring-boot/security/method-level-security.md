@@ -16,6 +16,8 @@ draft: false
 
 Method-level security enables fine-grained access control at the service layer. Spring Security provides annotations like @PreAuthorize, @PostAuthorize, @Secured, and @RolesAllowed to restrict access based on roles, permissions, and custom expressions.
 
+Method security complements web security. Web security (URL patterns) controls access at the controller level, while method security provides fine-grained control at the service layer. A common pattern is: web security ensures the user is authenticated, and method security checks specific permissions for the operation.
+
 ## Enabling Method Security
 
 ```java
@@ -26,13 +28,14 @@ Method-level security enables fine-grained access control at the service layer. 
     jsr250Enabled = true      // Enable @RolesAllowed
 )
 public class MethodSecurityConfig {
-    // Additional configuration
 }
 ```
 
 ## Basic Annotations
 
 ### @Secured
+
+`@Secured` is the simplest annotation. It checks for granted authorities (roles) and requires ALL specified authorities. Note that `@Secured` expects the full authority name including the `ROLE_` prefix.
 
 ```java
 @Service
@@ -52,6 +55,8 @@ public class UserService {
 ```
 
 ### @RolesAllowed (JSR-250)
+
+`@RolesAllowed` is a Java EE standard annotation. Unlike `@Secured`, it does NOT require the `ROLE_` prefix — Spring Security adds it automatically.
 
 ```java
 @Service
@@ -79,24 +84,22 @@ public class OrderService {
 
 ### @PreAuthorize
 
+`@PreAuthorize` evaluates a SpEL expression before the method executes. The expression has access to the `Authentication` object, method arguments (via `#paramName`), and utility methods like `hasRole()`, `hasAuthority()`, and `isAuthenticated()`.
+
+The expression must evaluate to true for the method to execute. If it evaluates to false, an `AccessDeniedException` is thrown and the method is never called.
+
 ```java
 @Service
 public class DocumentService {
 
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteAllDocuments() {
-        documentRepository.deleteAll();
-    }
+    public void deleteAllDocuments() { documentRepository.deleteAll(); }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public Document createDocument(Document document) {
-        return documentRepository.save(document);
-    }
+    public Document createDocument(Document document) { return documentRepository.save(document); }
 
     @PreAuthorize("hasAuthority('SCOPE_write:documents')")
-    public Document updateDocument(@P("document") Document document) {
-        return documentRepository.save(document);
-    }
+    public Document updateDocument(@P("document") Document document) { return documentRepository.save(document); }
 
     @PreAuthorize("isAuthenticated()")
     public List<Document> findMyDocuments(@AuthenticationPrincipal UserDetails user) {
@@ -117,6 +120,10 @@ public class DocumentService {
 ```
 
 ### @PostAuthorize
+
+`@PostAuthorize` evaluates the expression AFTER the method executes. The expression has access to the return value via `returnObject`. This is useful for data-level security where authorization depends on the returned data.
+
+Important: the method still executes even if the expression fails. The access control only prevents the return value from being sent to the caller. This means `@PostAuthorize` should not be used for expensive operations that you want to skip for unauthorized users.
 
 ```java
 @Service
@@ -148,6 +155,10 @@ public class PatientService {
 
 ### @PreFilter and @PostFilter
 
+`@PreFilter` filters a collection parameter before the method executes. `@PostFilter` filters the returned collection. The expression is evaluated for each element, accessed via `filterObject`.
+
+Warning: `@PostFilter` loads ALL records into memory before filtering. For large datasets, filter at the database level instead, and use `@PostFilter` only when database filtering isn't possible.
+
 ```java
 @Service
 public class BatchService {
@@ -172,14 +183,15 @@ public class BatchService {
 
 ## Custom Permission Evaluator
 
+For complex domain-specific permissions (e.g., "can user X edit document Y?"), implement a `PermissionEvaluator`. This lets you use `hasPermission()` expressions in security annotations, keeping the business logic clean.
+
 ```java
 @Component
 public class DocumentPermissionEvaluator implements PermissionEvaluator {
 
     @Override
     public boolean hasPermission(Authentication authentication,
-                                  Object targetDomainObject,
-                                  Object permission) {
+                                  Object targetDomainObject, Object permission) {
         if (targetDomainObject instanceof Document document) {
             return hasDocumentPermission(authentication, document, (String) permission);
         }
@@ -188,9 +200,7 @@ public class DocumentPermissionEvaluator implements PermissionEvaluator {
 
     @Override
     public boolean hasPermission(Authentication authentication,
-                                  Serializable targetId,
-                                  String targetType,
-                                  Object permission) {
+                                  Serializable targetId, String targetType, Object permission) {
         if ("Document".equals(targetType)) {
             Document document = loadDocument((Long) targetId);
             return hasDocumentPermission(authentication, document, (String) permission);
@@ -213,24 +223,7 @@ public class DocumentPermissionEvaluator implements PermissionEvaluator {
     }
 
     private Document loadDocument(Long id) {
-        // Load document from database
         return new Document(id, "sample", "user1", true);
-    }
-}
-```
-
-### Registering Permission Evaluator
-
-```java
-@Configuration
-public class PermissionConfig {
-
-    @Bean
-    public MethodSecurityExpressionHandler methodSecurityExpressionHandler(
-            DocumentPermissionEvaluator permissionEvaluator) {
-        DefaultMethodSecurityExpressionHandler handler = new DefaultMethodSecurityExpressionHandler();
-        handler.setPermissionEvaluator(permissionEvaluator);
-        return handler;
     }
 }
 ```
@@ -258,35 +251,9 @@ public class DocumentService {
 }
 ```
 
-## Domain Object Security
-
-```java
-@Service
-public class OrganizationService {
-
-    @PreAuthorize("hasPermission(#orgId, 'Organization', 'ADMIN')")
-    public void addMemberToOrganization(@P("orgId") Long orgId,
-                                        @P("userId") Long userId) {
-        Organization org = organizationRepository.findById(orgId).orElseThrow();
-        User user = userRepository.findById(userId).orElseThrow();
-        org.addMember(user);
-        organizationRepository.save(org);
-    }
-
-    @PostAuthorize("hasPermission(returnObject, 'READ')")
-    public Organization getOrganization(Long orgId) {
-        return organizationRepository.findById(orgId).orElseThrow();
-    }
-
-    @PreFilter(value = "hasPermission(filterObject, 'ADMIN')",
-               filterTarget = "organizations")
-    public List<Report> generateReports(List<Organization> organizations) {
-        return reportService.generateFor(organizations);
-    }
-}
-```
-
 ## Expression Utility Class
+
+For complex logic that doesn't fit in a SpEL expression, create a utility bean and reference it in expressions with `@beanName.method()`.
 
 ```java
 @Component("security")
@@ -310,7 +277,6 @@ public class SecurityUtils {
     }
 
     public boolean withinRateLimit(String action, Authentication auth, int limit) {
-        // Check rate limiting logic
         return rateLimiter.tryConsume(auth.getName() + ":" + action, limit);
     }
 
@@ -330,24 +296,16 @@ public class SecurityUtils {
 public class PaymentService {
 
     @PreAuthorize("@security.isAfterBusinessHours() ? hasRole('MANAGER') : true")
-    public void processPayment(Payment payment) {
-        paymentProcessor.process(payment);
-    }
+    public void processPayment(Payment payment) { paymentProcessor.process(payment); }
 
     @PreAuthorize("@security.withinRateLimit('export', authentication, 10)")
-    public List<DataPoint> exportData(DateRange range) {
-        return dataService.getData(range);
-    }
+    public List<DataPoint> exportData(DateRange range) { return dataService.getData(range); }
 
     @PreAuthorize("@security.isMemberOf(#orgId, authentication)")
-    public void accessOrganizationData(@P("orgId") Long orgId) {
-        // Access organization-specific data
-    }
+    public void accessOrganizationData(@P("orgId") Long orgId) { }
 
     @PreAuthorize("@security.belongsToDepartment('ENGINEERING', authentication)")
-    public void accessEngineeringResources() {
-        // Engineering-only resource
-    }
+    public void accessEngineeringResources() { }
 }
 ```
 
@@ -365,59 +323,14 @@ public class SensitiveDataService {
     }
 
     @PreAuthorize("hasRole('AUDITOR') or " +
-                  "(hasRole('MANAGER') and " +
-                  "@security.isMemberOf(#orgId, authentication))")
-    public AuditLog getAuditLog(@P("orgId") Long orgId) {
-        return auditService.getLog(orgId);
-    }
+                  "(hasRole('MANAGER') and @security.isMemberOf(#orgId, authentication))")
+    public AuditLog getAuditLog(@P("orgId") Long orgId) { return auditService.getLog(orgId); }
 
     @PreAuthorize("(#action == 'READ' and hasRole('VIEWER')) or " +
                   "(#action == 'WRITE' and hasRole('EDITOR')) or " +
                   "(#action == 'DELETE' and hasRole('ADMIN'))")
     public void performAction(@P("action") String action, Long resourceId) {
         actionService.perform(action, resourceId);
-    }
-}
-```
-
-## Testing Method Security
-
-```java
-@SpringBootTest
-@AutoConfigureMockMvc
-class DocumentServiceSecurityTest {
-
-    @Autowired
-    private DocumentService documentService;
-
-    @Test
-    @WithMockUser(roles = "USER")
-    void userCanReadOwnDocument() {
-        Document doc = new Document(1L, "My Doc", "user", true);
-        when(documentRepository.findById(1L)).thenReturn(Optional.of(doc));
-        assertDoesNotThrow(() -> documentService.getDocument(1L));
-    }
-
-    @Test
-    @WithMockUser(roles = "USER", username = "other")
-    void userCannotReadOthersPrivateDocument() {
-        Document doc = new Document(1L, "Private Doc", "owner", false);
-        when(documentRepository.findById(1L)).thenReturn(Optional.of(doc));
-        assertThrows(AccessDeniedException.class, () -> documentService.getDocument(1L));
-    }
-
-    @Test
-    @WithMockUser(roles = "ADMIN")
-    void adminCanReadAnyDocument() {
-        Document doc = new Document(1L, "Private Doc", "owner", false);
-        when(documentRepository.findById(1L)).thenReturn(Optional.of(doc));
-        assertDoesNotThrow(() -> documentService.getDocument(1L));
-    }
-
-    @Test
-    @WithAnonymousUser
-    void anonymousCannotAccessDocuments() {
-        assertThrows(AuthenticationException.class, () -> documentService.getDocument(1L));
     }
 }
 ```
@@ -438,69 +351,35 @@ class DocumentServiceSecurityTest {
 
 ```java
 // Wrong: Missing 'hasRole' quotes
-@Service
-public class MyService {
-    @PreAuthorize(hasRole('ADMIN')) // Compilation error
-    public void adminOnly() { }
-}
-```
+@PreAuthorize(hasRole('ADMIN')) // Compilation error
 
-```java
 // Correct: Proper SpEL syntax
-@Service
-public class MyService {
-    @PreAuthorize("hasRole('ADMIN')")
-    public void adminOnly() { }
-}
+@PreAuthorize("hasRole('ADMIN')")
 ```
 
 ### Mistake 2: Using @Secured Without ROLE_ Prefix
 
 ```java
 // Wrong: @Secured expects full role name
-@Service
-public class MyService {
-    @Secured("ADMIN") // Won't match ROLE_ADMIN
-    public void adminOnly() { }
-}
-```
+@Secured("ADMIN") // Won't match ROLE_ADMIN
 
-```java
 // Correct: @Secured requires full authority name
-@Service
-public class MyService {
-    @Secured("ROLE_ADMIN")
-    public void adminOnly() { }
-}
+@Secured("ROLE_ADMIN")
 ```
 
 ### Mistake 3: Performance Issues with @PostFilter
 
 ```java
 // Wrong: @PostFilter loads all records before filtering
-@Service
-public class DocumentService {
-    @PostFilter("hasPermission(filterObject, 'READ')")
-    public List<Document> getAllDocuments() {
-        return documentRepository.findAll(); // Loads everything
-    }
+@PostFilter("hasPermission(filterObject, 'READ')")
+public List<Document> getAllDocuments() {
+    return documentRepository.findAll();
 }
-```
 
-```java
 // Correct: Filter at database level
-@Service
-public class DocumentService {
-    public List<Document> getAccessibleDocuments() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return documentRepository.findByOwnerOrPublicDoc(auth.getName());
-    }
-
-    // @PostFilter only when database filtering isn't possible
-    @PostFilter("hasPermission(filterObject, 'READ')")
-    public List<Document> searchDocuments(String query) {
-        return documentRepository.search(query);
-    }
+public List<Document> getAccessibleDocuments() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    return documentRepository.findByOwnerOrPublicDoc(auth.getName());
 }
 ```
 

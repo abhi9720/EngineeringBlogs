@@ -18,7 +18,9 @@ This overview covers the search landscape from traditional full-text search engi
 
 ### Database Built-in Search
 
-PostgreSQL offers full-text search with tsvector and tsquery, suitable for basic search needs without additional infrastructure.
+PostgreSQL offers full-text search with tsvector and tsquery, suitable for basic search needs without additional infrastructure. The database-native approach eliminates the operational overhead of maintaining a separate search cluster, making it ideal for applications where search is a supporting feature rather than the primary interface.
+
+The following SQL demonstrates setting up a PostgreSQL full-text search pipeline. A generated column `search_vector` of type `tsvector` stores the lexeme-preprocessed text, a GIN index accelerates ranked lookups, and a trigger function keeps the vector in sync on every insert or update. The final query uses `ts_rank` to order results by relevance:
 
 ```sql
 CREATE TABLE articles (
@@ -51,9 +53,11 @@ ORDER BY rank DESC;
 
 ### Elasticsearch
 
-Dedicated search engine providing distributed indexing, full-text search, aggregations, and near real-time search capabilities.
+Dedicated search engine providing distributed indexing, full-text search, aggregations, and near real-time search capabilities. When your search requirements outgrow what a relational database can offer — paginated faceted navigation, fuzzy matching, or real-time analytics — Elasticsearch fills the gap with a horizontally scalable architecture built on Apache Lucene.
 
-```
+This index creation request configures three primary shards and two replicas for fault tolerance, defines a custom analyzer that chains lowercase normalization, stop-word removal, and synonym expansion, and declares explicit field mappings so that text fields are analyzed while keyword, numeric, and date fields are indexed for exact filtering and sorting:
+
+```json
 PUT /products
 {
   "settings": {
@@ -84,9 +88,9 @@ PUT /products
 
 ### Meilisearch
 
-Modern search engine focused on developer experience with instant typo-tolerant search, minimal configuration, and simple API.
+Modern search engine focused on developer experience with instant typo-tolerant search, minimal configuration, and simple API. Where Elasticsearch demands careful schema design and tuning, Meilisearch ships with sensible defaults that work well out of the box. Documents are indexed via a straightforward HTTP API, and typo tolerance, faceting, and ranking are configured through intuitive settings rather than complex DSL queries:
 
-```
+```bash
 curl -X POST 'http://localhost:7700/indexes/movies/documents' \
   -H 'Content-Type: application/json' \
   --data-binary '[
@@ -97,7 +101,9 @@ curl -X POST 'http://localhost:7700/indexes/movies/documents' \
 
 ### Vector Search (pgvector)
 
-Semantic search using embeddings for similarity-based retrieval, crucial for modern AI applications and RAG pipelines.
+Semantic search using embeddings for similarity-based retrieval, crucial for modern AI applications and RAG pipelines. Unlike keyword search, which matches literal terms, vector search operates on the semantic meaning of text by comparing dense embedding vectors. pgvector brings this capability directly into PostgreSQL, eliminating the need for a separate vector database while preserving ACID transactions, replication, and the entire Postgres ecosystem.
+
+The Java service below accepts a query string, generates an embedding vector via an external model (e.g., OpenAI's `text-embedding-ada-002`), and executes a nearest-neighbor search using the cosine-distance operator (`<=>`). Results are ordered by similarity, and the distance is converted into a normalized score:
 
 ```java
 @Component
@@ -136,7 +142,9 @@ public class VectorSearchService {
 
 ### Full Reindexing vs Incremental
 
-Full reindexing rebuilds the entire index, appropriate for initial setup or schema changes. Incremental indexing processes changes since the last update for ongoing synchronization.
+Full reindexing rebuilds the entire index, appropriate for initial setup or schema changes. Incremental indexing processes changes since the last update for ongoing synchronization. The choice between them is a trade-off between consistency and cost: full reindexing guarantees a clean state but is I/O intensive, while incremental indexing is lightweight but can drift if errors go unnoticed.
+
+The following Spring Boot indexer demonstrates both strategies. An `incrementalIndex()` method runs every 60 seconds, fetching only records modified since the last run and bulk-indexing them into Elasticsearch. A separate `fullReindex()` method runs nightly at 3 AM, deleting and recreating the index before reindexing every record from the source database:
 
 ```java
 @Component
@@ -180,7 +188,9 @@ public class ProductIndexer {
 
 ### Scoring and Ranking
 
-Understanding relevance scoring helps tune search results. TF-IDF and BM25 are common algorithms.
+Understanding relevance scoring helps tune search results. TF-IDF and BM25 are common algorithms. Elasticsearch uses BM25 by default, which balances term frequency saturation and document length normalization. However, business requirements — such as boosting popular products or newer content — often demand custom scoring that goes beyond pure text relevance.
+
+The `function_score` query in this example wraps a `multi_match` that boosts the `title` field by 3x and `description` by 2x. A `FieldValueFactorFunction` multiplies the score by a log-scaled popularity metric, ensuring that a highly popular product with a moderately relevant title can outrank a perfectly relevant but obscure one:
 
 ```java
 @Service
@@ -213,6 +223,8 @@ public class SearchService {
 
 ### Ignoring Typo Tolerance
 
+A common pitfall in search implementation is treating user queries as exact values. A standard `LIKE` or `contains` query will miss results when the user misspells even a single character. The wrong approach below performs a simple substring match — it returns nothing for "teh" when the product is named "The Phone":
+
 ```java
 // Wrong: Exact match only, fails on typos
 @Service
@@ -222,6 +234,8 @@ public class SearchService {
     }
 }
 ```
+
+The corrected implementation uses Elasticsearch's `match` query with `Fuzziness.AUTO`, which automatically applies edit-distance-based matching. The `prefixLength` parameter requires the first three characters to match exactly, reducing the number of candidate expansions and improving performance:
 
 ```java
 // Correct: Using search engine with typo tolerance

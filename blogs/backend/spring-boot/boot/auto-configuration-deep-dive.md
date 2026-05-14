@@ -16,9 +16,15 @@ draft: false
 
 Auto-configuration is Spring Boot's killer feature. It automatically configures beans based on classpath dependencies, property settings, and existing beans. This deep dive explores how auto-configuration works internally, how to create custom auto-configuration, and how to debug and customize the auto-configuration process.
 
+Auto-configuration operates on a simple principle: look at the classpath, look at the existing bean definitions, look at the environment properties, and register sensible defaults. Every auto-configuration class is annotated with `@Conditional*` annotations that gate its activation. Understanding these conditions is the key to mastering auto-configuration.
+
 ## How Auto-Configuration Works
 
 ### The @SpringBootApplication Meta-Annotation
+
+`@SpringBootApplication` is a convenience annotation that combines three essential annotations: `@Configuration` (marks the class as a configuration source), `@EnableAutoConfiguration` (triggers the auto-configuration mechanism), and `@ComponentScan` (enables component scanning).
+
+The `excludeFilters` in `@ComponentScan` prevent auto-configuration classes from being picked up by component scanning. Auto-configuration classes should only be loaded through the `AutoConfiguration.imports` file, not through component scanning. Loading them directly causes double initialization and class loading order issues.
 
 ```java
 @Target(ElementType.TYPE)
@@ -35,6 +41,10 @@ public @interface SpringBootApplication {
 
 ### @EnableAutoConfiguration Imports
 
+`@EnableAutoConfiguration` imports `AutoConfigurationImportSelector`, which is a `DeferredImportSelector`. The "deferred" aspect is important: auto-configuration classes are processed after all user-defined `@Configuration` classes have been processed. This ensures user beans take precedence over auto-configured ones.
+
+The `AutoConfigurationImportSelector` reads candidate configurations from the `AutoConfiguration.imports` file, filters them based on conditions, removes exclusions, and returns the matching configuration class names.
+
 ```java
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
@@ -48,6 +58,10 @@ public @interface EnableAutoConfiguration {
 ## Auto-Configuration Mechanics
 
 ### The AutoConfigurationImportSelector
+
+The import selector is the heart of auto-configuration. It reads all registered auto-configuration classes, applies exclusion filters, removes duplicates, and filters by the conditions defined on each candidate class. The `getConfigurationClassFilter()` method creates a filter from all `@ConditionalOn*` annotations found on the candidate classes and evaluates them against the current environment.
+
+This process runs at application startup and the result is cached. If you add a new jar to the classpath, you must restart the application for its auto-configuration to be considered.
 
 ```java
 public class AutoConfigurationImportSelector implements DeferredImportSelector, BeanClassLoaderAware,
@@ -81,6 +95,10 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector, 
 
 ### Loading Auto-Configuration Classes
 
+Since Spring Boot 3.0, auto-configuration classes are registered in `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`. This file replaces the old `META-INF/spring.factories` approach and is faster to process. Each line in the file is a fully-qualified auto-configuration class name.
+
+Spring Boot's built-in auto-configurations cover data sources, JPA, MVC, security, caching, and dozens more. Each one is conditionally activated. When working with a starter, you rarely need to know which auto-configurations are activated — just add the dependency and Spring Boot handles the rest.
+
 ```java
 // META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
 // This file replaces META-INF/spring.factories (deprecated)
@@ -92,6 +110,8 @@ com.example.autoconfigure.CircuitBreakerAutoConfiguration
 ## Building a Custom Auto-Configuration
 
 ### Step 1: Create the Service
+
+The service class contains the actual business logic. It should have no Spring annotations — it's a plain Java class that will be instantiated by the auto-configuration. The `GracefulShutdownService` below manages shutdown hooks and executes them with a configurable timeout.
 
 ```java
 // The service that will be auto-configured
@@ -142,6 +162,10 @@ public class GracefulShutdownService {
 
 ### Step 2: Create Properties
 
+Configuration properties define what users can customize. The `@ConfigurationProperties` annotation binds properties from the environment with the given prefix. Sensible defaults ensure the auto-configuration works out-of-the-box, while advanced users can customize every aspect.
+
+The `enabled` flag is a standard convention that lets users completely disable the auto-configuration. Without it, removing the starter from the classpath is the only way to disable it.
+
 ```java
 @ConfigurationProperties(prefix = "app.graceful-shutdown")
 public class GracefulShutdownProperties {
@@ -159,6 +183,10 @@ public class GracefulShutdownProperties {
 ```
 
 ### Step 3: Create the Auto-Configuration
+
+The auto-configuration class wires everything together. It uses `@ConditionalOnProperty` to check the enabled flag, `@ConditionalOnMissingBean` to let users replace the service with their own implementation, and `@ConditionalOnClass` to conditionally register web-specific beans only when the web framework is on the classpath.
+
+The `@AutoConfigureAfter` annotation controls ordering relative to other auto-configurations. The `GracefulShutdownAutoConfiguration` must run after `WebServerFactoryCustomizer` because it needs the embedded web server to be configured first.
 
 ```java
 @AutoConfiguration
@@ -207,12 +235,16 @@ public class GracefulShutdownAutoConfiguration {
 
 ### Step 4: Register the Auto-Configuration
 
+The `AutoConfiguration.imports` file must be placed in the correct location. It's loaded by Spring Boot's `AutoConfigurationImportSelector` using `SpringFactoriesLoader`. Ensure the file path is exact: `META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`.
+
 ```java
 // META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
 com.example.autoconfigure.GracefulShutdownAutoConfiguration
 ```
 
 ### Step 5: Create Spring Boot Metadata
+
+Configuration metadata provides IDE support — auto-completion, documentation, and default values. Without it, users must guess property names and types. The metadata file can be generated automatically by `spring-boot-configuration-processor` from `@ConfigurationProperties` annotations, or written manually for additional documentation.
 
 ```java
 // META-INF/spring-configuration-metadata.json (optional but recommended)
@@ -262,6 +294,8 @@ public class MyAutoConfiguration {
 
 ### Excluding Auto-Configuration
 
+When you don't need a particular auto-configuration, exclude it using `@SpringBootApplication(exclude = ...)` or the `spring.autoconfigure.exclude` property. Common exclusions include `DataSourceAutoConfiguration` when you define a custom DataSource manually, or `SecurityFilterAutoConfiguration` when using a custom security setup.
+
 ```java
 @SpringBootApplication(exclude = {
     DataSourceAutoConfiguration.class,
@@ -287,6 +321,10 @@ spring:
 
 ### Enable Debug Logging
 
+Set `debug: true` in application.yml to see the auto-configuration report at startup. This shows which auto-configurations matched (positive matches), which did not (negative matches), and why. Unmatched conditions are just as important as matched ones — they explain why expected beans are missing.
+
+For even more detail, set `logging.level.org.springframework.boot.autoconfigure: TRACE` to see each condition evaluation.
+
 ```yaml
 # application.yml
 debug: true
@@ -301,7 +339,9 @@ logging:
 
 ### Output Example
 
-```
+The auto-configuration report is printed in two sections. `Positive matches` shows configured beans and why they matched. `Negative matches` shows why certain beans were NOT configured — this is the most useful section for debugging missing beans.
+
+```text
 ============================
 CONDITIONS EVALUATION REPORT
 ============================
@@ -328,6 +368,8 @@ Negative matches:
 ```
 
 ### Actuator Endpoint
+
+The `/actuator/conditions` endpoint exposes the same information as the startup report but can be queried at runtime. This is useful for diagnosing configuration issues in production without restarting the application.
 
 ```java
 // Access conditions via actuator
@@ -358,22 +400,28 @@ GET /actuator/conditions
 
 ### Starter Module Structure
 
-```
-my-spring-boot-starter/
-├── pom.xml
-├── src/
-│   └── main/
-│       ├── java/
-│       │   └── com/
-│       │       └── example/
-│       │           └── autoconfigure/
-│       │               ├── MyService.java
-│       │               ├── MyProperties.java
-│       │               └── MyAutoConfiguration.java
-│       └── resources/
-│           └── META-INF/
-│               └── spring/
-│                   └── org.springframework.boot.autoconfigure.AutoConfiguration.imports
+```mermaid
+flowchart TB
+    Root[my-spring-boot-starter] --> POM[pom.xml]
+    Root --> SRC[src]
+    SRC --> main
+    main --> java
+    java --> autoconfigure[com.example.autoconfigure]
+    autoconfigure --> MyService[MyService.java]
+    autoconfigure --> MyProperties[MyProperties.java]
+    autoconfigure --> MyAutoConfig[MyAutoConfiguration.java]
+    main --> resources[META-INF/spring]
+    resources --> imports[org.springframework.boot.autoconfigure.AutoConfiguration.imports]
+
+    linkStyle default stroke:#278ea5
+
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+
+    class Root,POM blue
+    class SRC,main,java,resources green
+    class autoconfigure,MyService,MyProperties,MyAutoConfig,imports yellow
 ```
 
 ### Auto-Configuration Ordering Conventions

@@ -20,7 +20,7 @@ RabbitMQ and Apache Kafka are the two most popular messaging systems, but they s
 
 ### RabbitMQ Architecture
 
-RabbitMQ is a message broker that routes messages from producers to consumers via exchanges and queues. Messages are consumed and removed from queues upon acknowledgment.
+RabbitMQ is a message broker that routes messages from producers to consumers via exchanges and queues. Messages are consumed and removed from queues upon acknowledgment. This means each message is delivered to exactly one consumer in a competing consumers pattern (unless using fanout exchanges for pub-sub). If you need a replay of messages, RabbitMQ isn't well-suited — once consumed and acknowledged, the message is gone.
 
 ```java
 // RabbitMQ - message is delivered to one consumer in a competing consumers pattern
@@ -33,7 +33,7 @@ public void handleTask(Task task) {
 
 ### Kafka Architecture
 
-Kafka is a distributed log that retains messages for a configurable period. Consumers track their position in the log via offsets.
+Kafka is a distributed log that retains messages for a configurable period. Consumers track their position in the log via offsets, which allows multiple consumer groups to independently read the same message at different speeds. This log-based architecture enables event replay, long-term retention, and the ability to add new consumers that read from the beginning of the topic.
 
 ```java
 // Kafka - multiple consumer groups can independently read the same message
@@ -53,7 +53,7 @@ while (true) {
 
 ### Complex Routing
 
-RabbitMQ's exchange types provide sophisticated routing capabilities.
+RabbitMQ's exchange types provide sophisticated routing capabilities that Kafka can't match natively. Topic exchanges with wildcard patterns, headers exchanges with attribute-based routing, and direct exchanges with exact matching give you fine-grained control over message delivery. If your system requires complex routing based on multiple attributes or hierarchical routing keys, RabbitMQ is the better choice.
 
 ```java
 @Configuration
@@ -92,6 +92,8 @@ public class ComplexRoutingConfig {
 
 ### Task Distribution with Competing Consumers
 
+RabbitMQ's competing consumers pattern is ideal for work queues. Each message is delivered to exactly one consumer, and if the consumer fails, the message is requeued for another consumer. Kafka's consumer groups can approximate this, but RabbitMQ's per-message acknowledgment model is more natural for task distribution.
+
 ```java
 @Component
 public class TaskDistributor {
@@ -105,6 +107,8 @@ public class TaskDistributor {
 ```
 
 ### Request-Reply Pattern
+
+RabbitMQ has native RPC support through `convertSendAndReceive`, which handles correlation IDs and reply queues automatically. Kafka requires manual correlation ID management and separate reply topics. If you need request-reply messaging, RabbitMQ is significantly simpler to implement.
 
 ```java
 @Component
@@ -123,6 +127,8 @@ public class RpcClient {
 ## When to Choose Kafka
 
 ### Event Streaming and Log Aggregation
+
+Kafka excels at event streaming where multiple independent consumers need to process the same event stream. In the example below, two different consumer groups (`analytics-group` and `audit-group`) independently process the same `user-events` topic. Each group maintains its own offset and can consume at its own pace. This native pub-sub capability is Kafka's killer feature.
 
 ```java
 @Configuration
@@ -152,6 +158,8 @@ public class KafkaEventStreamingConfig {
 
 ### High Throughput Data Pipeline
 
+Kafka's sequential I/O and batching capabilities enable throughput of 100k+ messages per second. The producer configuration below uses `linger.ms=10` (small delay for batching), `batch.size=65536` (64KB batches), and Snappy compression to maximize throughput. For IoT sensor data, clickstreams, or log aggregation, Kafka's performance is unmatched.
+
 ```java
 @Component
 public class HighThroughputProducer {
@@ -176,6 +184,8 @@ public class HighThroughputProducer {
 ```
 
 ### Log Compaction and State Restoration
+
+Kafka's log compaction feature retains only the latest value for each key, making it ideal for state stores and CQRS read models. A compacted topic acts as a changelog: each message updates the state for its key, and old values are garbage collected. New consumers reading a compacted topic get the latest state for every key, enabling fast state restoration.
 
 ```java
 // Use log compaction for keyed state
@@ -208,6 +218,8 @@ public void restoreState(ConsumerRecord<String, String> record) {
 
 ## Performance Comparison
 
+RabbitMQ delivers lower latency for individual messages (<1ms) because it pushes messages directly to consumers. Kafka achieves higher throughput through batching: `linger.ms` adds a small delay to accumulate batches, `batch.size` controls batch size, and `compression.type=snappy` compresses batches on the wire. Choose based on whether message-level latency or aggregate throughput is more important.
+
 ```java
 // RabbitMQ - lower throughput but lower latency for individual messages
 @Bean
@@ -228,7 +240,7 @@ props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 67108864);      // 64MB buffer
 
 ## Hybrid Approach
 
-Some systems benefit from using both RabbitMQ and Kafka.
+Some systems benefit from using both RabbitMQ and Kafka. The `HybridMessagingService` uses RabbitMQ for immediate task distribution (low latency, competing consumers) and Kafka for long-term event logging and analytics (retention, replayability). This hybrid approach is common in large-scale systems where different message patterns coexist.
 
 ```java
 @Component
@@ -262,6 +274,8 @@ public class HybridMessagingService {
 
 ### Mistake: Choosing Kafka for simple task queues
 
+Kafka can do competing consumers, but it requires topics, consumer groups, partition management, and offset handling — far more infrastructure than needed for a simple work queue. If all you need is to distribute tasks across workers, RabbitMQ's competing consumers pattern is simpler and more appropriate.
+
 ```java
 // Overkill - too much infrastructure for a simple work queue
 // Kafka requires topics, consumer groups, offset management for competing consumers
@@ -276,6 +290,8 @@ public void processTask(Task task) {
 ```
 
 ### Mistake: Choosing RabbitMQ for event sourcing
+
+RabbitMQ removes messages after they're consumed and acknowledged. You cannot replay historical events or add a new consumer that reads from the beginning. For event sourcing, log-based systems like Kafka or Apache Pulsar are required because they retain messages for replay.
 
 ```java
 // Wrong - RabbitMQ removes messages after consumption

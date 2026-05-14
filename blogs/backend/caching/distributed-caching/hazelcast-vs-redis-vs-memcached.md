@@ -35,6 +35,8 @@ Hazelcast, Redis, and Memcached are three leading distributed caching solutions.
 
 ### Architecture
 
+Hazelcast runs embedded in the application JVM or as a standalone cluster. Its configuration below sets up discovery via Kubernetes, near-cache for local reads, and eviction policies.
+
 ```java
 @Configuration
 @EnableCaching
@@ -134,6 +136,8 @@ public NearCacheConfig nearCacheConfig() {
 
 ### Architecture
 
+Redis is an in-memory data store with rich data structures. Its configuration below sets up serialization, TTLs per cache, and a template for programmatic access.
+
 ```java
 @Configuration
 public class RedisCacheConfig {
@@ -224,6 +228,8 @@ public class RedisCacheService {
 ## Memcached
 
 ### Architecture
+
+Memcached is the simplest of the three: a distributed key-value store with no data structures beyond strings, no clustering, and no persistence. Its strength is raw speed and simplicity.
 
 ```java
 // Memcached has simpler data model - key/value only

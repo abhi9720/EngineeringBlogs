@@ -20,6 +20,8 @@ Choosing between synchronous and asynchronous communication is one of the most i
 
 ### REST API
 
+Synchronous REST calls follow a sequential orchestration pattern — inventory is checked first, then payment is processed, and only if both succeed is the order created. This is simple to reason about but the total latency is the sum of all downstream calls. Any single failure aborts the entire operation.
+
 ```java
 @RestController
 @RequestMapping("/api/orders")
@@ -59,6 +61,8 @@ public class OrderController {
 ```
 
 ### gRPC
+
+gRPC synchronous calls share the same sequential coupling as REST but with better performance due to binary serialization and HTTP/2 multiplexing. The blocking stub pauses the current thread until the response is received, making it suitable for low-latency internal calls where the sequential dependency is intentional.
 
 ```java
 @Service
@@ -121,6 +125,8 @@ public class OrderGrpcService extends OrderServiceGrpc.OrderServiceImplBase {
 ## Asynchronous Communication
 
 ### Kafka Event-Driven
+
+Kafka-based async communication decouples the order creation into an event pipeline. The order is saved immediately in PENDING state, then events are published for inventory reservation and payment processing. Independent consumers process these events and update the order state — the service becomes eventually consistent rather than strongly consistent.
 
 ```java
 @Component
@@ -188,6 +194,8 @@ public class OrderEventProcessor {
 
 ### RabbitMQ Async
 
+RabbitMQ chains listeners into a processing pipeline. Each step validates, processes, and forwards the message to the next queue. If any step fails, the message is routed to an error queue for manual inspection or dead-letter handling — the overall process remains decoupled and fault-tolerant.
+
 ```java
 @Component
 public class AsyncOrderProcessor {
@@ -235,7 +243,7 @@ public class AsyncOrderProcessor {
 
 ## Hybrid Approach
 
-Combine sync and async communication for different concerns.
+The hybrid approach gets the best of both worlds — synchronous validation ensures the request is immediately valid (fast feedback), while the actual processing pipeline runs asynchronously for resilience. The client receives an HTTP 202 Accepted with an order ID to poll later.
 
 ```java
 @Service

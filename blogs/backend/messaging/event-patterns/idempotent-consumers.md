@@ -18,7 +18,7 @@ Idempotent consumers ensure that processing the same message multiple times prod
 
 ## Idempotency with Database Dedup
 
-Store processed message IDs in the database and check before processing.
+The simplest approach is to store processed message IDs in a database table. Before processing, check if the ID exists. The check-and-insert must be atomic — the `@Transactional` wrapper ensures the database operations are committed together. The `COUNT(*)` query checks for duplicates, and the INSERT records the message as processed. Between the CHECK and INSERT, a race condition could occur if two threads check simultaneously. The next section's optimistic locking approach addresses this.
 
 ```java
 @Service
@@ -55,6 +55,8 @@ public class IdempotentOrderProcessor {
 ```
 
 ### Optimistic Locking for High Throughput
+
+This approach uses a JPA `@Version` field for optimistic locking. The `processedMessageRepository.save()` may throw a `DataIntegrityViolationException` if the message ID already exists (due to a unique constraint on `messageId`). Instead of checking then inserting (which has a race window), we attempt the insert and handle the conflict. This pattern is safe under concurrent access because the database enforces the uniqueness constraint atomically.
 
 ```java
 @Entity
@@ -106,7 +108,7 @@ public class OptimisticIdempotentProcessor {
 
 ## Redis-Based Idempotency
 
-Use Redis for low-latency deduplication with TTL-based expiration.
+Redis provides low-latency deduplication with automatic TTL-based cleanup. The `setIfAbsent` method atomically sets a key only if it doesn't exist — perfect for distributed deduplication. The TTL (24 hours) prevents unbounded memory growth. For extended protection, the `tryProcess` method uses a two-phase lock: first acquire with a short TTL ("processing"), then mark as "done" on success, or release on failure. This prevents concurrent processing of the same message by different consumers.
 
 ```java
 @Component
@@ -163,7 +165,7 @@ public class RedisIdempotencyService {
 
 ## Kafka-Specific Idempotent Consumer
 
-Kafka provides `enable.idempotence=true` for producers but consumers need manual idempotency.
+Kafka provides `enable.idempotence=true` for producers (which prevents duplicate messages caused by producer retries), but consumers still need their own idempotency. The consumer's `messageId` can come from a custom header or be computed as `topic-partition-offset` (which is guaranteed unique per Kafka cluster). The `processExactlyOnce` method uses PostgreSQL's `ON CONFLICT DO NOTHING` for atomic deduplication within the same transaction as business logic.
 
 ```java
 @Component
@@ -228,6 +230,8 @@ public class KafkaIdempotentConsumer {
 
 ## RabbitMQ-Specific Idempotent Consumer
 
+RabbitMQ messages may arrive with a `messageId` property or a `correlationId`. The consumer acquires the idempotency lock before processing, and releases it (or marks completed) based on success or failure. If processing throws an exception, the idempotency lock is released so the message can be retried. The `basicNack` with `requeue=false` sends the message to the dead letter queue (if configured) rather than requeueing it infinitely.
+
 ```java
 @Component
 public class RabbitIdempotentConsumer {
@@ -262,7 +266,7 @@ public class RabbitIdempotentConsumer {
 
 ## Business-Level Idempotency
 
-Sometimes idempotency is built into the business operation itself.
+Sometimes the business domain itself provides idempotency. If every order must have a unique `orderNumber`, adding a `UNIQUE` constraint on that column prevents duplicate orders regardless of message duplication. The `findByOrderNumber()` + `orElseGet()` pattern atomically checks and inserts — only one thread succeeds in creating the order. The `updateOrderStatus` method adds state-machine validation to prevent invalid transitions, making it safe to retry.
 
 ```java
 @Entity
@@ -316,7 +320,7 @@ public class BusinessIdempotentService {
 
 ## Idempotency with Outbox Pattern
 
-Combine outbox pattern with idempotent consumers for end-to-end reliability.
+Combining the outbox pattern with idempotent consumers gives end-to-end exactly-once guarantees. The producer writes both business data and the outbox event in the same database transaction. The outbox processor uses optimistic locking (`@Version`) to ensure each outbox event is published at most once. On the consumer side, deduplication (via the same unique `event_id`) ensures each event is processed at most once. Together, this chain prevents both producer-side duplicates and consumer-side duplicates.
 
 ```java
 @Component
@@ -364,6 +368,8 @@ public class OutboxIdempotentProcessor {
 
 ### Mistake: Using in-memory set for deduplication
 
+An in-memory `ConcurrentHashMap` loses all deduplication state when the application restarts. After a restart, the consumer may reprocess messages that were already handled before the crash, leading to duplicates. Always use persistent storage (database or Redis) for production idempotency.
+
 ```java
 // Wrong - dedup state lost on restart
 public class InMemoryDedup {
@@ -394,6 +400,8 @@ public class PersistentDedup {
 ```
 
 ### Mistake: Not handling concurrent duplicate delivery
+
+The check-then-insert pattern has a race condition: two threads can both check, find no existing record, and both proceed to process. The fix is to use an atomic insert with a unique constraint — the first thread's insert succeeds, the second thread's insert fails with a unique constraint violation, and it knows the message was already handled.
 
 ```java
 // Wrong - race condition between check and insert

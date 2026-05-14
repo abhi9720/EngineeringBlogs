@@ -16,6 +16,8 @@ This post covers configuring scheduling, different scheduling modes, the task ex
 
 ## Enabling Scheduling
 
+The configuration above sets up two thread pools. The `taskExecutor` bean is used by `@Async` for running scheduled tasks asynchronously — `CallerRunsPolicy` means that if the queue is full, the caller thread (the scheduler) runs the task itself, providing backpressure rather than silently dropping tasks. `WaitForTasksToCompleteOnShutdown` with a 30-second timeout ensures graceful shutdown: active tasks complete before the application context closes. The `scheduledTaskExecutor` bean is the dedicated scheduler pool for `@Scheduled` annotations — by default Spring uses a single-threaded scheduler, so explicitly configuring a pool of 10 avoids head-of-line blocking where one long task delays all subsequent triggers.
+
 ```java
 @Configuration
 @EnableScheduling
@@ -54,7 +56,7 @@ public class SchedulerConfiguration {
 
 ### Fixed Rate
 
-Executes the task at a fixed interval, regardless of when the previous execution completed. If a task exceeds the interval, the next execution waits until the current one finishes.
+Executes the task at a fixed interval, regardless of when the previous execution completed. If a task exceeds the interval, the next execution waits until the current one finishes. `fixedRate` is appropriate for time-sensitive periodic work like metrics collection — you want a sample every 60 seconds regardless of how long the previous collection took. However, if the task duration consistently exceeds the interval, you get a cascading effect where executions stack up with no gap between them. The `initialDelay` parameter prevents a thundering-herd of tasks starting immediately at application startup.
 
 ```java
 @Component
@@ -83,7 +85,7 @@ public class MetricsCollector {
 
 ### Fixed Delay
 
-Waits for the specified delay after the previous execution completes before starting the next.
+Waits for the specified delay after the previous execution completes before starting the next. This is the safer choice for most workloads because it guarantees no overlap — a 5-second delay means 5 seconds after the last execution finished, not 5 seconds from when it started. The trade-off is that the effective execution frequency varies with task duration: if a task takes 10 seconds and the delay is 5 seconds, the effective rate is every 15 seconds, not every 5.
 
 ```java
 @Component

@@ -28,6 +28,8 @@ Chaos engineering is the practice of intentionally injecting failures into a sys
 
 ### Dependencies
 
+Chaos Monkey for Spring Boot is a testing dependency that injects latency, exceptions, and other failures into application components. The `test` scope ensures it's never packaged in production artifacts.
+
 ```xml
 <dependency>
     <groupId>de.codecentric</groupId>
@@ -64,6 +66,8 @@ chaos:
 ```
 
 ### Chaos Profile
+
+The chaos profile activates assault configuration programmatically. The `level: 3` enables all assault types, with latency ranging from 3-10 seconds and a 50% exception weight. The watcher configuration specifies which Spring beans (controllers, services, repositories) are targeted for failure injection.
 
 ```java
 @Configuration
@@ -108,6 +112,8 @@ public class ChaosOrderController {
 ```
 
 ## LitmusChaos for Kubernetes
+
+LitmusChaos runs infrastructure-level experiments on Kubernetes — pod deletion, network latency, CPU spikes, and memory pressure. Each experiment has configurable parameters like duration, interval, and force flags. The `RAMP_TIME` ensures a gradual introduction of the fault rather than an instant shock.
 
 ```yaml
 apiVersion: litmuschaos.io/v1alpha1
@@ -164,6 +170,8 @@ spec:
 ```
 
 ## Chaos Experiment Runner
+
+The experiment runner orchestrates a series of chaos experiments, recording baseline metrics before and comparing after. Each experiment (service crash, latency spike, database failure, network partition) is wrapped with a health check to determine pass/fail status. Experiments should run during low-traffic periods to minimize user impact.
 
 ```java
 @Component
@@ -292,6 +300,8 @@ public class ChaosExperimentRunner {
 ```
 
 ## Resilience Verification
+
+After chaos experiments, verifying that resilience mechanisms recovered is essential. The verifier checks that all circuit breakers are CLOSED (not stuck OPEN), retry counts are within expected ranges, and bulkheads have available permits. Automated verification prevents the common pitfall of leaving resilience mechanisms in a degraded state.
 
 ```java
 @Component

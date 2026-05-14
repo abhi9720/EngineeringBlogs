@@ -28,7 +28,9 @@ This guide teaches you how Spring Data JPA actually works, when to use its built
 
 ### Repository Abstraction Architecture
 
-When you define a repository interface extending `JpaRepository`, Spring Data generates a proxy implementation at runtime. This proxy translates method calls into JPA operations:
+When you define a repository interface extending `JpaRepository`, Spring Data generates a proxy implementation at runtime. This proxy translates method calls into JPA operations. The proxy is created by `JpaRepositoryFactoryBean`, which uses a `QueryLookupStrategy` to determine how to generate the query for each method.
+
+The `SimpleJpaRepository` class is the default implementation behind every `JpaRepository` interface. It uses an `EntityManager` to execute all database operations. When Spring Data encounters a method like `findByEmail`, it parses the method name, extracts the property name (`email`), and builds a Criteria API query dynamically.
 
 ```java
 // Your repository interface
@@ -66,7 +68,9 @@ public class SimpleJpaRepository<T, ID> implements JpaRepository<T, ID> {
 
 ### The Proxy Creation Process
 
-Here's exactly how Spring creates your repository implementation:
+Here's exactly how Spring creates your repository implementation. The process has three distinct phases. First, Spring Data detects interfaces extending `Repository` at startup via component scanning. Second, `JpaRepositoryFactoryBean` creates a JDK dynamic proxy for each detected interface. Third, the proxy's `QueryLookupStrategy` decides how to generate queries for each method — either from `@Query` annotations, `@NamedQuery`, or method name derivation.
+
+The default lookup strategy is `CREATE_IF_NOT_FOUND`: it checks for `@Query` first, then `@NamedQuery`, and finally falls back to method name parsing. Understanding this order is essential for debugging — if your `@Query` annotation has a syntax error, you get an error at startup, but if the method name is ambiguous, you get a runtime error only when the method is called.
 
 1. **Bean Definition**: At application startup, Spring Data detects interfaces extending `Repository`
 2. **Factory Bean**: `JpaRepositoryFactoryBean` creates the proxy
@@ -99,7 +103,9 @@ public class QueryLookupStrategy {
 
 ### Method Name Parsing
 
-Spring Data parses method names into JPQL queries. Understanding the keyword mapping is essential:
+Spring Data parses method names into JPQL queries. Understanding the keyword mapping is essential because the parser has a specific grammar. The method name is split at camel-case boundaries and each segment is matched against a known set of keywords (`findBy`, `And`, `Or`, `Between`, `LessThan`, `GreaterThan`, `Containing`, `OrderBy`, etc.).
+
+If a property name in your entity doesn't match the segment in the method name, Spring Data throws an exception at startup with a message like "No property 'xyz' found for type 'Entity'". The table below shows the complete keyword mapping.
 
 | Method Fragment | SQL Equivalent |
 |-----------------|-----------------|
@@ -154,7 +160,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 ### Transaction Management
 
-Spring Data JPA methods are transactional by default. Understanding the propagation behavior is critical:
+Spring Data JPA methods are transactional by default. Understanding the propagation behavior is critical because it affects how transactions interact across service layers. Each `JpaRepository` method is annotated with `@Transactional(readOnly = true)` for read operations and `@Transactional` for write operations at the implementation level.
+
+At the service layer, you typically wrap multiple repository calls in a single `@Transactional` annotation. This ensures all calls participate in the same database transaction — either all succeed or all roll back. The propagation behavior defaults to `REQUIRED`, which means the service transaction is reused by each repository method.
 
 ```java
 // Default: REQUIRED - joins existing transaction or creates new one
@@ -207,7 +215,9 @@ public class UserService {
 
 ### Case 1: Paginated and Sorted Queries
 
-Production applications always need pagination:
+Production applications always need pagination. Returning all records from a large table will exhaust memory and overwhelm the network. Spring Data JPA provides the `Page` return type, which encapsulates the results, total count, and pagination metadata in a single response.
+
+Use `Pageable` for standard pagination and `Slice` when you only need to know if there's a "next page" (more efficient because it avoids the count query). For very large read-only datasets, use `Stream<T>` with `@Transactional(readOnly = true)` to process records one at a time without loading everything into memory.
 
 ```java
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -267,7 +277,9 @@ public class UserController {
 
 ### Case 2: Custom Queries with @Query
 
-When method names become unwieldy or you need complex queries:
+When method names become unwieldy or you need complex queries, use the `@Query` annotation. JPQL queries are recommended over native SQL because they are database-independent and validated against the entity model at startup. Use native SQL only for database-specific features like window functions or full-text search.
+
+The `@Modifying` annotation is mandatory for UPDATE, DELETE, or INSERT queries. Without it, Spring Data JPA throws an exception because it doesn't know the method modifies data. `@Modifying` also provides `clearAutomatically` (clears the persistence context after execution) and `flushAutomatically` (flushes before executing).
 
 ```java
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -312,7 +324,9 @@ public interface UserSummary {
 
 ### Case 3: Entity Graph for Complex Fetching
 
-Avoid N+1 problems with entity graphs:
+The N+1 query problem occurs when you load an entity with lazy associations and then iterate over the collection, triggering a separate SQL query for each item. Entity graphs solve this by specifying which associations to fetch eagerly for a particular query, overriding the default fetch strategy.
+
+`@NamedEntityGraph` defines reusable fetch plans at the entity level. The `@EntityGraph` annotation on repository methods references these plans or specifies inline attribute paths. Use `LOAD` to always fetch the specified attributes (even if they're LAZY) and `FETCH` to treat the specified attributes as EAGER while everything else remains LAZY.
 
 ```java
 @Entity
@@ -362,7 +376,9 @@ public class User {
 
 ### Case 4: Specification for Dynamic Queries
 
-Build complex queries programmatically:
+Build complex queries programmatically using the Specification pattern. This is the most flexible approach for dynamic search filters where the user can combine any subset of criteria. `JpaSpecificationExecutor` adds the `findAll(Specification<T>)` method to your repository.
+
+Each specification method returns `null` when the corresponding filter is not provided, which the `Specification.where()` method ignores. This lets you compose optional filters without complex conditional logic. The resulting query uses JOINs and WHERE clauses that are efficient and use proper bind parameters (no SQL injection risk).
 
 ```java
 public interface UserRepository extends JpaRepository<User, Long>, 
@@ -472,7 +488,9 @@ List<User> users = userSearchService.search(criteria);
 
 ### 1. Entity Manager Configuration
 
-Proper entity manager setup is critical for production:
+Proper entity manager setup is critical for production. The configuration below shows a tuned Hibernate setup with batching enabled, which reduces the number of SQL statements for bulk operations. Disable `show-sql` and `format-sql` in production — they add overhead and can leak schema information in logs.
+
+The batch settings tell Hibernate to group multiple INSERT statements into a single JDBC batch. `order_inserts` and `order_updates` reorganize the statements so that Hibernate can batch them efficiently. Without these, Hibernate interleaves statements and can't batch them.
 
 ```java
 @Configuration
@@ -517,7 +535,9 @@ public class JpaConfig {
 
 ### 2. Auditing:自动填充审计字段
 
-Track creation and modification times automatically:
+Track creation and modification times automatically with Spring Data JPA auditing. Enable it with `@EnableJpaAuditing`, define an `AuditorAware` bean that extracts the current user from the security context, and extend your entities from an `Auditable` base class.
+
+The `@CreatedDate`, `@LastModifiedDate`, `@CreatedBy`, and `@LastModifiedBy` annotations are automatically populated by `AuditingEntityListener` when the entity is persisted or updated. This eliminates repetitive timestamp-setting code and ensures consistency across all entities.
 
 ```java
 @Configuration
@@ -593,7 +613,9 @@ public class UserService {
 
 ### 3. Soft Delete Pattern
 
-Common in production to preserve data integrity:
+Common in production to preserve data integrity. Instead of physically deleting rows, set a `deleted` flag. This allows data recovery, maintains referential integrity, and enables audit trails. The pattern requires overriding standard repository methods to filter out deleted records and providing custom methods for admin-level hard deletion and restoration.
+
+The `@Where` annotation (Hibernate-specific) can also be used on entities to automatically filter out soft-deleted records in all queries, but it requires careful testing because it silently modifies every query.
 
 ```java
 @MappedSuperclass
@@ -672,7 +694,9 @@ public class UserRepositoryImpl implements UserRepositoryExtension {
 
 ### 4. Connection Pool Monitoring
 
-Monitor connection pool health:
+Monitor connection pool health to detect connection leaks, pool exhaustion, or database connectivity issues. HikariCP is the default connection pool in Spring Boot 2.x+ and provides comprehensive metrics.
+
+Configure HikariCP with reasonable pool limits and expose metrics via Micrometer. The `maximumPoolSize` should be set based on the database's max connections divided by the number of application instances. The `connectionTimeout` controls how long a thread waits for a connection before throwing an exception.
 
 ```java
 @Configuration
@@ -726,7 +750,9 @@ management:
 
 ### 5. Batch Operations for Bulk Inserts
 
-For high-volume data import:
+For high-volume data import, bypass Spring Data JPA's `saveAll()` and use the `EntityManager` directly. The reason is that `saveAll()` still processes entities through the persistence context, which grows unboundedly and causes memory pressure.
+
+The `flush()` and `clear()` calls every N items keep the persistence context at a manageable size. Without periodic clearing, the persistence context acts as a first-level cache that grows with each persisted entity, eventually causing out-of-memory errors.
 
 ```java
 @Service
@@ -776,7 +802,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     
     @Modifying
     @Query(value = "INSERT INTO users (name, email, created_at) " +
-                   "VALUES (:#{#user.name}, :#{#user.email}, :#{#user.createdAt})", 
+                   "VALUES (:#{#user.name}, ::#{#user.email}, ::#{#user.createdAt})", 
            nativeQuery = true)
     @QueryHints({@QueryHint(name = "org.hibernate.jdbc.batch_size", value = "50")})
     void bulkInsert(@Param("user") User user);
@@ -1047,4 +1073,4 @@ The key to using Spring Data JPA successfully is understanding when to rely on i
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

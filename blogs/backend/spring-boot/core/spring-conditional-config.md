@@ -1,4 +1,4 @@
----
+﻿---
 title: "Spring Conditional Configuration"
 description: "Master Spring's @Conditional annotations: @ConditionalOnClass, @ConditionalOnProperty, @ConditionalOnBean, and creating custom conditions for intelligent bean registration"
 date: "2026-05-11"
@@ -16,11 +16,17 @@ draft: false
 
 Spring's conditional configuration enables beans to be registered based on specific conditions - whether a class is on the classpath, a property is set, or another bean exists. This is the core mechanism behind Spring Boot's auto-configuration and enables flexible, environment-aware application setup.
 
+Conditional configuration is the engine behind "convention over configuration." Instead of requiring users to explicitly configure every bean, Spring Boot auto-configuration classes use conditions to automatically register beans when their dependencies are present. Understanding these conditions lets you debug why a bean was or was not created.
+
 ## The @Conditional Annotation
 
 ### Creating a Custom Condition
 
-```java
+The Condition interface has a single method: matches(ConditionContext, AnnotatedTypeMetadata). The ConditionContext provides access to the bean factory, environment, resource loader, and class loader. The AnnotatedTypeMetadata provides access to the annotations on the configuration class or bean method.
+
+Custom conditions are useful for environment-specific logic that the built-in annotations don't cover, like OS detection, region detection, or checking external configuration files.
+
+`java
 public class OnWindowsCondition implements Condition {
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
@@ -36,9 +42,9 @@ public class OnMacCondition implements Condition {
         return osName != null && osName.toLowerCase().contains("mac");
     }
 }
-```
+`
 
-```java
+`java
 @Configuration
 public class OsSpecificConfig {
 
@@ -54,13 +60,18 @@ public class OsSpecificConfig {
         return new MacFileSystemService();
     }
 }
-```
+`
 
 ## Spring Boot's @ConditionalOn* Annotations
 
 ### @ConditionalOnClass
 
-```java
+The most common conditional: register a bean only when a specific class is on the classpath. This is how Spring Boot auto-configures the appropriate DataSource based on which database driver is present — PostgreSQL, MySQL, or H2.
+
+The condition checks both at startup (when the configuration is parsed) and at runtime (when the bean is created). The 
+ame attribute accepts fully-qualified class names for classes that may not be on the classpath yet.
+
+`java
 @Configuration
 public class DatabaseAutoConfig {
 
@@ -91,11 +102,13 @@ public class DatabaseAutoConfig {
             .build();
     }
 }
-```
+`
 
 ### @ConditionalOnMissingClass
 
-```java
+The inverse of @ConditionalOnClass. Use it to provide a fallback implementation when a dependency is not available. In the example below, the H2-based fallback DataSource is created when neither PostgreSQL nor MySQL drivers are on the classpath.
+
+`java
 @Configuration
 public class FallbackConfig {
 
@@ -110,11 +123,13 @@ public class FallbackConfig {
             .build();
     }
 }
-```
+`
 
 ### @ConditionalOnProperty
 
-```java
+Conditional on a configuration property value. This is the primary mechanism for users to enable or disable features. The matchIfMissing attribute determines whether the condition matches when the property is absent. Setting matchIfMissing = true means the bean is created by default and users must opt out.
+
+`java
 @Component
 @ConditionalOnProperty(
     name = "app.feature.notifications.enabled",
@@ -150,11 +165,15 @@ public class SmsNotificationService implements NotificationService {
         twilioClient.sendSms(user.getPhone(), message);
     }
 }
-```
+`
 
 ### @ConditionalOnBean and @ConditionalOnMissingBean
 
-```java
+@ConditionalOnBean creates a bean only when another bean (of a specific type or name) already exists. @ConditionalOnMissingBean creates it only when no such bean exists. These are essential for providing default bean implementations that users can override.
+
+The pattern below creates a SimpleCacheManager only if no other CacheManager bean exists. If Redis is available (indicated by edisConnectionFactory bean), a RedisCacheManager replaces it.
+
+`java
 @Configuration
 public class CacheConfiguration {
 
@@ -196,11 +215,13 @@ public class DatabaseHealthIndicator implements HealthIndicator {
         }
     }
 }
-```
+`
 
 ### @ConditionalOnResource
 
-```java
+Creates a bean only when a specific resource (file) exists on the classpath or filesystem. Useful for optional configuration files like keystores or bootstrap configurations that may be present only in certain environments.
+
+`java
 @Configuration
 public class KeyStoreConfig {
 
@@ -222,13 +243,15 @@ public class KeyStoreConfig {
         return new BootstrapConfig();
     }
 }
-```
+`
 
 ### @ConditionalOnExpression
 
-```java
+The most flexible conditional: it evaluates an arbitrary SpEL expression. Use it for complex conditions that involve multiple properties, system properties, or computations. The expression has access to all environment properties, system properties, and Spring beans.
+
+`java
 @Component
-@ConditionalOnExpression("${app.feature.advanced-search:false} and ${app.search.engine:elasticsearch} == 'elasticsearch'")
+@ConditionalOnExpression(" and  == 'elasticsearch'")
 public class ElasticsearchAdvancedSearchService implements SearchService {
     private final ElasticsearchClient client;
 
@@ -252,11 +275,11 @@ public class ElasticsearchAdvancedSearchService implements SearchService {
         ).map(SearchResult::fromElasticsearchResponse);
     }
 }
-```
+`
 
 ### @ConditionalOnJava
 
-```java
+`java
 @Configuration
 public class JavaVersionSpecificConfig {
 
@@ -274,11 +297,11 @@ public class JavaVersionSpecificConfig {
         return new VirtualThreadService();
     }
 }
-```
+`
 
 ### @ConditionalOnSingleCandidate
 
-```java
+`java
 @Configuration
 public class PaymentConfig {
 
@@ -289,11 +312,11 @@ public class PaymentConfig {
         return new PaymentService(gateway);
     }
 }
-```
+`
 
 ### @ConditionalOnCloudPlatform
 
-```java
+`java
 @Configuration
 public class CloudConfig {
 
@@ -309,11 +332,11 @@ public class CloudConfig {
         return new KubernetesService();
     }
 }
-```
+`
 
 ### @ConditionalOnNotWebApplication
 
-```java
+`java
 @Component
 @ConditionalOnNotWebApplication
 public class CliRunner implements CommandLineRunner {
@@ -328,13 +351,15 @@ public class CliRunner implements CommandLineRunner {
 public class ServletInitializerConfig {
     // Configuration specific to WAR deployment
 }
-```
+`
 
 ## Custom Conditional Annotations
 
 ### Creating Composed Annotations
 
-```java
+Composed annotations combine multiple conditions into a single reusable annotation. This eliminates duplication and documents the intended use case. The @ConditionalOnRedisEnabled annotation below combines classpath and property checks into one annotation that clearly expresses "I need Redis enabled."
+
+`java
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Conditional(OnRedisCondition.class)
@@ -354,11 +379,11 @@ public @interface ConditionalOnRedisEnabled {
 @ConditionalOnExpression("T(java.lang.Runtime).getRuntime().availableProcessors() > 4")
 public @interface ConditionalOnHighPerformance {
 }
-```
+`
 
 ### Using Custom Annotations
 
-```java
+`java
 @Configuration
 public class FeatureConfig {
 
@@ -374,13 +399,15 @@ public class FeatureConfig {
         return new ParallelProcessor(Runtime.getRuntime().availableProcessors());
     }
 }
-```
+`
 
 ## Combining Conditions
 
 ### Logical Conditions
 
-```java
+Multiple @ConditionalOn* annotations on the same class combine with AND semantics — all conditions must match for the bean to be created. This is the most common way to express complex preconditions.
+
+`java
 @Component
 @ConditionalOnProperty("app.feature.fraud-detection")
 @ConditionalOnBean(RulesEngine.class)
@@ -400,11 +427,13 @@ public class FraudDetectionService {
         return new FraudScore(rulesScore * 0.4 + mlScore * 0.6);
     }
 }
-```
+`
 
 ### AllNestedConditions
 
-```java
+AllNestedConditions combines multiple inner conditions with AND logic. All inner conditions must match for the enclosing condition to pass. Use this for grouping related conditions into a single named condition.
+
+`java
 public class OnProductionWithHighTraffic extends AllNestedConditions {
 
     public OnProductionWithHighTraffic() {
@@ -414,7 +443,7 @@ public class OnProductionWithHighTraffic extends AllNestedConditions {
     @ConditionalOnProperty(name = "app.env", havingValue = "prod")
     static class OnProduction {}
 
-    @ConditionalOnExpression("${app.max-concurrent-users:0} > 10000")
+    @ConditionalOnExpression(" > 10000")
     static class OnHighTraffic {}
 }
 
@@ -423,11 +452,13 @@ public class OnProductionWithHighTraffic extends AllNestedConditions {
 public class ProductionHighTrafficService {
     // Only active in production with high traffic
 }
-```
+`
 
 ### AnyNestedCondition
 
-```java
+AnyNestedCondition combines conditions with OR logic. If any inner condition matches, the enclosing condition passes. Use this for fallback scenarios where multiple conditions could satisfy the requirement.
+
+`java
 public class OnAnyDatabaseAvailable extends AnyNestedCondition {
 
     public OnAnyDatabaseAvailable() {
@@ -446,11 +477,11 @@ public class OnAnyDatabaseAvailable extends AnyNestedCondition {
 public class DatabaseService {
     // Active if any database configuration is present
 }
-```
+`
 
 ## Condition Evaluation in Auto-Configuration
 
-```java
+`java
 @AutoConfiguration
 @ConditionalOnClass(DataSource.class)
 @EnableConfigurationProperties(DataSourceProperties.class)
@@ -484,11 +515,11 @@ public class DataSourceAutoConfiguration {
         }
     }
 }
-```
+`
 
 ## Debugging Conditions
 
-```java
+`java
 // application.yml
 debug: true
 
@@ -496,11 +527,11 @@ debug: true
 logging:
   level:
     org.springframework.boot.autoconfigure: DEBUG
-```
+`
 
 This enables condition evaluation logging:
 
-```
+`	ext
 Positive matches:
 -----------------
    DataSourceAutoConfiguration matched:
@@ -512,7 +543,7 @@ Negative matches:
    ActiveMQAutoConfiguration:
       Did not match:
          - @ConditionalOnClass did not find required class 'javax.jms.ConnectionFactory' (OnClassCondition)
-```
+`
 
 ## Best Practices
 
@@ -528,7 +559,7 @@ Negative matches:
 
 ### Mistake 1: Conditions that Always Match
 
-```java
+`java
 // Wrong: Condition evaluates incorrectly
 public class AlwaysTrueCondition implements Condition {
     @Override
@@ -539,9 +570,9 @@ public class AlwaysTrueCondition implements Condition {
 
 // The below condition depends on Spring Boot auto-configuration having already run
 // which may not be the case during early context initialization
-```
+`
 
-```java
+`java
 // Correct: Proper condition implementation
 public class OnCustomFeatureEnabled implements Condition {
     @Override
@@ -551,11 +582,11 @@ public class OnCustomFeatureEnabled implements Condition {
             || Boolean.parseBoolean(value);
     }
 }
-```
+`
 
 ### Mistake 2: Race Conditions in Bean Creation
 
-```java
+`java
 // Wrong: @ConditionalOnBean may fail due to bean creation order
 @Configuration
 public class ServiceConfig {
@@ -572,9 +603,9 @@ public class ServiceConfig {
         return DataSourceBuilder.create().build();
     }
 }
-```
+`
 
-```java
+`java
 // Correct: Use @ConditionalOnMissingBean for proper ordering
 @Configuration
 public class ServiceConfig {
@@ -590,11 +621,11 @@ public class ServiceConfig {
         return new DatabaseService();
     }
 }
-```
+`
 
 ### Mistake 3: Mismatching Condition Phases
 
-```java
+`java
 // Wrong: PARSE_CONFIGURATION phase condition accessing bean registry
 public class WrongPhaseCondition implements Condition {
     @Override
@@ -603,9 +634,9 @@ public class WrongPhaseCondition implements Condition {
         return context.getBeanFactory().containsBean("someBean");
     }
 }
-```
+`
 
-```java
+`java
 // Correct: Use appropriate phase
 public class CorrectPhaseCondition extends SpringBootCondition {
     @Override
@@ -619,7 +650,7 @@ public class CorrectPhaseCondition extends SpringBootCondition {
         return ConditionOutcome.noMatch(message.didNotFind("bean").items("someBean"));
     }
 }
-```
+`
 
 ## Summary
 

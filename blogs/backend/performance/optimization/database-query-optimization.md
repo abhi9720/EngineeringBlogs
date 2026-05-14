@@ -57,6 +57,8 @@ CREATE INDEX idx_orders_active ON orders(created_at)
 CREATE UNIQUE INDEX idx_users_email ON users(email);
 ```
 
+Each index type serves a distinct access pattern. B-tree (the default) is ideal for equality and range queries — it supports `=`, `>`, `<`, `BETWEEN`, `IN`, and `ORDER BY`. Composite indexes work best when the leading column matches the `WHERE` filter — a query filtering only on `status` cannot use `idx_orders_customer_status` because `customer_id` is the prefix. Covering indexes (with `INCLUDE`) store extra columns at the leaf level so the database can answer the query entirely from the index without touching the heap — this avoids costly table lookups. Partial indexes are half the size of a full index and are updated only for matching rows, so they are cheaper to maintain.
+
 ### JPA Index Configuration
 
 ```java
@@ -125,17 +127,31 @@ ORDER BY o.created_at DESC
 LIMIT 100;
 
 -- Output:
--- ┌────────────────────────────────────────────────────────┐
--- │ Limit (cost=10.5..15.2 rows=100)                       │
--- │   -> Sort (cost=15.2..17.8 rows=1000)                  │
--- │        Sort Key: o.created_at DESC                     │
--- │       -> Nested Loop (cost=5.5..12.0 rows=1000)        │
--- │            -> Index Scan on orders_status_created       │
--- │                 Index Cond: (status = 'PENDING')       │
--- │                 Filter: (created_at > '2026-01-01')    │
--- │            -> Index Scan on customers_pkey             │
--- │                 Index Cond: (id = o.customer_id)       │
--- └────────────────────────────────────────────────────────┘
+-- 
+-- ```mermaid
+-- graph TD
+--     classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+--     classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+--     classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+--     classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+--     linkStyle default stroke:#278ea5
+-- 
+--     Limit["Limit<br/>(cost=10.5..15.2 rows=100)"]
+--     Sort["Sort<br/>(cost=15.2..17.8 rows=1000)<br/>Sort Key: o.created_at DESC"]
+--     NL["Nested Loop<br/>(cost=5.5..12.0 rows=1000)"]
+--     Idx1["Index Scan on orders_status_created<br/>Index Cond: (status = 'PENDING')<br/>Filter: (created_at > '2026-01-01')"]
+--     Idx2["Index Scan on customers_pkey<br/>Index Cond: (id = o.customer_id)"]
+-- 
+--     Limit --> Sort
+--     Sort --> NL
+--     NL --> Idx1
+--     NL --> Idx2
+-- 
+--     class Limit pink
+--     class Sort yellow
+--     class NL blue
+--     class Idx1,Idx2 green
+-- ```
 ```
 
 ### Detect Full Table Scans
@@ -176,6 +192,8 @@ public class QueryAnalyzer {
     }
 }
 ```
+
+Running `EXPLAIN ANALYZE` from application code at startup or during integration tests is a powerful guardrail for catching regressions before they reach production. The query plan shown as a mermaid diagram above reveals an optimal execution: both sides of the Nested Loop use index scans, and the `Limit` node stops early once 100 rows are produced. The real value of `EXPLAIN (ANALYZE, BUFFERS)` is spotting "Seq Scan" on large tables — that indicates a missing index. A CI linter can parse these plans and fail builds when full table scans appear on tables above a configurable row threshold.
 
 ---
 
@@ -241,6 +259,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 }
 ```
 
+The three fixes address the same root cause — lazy association loading — through different mechanisms. `JOIN FETCH` generates a SQL inner join that loads all items in the same query as the orders, but `DISTINCT` is often needed to avoid duplicate order rows from the join. Entity Graphs are more flexible because they can be applied dynamically per query without changing the JPQL. Batch fetching (the third option) is the least invasive: Hibernate loads collection identifiers in batches using `WHERE id IN (?, ?, ...)` — for 100 orders it generates 2 queries instead of 101. Prefer Entity Graphs or batch fetching over `JOIN FETCH` when you need different fetch plans for different use cases.
+
 ### Batch Fetching Configuration
 
 ```yaml
@@ -270,6 +290,8 @@ ORDER BY id
 LIMIT 20;
 -- Scans 20 rows
 ```
+
+Keyset pagination (also called "seek pagination") avoids the OFFSET performance cliff: skipping 100,000 rows means the database must count through all of them, while `WHERE id > 100000` uses the primary key index to jump directly to the correct position. The trade-off is that keyset pagination requires a `WHERE` clause on a unique, sortable column and cannot jump to arbitrary pages — users must navigate sequentially. For most APIs that serve infinite scroll or "load more" UIs, this is the correct choice.
 
 ```java
 @Repository
@@ -393,6 +415,8 @@ public class GoodBatchService {
 ## Connection Management
 
 ### Pool Monitoring
+
+Monitoring the connection pool is critical because exhaustion symptoms — timeouts, queueing — look identical to database slowdowns. The `pendingThreads` counter shows how many request threads are actively waiting for a connection. Any sustained positive value means the pool is undersized or connections are held too long. Active connections at `maximumPoolSize` with zero pending is the ideal operating point: the pool is fully utilized but no one is waiting.
 
 ```java
 @Component

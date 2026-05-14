@@ -30,6 +30,8 @@ Go has several excellent web frameworks. Gin, Echo, and Fiber are the most popul
 
 ## Code Comparison
 
+Each framework exposes a slightly different API design. Gin opts for a `gin.Default()` constructor that includes logging and recovery middleware out of the box. Echo requires explicit `echo.New()` and manual `Logger.Fatal` wrapping. Fiber follows an Express.js-inspired pattern with `fiber.New()` and returns errors from handlers. These design choices reflect each framework's philosophy: Gin prioritizes convenience, Echo favors explicitness, and Fiber prioritizes developer familiarity for those coming from Node.js.
+
 ### Basic Setup
 
 ```go
@@ -75,6 +77,8 @@ func main() {
 
 ### Routing
 
+All three frameworks support route grouping with identical nesting semantics. Gin uses `Group()` which returns a `*gin.RouterGroup`, Echo returns `*echo.Group`, and Fiber returns `fiber.Router`. The grouping pattern is consistent across all three, making migration between them straightforward for route organization.
+
 ```go
 // Gin routing
 func ginRouter() *gin.Engine {
@@ -119,6 +123,8 @@ func fiberRouter() *fiber.App {
 ```
 
 ### Request Binding
+
+Request binding differs in approach: Gin uses `ShouldBindJSON` with struct tags that combine binding and validation rules in a single annotation. Echo separates binding from validation, requiring explicit calls to both `c.Bind()` and `c.Validate()`. Fiber uses `BodyParser` and relies on external validator packages. The trade-off is between Gin's convenience (single annotation approach) and Echo's separation of concerns (binding and validation as distinct steps).
 
 ```go
 // Gin
@@ -170,6 +176,8 @@ func fiberCreateUser(c *fiber.Ctx) error {
 
 ### Middleware
 
+The middleware signatures reveal key architectural differences. Gin middleware takes `*gin.Context` and calls `c.Next()` to pass control — the context acts as a request-scoped bag carrying both request data and error state. Echo middleware wraps the next handler explicitly, returning a `echo.HandlerFunc` closure. Fiber adopts yet another approach, returning an error from `c.Next()` which propagates up the middleware chain. Fiber's `c.Next()` returning an error enables middleware to short-circuit by returning early without calling next.
+
 ```go
 // Gin middleware
 func ginAuthMiddleware() gin.HandlerFunc {
@@ -212,6 +220,8 @@ func fiberAuthMiddleware() fiber.Handler {
 ```
 
 ### Error Handling
+
+Error handling strategies reflect each framework's design philosophy. Gin accumulates errors on the context via `c.Error()` and checks `c.Errors` after handler execution — this allows collecting multiple errors during request processing. Echo defines a dedicated error handler type that intercepts errors globally. Fiber uses typed errors with `*fiber.Error`, allowing structured error codes that can be inspected in custom error handlers.
 
 ```go
 // Gin error handling
@@ -265,6 +275,8 @@ func fiberErrorHandler(c *fiber.Ctx, err error) error {
 // Gin:    ~3KB
 // Echo:   ~4KB
 ```
+
+The performance data above highlights Fiber's advantage at the extremes — its fasthttp foundation gives it the lowest memory allocation per request and highest throughput. However, for the vast majority of applications, the gap narrows considerably under real-world conditions where database access, serialization, and business logic dominate request time. Gin strikes the best balance of performance and feature completeness, while Echo's extra allocation overhead comes from richer built-in features like WebSocket support and template rendering.
 
 ## Decision Guide
 

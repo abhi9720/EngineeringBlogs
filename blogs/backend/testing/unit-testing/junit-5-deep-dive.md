@@ -22,20 +22,34 @@ JUnit 5 is a complete rewrite of the JUnit testing framework, divided into three
 
 ## Architecture
 
+```mermaid
+graph TD
+    subgraph Platform["JUnit Platform"]
+        direction LR
+        Platform_content["Launcher · TestEngine · Console Launcher<br/>Gradle/Maven/IDE Integration"]
+    end
+    subgraph Jupiter["JUnit Jupiter"]
+        direction LR
+        Jupiter_content["@Test · @ParameterizedTest · Extensions<br/>Assertions · Assumptions · @Tag · @Display"]
+    end
+    subgraph Vintage["JUnit Vintage"]
+        direction LR
+        Vintage_content["Runs JUnit 3 and JUnit 4 tests"]
+    end
+    Platform --> Jupiter
+    Platform --> Vintage
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class Platform blue
+    class Jupiter green
+    class Vintage pink
 ```
-┌─────────────────────────────────────────────┐
-│              JUnit Platform                   │
-│  Launcher · TestEngine · Console Launcher    │
-│  Gradle/Maven/IDE Integration                │
-├─────────────────────────────────────────────┤
-│              JUnit Jupiter                    │
-│  @Test · @ParameterizedTest · Extensions    │
-│  Assertions · Assumptions · @Tag · @Display  │
-├─────────────────────────────────────────────┤
-│              JUnit Vintage                    │
-│  Runs JUnit 3 and JUnit 4 tests              │
-└─────────────────────────────────────────────┘
-```
+
+The modular architecture of JUnit 5 is a significant improvement over JUnit 4. The Platform layer provides a standard mechanism for discovering and executing tests—tools like Maven Surefire, Gradle, and IDEs all talk to this layer. Jupiter implements the actual test programming model (annotations, assertions, extensions). Vintage ensures existing JUnit 4 tests continue to run without modification, enabling incremental migration.
 
 ---
 
@@ -89,6 +103,8 @@ class OrderServiceTest {
     }
 }
 ```
+
+Note that `@BeforeAll` and `@AfterAll` must be `static` by default. They execute once per test class, making them suitable for expensive setup like database connections. If you prefer per-test-instance lifecycle (where these methods can be instance methods), use `@TestInstance(Lifecycle.PER_CLASS)` on the class.
 
 ---
 
@@ -204,6 +220,8 @@ class AssertionExamplesTest {
 }
 ```
 
+`assertAll` is particularly valuable because it executes every assertion within its lambda, collecting all failures before reporting. This differs from standard assertions that short-circuit on the first failure, making `assertAll` ideal for validating compound objects where you want to see every violated constraint in a single test run.
+
 ---
 
 ## Assumptions
@@ -241,6 +259,8 @@ class AssumptionExamplesTest {
     }
 }
 ```
+
+Assumptions are ideal for environment-specific tests. Unlike assertions, a failing assumption skips the test rather than failing it. The `assumingThat` variant is particularly useful when you want to conditionally run extra assertions without skipping the whole test.
 
 ---
 
@@ -371,6 +391,8 @@ class OrderServiceNestedTest {
     }
 }
 ```
+
+Nested tests allow you to structure test classes to mirror the scenarios being tested. Each `@Nested` class can have its own `@BeforeEach`, creating a setup hierarchy that builds on the parent state. This is especially useful for testing state machines or multi-step workflows where each stage has different valid behaviors.
 
 ---
 

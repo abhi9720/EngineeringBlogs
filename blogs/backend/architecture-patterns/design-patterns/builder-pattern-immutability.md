@@ -56,6 +56,8 @@ public class SearchRequest {
 }
 ```
 
+Telescoping constructors require the caller to provide every parameter up to a certain length, even if most have sensible defaults. Reading `new SearchRequest("spring boot", null, null, true, 0, 20, List.of(), "en")` is error-prone — which parameter is which? The builder pattern solves this by naming each parameter at the call site.
+
 ## Builder Pattern Implementation
 
 ### Manual Builder
@@ -169,6 +171,8 @@ public final class SearchRequest {
 }
 ```
 
+The manual builder validates each parameter in its setter method and performs cross-field validation in `build()`. The private constructor ensures `SearchRequest` can only be created through the builder, guaranteeing that validation always runs. The `Collections.unmodifiableList` wrapper in the constructor prevents the list from being modified after construction — critical for immutability.
+
 ### Using the Builder
 
 ```java
@@ -183,6 +187,8 @@ SearchRequest request = SearchRequest.builder()
     .locale("en")
     .build();
 ```
+
+The builder produces fluent, readable code. Each parameter is explicitly named, making the construction self-documenting. Even with 8 parameters, it is immediately clear what each value means. The fluent API also enables IDE autocompletion, reducing lookup time.
 
 ## Lombok @Builder
 
@@ -228,6 +234,8 @@ public class Address {
 }
 ```
 
+Lombok's `@Builder` generates the builder class, and `@Value` makes the class immutable (all fields are `private final`, getters are generated, equals/hashCode/toString are implemented). The `toBuilder = true` option generates a `toBuilder()` instance method that creates a builder pre-populated with the current object's values. `@Builder.Default` sets default values for optional fields.
+
 Using Lombok builders:
 
 ```java
@@ -254,6 +262,8 @@ CreateOrderCommand command = CreateOrderCommand.builder()
         .build())
     .build();
 ```
+
+Nested builders compose naturally. The `CreateOrderCommand` contains a list of `OrderItem` objects and an `Address`, each built with their own builder. This produces a complete, immutable object graph in a single expression.
 
 ## Immutable Domain Objects with Builder
 
@@ -350,6 +360,8 @@ public final class Order {
 }
 ```
 
+The `toBuilder()` method creates a new builder pre-populated with the current state, enabling `withStatus()` and `addItem()` methods that return new `Order` instances with modified fields. This is the "functional" approach to mutation — instead of modifying the object, you create a copy with the desired changes. The `Order` class remains fully immutable, which means it is thread-safe and its references can be shared freely.
+
 ## Advantages of Immutable Objects with Builders
 
 ### Thread Safety
@@ -375,6 +387,8 @@ public class OrderService {
 }
 ```
 
+Because `Order` is immutable, the `orderCache` can be safely shared across threads without synchronization. The `withStatus` method creates a new `Order` rather than modifying the existing one. The `ConcurrentHashMap` handles the atomic put operation, but the Order objects themselves need no locking.
+
 ### Defensive Copies Eliminated
 
 ```java
@@ -396,6 +410,8 @@ public final class ImmutableOrder {
     }
 }
 ```
+
+Mutable objects require defensive copies in getters to prevent callers from modifying internal state. Immutable objects eliminate this overhead entirely. The returned list is already unmodifiable because `OrderLine` is also immutable.
 
 ## Builder in Test Factories
 
@@ -441,6 +457,8 @@ void shouldCalculateTotalCorrectly() {
     assertThat(order.getTotal()).isEqualTo(Money.of(new BigDecimal("25.00"), "USD"));
 }
 ```
+
+Returning the builder from test factories allows tests to customize specific fields while inheriting sensible defaults. The `aConfirmedOrder()` factory creates an order with one item already added, and the test adds another item before building. This pattern reduces test duplication and makes test data setup readable.
 
 ## Common Mistakes
 
@@ -498,6 +516,8 @@ public class UserProfile {
 }
 ```
 
+If the builder exposes its internal list through a getter, callers can modify the builder's state after adding it. The fix is to either not expose getters on the builder or return defensive copies. The `build()` method should also create a defensive copy and wrap it in `Collections.unmodifiableList`.
+
 ### Missing Validation in Build Method
 
 ```java
@@ -521,6 +541,8 @@ public static class Builder {
     }
 }
 ```
+
+Validation in individual setter methods catches errors early, but cross-field validation belongs in `build()`. For example, requiring at least one item in an order cannot be validated when adding a single item — it must wait until the object is fully constructed.
 
 ## Best Practices
 

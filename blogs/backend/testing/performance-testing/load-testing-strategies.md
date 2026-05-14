@@ -74,6 +74,8 @@ class LoadTestSimulation extends Simulation {
 }
 ```
 
+The load test above includes realistic think times (`pause(3.seconds)`) between API calls. Without think times, you're testing a denial-of-service attack, not normal traffic. The assertion block enforces the SLA: 95% of requests under 1 second, 99% under 2 seconds, and 99.9% success rate.
+
 ### Key Metrics
 
 | Metric | Target | Description |
@@ -134,6 +136,8 @@ class StressTestSimulation extends Simulation {
 }
 ```
 
+Notice that the stress test check accepts both 200 (success), 429 (rate limited), and 503 (service unavailable). This is intentional—a well-designed system should return proper HTTP error codes with informative messages rather than crashing with connection timeouts. The transition from 429 to 503 tells you the rate limiting threshold.
+
 ### What to Observe
 
 ```
@@ -144,9 +148,9 @@ Stress Test Progression:
   200-500:      P95 = 3.5s,  2% errors    (Failing)
   500-1000:     P95 = 8s,    15% errors   (Breaking Point at ~400 users)
   
-Breaking Point: 400 concurrent users
-Recovery: System recovered within 30 seconds after load reduced
-Graceful Degradation: 429 responses returned, not 500 errors
+  Breaking Point: 400 concurrent users
+  Recovery: System recovered within 30 seconds after load reduced
+  Graceful Degradation: 429 responses returned, not 500 errors
 ```
 
 ### Recovery Test
@@ -198,6 +202,8 @@ class SoakTestSimulation extends Simulation {
     ).protocols(httpProtocol);
 }
 ```
+
+Soak tests run for hours, not minutes. The exponential pause distribution models real user behavior more accurately than fixed pauses. Monitor heap usage, GC pause times, and connection pool metrics every 5 minutes. A linear increase in response time over hours typically indicates a memory leak.
 
 ### Key Metrics Over Time
 

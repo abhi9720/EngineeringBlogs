@@ -20,6 +20,8 @@ Containerization is fundamental to microservices deployment. Docker packages app
 
 ### Minimal Dockerfile
 
+The minimal Dockerfile uses a two-stage build — the first stage compiles the application with the JDK, the second stage runs it with the lighter JRE. Multi-stage builds reduce the final image size by excluding build tools, compiler, and source files from the production image.
+
 ```dockerfile
 FROM eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /app
@@ -41,6 +43,8 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
 
 ### Optimized Dockerfile with JVM Tuning
+
+This production-ready Dockerfile adds JVM tuning flags: ZGC for low-latency garbage collection, `MaxRAMPercentage=75` to let the JVM dynamically size its heap within container memory limits, and heap dump on OOM for post-mortem analysis. The `tini` init process handles zombie reaping and signal forwarding.
 
 ```dockerfile
 FROM eclipse-temurin:21-jdk-alpine AS builder
@@ -81,7 +85,7 @@ CMD ["-XX:+UseZGC", \
 
 ## Layer Optimization
 
-Spring Boot 2.3+ supports layered JARs for faster container builds.
+Layered JARs split the Spring Boot application into four layers: dependencies (third-party libs), spring-boot-loader (framework classes), snapshot-dependencies (local snapshot deps), and application (your code). Docker caches each layer independently — rebuilding after a code change only invalidates the thin application layer, dramatically reducing build and push time.
 
 ```dockerfile
 FROM eclipse-temurin:21-jdk-alpine AS builder
@@ -104,6 +108,8 @@ ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
 ```
 
 ## Docker Compose
+
+Docker Compose orchestrates local development environments with all dependencies — Eureka, Config Server, Kafka, and Zookeeper. The `depends_on` with `condition: service_healthy` ensures services start in the correct order. Resource limits prevent any single service from starving others during local testing.
 
 ```yaml
 version: '3.8'
@@ -226,6 +232,8 @@ docker-compose*.yml
 ```
 
 ## Kubernetes Deployment
+
+The Kubernetes deployment configures rolling updates (`maxUnavailable: 0` for zero-downtime), three health probes (liveness, readiness, startup), resource limits, and a 60-second graceful shutdown period. The separate management port (8081) keeps actuator endpoints accessible without exposing them on the main application port.
 
 ```yaml
 apiVersion: apps/v1

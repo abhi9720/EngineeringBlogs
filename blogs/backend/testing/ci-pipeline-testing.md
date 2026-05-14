@@ -23,11 +23,19 @@ A well-designed CI pipeline runs the right tests at the right time, providing fa
 ## Test Pyramid in CI
 
 ```mermaid
-graph BT
-    E2E["E2E<br/>Few: Critical user journeys"]
-    Integration["Integration<br/>Some: Service interactions, database"]
-    Unit["Unit Tests<br/>Many: Isolated, fast, deterministic"]
-
+graph TD
+    subgraph E2E["E2E Tests (Few)"]
+        direction LR
+        E2E_desc["Critical user journeys"]
+    end
+    subgraph Integration["Integration Tests (Some)"]
+        direction LR
+        Int_desc["Service interactions, database"]
+    end
+    subgraph Unit["Unit Tests (Many)"]
+        direction LR
+        Unit_desc["Isolated, fast, deterministic"]
+    end
     Unit --> Integration --> E2E
 
     classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
@@ -35,7 +43,6 @@ graph BT
     classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
     classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
     linkStyle default stroke:#278ea5
-
     class Unit green
     class Integration blue
     class E2E pink
@@ -398,15 +405,14 @@ public class TestSelector {
 
 ```mermaid
 gantt
-    title Test Execution Timeline
+    title Layer-Based Test Execution Timeline
     dateFormat X
-    axisFormat %s
-
-    section Execution
-    Unit Tests          : 0, 5s
-    Component Tests     : 5, 10s
-    Integration Tests   : 15, 15s
-    Contract Tests      : 30, 30s
+    axisFormat %S s
+    section Test Stages
+    Unit Tests (fast)    :0, 5
+    Component Tests (medium) :5, 10
+    Integration Tests (slower) :10, 25
+    Contract Tests       :25, 35
 ```
 
 ---

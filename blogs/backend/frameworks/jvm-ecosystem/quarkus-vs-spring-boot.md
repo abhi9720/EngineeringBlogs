@@ -31,6 +31,8 @@ Quarkus and Spring Boot are the two leading Java frameworks for building microse
 
 ## Code Comparison
 
+The surface-level similarities between Quarkus and Spring Boot are intentional — Quarkus provides a Spring-compatible API via `quarkus-spring-web` extension. However, the default programming models differ. Spring Boot uses `@RestController` with `@RequestMapping` and returns `ResponseEntity`. Quarkus uses JAX-RS annotations (`@Path`, `@GET`, `@Produces`) and returns JAX-RS `Response`. The architectural intent is the same, but the annotation vocabulary differs.
+
 ### REST Endpoint
 
 ```java
@@ -91,6 +93,8 @@ public class UserResource {
 }
 ```
 
+Both frameworks support constructor injection. Spring Boot uses `@Service` (a specialized `@Component`) and injects via the constructor. Quarkus uses `@ApplicationScoped` (a CDI scope) and allows field injection with `@Inject`. Spring Boot's `@Transactional` and Quarkus's `@Transactional` both delegate to the same underlying Jakarta Transactions API but are processed at different lifecycle stages — Spring at runtime via AOP proxies, Quarkus at build time via bytecode transformation.
+
 ### Dependency Injection
 
 ```java
@@ -144,6 +148,8 @@ public class UserService {
 }
 ```
 
+A notable difference is how the frameworks handle database operations: Spring Boot's `repository.save(user)` follows the JPA merge/persist pattern, while Quarkus's `repository.persist(user)` uses the Panache pattern which provides Active Record-style methods directly on entities. Panache reduces boilerplate by mixing repository methods into entity classes and providing common queries as static methods.
+
 ### Configuration
 
 ```java
@@ -169,6 +175,8 @@ public interface DatabaseConfig {
     int maxPoolSize();
 }
 ```
+
+Configuration also diverges. Spring Boot uses mutable classes with getters/setters and `@ConfigurationProperties(prefix = "...")`. Quarkus uses immutable interfaces with `@ConfigMapping(prefix = "...")` where methods return configuration values. The interface approach is more type-safe and aligns with Quarkus's compile-time orientation. Quarkus also supports `@WithDefault` for optional values, while Spring Boot uses field initializers.
 
 ### Reactive Support
 
@@ -219,6 +227,8 @@ public class ReactiveUserResource {
 }
 ```
 
+For reactive programming, Spring Boot uses Project Reactor (`Flux` and `Mono`) via Spring WebFlux, while Quarkus uses Mutiny (`Multi` and `Uni`). Both represent the same concepts — single-value and multi-value asynchronous streams — but with different APIs. Mutiny is designed specifically for Quarkus and emphasizes an event-driven API with `onItem().transform()` chaining, while Reactor uses operator fusion for pipeline optimization.
+
 ## Native Image
 
 ```xml
@@ -242,6 +252,8 @@ public class ReactiveUserResource {
     </executions>
 </plugin>
 ```
+
+Both frameworks can produce GraalVM native images, but the experience differs. Spring Boot's AOT engine emerged later and required more manual configuration, especially for reflection-heavy features. Quarkus was designed for native compilation from the start, with most extensions generating the necessary native-image metadata automatically. Quarkus's `container-build=true` flag compiles inside a Docker container, removing the local GraalVM installation requirement.
 
 ## Extensions Ecosystem
 

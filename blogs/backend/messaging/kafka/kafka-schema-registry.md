@@ -18,7 +18,7 @@ Schema Registry provides a centralized repository for managing and enforcing mes
 
 ## Setting Up Schema Registry
 
-Schema Registry is deployed as a REST service alongside Kafka brokers.
+Schema Registry is deployed as a REST service alongside Kafka brokers. It stores schemas in an internal Kafka topic (`_schemas`) for durability and replication. The `cp-schema-registry` Docker image from Confluent runs the service, with `SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS` pointing to the Kafka cluster. The REST API runs on port 8081 by default.
 
 ```yaml
 # docker-compose.yml
@@ -36,7 +36,7 @@ services:
 
 ## Defining Avro Schemas
 
-Avro schemas are defined in JSON format. They describe the structure of your messages.
+Avro schemas are defined in JSON format. They describe the structure of your messages. Avro was chosen for Kafka because it's compact (binary encoding), fast, and has first-class support for schema evolution. The schema below defines an OrderEvent with fields including an enum (OrderStatus) and a logical type (timestamp-millis) for precise timestamp handling. When a producer sends a message, it includes the schema ID (not the full schema), keeping message overhead small.
 
 ```json
 {
@@ -78,6 +78,8 @@ Generate Java classes from Avro schema using Maven:
 
 ## Producer with Schema Registry
 
+The producer configures `KafkaAvroSerializer` as both the key and value serializer. The `SCHEMA_REGISTRY_URL_CONFIG` tells the serializer where to fetch and register schemas. When the producer sends the first message of a new schema version, it registers the schema with the registry and caches the schema ID locally. Subsequent messages include only the 4-byte schema ID, making the wire format extremely compact. The `OrderEvent` is a generated Avro-specific class with a builder pattern for construction.
+
 ```java
 Properties props = new Properties();
 props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -109,6 +111,8 @@ producer.close();
 ```
 
 ## Consumer with Schema Registry
+
+The consumer uses `KafkaAvroDeserializer` to automatically deserialize Avro messages. Setting `specific.avro.reader=true` tells the deserializer to return the generated Avro-specific class (`OrderEvent`) rather than a generic `GenericRecord`. This provides compile-time type safety. The deserializer fetches the schema from the registry using the 4-byte schema ID embedded in the message, so it can read messages produced with any compatible schema version.
 
 ```java
 Properties props = new Properties();
@@ -146,6 +150,8 @@ Schema Registry supports several compatibility modes:
 - **FORWARD_TRANSITIVE**: Forward compatible with all previous schemas.
 - **FULL_TRANSITIVE**: Fully compatible with all previous schemas.
 
+The compatibility mode is configured per subject (topic-key or topic-value) via the REST API. BACKWARD is the default and safest — it ensures consumers can always read new data. FORWARD is useful when you want to upgrade consumers before producers. FULL_TRANSITIVE guarantees compatibility across the entire schema history.
+
 ```java
 // Set compatibility via REST API
 POST /config/orders-value
@@ -161,7 +167,7 @@ POST /config/orders-value
 
 ### Adding an Optional Field (Backward Compatible)
 
-When adding a new field, provide a default value to maintain backward compatibility.
+When adding a new field, provide a default value to maintain backward compatibility. Here, `discountCode` is added as a union type `["null", "string"]` with a default of `null`. Old consumers that don't know about this field will ignore it, while new consumers can read messages produced by old producers (the field will be null). This is the standard backward-compatible evolution pattern.
 
 ```json
 {
@@ -182,7 +188,7 @@ When adding a new field, provide a default value to maintain backward compatibil
 
 ### Removing a Field (Forward Compatible)
 
-Use the `FULL` compatibility mode to safely remove fields by making them optional first.
+Use the `FULL` compatibility mode to safely remove fields by making them optional first. First add the field as optional (with default), then in the next version remove it. Old consumers that still expect the field will use the default value. This two-step process prevents breaking existing consumers.
 
 ```json
 {
@@ -200,6 +206,8 @@ Use the `FULL` compatibility mode to safely remove fields by making them optiona
 ```
 
 ## REST API Integration
+
+The REST controller demonstrates a typical Spring Boot integration with Schema Registry. The producer uses `KafkaTemplate` with Avro serialization, building an `OrderEvent` from the incoming request. The controller returns `202 Accepted` immediately — the actual processing happens asynchronously in the consumer.
 
 ```java
 @RestController
@@ -239,6 +247,8 @@ public class OrderController {
 
 ### Mistake: Adding a required field without default
 
+Adding a new field without a default value makes it required. New consumers can read old messages (the field will be null), but old consumers can't read new messages because they don't know about the field. This breaks backward compatibility. Always provide a default for new fields.
+
 ```json
 // Wrong - breaks existing consumers
 { "name": "discountCode", "type": "string" }
@@ -250,6 +260,8 @@ public class OrderController {
 ```
 
 ### Mistake: Not setting specific.avro.reader on consumer
+
+Without `specific.avro.reader=true`, the deserializer returns a `GenericRecord` — a generic map of field names to values. You lose compile-time type safety and need to use string field names for access. Setting it to `true` returns the generated Avro-specific class with typed getters.
 
 ```java
 // Wrong - returns GenericRecord

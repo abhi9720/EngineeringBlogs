@@ -66,6 +66,8 @@ public class OrderService {
 }
 ```
 
+Bytecode instrumentation works by rewriting class bytecode at load time via a Java Agent (`-javaagent` flag). The advantage is zero code changes—the agent automatically wraps every method with span creation, timer recording, and exception handling. This is ideal for organizations with hundreds of services where retrofitting manual instrumentation is impractical. The cost is a slight CPU overhead at class-load time and a marginal per-invocation penalty from the wrapper logic.
+
 ### Manual Instrumentation
 
 ```java
@@ -102,6 +104,8 @@ public class ManualInstrumentationService {
 }
 ```
 
+Micrometer Observation unifies metrics, tracing, and logging into a single API. The `@Observed` annotation handles the common case—method-level tracing with low-cardinality tags. For finer-grained control, the programmatic API gives access to `openScope()`, which binds the observation context to the current thread so that downstream calls (like `paymentGateway.charge()`) are automatically linked as child spans. The `highCardinalityKeyValue` field (e.g. `userId`) is particularly useful: the APM tool can index it for trace search without exploding metric cardinality, since metrics only aggregate the low-cardinality keys.
+
 ---
 
 ## Transaction Tracing
@@ -130,19 +134,30 @@ public class CheckoutService {
 }
 ```
 
+Even though `checkout()` delegates to three separate services, a distributed tracing backend stitches the individual spans into a single trace tree rooted at this method. Each downstream call becomes a child span with its own timing, status, and attributes. This is essential for understanding whether a slow checkout is caused by inventory lookups, payment gateway latency, or shipping label generation.
+
 ### Transaction Breakdown
 
 APM tools break down the transaction into segments:
 
-```
-Total: 450ms
-├── Controller: 420ms
-│   ├── Service Layer: 400ms
-│   │   ├── Database Query: 150ms
-│   │   ├── External API Call: 200ms  ← Bottleneck
-│   │   └── Cache Lookup: 50ms
-│   └── Serialization: 20ms
-└── Middleware: 30ms
+```mermaid
+flowchart TD
+    Total["Total: 450ms"] --> Controller["Controller: 420ms"]
+    Controller --> Service["Service Layer: 400ms"]
+    Service --> DB["Database Query: 150ms"]
+    Service --> ExtAPI["External API Call: 200ms"]
+    Service --> Cache["Cache Lookup: 50ms"]
+    Controller --> Serial["Serialization: 20ms"]
+    Total --> Middleware["Middleware: 30ms"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class ExtAPI pink
+    class Total blue
 ```
 
 ---
@@ -156,20 +171,24 @@ APM tools automatically discover service dependencies:
 ```java
 // Service A calls Service B which calls Service C and Database D
 // APM builds a service map:
-//
-//          ┌──────────┐
-//          │ Service A │
-//          └────┬─────┘
-//               │ HTTP GET /api/data
-//          ┌────┴─────┐
-//          │ Service B │
-//          └────┬─────┘
-//            ┌──┴──┐
-//            │     │
-//     ┌──────┴┐  ┌─┴────────┐
-//     │Service│  │Database D│
-//     │  C    │  └──────────┘
-//     └───────┘
+```
+
+```mermaid
+flowchart TD
+    A["Service A"] -->|"HTTP GET /api/data"| B["Service B"]
+    B --> C["Service C"]
+    B --> D["Database D"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class A blue
+    class B green
+    class C yellow
+    class D pink
 ```
 
 ### Service Map Analysis
@@ -190,6 +209,8 @@ public class ServiceMapMetrics {
     }
 }
 ```
+
+An auto-generated service map is a powerful tool for onboarding new team members and identifying unexpected dependencies. When the map shows a service calling a database it should not directly access, that is a strong signal for a refactoring opportunity. Most APM tools also overlay health status (green/yellow/red) on each node, giving an instant snapshot of system health.
 
 ---
 
@@ -227,6 +248,8 @@ public class OrderService {
     }
 }
 ```
+
+The N+1 query pattern is one of the most common—and most invisible—performance killers. Without APM, each `findById` call may complete in under 5ms, making it hard to notice. But when you zoom out to the transaction level, a 50ms endpoint suddenly takes 300ms because 10 hidden queries ran sequentially. APM tools typically surface this by showing "10 database calls" on a single span, with the same query shape but different bind parameters.
 
 ### Database Query Analysis
 
@@ -278,6 +301,8 @@ public PageData getPageData(@RequestHeader("x-datadog-trace-id") String traceId)
     return pageService.buildPageData();
 }
 ```
+
+Bridging Real-User Monitoring with backend traces closes the gap between user experience and server-side performance. A page that renders in 2 seconds may only spend 200ms on the server—the rest is client-side JavaScript execution, CSS rendering, or image loading. Without RUM, teams would optimize server code that was never the bottleneck.
 
 ---
 

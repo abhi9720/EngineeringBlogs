@@ -20,10 +20,25 @@ Spring Boot Actuator provides production-ready features for monitoring and manag
 
 ### How Micrometer Works
 
-```
-Application → Micrometer (MeterRegistry) → MeterBinder → Monitoring System
-                      ↕                            ↕
-              Counter, Gauge, Timer        Prometheus, Datadog, etc.
+```mermaid
+flowchart LR
+    App["Application"] --> Mic["Micrometer<br/>(MeterRegistry)"]
+    Mic --> MB["MeterBinder"]
+    MB --> MS["Monitoring System<br/>Prometheus, Datadog, etc."]
+    Mic --> Types["Counter, Gauge, Timer"]
+    MB --> Types
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class App yellow
+    class Mic blue
+    class MB green
+    class MS pink
+    class Types green
 ```
 
 ---
@@ -54,6 +69,8 @@ Application → Micrometer (MeterRegistry) → MeterBinder → Monitoring System
     <artifactId>micrometer-registry-graphite</artifactId>
 </dependency>
 ```
+
+The `micrometer-registry-prometheus` dependency enables the `/actuator/prometheus` endpoint. Additional registry dependencies can be added without changing application code—Micrometer's `CompositeMeterRegistry` routes all metrics to every registered backend. This means you can send metrics to Prometheus for dashboards AND Datadog for long-term retention simultaneously.
 
 ### Application Properties
 
@@ -95,6 +112,8 @@ management:
         http.server.requests: 0.5, 0.75, 0.9, 0.95, 0.99
 ```
 
+The `distribution` block configures how Micrometer publishes HTTP request latency. `percentiles-histogram: true` enables Prometheus-compatible histogram buckets, allowing accurate server-side percentile calculation across aggregated instances. The `sla` list defines custom bucket boundaries at common latency thresholds. The `percentiles` setting publishes client-side percentile approximations (p50, p75, p90, p95, p99) as separate gauges for backends that do not support histogram quantile calculation.
+
 ### Custom MeterRegistry
 
 ```java
@@ -127,6 +146,8 @@ public class MetricsConfig {
 }
 ```
 
+The `CompositeMeterRegistry` allows multiple monitoring backends to receive the same metrics. When `JvmGcMetrics.bindTo()` is called, Micrometer starts publishing GC pause timings, memory pool usage after GC, and allocation rates. These are automatically exported to all registered registries.
+
 ---
 
 ## JVM Metrics
@@ -158,6 +179,8 @@ Spring Boot Actuator automatically exposes these JVM metrics:
 // process.start.time
 // process.uptime
 ```
+
+These metrics are auto-configured when `micrometer-registry-prometheus` is on the classpath. No additional code is needed. The GC metrics (pause time, promoted memory, live data size) are the most important for diagnosing latency issues—a sudden increase in GC pause time often explains a corresponding spike in p99 response latency.
 
 ### Custom JVM Monitoring
 
@@ -257,6 +280,8 @@ public class HttpMetricsConfig {
     }
 }
 ```
+
+The custom `WebMvcTagsProvider` adds a `tenant` tag from the HTTP header and normalizes URI paths by replacing numeric path segments with `{id}`. Without path normalization, `/api/orders/123` and `/api/orders/456` would create separate time series, causing unbounded cardinality growth. Path normalization collapses all order lookups into a single `/api/orders/{id}` series.
 
 ---
 

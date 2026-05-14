@@ -18,6 +18,8 @@ Express.js has been the dominant Node.js web framework for years, but Fastify ha
 
 ## Performance Comparison
 
+Fastify's performance advantage over Express stems from three architectural decisions: schema-based serialization compiles JSON serializers once and reuses them, the JSON Schema validation runs before the handler, and its core is built on a leaner abstraction that avoids Express's historical baggage. Express uses runtime `JSON.stringify` on every response and delegates validation to third-party libraries, trading raw performance for ecosystem flexibility.
+
 ### Request Handling Performance
 
 ```javascript
@@ -36,6 +38,8 @@ fastify.get('/api/users', async (request, reply) => {
   return { users: [] };
 });
 ```
+
+Another significant difference is the handler signature. Express uses `(req, res)` callbacks with `res.json()` for responses. Fastify uses `async (request, reply)` where the return value is automatically serialized. Fastify's `reply` object also supports chainable calls like `reply.code(201).send(data)`. The async handler pattern eliminates Express's common pitfall of forgetting to call `res.json()` or sending multiple responses.
 
 ### Serialization
 
@@ -70,6 +74,8 @@ fastify.get('/api/data', { schema }, async (request, reply) => {
 
 ## Core Differences
 
+While the serialization difference may seem small, it compounds under load. Express's approach means `JSON.stringify` runs on every request with full type inspection, garbage collection pressure from temporary strings, and no validation guarantees. Fastify compiles a serializer function based on the JSON Schema that knows exact field types and order, producing tightly optimized string building that can be 2-3x faster than generic serialization.
+
 ### Routing
 
 ```javascript
@@ -96,6 +102,8 @@ fastify.get('/users/:id', async (request, reply) => {
   return { id };
 });
 ```
+
+Routing between the two is syntactically similar but architecturally different. Express routers are simple middleware handlers — they iterate middleware arrays and match patterns. Fastify uses a radix tree router similar to Go's `httprouter`, providing O(pattern-length) matching with no linear scan. Both frameworks support path parameters, query strings, and header access, but Fastify's built-in body parsing eliminates the need for additional middleware.
 
 ### Validation
 
@@ -146,6 +154,8 @@ fastify.post('/users', { schema: createUserSchema }, async (request, reply) => {
 });
 ```
 
+Validation illustrates the philosophical difference. Express uses the `express-validator` library which runs validation as middleware — you declare validation chains for each route and check results manually. Fastify's JSON Schema validation is declarative and automatic — define the schema, and invalid requests are rejected with structured error responses before the handler runs. This shifts the burden from developers (who must remember to check validation results) to the framework.
+
 ### Plugin System
 
 ```javascript
@@ -191,6 +201,8 @@ fastify.register(require('@fastify/jwt'), {
 });
 ```
 
+Fastify's plugin system is a significant departure from Express. Express treats everything as middleware — routers, CORS, body parsers, all are `app.use()` calls. Fastify plugins are encapsulated contexts with their own scope, decorators, and hooks. A plugin cannot accidentally leak decorators to parent contexts. This encapsulation prevents the cross-plugin interference that can occur in Express when middleware modifies shared state. Plugins also support prefixes, making path-based versioning clean.
+
 ### Logging
 
 ```javascript
@@ -226,6 +238,8 @@ fastify.get('/api/data', async (request, reply) => {
   return data;
 });
 ```
+
+Fastify bundles Pino as its built-in logger, configured at server instantiation. Pino is the fastest JSON logger for Node.js, and Fastify integrates it deeply — each request gets a child logger with request-specific context (`request.log.info(...)`). Express requires external libraries like morgan for HTTP logging and winston for structured logging. Fastify's logger serializers pattern lets you customize how request/response objects are rendered in log output.
 
 ## Code Organization
 
@@ -264,6 +278,8 @@ module.exports = async function (fastify, opts) {
   });
 };
 ```
+
+Code organization in Express is flexible but unopinionated — routes can be defined anywhere, leading to inconsistent patterns across teams. Fastify's plugin system provides structured encapsulation: each plugin gets its own decorators, hooks, and routes. The `UserService` can be decorated onto the Fastify instance and accessed within plugin handlers. This structure scales better for large teams where module boundaries need to be explicit and enforced.
 
 ## Error Handling
 

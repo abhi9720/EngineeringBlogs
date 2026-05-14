@@ -18,6 +18,8 @@ Express.js is a minimal and flexible Node.js web application framework that prov
 
 ## Setup
 
+Express creates an application instance that acts as a request handler. The `express.json()` middleware parses incoming JSON request bodies — without it, `req.body` remains `undefined`. `express.urlencoded({ extended: true })` parses form-encoded bodies. These two middleware should be applied early via `app.use()` before any route handlers.
+
 ```javascript
 const express = require('express');
 const app = express();
@@ -34,6 +36,8 @@ app.listen(port, () => {
 ```
 
 ## Routing
+
+Express uses `Router` instances for modular route organization. Each router is a mini-application that can define middleware and routes independently. The `Router` is then mounted on the main app via `app.use('/prefix', router)`. This pattern scales well — each resource (users, orders, admin) gets its own router file.
 
 ### Basic Routing
 
@@ -74,6 +78,8 @@ router.delete('/users/:id', (req, res) => {
 module.exports = router;
 ```
 
+Express route parameters are named segments prefixed with `:`. They are extracted via `req.params`. Path-to-regexp conversion happens internally — Express converts route patterns like `/users/:userId/posts/:postId` into regular expressions for matching. Optional parameters use a `?` suffix, and wildcard `*` captures the rest of the path. Multiple callback functions can be chained per route for inline middleware.
+
 ### Route Patterns
 
 ```javascript
@@ -108,6 +114,8 @@ router.get('/profile',
 );
 ```
 
+Routers are mounted on the application at specific prefixes. When `app.use('/api/users', userRouter)` is called, the userRouter receives requests matching `/api/users` and its sub-paths. Middleware can be passed in the mount call — here the admin router requires both `authenticate` and `authorize('admin')` middleware. This pattern keeps auth logic centralized rather than scattered across route handlers.
+
 ### Application-Level Router
 
 ```javascript
@@ -124,6 +132,8 @@ app.use('/api/admin', [authenticate, authorize('admin')], adminRouter);
 ```
 
 ## Middleware
+
+Express middleware is the backbone of request processing. Functions receive `(req, res, next)` and can: modify `req` and `res`, end the request cycle, or call `next()` to pass control. Middleware execution order is determined by registration order via `app.use()`. This linear pipeline model is simple but powerful — every framework feature (parsing, logging, auth, compression) is middleware.
 
 ### Application-Level Middleware
 
@@ -173,6 +183,8 @@ app.use((req, res, next) => {
 });
 ```
 
+Application-level middleware runs on every request. The logging example hooks into the `finish` event on the response object to measure latency — a common pattern for request timing. The request ID middleware generates a unique ID per request and sets it both on `req` and as a response header, enabling request tracing across logs and downstream services.
+
 ### Router-Level Middleware
 
 ```javascript
@@ -211,6 +223,8 @@ router.get('/admin', authenticate, authorize('admin'), (req, res) => {
 });
 ```
 
+Router-level middleware applies only to routes within that router. The `authenticate` function verifies JWT tokens from the Authorization header and attaches the decoded user to `req.user`. The `authorize` function is a higher-order function that takes roles and returns a middleware — this pattern enables reusable, parameterized middleware. Routes can accept multiple middleware functions before the final handler.
+
 ### Third-Party Middleware
 
 ```javascript
@@ -248,6 +262,8 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 ```
+
+Express's ecosystem of third-party middleware handles common concerns. `helmet` sets security-related HTTP headers. `cors` manages Cross-Origin Resource Sharing. `morgan` provides HTTP request logging. `compression` gzips responses. `express-rate-limit` implements rate limiting. This plugin architecture lets you compose your middleware stack declaratively at the application level.
 
 ## Error Handling
 
@@ -296,6 +312,8 @@ app.use((err, req, res, next) => {
 });
 ```
 
+Express error handling uses a special middleware signature with four parameters: `(err, req, res, next)`. When any middleware calls `next(err)`, Express skips all remaining regular middleware and jumps to the error handler. The custom `AppError` class distinguishes operational errors (expected, like validation failures) from programmer errors (unexpected, like null reference). In development mode, full stack traces are returned; in production, only safe messages are exposed.
+
 ## Request/Response
 
 ### Request Object
@@ -327,6 +345,8 @@ router.post('/api/data', (req, res) => {
   console.log(req.user);
 });
 ```
+
+The `req` object provides access to all parts of the incoming request. `req.body` contains parsed JSON/form data (requires middleware). `req.params` holds route parameters. `req.query` provides parsed query string. `req.headers` and `req.get()` access headers. Custom properties like `req.requestId` and `req.user` are set by earlier middleware — this is how Express middleware layers build up request context.
 
 ### Response Object
 
@@ -368,6 +388,8 @@ router.get('/response-demo', (req, res) => {
   res.clearCookie('token');
 });
 ```
+
+The `res` object provides methods for sending responses. `res.json()` serializes objects to JSON and sets the Content-Type header. `res.status()` sets the HTTP status code and returns `res` for chaining. `res.cookie()` sets cookies with options for security (`httpOnly`, `secure`, `maxAge`). `res.redirect()` sends a 302 by default. `res.sendFile()` and `res.download()` serve files from the filesystem.
 
 ## Testing
 

@@ -32,6 +32,8 @@ Redis Pub/Sub provides a lightweight messaging pattern where publishers send mes
 
 ### Publisher
 
+The publisher sends messages to Redis channels. The same message is delivered to all active subscribers of that channel at the time of publishing.
+
 ```java
 @Service
 public class RedisPublisher {
@@ -63,6 +65,8 @@ public class RedisPublisher {
 ```
 
 ### Subscriber
+
+The subscriber uses Spring's `MessageListenerAdapter` to handle incoming messages. The `onMessage` method receives both the channel and the message body, enabling channel-specific routing.
 
 ```java
 @Component
@@ -104,6 +108,8 @@ public class RedisSubscriber extends MessageListenerAdapter {
 
 ### Configuration
 
+The `RedisMessageListenerContainer` manages subscription lifecycle. It supports both `ChannelTopic` (exact match) and `PatternTopic` (wildcard) subscriptions.
+
 ```java
 @Configuration
 public class RedisPubSubConfig {
@@ -144,6 +150,8 @@ public class RedisPubSubConfig {
 
 ### Topic Patterns
 
+Redis supports glob-style pattern matching for channel subscriptions. This enables flexible topic hierarchies without subscribing to individual channels.
+
 ```java
 @Configuration
 public class PatternSubscriptionConfig {
@@ -180,6 +188,8 @@ public class PatternSubscriptionConfig {
 ## Spring Event Integration
 
 ### Event-Driven Pub/Sub
+
+Domain events published via Spring's `ApplicationEventPublisher` can be forwarded to Redis for cross-instance notification. Conversely, Redis messages can be re-published as Spring events for local processing.
 
 ```java
 @Component
@@ -219,6 +229,8 @@ public class EventDrivenPubSub {
 ## Multi-Instance Cache Invalidation
 
 ### Cache Event Publisher
+
+Redis Pub/Sub is widely used for cross-instance cache invalidation. When one application instance updates data, it publishes an invalidation message so other instances clear their local caches.
 
 ```java
 @Service
@@ -278,6 +290,8 @@ public class CacheInvalidationSubscriber {
 
 ### WebSocket Bridge
 
+Redis Pub/Sub can bridge to WebSocket clients via Spring's `SimpMessagingTemplate`. Backend events published to Redis are routed to browser clients in real-time.
+
 ```java
 @Component
 public class RedisWebSocketBridge {
@@ -335,6 +349,8 @@ stompClient.connect({}, function(frame) {
 
 ### 1. Handle Subscriber Failures
 
+Pub/Sub has no message persistence — if a subscriber disconnects, messages sent during that time are lost. Use the container's recovery interval to automatically reconnect.
+
 ```java
 // Pub/Sub has no message persistence
 // Subscribers must handle disconnection and reconnection
@@ -364,6 +380,8 @@ public class ResilientSubscriptionConfig {
 
 ### 2. Use Redis Streams for Reliable Messaging
 
+If message delivery guarantee is needed, use Redis Streams instead. Streams persist messages and support consumer groups with acknowledgments.
+
 ```java
 // If message delivery guarantee is needed, use Redis Streams
 // Pub/Sub is fire-and-forget
@@ -375,6 +393,8 @@ public class ResilientSubscriptionConfig {
 ```
 
 ### 3. Limit Channel Namespace
+
+Organize channels in a consistent hierarchy to avoid naming collisions and make subscriptions predictable.
 
 ```java
 public class ChannelNames {
@@ -393,6 +413,8 @@ public class ChannelNames {
 
 ### Mistake 1: Assuming Message Persistence
 
+Pub/Sub does not store messages. If a subscriber is offline when a message is published, that message is lost forever.
+
 ```java
 // WRONG: Expecting offline subscriber to receive messages
 // Publisher sends
@@ -405,6 +427,8 @@ redisTemplate.convertAndSend("orders", "message");
 ```
 
 ### Mistake 2: Subscribing in a Short-Lived Thread
+
+Subscriptions require a long-lived connection. Subscribing in a request thread causes the subscription to be lost when the request completes.
 
 ```java
 // WRONG: Subscription in request thread
@@ -419,6 +443,8 @@ public void subscribe() {
 ```
 
 ### Mistake 3: Publishing Large Messages
+
+Large messages block Redis during publishing and transmission. Publish a reference (message ID) instead, and store the payload separately.
 
 ```java
 // WRONG: Publishing large JSON payloads

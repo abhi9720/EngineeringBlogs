@@ -16,30 +16,41 @@ draft: false
 
 Spring Boot starters are a powerful way to package reusable functionality. A starter bundles auto-configuration, dependencies, and configuration properties into a single dependency. This guide covers creating production-ready custom starters with proper auto-configuration, configuration metadata, and testing.
 
+A starter is not just a jar with auto-configuration. It's a convention-driven packaging that follows Spring Boot's philosophy: sensible defaults, easy customization, and zero-configuration setup. Starters lower the barrier to adopting new technologies by eliminating boilerplate configuration.
+
 ## Starter Architecture
 
 ### Module Structure
 
-```
-my-spring-boot-starter/
-├── my-spring-boot-autoconfigure/   # Auto-configuration module
-│   ├── pom.xml
-│   └── src/main/
-│       ├── java/com/example/
-│       │   ├── MyService.java
-│       │   ├── MyProperties.java
-│       │   └── MyAutoConfiguration.java
-│       └── resources/META-INF/
-│           └── spring/
-│               └── org.springframework.boot.autoconfigure.AutoConfiguration.imports
-│
-├── my-spring-boot-starter/          # Starter POM module
-│   ├── pom.xml
-│   └── src/main/resources/
-│       └── META-INF/
-│           └── spring.provides      # Optional: documents what the starter provides
-│
-└── pom.xml                          # Parent POM
+The recommended structure uses two modules: an `autoconfigure` module containing the configuration classes and service code, and a `starter` module that is an empty POM dependending on `autoconfigure` and `spring-boot-starter`. This separation lets users depend on just the autoconfigure module if they want to customize the starter's behavior without pulling in its transitive dependencies.
+
+```mermaid
+flowchart TB
+    Root[my-spring-boot-starter] --> POM[pom.xml]
+    Root --> Auto[my-spring-boot-autoconfigure]
+    Root --> Starter[my-spring-boot-starter]
+
+    Auto --> AutoPOM[pom.xml]
+    Auto --> AutoSRC[src/main/java/com/example]
+    AutoSRC --> Service[MyService.java]
+    AutoSRC --> Props[MyProperties.java]
+    AutoSRC --> Config[MyAutoConfiguration.java]
+    Auto --> AutoResources[src/main/resources/META-INF/spring]
+    AutoResources --> Imports[org.springframework.boot.autoconfigure.AutoConfiguration.imports]
+
+    Starter --> StarterPOM[pom.xml]
+    Starter --> StarterResources[src/main/resources/META-INF]
+    StarterResources --> Provides[spring.provides]
+
+    linkStyle default stroke:#278ea5
+
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+
+    class Root,POM blue
+    class Auto,AutoPOM,Starter,StarterPOM green
+    class Service,Props,Config,Imports,Provides yellow
 ```
 
 ### Starter POM
@@ -83,6 +94,8 @@ my-spring-boot-starter/
 
 ### Starter Module POM
 
+The starter module's POM is minimal: it depends on the autoconfigure module and `spring-boot-starter` (which provides auto-configuration support, logging, and basic Spring Boot infrastructure). It should NOT contain any Java code.
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -117,6 +130,8 @@ my-spring-boot-starter/
 ## Building the Auto-Configuration Module
 
 ### Auto-Configuration Module POM
+
+The autoconfigure module depends on `spring-boot-autoconfigure` and `spring-boot-configuration-processor`. Both are marked `optional=true` because they are compile-time dependencies — users of your starter don't need them on their runtime classpath.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -156,6 +171,10 @@ my-spring-boot-starter/
 ```
 
 ### Service Class
+
+The core service class implements the starter's functionality. It should be a plain Java class without Spring annotations — the auto-configuration will create it as a bean. The `RateLimiter` below implements a sliding window algorithm using `ConcurrentHashMap`. Each unique key (e.g., user ID or IP address) has its own request log.
+
+The constructor takes configuration parameters (max requests, window size) that come from `RateLimiterProperties`. Methods are thread-safe because `ConcurrentHashMap.compute` is atomic.
 
 ```java
 public class RateLimiter {
@@ -206,6 +225,10 @@ public class RateLimiter {
 
 ### Configuration Properties
 
+Configuration properties classes follow JavaBean conventions with getters and setters. The `@ConfigurationProperties` annotation binds properties with the `app.rate-limiter` prefix. Nested static classes handle grouped configuration like Redis settings.
+
+The `StorageType` enum lets users switch between in-memory and Redis-backed rate limiting. The property class also defines sensible defaults: 100 requests per minute window, with memory storage.
+
 ```java
 @ConfigurationProperties(prefix = "app.rate-limiter")
 public class RateLimiterProperties {
@@ -250,6 +273,10 @@ public class RateLimiterProperties {
 
 ### Auto-Configuration Class
 
+The auto-configuration class is the heart of the starter. It uses multiple conditional annotations to handle different scenarios. The memory-based rate limiter is the default. When `storage-type=redis` AND `RedisTemplate` is on the classpath AND a `RedisConnectionFactory` bean exists, the Redis-backed implementation is used instead.
+
+The `@ConditionalOnWebApplication` annotation on the filter bean ensures the servlet filter is only registered in web applications. For non-web applications (like batch processors), the filter is not needed and won't be created.
+
 ```java
 @AutoConfiguration
 @ConditionalOnClass(RateLimiter.class)
@@ -291,6 +318,8 @@ public class RateLimiterAutoConfiguration {
 ```
 
 ### Filter (Optional Web Integration)
+
+The servlet filter intercepts all requests, checks if the path is excluded, and acquires a rate limiter token for the client. If the limit is exceeded, it returns HTTP 429 with a JSON error body. Non-excluded paths that exceed the limit get a `X-RateLimit-Remaining` header so clients can track their consumption.
 
 ```java
 @ConditionalOnWebApplication
@@ -345,6 +374,10 @@ com.example.ratelimiter.RateLimiterAutoConfiguration
 
 ### ApplicationContextRunner Test
 
+Test auto-configuration conditions in isolation using `ApplicationContextRunner`. This lightweight test utility creates a minimal application context with only the specified auto-configuration, avoiding the overhead of a full Spring Boot context.
+
+Each test method verifies a specific condition: default configuration creates the bean, disabled property prevents creation, Redis configuration routes to the correct implementation, and missing classpath conditions prevent any beans from being created.
+
 ```java
 class RateLimiterAutoConfigurationTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
@@ -398,6 +431,8 @@ class RateLimiterAutoConfigurationTest {
 
 ### Integration Test
 
+Integration tests use `@SpringBootTest` with specific property overrides. These tests verify that the starter works with the full application context, including any Spring Boot auto-configuration it depends on.
+
 ```java
 @SpringBootTest(properties = {
     "app.rate-limiter.max-requests=5",
@@ -427,6 +462,8 @@ class RateLimiterIntegrationTest {
 ## Configuration Metadata
 
 ### Additional Metadata
+
+Configuration metadata provides IDE auto-completion for your starter's properties. The `additional-spring-configuration-metadata.json` file overrides or extends the auto-generated metadata from `spring-boot-configuration-processor`. Use it to add descriptions, default values, minimum/maximum constraints, and deprecation warnings.
 
 ```java
 // META-INF/additional-spring-configuration-metadata.json
@@ -466,6 +503,8 @@ class RateLimiterIntegrationTest {
 ## Publishing the Starter
 
 ### Maven Central Requirements
+
+To publish on Maven Central, your starter must include source and Javadoc jars, have a valid POM with all required metadata, and be signed with a GPG key. The `maven-source-plugin` and `maven-javadoc-plugin` below handle the jar generation.
 
 ```xml
 <distributionManagement>

@@ -18,6 +18,8 @@ Celery is widely used in Python backend applications for sending emails, generat
 
 ### Basic Celery Application
 
+Several `app.conf` settings here are critical for production reliability. `task_acks_late=True` combined with `task_reject_on_worker_lost=True` implements at-least-once delivery: the broker does not remove a message from the queue until the worker acknowledges it. If the worker crashes mid-execution, the message is redelivered to another worker. `worker_prefetch_multiplier=1` tells each worker to fetch only one task at a time — this prevents a single fast worker from hoarding messages and enables fair distribution across workers of varying speed. `worker_max_tasks_per_child=200` forces worker processes to restart after 200 tasks, mitigating memory leaks.
+
 ```python
 from celery import Celery
 
@@ -132,6 +134,8 @@ def process_upload(self, upload_id: str, file_path: str) -> dict:
 
 ### Tasks with Custom Base Class
 
+The custom base class pattern is useful for cross-cutting concerns like database connection management. The `after_return` hook is called after every task execution regardless of success or failure, making it a reliable place for cleanup. Notice the `bind=True` parameter — it binds the task instance as the first argument (`self`), giving the task access to the base class methods and properties. This pattern avoids littering every task function with connection setup and teardown boilerplate.
+
 ```python
 from celery import Task
 
@@ -161,6 +165,8 @@ def generate_report(self, report_type: str, user_id: str) -> str:
 ```
 
 ## Task Routing and Queues
+
+Task routing separates workloads by priority or function. The key design choice here is using separate queues backed by dedicated worker pools — a backlog in the `reports` queue will not delay urgent payment processing in the `high` queue. The `task_routes` dictionary uses glob-style patterns (`tasks.email.*`) to match task names, which keeps routing configuration centralized rather than scattering `@shared_task(queue='...')` annotations across every task definition.
 
 ```python
 from kombu import Queue, Exchange
@@ -198,6 +204,8 @@ def cleanup_old_records(days: int = 90) -> int:
 ```
 
 ## Periodic Tasks (Celery Beat)
+
+Celery Beat is a separate scheduler process that sends tasks to workers at configured intervals. The `beat_schedule` dictionary maps schedule names to task paths, cron expressions, and routing options. A common pitfall is forgetting that beat schedules use fully qualified task names (`tasks.reports.generate_daily_sales_report`) — importing the task locally is not enough; the name must match what Celery registered at startup. Setting `'expires': 300` on the external sync task ensures that if the worker pool is backlogged and a beat-cycle fires late, the stale task is discarded rather than executed.
 
 ```python
 from celery import shared_task
@@ -251,6 +259,8 @@ app.conf.beat_schedule = {
 ```
 
 ## Task Chaining and Workflows
+
+Celery provides three primitives for composing tasks into workflows. `chain` runs tasks sequentially, passing the result of each step as the first argument to the next — the signature syntax (`validate_order.s(order_id)`) creates a partially applied task that is resolved at execution time. `group` fans out work in parallel across multiple workers. `chord` is a group with a callback: when all tasks in the group finish, the callback executes with the aggregated results. These primitives together cover synchronous pipelines, scatter-gather, and map-reduce patterns without needing an external workflow engine.
 
 ```python
 from celery import chain, group, chord

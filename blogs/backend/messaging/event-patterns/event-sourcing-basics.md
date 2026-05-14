@@ -18,7 +18,7 @@ Event sourcing is a pattern where state changes are stored as a sequence of even
 
 ## Core Concepts
 
-Instead of storing the current balance of an account, event sourcing stores every transaction as an event.
+Instead of storing the current balance of an account, event sourcing stores every transaction as an event. The traditional approach stores only the final state — if you want to know what the balance was a week ago, you'd need separate audit logging. Event sourcing makes this trivial: replay events up to any point in time to see the state at that moment.
 
 ```java
 // Traditional approach - store current state
@@ -37,6 +37,8 @@ public class BankAccount {
 ```
 
 ## Event Store
+
+The event store is the append-only database of all events. The `JdbcEventStore` implementation stores events in a relational table with the aggregate ID as the grouping key. Events are ordered by version and never mutated. The `load()` method retrieves all events for an aggregate in order, while `loadSince()` enables snapshot-based optimization by loading only events after a given version. The `loadByType()` method supports queries across aggregates by event type and time range.
 
 ```java
 public interface EventStore {
@@ -123,6 +125,8 @@ public class JdbcEventStore implements EventStore {
 ```
 
 ## Aggregate Root
+
+The aggregate root is the transactional boundary in event sourcing. `BankAccountAggregate` maintains an in-memory list of `uncommittedEvents` that are new since the last save. The `apply()` method both mutates the aggregate state and records the event. `loadFromHistory()` replays stored events to reconstruct the aggregate's current state without calling `applyChange()` (which would add events to the uncommitted list). The version field enables optimistic concurrency — when saving, the database checks that no concurrent write has occurred.
 
 ```java
 public class BankAccountAggregate {
@@ -215,6 +219,8 @@ public class BankAccountAggregate {
 
 ## Event Definitions
 
+Each event class captures a specific domain change. Events are immutable — they represent facts that have already happened. The `eventId` is a UUID for deduplication, `aggregateId` ties the event to a specific aggregate instance, and `version` enables optimistic concurrency. Events should be named in the past tense (AccountCreated, MoneyDeposited) to emphasize that they represent historical facts, not commands to be executed.
+
 ```java
 public class AccountCreatedEvent {
     private String eventId = UUID.randomUUID().toString();
@@ -274,7 +280,7 @@ public class AccountClosedEvent {
 
 ## Snapshots
 
-Snapshots optimize aggregate reconstruction by storing the current state at certain intervals.
+Replaying hundreds or thousands of events to load an aggregate is expensive. Snapshots store the aggregate's full state at a given version, so you only need to replay events since the snapshot. The `SnapshotService` takes a snapshot every 100 events (configurable via `SNAPSHOT_THRESHOLD`). On load, you fetch the latest snapshot, then replay only the events that occurred after it. This drastically reduces load time for long-lived aggregates.
 
 ```java
 @Component
@@ -345,6 +351,8 @@ public class SnapshotService {
 
 ## Projections (Read Side)
 
+Projections build read-optimized views from the event stream. The `BankAccountProjection` listens for each event type and updates a relational summary table accordingly. This is the "Q" in CQRS — the read side is a denormalized projection of the event stream, optimized for querying rather than writing. Different projections can serve different query patterns: account summaries, transaction history, monthly statements — each built from the same event stream.
+
 ```java
 @Component
 public class BankAccountProjection {
@@ -400,6 +408,8 @@ public class BankAccountProjection {
 
 ### Mistake: Storing too much data in a single event
 
+Coarse-grained events that dump the entire aggregate state defeat the purpose of event sourcing — you lose the ability to reason about what specifically changed. Instead, emit fine-grained events (OrderItemAddedEvent, OrderItemRemovedEvent, OrderStatusChangedEvent) that capture exactly what happened. This makes the event log a true audit trail rather than a snapshot history.
+
 ```java
 // Wrong - coarse event with too much data
 public class OrderChangedEvent {
@@ -419,6 +429,8 @@ public class OrderItemAddedEvent {
 ```
 
 ### Mistake: Not using snapshots for long-lived aggregates
+
+Without snapshots, loading an aggregate with thousands of events means replaying every event from the beginning — this can take seconds and waste I/O. Always use snapshots for aggregates that may accumulate many events. The snapshot gives you a known state at version N, and you only replay events after N.
 
 ```java
 // Wrong - replaying thousands of events on every load

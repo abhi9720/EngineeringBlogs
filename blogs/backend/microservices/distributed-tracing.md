@@ -55,6 +55,8 @@ Each span contains:
 - Start/end timestamps
 - Tags (metadata)
 
+Spring Cloud Sleuth (now part of Micrometer Tracing) automatically instruments common communication patterns — every incoming request creates a trace, and propagated headers (trace ID, span ID) flow through RestTemplate, WebClient, Messaging, and gRPC calls without any manual code.
+
 ### Spring Cloud Sleuth Integration
 
 ```java
@@ -86,6 +88,8 @@ spring:
 ## Real-World Use Cases
 
 ### Case 1: Tracing a Cross-Service Request
+
+When Service A calls Service B, Sleuth automatically propagates the trace context via HTTP headers (`X-B3-TraceId`, `X-B3-SpanId`, etc.). The same trace ID appears in both services' logs, allowing operators to correlate events across the entire request lifecycle. The log output shows how the trace ID remains consistent while span IDs change per operation.
 
 ```java
 // Service A calls Service B
@@ -122,6 +126,8 @@ public class OrderController {
 ```
 
 ### Case 2: Custom Span Tags
+
+Custom tags add business context to spans — enabling searches like "find all traces where cache.hit=false" or "show me spans for product id X". The `@NewSpan` and `@SpanTag` annotations offer a declarative alternative to programmatic span creation, useful for quick instrumentation without boilerplate.
 
 ```java
 @Service
@@ -178,6 +184,8 @@ public class AnnotatedOrderService {
 
 ### Case 3: Zipkin Integration
 
+Zipkin collects and visualizes traces sent by Sleuth. In production, direct HTTP submission can be a bottleneck — switching to Kafka as the transport decouples span reporting from request processing, ensuring tracing overhead doesn't affect application latency even under high throughput.
+
 ```java
 // Add Zipkin dependencies
 // pom.xml
@@ -211,6 +219,8 @@ spring:
 ```
 
 ### Case 4: Async Tracing
+
+Asynchronous operations break the natural thread-local propagation of trace context. Using `LazyTraceExecutor` wraps the thread pool so that every submitted task inherits the caller's trace context. Without this wrapper, async operations create orphan spans that cannot be correlated to their parent trace.
 
 ```java
 // Properly propagate trace to async operations
@@ -248,6 +258,8 @@ public class AsyncService {
 
 ### 1. Sampling Strategies
 
+Sampling 100% of traces is expensive — storage and processing costs grow with traffic. A common strategy is to always sample traces that contain errors (they are most valuable for debugging) and sample a low percentage (1-10%) of successful requests for performance trending.
+
 ```java
 // Custom sampler
 @Configuration
@@ -283,6 +295,8 @@ public class RateSamplerConfig {
 
 ### 2. Storing Traces in Elasticsearch
 
+The storage backend determines query performance and retention capabilities. Elasticsearch is the most common choice for Zipkin due to its full-text search and aggregation capabilities. Cassandra is an alternative when write throughput is the primary concern.
+
 ```java
 // Zipkin with Elasticsearch backend
 spring:
@@ -305,6 +319,8 @@ zipkin:
 ```
 
 ### 3. Querying Traces
+
+The Zipkin API allows programmatic trace retrieval — useful for automated incident response tools that need to pull related traces when an alert fires. Filtering by service name, time range, and tags enables precise forensic analysis without manual UI navigation.
 
 ```java
 // Use Zipkin API to query traces
@@ -478,4 +494,4 @@ Integrate Zipkin or Jaeger early—retrofitting tracing is much harder than buil
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

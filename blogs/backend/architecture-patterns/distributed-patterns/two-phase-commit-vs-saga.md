@@ -20,19 +20,29 @@ Understanding these trade-offs is essential for designing reliable distributed s
 
 ### How 2PC Works
 
+```mermaid
+graph TD
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    C[Coordinator]
+    PA[Participant A]
+    PB[Participant B]
+    C -->|Phase 1: Prepare - Can you commit?| PA
+    C -->|Phase 1: Prepare - Can you commit?| PB
+    PA -->|Yes - prepare complete, holding locks| C
+    PB -->|Yes - prepare complete, holding locks| C
+    C -->|Phase 2: Commit| PA
+    C -->|Phase 2: Commit| PB
+    PA -->|Committed| C
+    PB -->|Committed| C
+    class C green
+    class PA,PB blue
 ```
-Phase 1: Prepare
-Coordinator --> Participant A: Can you commit?
-Coordinator --> Participant B: Can you commit?
-Participant A --> Coordinator: Yes (prepare complete, holding locks)
-Participant B --> Coordinator: Yes (prepare complete, holding locks)
 
-Phase 2: Commit (if all prepare succeeded)
-Coordinator --> Participant A: Commit
-Coordinator --> Participant B: Commit
-Participant A --> Coordinator: Committed
-Participant B --> Coordinator: Committed
-```
+In phase 1 (prepare), the coordinator asks each participant if they can commit. Participants acquire all necessary locks, perform the work, and write prepare records to their transaction logs — but do not yet commit. They respond "yes" if ready, or "no" if they cannot proceed. In phase 2, if all participants said "yes", the coordinator sends a commit command. If any said "no", it sends an abort command.
 
 ### 2PC with JTA
 
@@ -109,6 +119,8 @@ public class XAConfiguration {
 }
 ```
 
+The `@Transactional` annotation on `createUserWithAccounts` spans three databases (users, accounts, notifications). Spring delegates to the JTA transaction manager (Atomikos), which coordinates the two-phase commit across the MySQL and PostgreSQL XA resources. If any database fails to commit, all databases roll back. The `@Autowired` fields simplify the code but would be better as constructor injection in production.
+
 ### Limitations of 2PC
 
 - **Blocking protocol**: Participants hold locks during the prepare phase, reducing concurrency.
@@ -159,6 +171,8 @@ public class UserRegistrationSaga {
     }
 }
 ```
+
+In the saga pattern, each step commits independently. If a later step fails, the saga runs compensating actions for all previously completed steps. Here, if billing creation fails, it deletes the created identity. If notification fails, it closes the billing account and deletes the identity. No distributed locks are held — each step's local transaction commits before the next step begins.
 
 ### Choreography Saga
 
@@ -217,6 +231,8 @@ public class CompensationHandler {
 }
 ```
 
+In choreography, there is no central coordinator. Each service listens for events and performs its own step. If `BillingService` fails to create an account, it publishes a `BillingCreationFailedEvent`, which triggers the `CompensationHandler` to delete the identity. This is more decentralized than orchestration but harder to trace and debug — the flow is implicit in the event wiring.
+
 ## Comparison Table
 
 | Aspect | 2PC | Saga |
@@ -251,6 +267,8 @@ public TransferResult transferMoney(String fromAccount, String toAccount, BigDec
 }
 ```
 
+A money transfer between two accounts in different databases is a classic 2PC use case. If the withdrawal succeeds but the deposit fails, the system must roll back the withdrawal. The transaction is short (milliseconds) and the cost of inconsistency is high (lost money). 2PC guarantees that either both operations complete or neither does.
+
 ### Use Saga When
 
 ```java
@@ -277,6 +295,8 @@ public class OrderProcessingSaga {
     }
 }
 ```
+
+Order processing involves multiple services, some of which may take seconds (payment gateway, shipping carrier). Holding distributed locks for this duration would kill concurrency. A saga compensates on failure: refund the payment if inventory can't be reserved, cancel the shipment if notification fails. The customer sees eventual consistency — their order might show as "processing" for a few seconds while the saga completes.
 
 ## Compensating Transaction Design
 
@@ -323,6 +343,8 @@ public class CompensatingTransactionService {
     }
 }
 ```
+
+Each compensable transaction bundles the forward action and its compensating action. The `execute` method returns a result that can be passed to `compensate`. This composable design makes it possible to build a generic saga orchestrator that executes transactions and tracks compensations.
 
 ## Common Mistakes
 

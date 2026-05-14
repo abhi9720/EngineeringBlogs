@@ -41,6 +41,8 @@ public class PriceCalculator {
 
 This violates the Open-Closed Principle: adding a new customer type requires modifying existing code.
 
+The procedural approach has several problems. It violates the Open-Closed Principle — adding a new customer type requires modifying `PriceCalculator`. It also forces all pricing logic into one method, making it impossible to test or reuse individual pricing rules. A change to wholesale pricing means the entire class must be recompiled and retested.
+
 ### With Strategy Pattern
 
 ```java
@@ -105,6 +107,8 @@ public class EmployeePricingStrategy implements PricingStrategy {
 }
 ```
 
+With the strategy pattern, each pricing rule is a separate class. The `PricingStrategy` interface defines the contract. Each implementation encapsulates the logic for one customer type. Adding a new customer type means adding a new `@Component` class — no existing code changes. Each strategy can be tested independently.
+
 ### Strategy Context
 
 ```java
@@ -130,6 +134,8 @@ public class PricingContext {
     }
 }
 ```
+
+The `PricingContext` holds a map of strategies keyed by customer type. Spring's auto-collection injects all `PricingStrategy` beans into the constructor. The context selects the right strategy in O(1) via the map lookup. If no strategy matches, it throws a clear exception rather than silently returning null or the wrong price.
 
 ## Advanced Strategy: Payment Processing
 
@@ -250,6 +256,8 @@ public class CryptoCurrencyStrategy implements PaymentGatewayStrategy {
 }
 ```
 
+Each payment strategy encapsulates all logic for a specific payment method, including its own API client, error handling, and refund logic. The `supports()` method enables runtime selection based on the payment method, while `supportedMethod()` provides metadata for UI rendering. Each strategy translates domain concepts (like `Money`) into payment-provider-specific formats.
+
 ### Payment Strategy Context
 
 ```java
@@ -281,6 +289,8 @@ public class PaymentStrategyContext {
     }
 }
 ```
+
+The context iterates through strategies to find the one that supports the given payment method. Using `supports()` instead of a map lookup allows strategies to make complex decisions — a strategy could support multiple payment methods or vary based on amount, currency, or region.
 
 ## Strategy with Enums
 
@@ -354,6 +364,8 @@ public class DiscountService {
 }
 ```
 
+Enum-keyed strategies use `@Value` to externalize configuration — the seasonal discount percentage comes from `application.properties`, not hard-coded in the class. The clearance strategy caps the minimum at $1.00. The `DiscountService` maps enum values to strategies using Java's `Collectors.toMap`.
+
 ## Testing Strategy Pattern
 
 ```java
@@ -392,6 +404,8 @@ class PricingContextTest {
     }
 }
 ```
+
+Each strategy can be tested independently and in combination. Testing the context validates registration and selection logic. The individual strategy tests validate business rules without needing the Spring context.
 
 ## Common Mistakes
 

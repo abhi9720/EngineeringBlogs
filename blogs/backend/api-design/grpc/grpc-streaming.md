@@ -22,7 +22,11 @@ gRPC supports four types of RPC calls: unary, server-streaming, client-streaming
 
 ## Streaming Types
 
+gRPC supports four RPC types that map to different communication patterns: unary (single request, single response), server streaming (single request, multiple responses), client streaming (multiple requests, single response), and bidirectional streaming (multiple requests, multiple responses). Streaming is a first-class concept in gRPC, not an afterthought — the protocol, transport, and code generation are all designed to support streaming efficiently.
+
 ### Protocol Definitions
+
+The `.proto` file uses the `stream` keyword to declare streaming RPCs. `rpc SubscribeEvents(EventSubscription) returns (stream Event)` declares server streaming — the client sends one request and receives a stream of events. `rpc UploadMetrics(stream Metric) returns (UploadSummary)` declares client streaming — the client sends multiple metrics and receives a single summary. `rpc ProcessChatMessages(stream ChatMessage) returns (stream ChatResponse)` declares bidirectional streaming — both sides send multiple messages independently. The message definitions include metadata fields (like `sequence_number`, `checksum`, `timestamp`) that are important for reliable streaming in production.
 
 ```protobuf
 syntax = "proto3";
@@ -121,7 +125,11 @@ message DataChunk {
 
 ## Server Streaming
 
+Server streaming is the most commonly used streaming pattern in gRPC. The client sends a single request and receives a stream of responses. This is ideal for use cases like real-time event subscriptions, large data exports, and progress reporting. The server pushes multiple messages through the same `StreamObserver`, calling `onNext()` for each message and `onCompleted()` when done. Server streaming leverages HTTP/2's multiplexing — multiple streams can share the same connection without head-of-line blocking.
+
 ### Implementation
+
+The `EventStreamingService` demonstrates server streaming for two use cases: real-time event subscription and data export. For event subscription, the service registers with an event bus and pushes events to the client as they arrive, handling client cancellation via `setOnCancelHandler`. For data export, the service reads data in chunks from an input stream, builds `DataChunk` messages, and sends them sequentially with progress metadata. Both patterns require careful resource management — the subscription must be disposed when the client disconnects, and the export must check for cancellation between chunks.
 
 ```java
 @GrpcService
@@ -220,7 +228,11 @@ public class EventStreamingService extends EventStreamingGrpc.EventStreamingImpl
 
 ## Client Streaming
 
+Client streaming allows the client to send multiple messages and receive a single aggregated response. This pattern is ideal for batch uploads, data ingestion pipelines, and bulk operations where the client needs to send many items and receive a summary. The server returns a `StreamObserver` that the client uses to send messages, and the server aggregates them until the client signals completion by calling `onCompleted()`.
+
 ### Implementation
+
+The `MetricIngestionService` handles client streaming for metric uploads. The `uploadMetrics` method returns a custom `StreamObserver` that accumulates received metrics, tracks failures, and measures processing time. Each incoming metric is validated and stored; invalid metrics are counted but not stored. When the client completes the stream, the service sends back an `UploadSummary` with total metrics, failures, data size, and processing time. This pattern gives clients immediate feedback on the batch's success and enables partial-failure handling — even if some metrics fail, the summary includes the failure count and successful metrics are still stored.
 
 ```java
 @GrpcService
@@ -293,7 +305,11 @@ public class MetricIngestionService extends EventStreamingGrpc.EventStreamingImp
 
 ## Bidirectional Streaming
 
+Bidirectional streaming is the most powerful and complex gRPC streaming pattern. Both client and server send independent streams of messages, enabling true real-time interactive communication. This pattern is ideal for chat applications, collaborative editing, real-time gaming, and any scenario where both peers need to send messages asynchronously. The two streams are independent — the server can respond to messages in any order and at any time.
+
 ### Chat Service Implementation
+
+The `ChatService` implements bidirectional streaming for a real-time chat application. It returns a `StreamObserver` for receiving client messages while using the `responseObserver` to send messages back to the client. The handler processes different message types (text, image, file, system), persists messages, broadcasts to room subscribers, and sends acknowledgments back to the sender. The `ChatRoomManager` manages room membership — clients join rooms, receive broadcasts from other members, and are cleaned up on disconnection. This implementation demonstrates the key pattern for bidirectional streaming: the server-side `StreamObserver` receives client messages, while the stored response observer handles server-to-client messages.
 
 ```java
 @GrpcService
@@ -431,7 +447,11 @@ public class ChatRoomManager {
 
 ## Backpressure Handling
 
+Backpressure is critical for streaming applications to prevent fast producers from overwhelming slow consumers. gRPC has built-in HTTP/2 flow control, but application-level backpressure is often needed for complex streaming scenarios. Without backpressure handling, a slow consumer causes memory growth on the producer as messages queue up, eventually leading to out-of-memory errors. Application-level strategies include dropping messages, buffering with limits, sampling, and flow control signaling.
+
 ### Flow Control Implementation
+
+The `BackpressureManager` uses a semaphore to limit the number of outstanding messages. Before sending each message, the producer acquires a permit from the semaphore. If no permit is available within the timeout, the message is dropped (with a warning). The consumer releases permits as it processes messages, controlling the producer's rate. This backpressure strategy prevents unbounded memory growth while allowing the producer to continue working without blocking indefinitely. The `maxOutstandingRequests` parameter controls the trade-off between throughput and memory — higher values allow more concurrency but consume more memory.
 
 ```java
 @Component

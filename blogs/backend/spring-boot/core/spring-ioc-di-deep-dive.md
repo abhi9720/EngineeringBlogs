@@ -16,11 +16,15 @@ draft: false
 
 The Inversion of Control (IoC) principle is the foundation of the Spring Framework. Instead of objects creating their own dependencies, control is inverted: the container manages object creation and wiring. This deep dive explores the Spring IoC container, dependency injection patterns, and advanced configuration techniques.
 
+IoC means your classes don't control their dependencies — the container does. This decouples object creation from object usage, making your code more testable, flexible, and maintainable. Instead of calling `new PaymentService()`, you declare `PaymentService` as a constructor parameter and let Spring provide it.
+
 ## The IoC Container
 
 Spring's `ApplicationContext` is the central interface for providing configuration to the application. It manages bean lifecycle, dependency resolution, and configuration.
 
 ### Types of ApplicationContext
+
+The `AnnotationConfigApplicationContext` is the standard choice for Spring Boot applications. It processes `@Configuration` classes and `@Component`-annotated beans. The XML-based context is legacy but may appear in older projects. The Groovy-based context is rarely used.
 
 ```java
 // Annotation-based context (most common in Spring Boot)
@@ -35,6 +39,8 @@ ApplicationContext context = new GenericGroovyApplicationContext("config.groovy"
 
 ### BeanFactory vs ApplicationContext
 
+The `BeanFactory` is the lowest-level container with lazy initialization — beans are created only when requested. The `ApplicationContext` extends `BeanFactory` with eager initialization, AOP support, event publishing, internationalization, and resource loading. Spring Boot always uses `ApplicationContext`.
+
 ```java
 // BeanFactory is the lowest-level container - lazy initialization
 BeanFactory factory = new XmlBeanFactory(new ClassPathResource("beans.xml"));
@@ -48,6 +54,8 @@ MyService service = context.getBean(MyService.class);
 ## Dependency Injection Patterns
 
 ### Constructor Injection (Recommended)
+
+Constructor injection is the recommended approach. It ensures the bean is fully initialized when constructed, makes dependencies explicit, enables immutability with `final` fields, and simplifies testing — just pass mocks to the constructor.
 
 ```java
 @Component
@@ -75,6 +83,8 @@ public class OrderService {
 
 ### Setter Injection
 
+Setter injection is useful for optional dependencies or circular dependencies. Spring calls the setter after the bean is constructed. The `@Autowired` annotation on the setter triggers injection. Unlike constructor injection, the fields cannot be final.
+
 ```java
 @Component
 public class EmailService {
@@ -100,6 +110,8 @@ public class EmailService {
 
 ### Field Injection (Not Recommended)
 
+Field injection uses `@Autowired` directly on fields. While concise, it makes testing difficult — you can't construct the object without reflection or a Spring context, and the bean isn't fully initialized after construction. Avoid field injection in production code.
+
 ```java
 @Component
 public class UserService {
@@ -119,6 +131,10 @@ public class UserService {
 ## Java-Based Configuration
 
 ### @Configuration and @Bean
+
+`@Configuration` classes are the standard way to define beans in modern Spring. Each `@Bean` method creates a bean of the return type. Spring calls these methods, injecting dependencies via method parameters. The `DataSourceConfig` below creates three beans that depend on each other: `DataSource`, `PlatformTransactionManager`, and `JdbcTemplate`.
+
+The `PlatformTransactionManager` method takes a `DataSource` parameter — Spring automatically injects the `dataSource()` bean. This is method-level injection, which is explicit and refactoring-friendly.
 
 ```java
 @Configuration
@@ -152,6 +168,8 @@ public class DataSourceConfig {
 
 ### @Bean with Factory Methods
 
+Factory methods in `@Configuration` classes can use conditional logic. The example below returns a different `CacheManager` implementation based on the `cache.type` property. This pattern lets users choose the implementation without changing code.
+
 ```java
 @Configuration
 public class CacheConfig {
@@ -183,13 +201,14 @@ public class CacheConfig {
 
 ### Resolving Ambiguous Dependencies
 
+When multiple beans implement the same interface, Spring throws a `NoUniqueBeanDefinitionException`. Use `@Qualifier` to specify which bean to inject. The qualifier value matches the bean name or a custom `@Qualifier` annotation value.
+
 ```java
 @Component
 @Qualifier("creditCard")
 public class CreditCardPaymentService implements PaymentService {
     @Override
     public PaymentResult process(PaymentRequest request) {
-        // Process credit card payment
         return new PaymentResult(true, "CC-" + UUID.randomUUID());
     }
 }
@@ -199,13 +218,14 @@ public class CreditCardPaymentService implements PaymentService {
 public class PayPalPaymentService implements PaymentService {
     @Override
     public PaymentResult process(PaymentRequest request) {
-        // Process PayPal payment
         return new PaymentResult(true, "PP-" + UUID.randomUUID());
     }
 }
 ```
 
 ### Using @Primary
+
+`@Primary` marks a bean as the default when multiple candidates exist. It's useful for providing a fallback implementation that applies when no specific qualifier is used.
 
 ```java
 @Component
@@ -248,6 +268,8 @@ public class CheckoutService {
 
 ## Injecting Collections
 
+Spring can inject all beans of a given type as a `List` or `Map`. The `List<PaymentService>` contains all implementations ordered by `@Order` or `@Priority`. The `Map<String, PaymentService>` maps bean names to their instances.
+
 ```java
 @Component
 public class PaymentRouter {
@@ -272,12 +294,13 @@ public class PaymentRouter {
 
 ## Lazy Initialization
 
+`@Lazy` delays bean creation until it's first requested. Use it for expensive resources that may not be needed in every request path. The `ExpensiveResource` below is created only when `ResourceService` first calls a method that uses it.
+
 ```java
 @Component
 @Lazy
 public class ExpensiveResource {
     public ExpensiveResource() {
-        // Heavy initialization: database connections, thread pools
         initializeConnectionPool();
         loadConfiguration();
     }
@@ -297,6 +320,8 @@ public class ResourceService {
 
 ### Prototype Scope with Lookup Method
 
+Singleton beans holding prototype-scoped dependencies must use `@Lookup` or `ObjectProvider` to get a new instance on each call. The `@Lookup` annotation tells Spring to override the method with a new instance lookup at runtime.
+
 ```java
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -314,18 +339,19 @@ public class ShoppingCart {
 public class CheckoutService {
     @Lookup
     public ShoppingCart createCart() {
-        return null; // Spring overrides this method
+        return null;
     }
 
     public CheckoutResult startCheckout() {
         ShoppingCart cart = createCart();
-        // Use the new cart instance
         return new CheckoutResult(cart);
     }
 }
 ```
 
 ### Custom Scope
+
+Custom scopes extend the container's scope mechanism. The `ThreadScope` below creates one bean instance per thread using a `ThreadLocal`. Implement the `Scope` interface and register it to make the scope available via `@Scope("thread")`.
 
 ```java
 public class ThreadScope implements Scope {
@@ -344,7 +370,6 @@ public class ThreadScope implements Scope {
 
     @Override
     public void registerDestructionCallback(String name, Runnable callback) {
-        // Thread scope destruction not supported
     }
 
     @Override
@@ -403,29 +428,20 @@ public class AuditingBeanPostProcessor implements BeanPostProcessor {
 public class OrderProcessor {
     @Autowired
     private PaymentService paymentService;
-
     @Autowired
     private InventoryService inventoryService;
-
-    public void process(Order order) {
-        // Can't easily mock dependencies in tests
-    }
+    public void process(Order order) { }
 }
-```
 
-```java
 // Correct: Constructor injection enables easy mocking
 @Component
 public class OrderProcessor {
     private final PaymentService paymentService;
     private final InventoryService inventoryService;
-
-    public OrderProcessor(PaymentService paymentService,
-                         InventoryService inventoryService) {
+    public OrderProcessor(PaymentService paymentService, InventoryService inventoryService) {
         this.paymentService = paymentService;
         this.inventoryService = inventoryService;
     }
-
     public void process(Order order) {
         paymentService.charge(order.getTotal());
         inventoryService.deduct(order.getItems());
@@ -436,84 +452,51 @@ public class OrderProcessor {
 ### Mistake 2: Circular Dependencies
 
 ```java
-// Wrong: Circular dependency between services
+// Wrong: Circular dependency
 @Component
 public class OrderService {
     private final InvoiceService invoiceService;
-
-    public OrderService(InvoiceService invoiceService) {
-        this.invoiceService = invoiceService;
-    }
+    public OrderService(InvoiceService invoiceService) { this.invoiceService = invoiceService; }
 }
-
 @Component
 public class InvoiceService {
     private final OrderService orderService;
-
-    public InvoiceService(OrderService orderService) {
-        this.orderService = orderService;
-    }
+    public InvoiceService(OrderService orderService) { this.orderService = orderService; }
 }
-```
 
-```java
 // Correct: Introduce a third service to break the cycle
+@Component
+public class BillingService { }
 @Component
 public class OrderService {
     private final BillingService billingService;
-
-    public OrderService(BillingService billingService) {
-        this.billingService = billingService;
-    }
+    public OrderService(BillingService billingService) { this.billingService = billingService; }
 }
-
 @Component
 public class InvoiceService {
     private final BillingService billingService;
-
-    public InvoiceService(BillingService billingService) {
-        this.billingService = billingService;
-    }
-}
-
-@Component
-public class BillingService {
-    // Shared logic between Order and Invoice
+    public InvoiceService(BillingService billingService) { this.billingService = billingService; }
 }
 ```
 
 ### Mistake 3: Forgetting Scope for Stateful Beans
 
 ```java
-// Wrong: Using singleton for stateful beans causes thread-safety issues
+// Wrong: Singleton for stateful beans causes thread-safety issues
 @Component
 public class RequestContext {
     private String currentUserId;
-
-    public void setCurrentUserId(String userId) {
-        this.currentUserId = userId;
-    }
-
-    public String getCurrentUserId() {
-        return currentUserId;
-    }
+    public void setCurrentUserId(String userId) { this.currentUserId = userId; }
+    public String getCurrentUserId() { return currentUserId; }
 }
-```
 
-```java
 // Correct: Use proper scope for stateful beans
 @Component
 @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_PROXY)
 public class RequestContext {
     private String currentUserId;
-
-    public void setCurrentUserId(String userId) {
-        this.currentUserId = userId;
-    }
-
-    public String getCurrentUserId() {
-        return currentUserId;
-    }
+    public void setCurrentUserId(String userId) { this.currentUserId = userId; }
+    public String getCurrentUserId() { return currentUserId; }
 }
 ```
 

@@ -31,6 +31,8 @@ Testcontainers is a Java library that provides lightweight, disposable instances
 | Migration | May pass on H2, fail on PG | Same as production |
 | Startup time | Instant | 5-10 seconds (first time) |
 
+The first-time startup cost of Testcontainers is amortized when using static singleton containers—the Docker image is pulled once, and the container stays alive across all test classes in the suite. For CI pipelines, the image is typically cached on the runner.
+
 ---
 
 ## Setup
@@ -106,6 +108,8 @@ class UserRepositoryTest {
     }
 }
 ```
+
+The singleton pattern (static `@Container` field) is the recommended approach. The container starts once before all tests in the class and stops after all tests complete. All test methods share the same database instance, but `@Transactional` rollback on each method keeps them isolated.
 
 ### With Sping Boot Testcontainers (1.2+)
 

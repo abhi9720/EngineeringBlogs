@@ -19,11 +19,11 @@ RabbitMQ exchanges are the central routing hub where producers send messages. Ex
 
 ## Exchange Types
 
-RabbitMQ supports four exchange types, each implementing a different routing algorithm.
+RabbitMQ supports four exchange types, each implementing a different routing algorithm. Choosing the right type depends on your routing complexity: direct for exact matching, topic for pattern-based, fanout for broadcasting, and headers for attribute-based routing.
 
 ### Direct Exchange
 
-Routes messages to queues where the routing key exactly matches the binding key.
+Routes messages to queues where the routing key exactly matches the binding key. In the example below, messages with routing key `"order"` go to `order.queue`, and `"payment"` goes to `payment.queue`. This is the simplest exchange type and is ideal for unicast routing where each message type has a dedicated queue. Note that `order.queue` also has a DLQ configured — a best practice for production queues.
 
 ```java
 @Configuration
@@ -65,7 +65,7 @@ public class DirectExchangeConfig {
 
 ### Topic Exchange
 
-Routes messages using wildcard patterns. `*` matches exactly one word, `#` matches zero or more words.
+Routes messages using wildcard patterns. `*` matches exactly one word, `#` matches zero or more words. In the example, `order.#` matches `order.created`, `order.created.eu`, `order.created.eu.france`, etc. The `order.europe.*` binding matches `order.europe.france` but not `order.europe.france.paris` (because `*` matches exactly one word). Topic exchanges are the most flexible and widely used in production.
 
 ```java
 @Configuration
@@ -104,7 +104,7 @@ public class TopicExchangeConfig {
 
 ### Fanout Exchange
 
-Broadcasts messages to all bound queues, ignoring routing keys.
+Broadcasts messages to all bound queues, ignoring routing keys. This is ideal for publish-subscribe scenarios where every consumer should receive every message. In the example, every notification (email, SMS, push) receives all messages from the fanout exchange. This eliminates the need to maintain routing key consistency across multiple queues.
 
 ```java
 @Configuration
@@ -149,7 +149,7 @@ public class FanoutExchangeConfig {
 
 ### Headers Exchange
 
-Routes messages based on header attributes rather than routing keys. Supports `x-match=any` (match any header) or `x-match=all` (match all headers).
+Routes messages based on header attributes rather than routing keys. Supports `x-match=any` (match any header) or `x-match=all` (match all headers). This is useful when routing depends on multiple attributes that don't fit into a hierarchical routing key. In the example, a message must have both `priority=high` and `region=us-east` headers to reach `priority.queue`.
 
 ```java
 @Configuration
@@ -180,6 +180,8 @@ public class HeadersExchangeConfig {
 ```
 
 ## Producer Implementation
+
+The `OrderEventProducer` demonstrates how to send messages to each exchange type. Note that fanout exchanges ignore the routing key (empty string is conventional). Headers exchanges require building a `Message` object with properties rather than using `convertAndSend` with a routing key. The `RabbitTemplate` handles serialization and delivery.
 
 ```java
 @Component
@@ -215,6 +217,8 @@ public class OrderEventProducer {
 
 ## Consumer Implementation
 
+Consumers use `@RabbitListener` with the queue name. The `OrderConsumer` demonstrates consumers for each exchange type. The `receivedRoutingKey` is available from message headers, which helps consumers understand which binding matched the message.
+
 ```java
 @Component
 public class OrderConsumer {
@@ -247,6 +251,8 @@ public class OrderConsumer {
 ```
 
 ## Dynamic Bindings
+
+Sometimes queues need to be bound at runtime rather than at configuration time. The `DynamicBindingManager` uses `AmqpAdmin` to declare queues, create bindings, and remove bindings on the fly. This is useful for multi-tenant systems where each tenant gets a dedicated queue, or for dynamic routing rules that change based on business conditions.
 
 ```java
 @Component
@@ -300,6 +306,8 @@ public class DynamicBindingManager {
 
 ### Mistake: Misunderstanding topic exchange wildcards
 
+A binding of `order.europe` matches only the exact routing key `order.europe` — it does not match `order.europe.france` because the binding has no wildcard. If you want to match all sub-routing-keys under `order.europe`, use `order.europe.#`.
+
 ```java
 // Wrong - expects "order.europe" to match "order.europe.*"
 .with("order.europe")
@@ -313,6 +321,8 @@ public class DynamicBindingManager {
 ```
 
 ### Mistake: Not setting up DLQ for failed messages
+
+Without DLQ configuration, messages that are nack'd or expire are silently dropped. In production, this means lost data with no trace. Always add dead letter exchange configuration to every queue that handles business-critical messages.
 
 ```java
 // Wrong - no dead letter configuration

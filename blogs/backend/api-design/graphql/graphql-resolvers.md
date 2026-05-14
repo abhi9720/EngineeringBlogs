@@ -22,7 +22,11 @@ Resolvers are the core of GraphQL data fetching. Each field in a GraphQL schema 
 
 ## Understanding Resolver Execution
 
+GraphQL resolvers are the functions that populate each field in a query response. Unlike REST controllers that return pre-assembled data, GraphQL resolves fields individually, allowing the execution engine to parallelize independent fields and skip fields not requested by the client. Understanding resolver execution is critical for performance — a naive resolver that makes a database call for every field will quickly overwhelm the database.
+
 ### Field-Level Resolution
+
+Each field in a GraphQL response has its own resolver. The `OrderResolver` class implements `GraphQLResolver<Order>`, meaning it provides resolvers for fields on the `Order` type. Notice how different fields have different resolution strategies: `customer` requires a database lookup by foreign key, `items` fetches children by parent ID, `totalAmount` computes a value in-memory from already-loaded data, and `statusLabel` merely transforms an existing field. This flexibility is what makes GraphQL powerful — but it also means each field's performance characteristics must be considered individually.
 
 ```java
 @Component
@@ -67,6 +71,8 @@ public class OrderResolver implements GraphQLResolver<Order> {
 }
 ```
 
+GraphQL's execution model resolves fields in phases. First, the root query field runs (e.g., `order(id: "123")`), which returns the `Order` object. Then, at the next level, fields `id`, `customer`, `items`, `payment`, and `totalAmount` are resolved in parallel because they are at the same nesting depth and have no data dependencies between them. This parallel execution is a key performance feature — independent database queries and external service calls run concurrently, reducing total response time compared to sequential resolution.
+
 ### Resolver Execution Flow
 
 ```java
@@ -86,7 +92,11 @@ query {
 
 ## DataLoader for Batch Loading
 
+DataLoader is the single most important optimization technique for GraphQL resolvers. It solves the N+1 query problem by batching individual field resolutions into grouped database queries within a single request. DataLoader works at the request level — it collects all loads for a given key type during a request execution tick, then dispatches them as a single batch query. It also caches results within the request, so if the same entity is requested multiple times (e.g., the same author for multiple posts), it only loads it once.
+
 ### Basic DataLoader
+
+DataLoader configuration starts with defining loader functions that map batch keys to batch results. The `DataLoader.newMappedDataLoader` method accepts a function that receives a collection of keys and returns a `Map` of key-to-value. This allows the database to execute a single `IN` query instead of N individual `SELECT` queries. The example creates two loaders: one for loading customers by ID, and another for loading orders grouped by customer ID — a common pattern for resolving parent-child relationships efficiently.
 
 ```java
 @Component
@@ -121,6 +131,8 @@ public class DataLoaderConfig {
     }
 }
 ```
+
+Using DataLoader in resolvers changes the return type from direct values to `CompletableFuture`. Instead of blocking on a database call, the resolver returns a `CompletableFuture` that will be completed when the DataLoader dispatches its batch. This enables the GraphQL engine to resolve independent fields in parallel without blocking threads. The resolver's job becomes simply loading the key through the appropriate DataLoader — the batching and caching logic is handled transparently by the DataLoader framework.
 
 ### Using DataLoader in Resolvers
 
@@ -164,6 +176,8 @@ public class OrderItemResolver implements GraphQLResolver<OrderItem> {
 }
 ```
 
+For more complex use cases — like loading a list of related entities per parent (e.g., all reviews for each product) — the `BatchLoader` interface provides finer control. Unlike `MappedDataLoader` which returns a map, `BatchLoader` returns a list of results in the same order as the input keys. This is useful when the database query naturally returns ordered results or when you need to handle missing keys explicitly (returning empty lists for products without reviews).
+
 ### BatchLoader for Complex Queries
 
 ```java
@@ -198,7 +212,11 @@ public class BatchLoaderConfig {
 
 ## Advanced Resolver Patterns
 
+Beyond basic field resolution, GraphQL resolvers support advanced patterns for handling polymorphic types, conditional data fetching, pagination, and performance optimization. These patterns become essential as your API grows in complexity.
+
 ### Conditional Resolution
+
+Sometimes a resolver should return data only under certain conditions. The `ContentResolver` demonstrates this pattern: a polymorphic `Content` type can represent videos, articles, or quizzes, but only one type applies to a given content entity. The resolvers check the content type and return null for non-matching types. GraphQL handles null gracefully — if an interface field resolves to null for a specific type, it simply omits that field from the response.
 
 ```java
 @Component
@@ -232,6 +250,8 @@ public class ContentResolver implements GraphQLResolver<Content> {
 }
 ```
 
+Union and interface types require a `TypeResolver` — a special resolver that determines the concrete object type at runtime. When a query returns a `SearchResult` (which could be a User, Post, or Product), the `TypeResolver` inspects the source object and returns the appropriate GraphQL type. This dynamic type resolution enables flexible search APIs and polymorphic relationships that are difficult to model in REST.
+
 ### Union and Interface Resolvers
 
 ```java
@@ -263,6 +283,8 @@ type Query {
   search(term: String!): [SearchResult!]!
 }
 ```
+
+The Relay Connection pattern is the standard approach for cursor-based pagination in GraphQL. A Connection wraps a list of Edges, each containing a node (the actual entity) and a cursor (an opaque pagination token). The `PageInfo` object provides navigation metadata. Connection resolvers transform the internal list of entities into the connection format, encoding cursors and computing page boundaries. This pattern provides consistent, efficient pagination across all list fields in the API.
 
 ### Connection and Edge Resolvers
 
@@ -321,7 +343,11 @@ type PageInfo {
 
 ## Performance Optimization
 
+Poor resolver performance is the leading cause of slow GraphQL APIs. Profiling resolvers in production reveals which fields are expensive and whether DataLoader caching is working effectively. Several optimization techniques can dramatically improve performance beyond basic DataLoader usage.
+
 ### Resolver Caching
+
+Beyond DataLoader's per-request caching, application-level caching can avoid expensive computations and service calls across requests. The example shows caching a customer's recent orders with a cache-aside pattern: check the cache first, return cached data if available, otherwise fetch from the service and populate the cache. Cache duration should balance freshness with performance — seconds for frequently-changing data, minutes for stable data. Always invalidate caches when related data is modified through mutations.
 
 ```java
 @Component
@@ -353,6 +379,8 @@ public class CachedCustomerResolver implements GraphQLResolver<Customer> {
     }
 }
 ```
+
+Selective field resolution optimizes expensive fields by checking the query's selection set before fetching data. The example shows a `content` field that only fetches full document content from a service if the client actually requested it. For large documents, this can save significant bandwidth and database load. Use `DataFetchingEnvironment.getSelectionSet()` to inspect which fields the client requested and avoid unnecessary work for unrequested fields.
 
 ### Selective Field Resolution
 
@@ -390,6 +418,8 @@ public class SelectiveResolver implements GraphQLResolver<Document> {
 ---
 
 ## Best Practices
+
+Efficient resolver design is the foundation of a performant GraphQL API. The following practices help ensure your resolvers are fast, reliable, and maintainable at scale.
 
 1. **Use DataLoader for all related data**: Eliminate N+1 queries
 2. **Keep resolvers focused**: Each resolver handles one field
@@ -432,6 +462,8 @@ public class ResolverMetrics {
 
 ### Mistake 1: Naive Resolver Without DataLoader
 
+The naive resolver calls `findById` for each parent entity individually. With 100 orders, this generates 100 database queries just for the customer field. The correct approach uses DataLoader, which collects all 100 customer IDs, dispatches a single `WHERE id IN (...)` query, and maps results back to their respective orders. This reduces database round trips from O(N) to O(1), which is the difference between a 100ms response and a 5-second response.
+
 ```java
 // WRONG: Each resolver hits database individually
 public Customer customer(Order order) {
@@ -448,6 +480,8 @@ public CompletableFuture<Customer> customer(Order order) {
 
 ### Mistake 2: Blocking in Async Resolvers
 
+Wrapping a blocking call in `CompletableFuture.supplyAsync` does not make it non-blocking — it just moves the blocking to a thread pool. This still consumes a thread and limits concurrency. True async resolvers should use non-blocking I/O throughout the call chain: reactive database drivers (R2DBC), async HTTP clients (WebClient), or asynchronous service calls. Thread starvation occurs when all threads in the pool are blocked on I/O, preventing new requests from being processed.
+
 ```java
 // WRONG: Blocking call in CompletableFuture
 public CompletableFuture<Data> fetchData() {
@@ -463,6 +497,8 @@ public CompletableFuture<Data> fetchData() {
 ```
 
 ### Mistake 3: Over-resolving
+
+GraphQL's lazy resolution means resolvers should only run for fields the client requested. However, some resolver implementations eagerly fetch data even for unrequested fields — for example, a DataLoader that loads all related data regardless of whether it was queried. Always ensure your resolvers only perform work for fields in the client's selection set. Use `DataFetchingEnvironment.getSelectionSet()` to check which fields were requested and avoid unnecessary database queries or API calls.
 
 ```java
 // WRONG: Resolving fields that aren't requested

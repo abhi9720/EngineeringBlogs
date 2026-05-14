@@ -18,6 +18,8 @@ This post covers the essential design patterns for production task queues: prior
 
 ### Basic Producer-Consumer
 
+The producer-consumer pattern shown here illustrates three important RabbitMQ practices. First, `DeliveryMode.PERSISTENT` ensures messages survive a broker restart — without it, messages live only in memory. Second, the consumer uses `Channel`-level acknowledgements (`basicAck`/`basicNack`) rather than automatic acknowledgement, which gives the consumer control over redelivery. Third, exception-driven routing is implemented via two `basicNack` variants: `requeue=true` for `RetryableException` (the message goes back to the queue for another attempt) and `requeue=false` for `FatalException` (the message is discarded or routed to a dead-letter exchange). This pattern is the foundation on which more sophisticated retry and DLQ mechanisms are built.
+
 ```java
 // Message producer
 @Component
@@ -102,6 +104,8 @@ public class TaskConsumer {
 
 ### Priority Queue Configuration
 
+Three separate queues provide strict priority isolation — tasks in the `high` queue are always consumed before `medium` or `low` tasks, regardless of how many low-priority tasks are backlogged. The `maxPriority` attribute on each queue limits how many priority levels are supported (10 for high, 5 for medium). This approach is simpler than a single queue with message-level priorities, which requires consumers to scan for the highest-priority message, adding overhead. The trade-off is operational complexity: you now have three queues to monitor, three sets of consumers to configure, and the question of what happens to high-priority tasks when all high-priority consumers are busy — they back up in the high queue while lower-priority consumers sit idle.
+
 ```java
 @Configuration
 public class PriorityQueueConfiguration {
@@ -175,6 +179,8 @@ public class PriorityTaskProducer {
 ```
 
 ## Retry Pattern with Exponential Backoff
+
+Two retry strategies are shown here. The first uses Spring's `RetryTemplate` for in-process retry — the consumer thread retries the failed operation up to 5 times with an exponential backoff starting at 1 second and doubling each time, capped at 30 seconds. This works well for transient failures (database deadlocks, network timeouts) but blocks the consumer thread during the backoff window. The second strategy uses RabbitMQ's dead-letter exchange mechanism for out-of-process retry: failed messages from `tasks.main` are routed to `tasks.retry`, which has a 30-second TTL, then automatically re-routed back to the main queue. This frees the consumer thread immediately but is more complex to configure and introduces latency from the TTL-based redelivery.
 
 ```java
 @Component

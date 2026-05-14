@@ -42,7 +42,11 @@ Learning Curve       | Low                     | Medium                 | Medium
 
 ## Performance Comparison
 
+Performance characteristics differ significantly between the three paradigms due to differences in serialization format, transport protocol, and request semantics. Understanding these differences helps make informed architectural decisions.
+
 ### Latency and Throughput
+
+gRPC generally offers the lowest latency and highest throughput due to three factors: Protocol Buffers' compact binary encoding (significantly smaller than JSON), HTTP/2's multiplexing (multiple concurrent streams over a single connection without head-of-line blocking), and efficient connection reuse. REST's JSON serialization adds parsing overhead and produces larger payloads. GraphQL's flexibility comes at a cost — query parsing, validation, and resolver execution add latency compared to REST's simpler endpoint dispatch. For microservice-to-microservice communication where every millisecond matters, gRPC's performance advantage is compelling.
 
 ```java
 // REST - JSON serialization overhead
@@ -83,6 +87,8 @@ public class ProductGraphQLController {
 }
 ```
 
+Payload size directly affects network latency, especially in bandwidth-constrained environments or at high traffic volumes. The comparison shows that gRPC's protobuf encoding can be 5-10x smaller than equivalent JSON — a 40-byte protobuf vs 200-byte JSON for a simple entity. This savings compounds for list responses and deeply nested data. GraphQL can reduce payload size compared to REST by allowing clients to select only needed fields, but the JSON encoding overhead remains. For IoT devices, mobile apps, or high-throughput internal services, gRPC's payload efficiency is a significant advantage.
+
 ### Payload Size Comparison
 
 ```json
@@ -116,6 +122,8 @@ public class ProductGraphQLController {
 ## Use Case Scenarios
 
 ### When to Use REST
+
+REST remains the most universal API paradigm, supported natively by every programming language, HTTP client, and web browser. Its resource-oriented model maps naturally to CRUD operations, and HTTP caching (ETags, Cache-Control) provides built-in performance optimization. REST's wide ecosystem — OpenAPI, Postman, API gateways, monitoring tools — makes it the safest choice for public-facing APIs where third-party developers need to integrate quickly.
 
 ```java
 // REST excels at CRUD, public APIs, web applications
@@ -156,6 +164,8 @@ public class CustomerController {
 
 ### When to Use GraphQL
 
+GraphQL excels when clients have diverse data requirements that change frequently — such as mobile apps where bandwidth is precious and different screens need different data shapes. It also shines for aggregating data from multiple sources into a single query, reducing the N+1 request problem common in REST dashboards. The strongly-typed schema provides excellent developer tooling (autocompletion, validation, documentation) that speeds up frontend development.
+
 ```java
 // GraphQL excels at complex data requirements
 @Controller
@@ -187,6 +197,8 @@ public class ProductGraphQLResolver implements GraphQLResolver<Product> {
 - Rapid frontend development
 
 ### When to Use gRPC
+
+gRPC is the best choice for internal microservice communication where both producer and consumer are under your control. Its performance advantages (binary protocol, HTTP/2 multiplexing, streaming) are most valuable in high-throughput, low-latency environments. gRPC's code generation from proto files ensures type safety across language boundaries, making it ideal for polyglot environments. The streaming support is unmatched — bidirectional streaming for real-time features is significantly simpler in gRPC than alternatives.
 
 ```java
 // gRPC excels at microservices communication
@@ -250,7 +262,11 @@ public class OrderGrpcService extends OrderServiceGrpc.OrderServiceImplBase {
 
 ## Code Example Comparison
 
+Seeing the same business operation implemented in all three paradigms clarifies the API surface differences. The example compares creating an order — a typical resource creation operation — across REST, GraphQL, and gRPC.
+
 ### Same Operation in Three Paradigms
+
+All three implementations call the same `orderService.create()` method, but the API surface differs significantly. REST requires explicit HTTP status code handling, URI creation for the Location header, and request validation annotations. GraphQL is the most concise — the `@MutationMapping` annotation handles everything. gRPC requires the most boilerplate (request mapping, protobuf building, StreamObserver handling) but provides the strongest typing and generates client stubs automatically. The choice depends on which trade-offs matter most for your use case.
 
 ```java
 // REST: POST /api/orders
@@ -278,6 +294,8 @@ public void createOrder(CreateOrderRequest request,
     responseObserver.onCompleted();
 }
 ```
+
+The client-side experience also differs significantly. REST clients use HTTP libraries with manual URL construction and JSON deserialization. GraphQL clients send structured queries with variable binding. gRPC clients use generated stubs with type-safe method calls — the IDE provides autocompletion for request fields, and invalid requests are caught at compile time rather than runtime. This developer experience difference is one of gRPC's strongest selling points for internal services.
 
 ### Client Implementations
 

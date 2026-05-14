@@ -21,6 +21,8 @@ Apache Kafka is a distributed event streaming platform that handles trillions of
 
 ## Kafka Architecture
 
+Kafka's architecture revolves around a cluster of brokers managed by ZooKeeper (or KRaft in newer versions). Producers publish messages to topics, which are split into partitions for parallelism. Each partition is replicated across multiple brokers for fault tolerance. Consumers read from partitions within a consumer group, and each message in a partition has a unique offset. This design enables both ordering guarantees (within a partition) and horizontal scalability (across partitions).
+
 ```mermaid
 flowchart TB
 
@@ -48,6 +50,7 @@ flowchart TB
     classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
     classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
     classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
 
     class Zookeeper green
     class Broker1,Broker2,Broker3 blue
@@ -55,6 +58,8 @@ flowchart TB
 ```
 
 ### Core Concepts
+
+A producer publishes messages to a topic with an optional key — all messages with the same key land in the same partition, preserving order for that key. The `KafkaTemplate` in Spring abstracts the producer API. On the consumer side, `@KafkaListener` subscribes to a topic within a consumer group. Each consumer in the group handles a subset of partitions. The offset metadata tells the consumer its position in each partition, enabling reliable replay and resume.
 
 ```java
 // Producer: Sends messages to Kafka
@@ -104,6 +109,8 @@ public class OrderConsumer {
 
 ### 1. Event Sourcing
 
+Kafka's append-only log is a natural fit for event sourcing. Every state change (deposit, withdrawal) is published as an immutable event to Kafka. Downstream services or the same service can consume these events to rebuild state, project read models, or trigger side effects. Because Kafka retains events for a configurable period, you can replay from any point in time — enabling temporal queries and debugging.
+
 ```java
 // Store state changes as events
 @Service
@@ -137,6 +144,8 @@ public class AccountEventHandler {
 
 ### 2. Real-time Analytics
 
+Kafka's ability to retain messages and serve multiple consumer groups makes it ideal for analytics pipelines. The `AnalyticsService` processes `user-actions` in real time, incrementing metrics and updating dashboards. Multiple analytics consumers can independently track the same event stream without interfering with each other.
+
 ```java
 @Service
 public class AnalyticsService {
@@ -157,6 +166,8 @@ public class AnalyticsService {
 ## Production Considerations
 
 ### 1. Configuration
+
+The `application.yml` shown here is a production baseline. Key settings: `acks: all` ensures the leader waits for all in-sync replicas, `retries: 3` handles transient broker failures, and `auto-offset-reset: earliest` makes new consumers start from the beginning of the topic. Setting `ack-mode: manual` gives you control over offset commits, preventing message loss if processing fails between auto-commits.
 
 ```yaml
 # application.yml
@@ -182,6 +193,8 @@ spring:
 ```
 
 ### 2. Error Handling
+
+When a consumer fails to process a message, the safest strategy is to not acknowledge it — the message will be redelivered on the next poll. For persistent failures, send the message to a dead-letter topic (DLT) before acknowledging, so the main processing pipeline isn't blocked. The `kafkaTemplate` can be used to forward failed messages to a separate topic for later analysis and manual reprocessing.
 
 ```java
 @Service
@@ -212,6 +225,8 @@ public class ResilientConsumer {
 
 ### Mistake 1: Not Using Keys for Partitioning
 
+Sending a message without a key causes Kafka to distribute it across partitions in a round-robin or sticky fashion. This is fine for fire-and-forget but breaks ordering guarantees. If you need all messages for a given entity (e.g., a specific order) to arrive in order, always provide a consistent key like the order ID — Kafka guarantees order within a partition by key.
+
 ```java
 // WRONG: Random partitioning
 kafkaTemplate.send("orders", event);  // No key - random partition
@@ -223,6 +238,8 @@ kafkaTemplate.send("orders", order.getId().toString(), event);
 ```
 
 ### Mistake 2: Not Handling Duplicates
+
+Kafka's at-least-once delivery guarantees mean that messages can be delivered more than once. If your consumer isn't idempotent, duplicates cause incorrect state — double processing, duplicate database entries, or double charges. Track processed offsets or use unique event IDs with a deduplication store (database unique constraint or Redis) to make your consumer idempotent.
 
 ```java
 // WRONG: No idempotence - duplicates cause issues
@@ -265,4 +282,4 @@ public void handleOrder(
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

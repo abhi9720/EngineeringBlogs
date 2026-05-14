@@ -18,7 +18,7 @@ The transactional outbox pattern ensures reliable event publishing by storing ev
 
 ## The Problem
 
-When a service writes to its database and publishes a message to Kafka or RabbitMQ in separate steps, a failure between the two operations leads to data inconsistency.
+When a service writes to its database and publishes a message to Kafka or RabbitMQ in separate steps, a failure between the two operations leads to data inconsistency. The code below shows the flawed approach — if the `kafkaTemplate.send()` fails after the database save, the order is persisted but no event is published, leaving other services unaware of the new order. Conversely, if the database save succeeds but the application crashes before the Kafka call, the event is lost.
 
 ```java
 // Wrong - non-atomic operation
@@ -33,6 +33,8 @@ public Order createOrder(OrderRequest request) {
 ```
 
 ## Outbox Table Design
+
+The outbox table stores events that need to be published. Each row has a unique `id`, the `aggregate_type` and `aggregate_id` for correlation, the `event_type` for routing, a `payload` (JSONB for flexible schemas), and status tracking fields. The partial index on `(status, created_at) WHERE status = 'PENDING'` ensures the polling publisher can efficiently find unprocessed events without scanning the entire table. The unique constraint on `event_id` prevents duplicate publishing.
 
 ```sql
 CREATE TABLE outbox_events (
@@ -55,6 +57,8 @@ CREATE INDEX idx_outbox_event_id ON outbox_events (event_id);
 ```
 
 ## Outbox Event Entity
+
+The JPA entity maps to the outbox table. The `@Version` field provides optimistic locking — when the polling publisher reads and updates an event, the version ensures no other publisher instance processes the same row concurrently. The `create()` static factory method handles construction, generating UUIDs for both the row ID and the event ID, serializing the payload to JSON, and setting the creation timestamp.
 
 ```java
 @Entity
@@ -116,6 +120,8 @@ public enum OutboxStatus {
 
 ## Service with Outbox
 
+The service saves both the business entity (order) and the outbox event in the same `@Transactional` database transaction. Either both succeed or both fail — there is no window where the order exists without a corresponding outbox event. This atomicity is the core benefit of the outbox pattern.
+
 ```java
 @Service
 public class OrderService {
@@ -143,6 +149,8 @@ public class OrderService {
 ```
 
 ## Polling Publisher
+
+The polling publisher runs on a scheduled interval (every 1 second) and processes pending outbox events. It fetches events in pages of 100, sends them to Kafka, and marks them as published. If sending fails, it increments the retry count and marks the event as FAILED after 5 retries. The `@Transactional` annotation ensures that if the Kafka send succeeds but the status update fails, the event will be reprocessed (the consumer must be idempotent).
 
 ```java
 @Component
@@ -191,7 +199,7 @@ public class OutboxPollingPublisher {
 
 ## CDC-Based Publisher (Debezium)
 
-Use Debezium for change data capture to avoid polling overhead.
+Change Data Capture (CDC) with Debezium eliminates the need for a polling publisher. Debezium reads the database's write-ahead log (WAL) and publishes changes directly to Kafka. The outbox router transform extracts event metadata from the outbox table columns and routes them to the appropriate Kafka topic. This approach has lower latency than polling (near real-time) and doesn't compete with business transactions for database connections. The trade-off is operational complexity — you need to run and monitor Debezium connectors.
 
 ```json
 // Debezium connector configuration
@@ -224,7 +232,7 @@ Use Debezium for change data capture to avoid polling overhead.
 
 ## Outbox with Spring Modulith
 
-Spring Modulith 1.0+ provides built-in outbox support.
+Spring Modulith (1.0+) provides built-in outbox support through its event publication registry. Events published via `ApplicationEventPublisher` are automatically persisted to an outbox table and published asynchronously. This eliminates the need for custom outbox tables and polling publishers — Spring handles the infrastructure. The `@ApplicationModuleId` annotation integrates with Modulith's event publication mechanism.
 
 ```java
 @Configuration
@@ -273,6 +281,8 @@ public class OrderServiceWithModulith {
 
 ### Mistake: Sending events before commit
 
+If you save business data, send a message, and then perform another database operation that fails, the message was already sent but the transaction rolls back. The consumer receives an event for data that doesn't exist. Always use the outbox pattern to ensure the event is only published if the transaction commits.
+
 ```java
 // Wrong - event sent before transaction commits
 @Transactional
@@ -296,6 +306,8 @@ public Order createOrder(OrderRequest request) {
 ```
 
 ### Mistake: Not handling duplicate outbox event publishing
+
+Without idempotency in the outbox processor, the same event could be published multiple times (e.g., if the publisher crashes after Kafka send but before marking the event as published). Use a unique constraint on `event_id` in the outbox table and optimistic locking with `@Version` to ensure each event is published at most once.
 
 ```java
 // Wrong - no idempotency check can publish same event twice

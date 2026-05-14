@@ -42,7 +42,11 @@ Headers per message  | Minimal (frame-based)        | Event-stream format overhe
 
 ## Server-Sent Events Implementation
 
+Server-Sent Events (SSE) is a standard HTTP mechanism for pushing data from server to client over a persistent connection. Unlike WebSocket, SSE uses standard HTTP (no upgrade required) and is unidirectional — only the server can send data. The browser's `EventSource` API provides built-in reconnection and event ID tracking, simplifying client implementation significantly. SSE is the right choice when you need one-way data push and don't need client-to-server messaging.
+
 ### SSE Controller
+
+The SSE controller returns a `Flux<ServerSentEvent<T>>` — a reactive stream of SSE messages. Spring WebFlux handles the streaming response, keeping the HTTP connection open and sending events as they become available. Each `ServerSentEvent` can include an `id` (for client-side reconnection tracking), `event` type (for client-side event dispatch), `data` (the payload), and `comment` (for debugging). The heartbeat events keep the connection alive — without them, proxies and load balancers might close idle connections. The `mergeWith` operator combines the notification stream with the heartbeat stream into a single event flow.
 
 ```java
 @RestController
@@ -119,7 +123,11 @@ event: notification
 
 ## WebSocket for Bidirectional Communication
 
+When the client needs to send data to the server as well as receive real-time updates, WebSocket is the appropriate choice. The bidirectional Chat handler demonstrates this: clients send messages through the same connection, and the server broadcasts them to other clients in the same room. The low latency and full-duplex nature of WebSocket make it suitable for interactive applications where round-trip time matters.
+
 ### Bidirectional Chat
+
+The bidirectional handler processes different message actions: `subscribe` to join a room (enabling broadcast reception), `unsubscribe` to leave, `message` to send a chat message, and `command` for control operations. Broadcasting uses `parallelStream` for concurrent delivery to room members, excluding the sender. This pattern is efficient for small to medium room sizes — for large rooms, consider async processing or delivery queues to avoid blocking the handler thread.
 
 ```java
 @Component

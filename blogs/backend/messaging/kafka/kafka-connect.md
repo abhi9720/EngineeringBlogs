@@ -18,7 +18,7 @@ Kafka Connect is a framework for scalably and reliably streaming data between Ap
 
 ## Architecture
 
-Kafka Connect runs as a cluster of worker processes that distribute connector execution. Connectors are configured via REST API and can be scaled horizontally.
+Kafka Connect runs as a cluster of worker processes that distribute connector execution. Connectors are configured via REST API and can be scaled horizontally. The worker processes coordinate via internal Kafka topics (`connect-offsets`, `connect-configs`, `connect-status`) that store connector configurations, offset progress, and status information. The converters control serialization format — JSON is common for development, while Avro with Schema Registry is recommended for production.
 
 ```json
 // connect-distributed.properties
@@ -40,7 +40,7 @@ Kafka Connect runs as a cluster of worker processes that distribute connector ex
 
 ## Source Connector Example - JDBC Source
 
-A source connector streams data from a relational database into Kafka topics.
+A source connector streams data from a relational database into Kafka topics. The JDBC source connector polls the database for new or changed rows. The `mode` parameter determines how changes are detected: `incrementing` uses an auto-increment column, `timestamp` uses a timestamp column, and `timestamp+incrementing` uses both for robustness. The `transforms` field applies a lightweight transformation (RegexRouter) to modify the output topic name.
 
 ```json
 // POST /connectors
@@ -67,6 +67,8 @@ A source connector streams data from a relational database into Kafka topics.
 
 ### JDBC Source with Timestamp + Incrementing Mode
 
+The `timestamp+incrementing` mode provides the most reliable change capture for relational databases. It uses a timestamp column (`updated_at`) to detect changed rows and an incrementing column (`id`) to handle inserts that happen at the same timestamp. The `validate.non.null` setting ensures rows with null timestamp values are skipped, preventing data quality issues.
+
 ```json
 {
   "name": "jdbc-source-orders-timestamp",
@@ -88,7 +90,7 @@ A source connector streams data from a relational database into Kafka topics.
 
 ## Sink Connector Example - Elasticsearch Sink
 
-A sink connector streams data from Kafka topics into Elasticsearch.
+A sink connector streams data from Kafka topics into Elasticsearch. The connector reads from the `enriched-orders` topic and indexes documents into Elasticsearch. The `batch.size` and `linger.ms` control batching for throughput. The `transforms` field uses a `TimestampConverter` to normalize timestamp fields into a standard format before indexing. Setting `key.ignore=true` tells the connector to auto-generate document IDs rather than using Kafka message keys.
 
 ```json
 {
@@ -117,7 +119,7 @@ A sink connector streams data from Kafka topics into Elasticsearch.
 
 ## S3 Sink Connector
 
-Stream Kafka data to Amazon S3 for archival and analytics.
+Stream Kafka data to Amazon S3 for archival and analytics. The S3 sink connector partitions data by time (year/month/day/hour) using a `TimeBasedPartitioner`, enabling efficient querying in analytical tools like Athena and Spark. Avro format provides compact binary encoding with schema support. The `flush.size` and `rotate.interval.ms` control how often files are closed and uploaded to S3, balancing latency against file size.
 
 ```json
 {
@@ -143,7 +145,7 @@ Stream Kafka data to Amazon S3 for archival and analytics.
 
 ## Single Message Transforms (SMTs)
 
-SMTs allow lightweight message transformations without requiring Kafka Streams.
+SMTs allow lightweight message transformations without requiring Kafka Streams. The custom `FieldMask` transform masks sensitive fields (like PII) before data reaches the sink. SMTs run within the connector process and can modify keys, values, headers, or topics. They are stateless and operate on individual messages, making them ideal for simple filtering, renaming, and masking operations.
 
 ```java
 // Custom SMT - Field Masking
@@ -182,7 +184,7 @@ public class FieldMask implements Transformation<R> {
 
 ## REST API Management
 
-Kafka Connect provides a comprehensive REST API for managing connectors.
+Kafka Connect provides a comprehensive REST API for managing connectors. The API allows you to create, update, pause, resume, restart, and delete connectors at runtime without restarting the Connect cluster. This is essential for operational workflows — you can reconfigure connectors, roll out new versions, and handle failures without downtime.
 
 ```bash
 # List connectors
@@ -212,7 +214,7 @@ DELETE /connectors/jdbc-source-orders
 
 ## Monitoring with JMX
 
-Enable JMX metrics for monitoring connector performance and throughput.
+Enable JMX metrics for monitoring connector performance and throughput. Metrics include records-per-second, latency, error rates, and task status. Monitoring is critical for production deployments — track connector lag, retry rates, and task failures to detect issues before they impact data pipelines.
 
 ```json
 // connect-distributed.properties
@@ -226,7 +228,7 @@ Enable JMX metrics for monitoring connector performance and throughput.
 
 ## Dead Letter Queue (DLQ)
 
-Configure a DLQ for handling connector errors without losing data.
+Configure a DLQ for handling connector errors without losing data. With `errors.tolerance=all`, the connector continues processing other messages even when individual messages fail. Failed messages are routed to the configured DLQ topic (`dlq-elasticsearch-orders`) with original headers and error details, allowing later analysis and reprocessing. Set `errors.log.include.messages=true` to log the full message content for debugging.
 
 ```json
 {
@@ -257,6 +259,8 @@ Configure a DLQ for handling connector errors without losing data.
 
 ### Mistake: Not configuring error handling
 
+Without `errors.tolerance=all`, a single bad message causes the connector task to fail and stop processing. All subsequent messages (good and bad) are blocked until the task is restarted. Always configure DLQ with error tolerance to prevent data pipeline outages.
+
 ```json
 // Wrong - connector fails on any error, losing data
 {
@@ -273,6 +277,8 @@ Configure a DLQ for handling connector errors without losing data.
 ```
 
 ### Mistake: Running connectors without Schema Registry for production
+
+JSON converters with schemas disabled lose type information and make schema evolution impossible. In production, use Avro with Schema Registry to enforce data contracts, enable schema evolution, and reduce message size through compact binary encoding.
 
 ```json
 // Wrong - fragile JSON schemas

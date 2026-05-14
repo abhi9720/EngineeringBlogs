@@ -68,6 +68,8 @@ groups:
           page: true
 ```
 
+Page-worthy alerts should be rare—ideally fewer than two per week per service. The `for` duration prevents alerting on transient blips. A 5-minute `for` on error rate means a brief deployment spike won't page anyone. The `page: true` label separates notification routing from severity, allowing the same alert to page during business hours while going to email at night if desired.
+
 ### 2. Warning Alerts
 
 Conditions that need attention but not immediate page:
@@ -99,6 +101,8 @@ groups:
         labels:
           severity: warning
 ```
+
+Warning alerts should be investigated during business hours. The longer `for` durations (15-60 minutes) ensure the condition is sustained before creating a ticket. A JVM heap spike during a garbage collection cycle is normal; a 30-minute sustained high heap indicates a leak.
 
 ### 3. Informational Alerts
 
@@ -155,6 +159,8 @@ route:
       repeat_interval: 24h
 ```
 
+The grouping logic (`group_by: ['alertname', 'severity']`) batches identical alerts firing on multiple instances into a single notification. Without grouping, a service with 10 down instances would send 10 separate pages. The `repeat_interval` controls how often the alert re-notifies while still firing—every 5 minutes for critical, every 30 for warnings, once per day for info.
+
 ### Receiver Configuration
 
 ```yaml
@@ -185,6 +191,8 @@ receivers:
         from: 'alerts@company.com'
         smarthost: 'smtp.company.com:587'
 ```
+
+The Slack template iterates over all alerts in the group, rendering each as a formatted message block. The `send_resolved: true` flag is important—it sends a follow-up message when the alert resolves, so the team knows the issue is clear without checking the dashboard.
 
 ---
 
@@ -235,6 +243,8 @@ groups:
           summary: "Dead man switch alert"
 ```
 
+The Dead Man Switch is a synthetic alert that always fires. If Alertmanager stops receiving it (because Prometheus is down or the alerting pipeline is broken), the silence on this alert expires and triggers a notification. This catches silent failures of the monitoring infrastructure itself.
+
 ### Predictive Alerting
 
 ```yaml
@@ -254,6 +264,8 @@ groups:
         annotations:
           summary: "Disk will fill within 24 hours"
 ```
+
+PromQL's `predict_linear` function applies linear regression to the last 6 hours of disk usage and projects forward 24 hours. When the projection crosses zero, the alert fires—typically 12-18 hours before the disk actually fills, giving plenty of time for cleanup or provisioning.
 
 ---
 

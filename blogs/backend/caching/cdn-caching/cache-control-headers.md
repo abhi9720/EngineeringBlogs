@@ -33,6 +33,8 @@ HTTP caching headers are the primary mechanism for controlling how browsers, pro
 
 ### Response Directives
 
+The three response types below demonstrate the spectrum of caching behavior: public cacheable data (product listings), private user-specific data (profiles), and sensitive data that must never be cached (account balances).
+
 ```java
 @RestController
 public class CacheControlController {
@@ -79,7 +81,11 @@ public class CacheControlController {
 }
 ```
 
+The `s-maxage` directive is specific to shared caches (CDNs, reverse proxies) — it overrides `max-age` for intermediate caches. The `private` directive tells shared caches not to cache the response, while `no-store` prevents all caching at any level.
+
 ### Common Cache-Control Combinations
+
+These reusable cache configuration methods encapsulate best practices for different response types.
 
 ```java
 public class CacheDirectives {
@@ -112,11 +118,15 @@ public class CacheDirectives {
 }
 ```
 
+`stale-while-revalidate` is a powerful pattern for CDN caching: after the TTL expires, the CDN can serve the stale response while fetching a fresh copy in the background. This eliminates the "thundering herd" problem when a popular cache key expires.
+
 ---
 
 ## ETag Implementation
 
 ### ETag Generation
+
+ETags are strong validators — they uniquely identify a version of a resource. Different generation strategies offer different trade-offs between accuracy and performance.
 
 ```java
 @Service
@@ -147,7 +157,11 @@ public class ETagService {
 }
 ```
 
+Content-hash ETags are the most accurate but require serializing the entire response body. Version-based ETags are more efficient — if your database row has an `@Version` column (e.g., JPA optimistic locking), you can use it directly as the ETag without computing a hash.
+
 ### Conditional Request Handling
+
+Conditional requests use ETag and Last-Modified headers to avoid sending the full response body when the client already has the latest version. The server responds with `304 Not Modified` and an empty body.
 
 ```java
 @RestController
@@ -224,7 +238,11 @@ public class ConditionalRequestController {
 }
 ```
 
+The controller checks `If-None-Match` (ETag) first because it is a strong validator — byte-exact comparison. `If-Modified-Since` (Last-Modified) is a weak validator — it uses timestamp comparison with second granularity. When both are sent, ETag takes precedence.
+
 ### Spring ETag Filter
+
+Spring's `ShallowEtagHeaderFilter` automatically generates weak ETags by hashing the response body. This requires no code changes but computes the hash after the response is generated, so it doesn't save server processing time — only bandwidth.
 
 ```java
 @Configuration
@@ -246,6 +264,8 @@ public class ETagFilterConfig {
 ## Last-Modified Headers
 
 ### Implementation
+
+Last-Modified enables conditional GET requests. When a client sends `If-Modified-Since`, the server can respond with `304 Not Modified` if the resource hasn't changed, saving bandwidth and processing time.
 
 ```java
 @Service
@@ -287,6 +307,8 @@ public class LastModifiedController {
 ## Vary Header
 
 ### Configuration
+
+The `Vary` header tells caches which request headers affect the response. Without it, a CDN might serve a gzip-compressed response to a client that doesn't support gzip, or an English response to a French user.
 
 ```java
 @Configuration
@@ -330,6 +352,8 @@ public class VaryHeaderConfig {
 
 ### 1. Immutable for Static Assets
 
+Content-hashed filenames (e.g., `bundle.abc123.js`) ensure that the URL changes when content changes. The `immutable` directive tells browsers to never revalidate — the cached copy is guaranteed to be correct.
+
 ```java
 // Assets with content-based filenames never change
 // bundle.abc123.js will always serve same content
@@ -345,6 +369,8 @@ public ResponseEntity<Resource> getStatic(@PathVariable String filename) {
 ```
 
 ### 2. Stale-While-Revalidate for API Responses
+
+This pattern prevents the thundering herd problem at cache expiration. The CDN serves stale content for up to an hour while one request fetches fresh data.
 
 ```java
 // Serve stale data while fetching fresh version in background
@@ -367,6 +393,8 @@ public ResponseEntity<List<Product>> getPopular() {
 
 ### 3. Use Strong vs Weak Validators
 
+Strong ETags change when any byte changes — they are byte-exact. Weak ETags (prefixed with `W/`) allow semantically equivalent representations. Use strong ETags for caching and weak ETags for conditional uploads.
+
 ```java
 // Strong ETag: Content changes = ETag changes (byte-exact)
 ETag: "33a64df551425fcc55e4d42a148795d9f25f89d4"
@@ -384,6 +412,8 @@ ETag: W/"33a64df551425fcc55e4d42a148795d9f25f89d4"
 
 ### Mistake 1: Setting Both Expires and Cache-Control
 
+`Expires` is a HTTP/1.0 header; `Cache-Control` overrides it in HTTP/1.1. Sending both is redundant and can confuse older proxies.
+
 ```java
 // WRONG: Both Expires and Cache-Control max-age
 response.setHeader("Expires", "Wed, 21 Oct 2026 07:28:00 GMT");
@@ -396,6 +426,8 @@ response.setHeader("Cache-Control", "max-age=3600");
 
 ### Mistake 2: Missing Vary Header
 
+Without `Vary`, a CDN may serve a response optimized for one client to another client with different capabilities, causing data corruption or unreadable content.
+
 ```java
 // WRONG: No Vary header for content-negotiated responses
 // CDN may serve English version to French users!
@@ -407,6 +439,8 @@ response.setHeader("Cache-Control", "public, max-age=300");
 ```
 
 ### Mistake 3: Over-Caching Dynamic Content
+
+User-specific responses must never be cached at a shared cache level. Even `private` caching should be used cautiously with authenticated data.
 
 ```java
 // WRONG: Caching user-specific data

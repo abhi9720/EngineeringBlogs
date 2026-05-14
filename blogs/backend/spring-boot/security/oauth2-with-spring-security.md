@@ -1,4 +1,4 @@
----
+﻿---
 title: "OAuth2 with Spring Security"
 description: "Implement OAuth2 authentication and authorization with Spring Security: authorization server, resource server, client registration, and JWT token handling"
 date: "2026-05-11"
@@ -16,39 +16,39 @@ draft: false
 
 OAuth2 is the industry-standard protocol for authorization. Spring Security provides comprehensive support for OAuth2, including authorization server, resource server, and client configurations. This guide covers implementing OAuth2 with JWT tokens, securing APIs, and integrating with identity providers.
 
+OAuth2 separates three roles: the resource owner (user), the client (application), and the authorization server (identity provider). The client obtains an access token from the authorization server and presents it to the resource server (your API) to access protected resources. This delegation eliminates the need for your API to handle passwords directly.
+
 ## OAuth2 Architecture
 
-```
-                    +---------+         +---------+
-                    |         |         |         |
-                    |  User   |         |  Client |
-                    | (Browser)|        |  (App)  |
-                    +----+----+         +----+----+
-                         |                   |
-                         | 1. Auth Request    |
-                         +-------------------+
-                         |                   |
-                         v                   v
-                    +----+-------------------+----+
-                    |                              |
-                    |      Authorization Server     |
-                    |      (Keycloak/Auth0/Self)    |
-                    |                              |
-                    +--------------+---------------+
-                                   |
-                                   | 2. Access Token (JWT)
-                                   v
-                    +--------------+---------------+
-                    |                               |
-                    |       Resource Server          |
-                    |       (Your API)              |
-                    |                               |
-                    +-------------------------------+
-```
+The flow below shows the standard authorization code flow. The user authenticates with the authorization server, which issues an access token (JWT). The client presents this token to the resource server, which validates it and returns the requested data. The resource server never sees the user's credentials.
+
+`mermaid
+flowchart LR
+    User[User Browser] --> AS[Authorization Server<br/>Keycloak/Auth0]
+    Client[Client App] --> AS
+    AS --> Client
+    AS --> RS[Resource Server<br/>Your API]
+    Client --> RS
+
+    User -.->|1. Auth Request| AS
+    AS -.->|2. Access Token JWT| Client
+    Client -.->|3. API Request + JWT| RS
+    RS -.->|4. Protected Data| Client
+
+    linkStyle default stroke:#278ea5
+
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+
+    class User,Client yellow
+    class AS blue
+    class RS green
+`
 
 ## Dependencies
 
-```xml
+`xml
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
@@ -61,13 +61,17 @@ OAuth2 is the industry-standard protocol for authorization. Spring Security prov
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-web</artifactId>
 </dependency>
-```
+`
 
 ## Resource Server Configuration
 
 ### JWT Configuration
 
-```yaml
+The resource server configuration begins with the issuer URI. Spring Security uses this URI to discover the authorization server's public keys via the JWK Set URI (JWKS) endpoint. It downloads the keys, caches them, and uses them to verify incoming JWT signatures.
+
+The issuer-uri is used for both key discovery and token validation. Spring Security automatically constructs the JWKS URI by appending /protocol/openid-connect/certs for Keycloak or using the standard OIDC discovery endpoint. You can override this with jwk-set-uri for non-standard providers.
+
+`yaml
 spring:
   security:
     oauth2:
@@ -75,11 +79,15 @@ spring:
         jwt:
           issuer-uri: https://auth.example.com/realms/my-realm
           jwk-set-uri: https://auth.example.com/realms/my-realm/protocol/openid-connect/certs
-```
+`
 
 ### Security Configuration
 
-```java
+The security configuration secures specific URL patterns with different scopes. The jwtAuthenticationConverter maps JWT claims to Spring Security authorities. By default, the scope claim is used; the converter maps each scope to an authority prefixed with SCOPE_.
+
+The configuration below enforces scopes for specific endpoints: GET /api/users/** requires SCOPE_read:users, while POST /api/users/** requires SCOPE_write:users. The /api/admin/** endpoints use role-based access (ROLE_ADMIN).
+
+`java
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -119,11 +127,15 @@ public class ResourceServerConfig {
         return converter;
     }
 }
-```
+`
 
 ### Custom JWT Authentication
 
-```java
+For identity providers like Keycloak, roles are embedded in custom claims (ealm_access.roles and esource_access.*.roles). The custom converter below extracts these and maps them to ROLE_ prefixed authorities. This lets you use hasRole('ADMIN') in security expressions.
+
+The converter first extracts standard scopes, then parses the ealm_access claim for realm-level roles, and finally parses esource_access for client-specific roles. Each role is prefixed with the resource name to prevent collisions between different clients.
+
+`java
 @Component
 public class CustomJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
     private final JwtGrantedAuthoritiesConverter defaultConverter = new JwtGrantedAuthoritiesConverter();
@@ -163,16 +175,18 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
         return new JwtAuthenticationToken(jwt, authorities);
     }
 }
-```
+`
 
 ### Custom JWT Validator
 
-```java
+Beyond signature validation, you should validate JWT claims at the application level. The AudienceValidator below checks that the token contains the expected audience. Without this, a token issued for one API could be used against another API using the same authorization server.
+
+`java
 @Component
 public class AudienceValidator implements ReactiveJwtClaimsValidator {
     private final String expectedAudience;
 
-    public AudienceValidator(@Value("${app.oauth2.audience}") String audience) {
+    public AudienceValidator(@Value("") String audience) {
         this.expectedAudience = audience;
     }
 
@@ -192,27 +206,31 @@ public class AudienceValidator implements ReactiveJwtClaimsValidator {
         return Mono.empty();
     }
 }
-```
+`
 
 ## OAuth2 Client Configuration
 
 ### Social Login (Google/GitHub)
 
-```yaml
+Spring Security's OAuth2 client support makes social login straightforward. Register each provider with its client ID and secret. The provider metadata (authorization URI, token URI, user info URI) is usually auto-configured for well-known providers like Google and GitHub.
+
+For custom providers, specify all URIs explicitly under provider.*. The user-name-attribute maps to the claim that uniquely identifies the user (typically sub or email).
+
+`yaml
 spring:
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
+            client-id: 
+            client-secret: 
             scope:
               - email
               - profile
           github:
-            client-id: ${GITHUB_CLIENT_ID}
-            client-secret: ${GITHUB_CLIENT_SECRET}
+            client-id: 
+            client-secret: 
             scope:
               - user:email
               - read:user
@@ -222,11 +240,11 @@ spring:
             token-uri: https://oauth2.googleapis.com/token
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
             user-name-attribute: sub
-```
+`
 
 ### Client Controller
 
-```java
+`java
 @RestController
 public class OAuth2LoginController {
 
@@ -250,11 +268,13 @@ public class OAuth2LoginController {
         );
     }
 }
-```
+`
 
 ### Custom User Registration
 
-```java
+When a user logs in via OAuth2 for the first time, you need to register them in your local database. Override DefaultOAuth2UserService.loadUser() to add custom registration logic. The service below creates a new User entity if the email doesn't exist in the local database, linking the OAuth2 identity to an internal user record.
+
+`java
 @Service
 public class OAuth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
@@ -294,13 +314,13 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         return userRepository.save(user);
     }
 }
-```
+`
 
 ## JWT Token Customization
 
 ### Custom Token Claims
 
-```java
+`java
 @Component
 public class CustomTokenEnhancer implements TokenEnhancer {
     @Override
@@ -320,11 +340,11 @@ public class CustomTokenEnhancer implements TokenEnhancer {
         return accessToken;
     }
 }
-```
+`
 
 ### JWT with Custom Claims
 
-```java
+`java
 @Service
 public class TokenService {
     private final JwtEncoder jwtEncoder;
@@ -366,11 +386,15 @@ public class TokenService {
         return "unknown";
     }
 }
-```
+`
 
 ## Multi-Tenant OAuth2
 
-```java
+Multi-tenant OAuth2 support requires a dynamic JwtDecoder that selects the correct issuer and validation rules based on the token's iss claim. The MultiTenantJwtIssuerConfig caches decoders per issuer URI. The TenantAwareAuthenticationConverter reads the issuer from the JWT, selects the decoder, and validates the token.
+
+Each tenant gets its own issuer URI, JWKS endpoint, audience validator, and issuer validator. This enables a single resource server to handle tokens from multiple identity providers.
+
+`java
 @Component
 public class MultiTenantJwtIssuerConfig {
     private final Map<String, JwtDecoder> jwtDecoders = new ConcurrentHashMap<>();
@@ -412,11 +436,11 @@ public class TenantAwareAuthenticationConverter implements Converter<Jwt, Abstra
         return new JwtAuthenticationToken(validated, extractAuthorities(jwt));
     }
 }
-```
+`
 
 ## Testing OAuth2
 
-```java
+`java
 @WebMvcTest(UserController.class)
 class UserControllerTest {
     @Autowired
@@ -453,7 +477,7 @@ class UserControllerTest {
         return "test-jwt-token"; // Use JWT test utilities in real tests
     }
 }
-```
+`
 
 ## Best Practices
 
@@ -469,7 +493,7 @@ class UserControllerTest {
 
 ### Mistake 1: Storing Secrets in Code
 
-```java
+`java
 // Wrong: Secret hardcoded in configuration
 @Bean
 public JwtDecoder jwtDecoder() {
@@ -477,34 +501,34 @@ public JwtDecoder jwtDecoder() {
         new SecretKeySpec("my-secret-key-123".getBytes(), "HmacSHA256")
     ).build();
 }
-```
+`
 
-```java
+`java
 // Correct: Use asymmetric keys with proper key management
 @Bean
-public JwtDecoder jwtDecoder(@Value("${jwt.public-key-location}") RSAPublicKey publicKey) {
+public JwtDecoder jwtDecoder(@Value("") RSAPublicKey publicKey) {
     return NimbusJwtDecoder.withPublicKey(publicKey).build();
 }
 
 // application.yml
 jwt:
   public-key-location: classpath:keys/public.pem
-```
+`
 
 ### Mistake 2: Not Validating Token Claims
 
-```java
+`java
 // Wrong: Accepting any valid JWT without audience validation
 @Bean
-public JwtDecoder jwtDecoder(@Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}") String jwkUri) {
+public JwtDecoder jwtDecoder(@Value("") String jwkUri) {
     return NimbusJwtDecoder.withJwkSetUri(jwkUri).build();
 }
-```
+`
 
-```java
+`java
 // Correct: Validate all relevant claims
 @Bean
-public JwtDecoder jwtDecoder(@Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}") String jwkUri) {
+public JwtDecoder jwtDecoder(@Value("") String jwkUri) {
     NimbusJwtDecoder decoder = NimbusJwtDecoder.withJwkSetUri(jwkUri).build();
 
     OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(
@@ -515,11 +539,11 @@ public JwtDecoder jwtDecoder(@Value("${spring.security.oauth2.resourceserver.jwt
     decoder.setJwtValidator(validator);
     return decoder;
 }
-```
+`
 
 ### Mistake 3: Using Stateful Sessions with JWT
 
-```java
+`java
 // Wrong: Mixing JWT with session-based state
 @Configuration
 public class SecurityConfig {
@@ -533,9 +557,9 @@ public class SecurityConfig {
         return http.build();
     }
 }
-```
+`
 
-```java
+`java
 // Correct: Stateless JWT authentication
 @Configuration
 public class SecurityConfig {
@@ -550,7 +574,7 @@ public class SecurityConfig {
         return http.build();
     }
 }
-```
+`
 
 ## Summary
 

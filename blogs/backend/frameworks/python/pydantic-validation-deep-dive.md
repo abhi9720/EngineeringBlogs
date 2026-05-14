@@ -18,6 +18,8 @@ Pydantic is the most widely used data validation library for Python. It provides
 
 ## Basic Model
 
+Pydantic models are defined by inheriting from `BaseModel` and declaring fields with type annotations. Each field undergoes validation and type coercion during initialization. Field constraints are specified via `Field()` — `Field(..., min_length=3)` means required (`...`) with a minimum length of 3. Custom validators are defined with the `@validator` decorator and run after type coercion. Multiple validators for the same field can be chained with the `each_item` or `pre` options.
+
 ```python
 from pydantic import BaseModel, Field, EmailStr, validator
 from typing import Optional, List
@@ -67,6 +69,8 @@ print(user.dict())
 
 ## Field Types and Constraints
 
+Pydantic supports a rich set of field types that go beyond basic Python types. The standard library types (`str`, `int`, `float`, `Decimal`, `UUID`, `date`, etc.) are handled natively, along with collections (`List`, `Set`, `Dict`, `Tuple`) and network types (`IPv4Address`, `IPv6Address`). Each type has specific validation rules — `EmailStr` checks email format, `UUID` validates UUID format, and `Decimal` enforces precision constraints.
+
 ### Standard Types
 
 ```python
@@ -109,6 +113,8 @@ class ComplexModel(BaseModel):
     server_ip: Optional[IPv6Address] = None
 ```
 
+Field constraints are specified through `Field()` arguments. `min_length`/`max_length` constrain string lengths, `ge`/`le` constrain numeric values, `regex` validates string patterns, and `max_digits`/`decimal_places` control decimal precision. `default_factory` enables dynamic defaults (like `uuid4` or `datetime.utcnow`). Using these declarative constraints reduces the need for custom validators on common patterns.
+
 ### Custom Validators
 
 ```python
@@ -149,6 +155,8 @@ class OrderCreate(BaseModel):
         return values
 ```
 
+Pydantic validators can access other field values through the `values` parameter (note the spelling — it's `values`, not `values`). The `quantities_match_products` validator uses `values['product_ids']` to cross-validate. The `@root_validator` operates on all fields at once, enabling cross-field validation like "coupon requires minimum 5 items". `root_validator` returns the full `values` dict, optionally modified.
+
 ### Pre and Post Validators
 
 ```python
@@ -181,6 +189,8 @@ class SanitizedModel(BaseModel):
             return v.strip()
         return v
 ```
+
+Validators have an execution order controlled by the `pre` parameter. Pre-validators (`pre=True`) run before type coercion — useful for data cleaning like stripping whitespace or normalizing formats. Post-validators (the default) run after type coercion and validation, operating on already-converted values. The `*` wildcard in `@validator('*', pre=True)` applies a validator to all fields, enabling cross-cutting transformations like trimming all strings.
 
 ## Model Configuration
 
@@ -248,6 +258,8 @@ user_orm = session.query(UserTable).first()
 user_pydantic = UserORM.from_orm(user_orm)
 ```
 
+The `Config` class controls model behavior. `allow_population_by_field_name = True` enables populating via either field name or alias. `extra = "forbid"` rejects unknown fields (safe default). `frozen = True` makes the model immutable and hashable. `orm_mode = True` enables `.from_orm()` for populating from ORM objects. `use_enum_values = True` serializes enum members as their values instead of names. Configuration choices significantly affect API behavior and should be set consciously.
+
 ## Generic Models
 
 ```python
@@ -286,6 +298,8 @@ response = PaginatedResponse[UserResponse](
     page_size=10
 )
 ```
+
+Generic models enable reusable, type-safe wrappers. `PaginatedResponse[T]` wraps any type `T` in a pagination envelope with `total`, `page`, `page_size`, and `total_pages` fields. The `total_pages` field is computed automatically via a validator with `always=True` — it runs even if the field isn't explicitly provided. This pattern eliminates repetitive pagination boilerplate while maintaining full type safety.
 
 ## Custom Types
 
@@ -335,6 +349,8 @@ m = ModelWithCustomTypes(phone="+1 (555) 123-4567")
 print(m.phone)  # "+15551234567"
 ```
 
+Custom types extend Pydantic with domain-specific validation. A custom type is a class that implements `__get_validators__` returning a generator of validator functions. The `PhoneNumber` type validates and normalizes phone numbers — stripping formatting characters and validating the digit pattern. Custom types encapsulate validation logic in reusable components, keeping model definitions clean and enforcing consistent validation across the application.
+
 ## Performance Optimization
 
 ```python
@@ -381,6 +397,8 @@ class BatchProcessor:
 # .json() calls .dict() then json.dumps()
 # model_dump(mode='json') does it in one pass
 ```
+
+Performance optimization in Pydantic follows a few key principles. `model_validate(data)` is faster than `Model(**data)` because it skips the per-field validation loop when given a dict that matches the model structure. `model_dump(mode='json')` is faster than `.json()` because it serializes in a single pass rather than calling `.dict()` then `json.dumps()`. Setting `frozen=True` enables hashing and cache-friendly behavior. Avoid field aliases in hot paths as they add dict key lookup overhead.
 
 ## Testing
 

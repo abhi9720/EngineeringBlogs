@@ -18,6 +18,8 @@ This post covers the full-text query DSL, relevance tuning, query performance op
 
 ### Match Query
 
+The `match` query is the go-to for full-text search. It analyzes the input text using the field's analyzer and constructs a boolean query from the resulting tokens. The `operator(AND)` variant requires all tokens to match, useful for precision. `minimumShouldMatch("75%")` ensures at least 75% of the tokens match, tolerating partial matches. `fuzziness(AUTO)` applies edit-distance corrections for typos:
+
 ```java
 @Service
 public class MatchQueryService {
@@ -68,6 +70,8 @@ public class MatchQueryService {
 
 ### Term Query (Exact Match)
 
+Use `term` queries for structured data — keywords, enums, IDs — where you need exact matching without analysis. The `terms` variant accepts multiple values (OR logic), and `exists` checks for the presence of a field:
+
 ```java
 @Service
 public class TermQueryService {
@@ -102,6 +106,8 @@ public class TermQueryService {
 ```
 
 ## Bool Query (Compound Query)
+
+The `bool` query is the Swiss Army knife of the Elasticsearch DSL. It combines four clauses: `must` (contributes to score and must match), `filter` (must match but does not affect score — cached for performance), `should` (boosts score when matched), and `must_not` (excludes documents). The example below demonstrates a complex e-commerce search with keyword search, category/price filters, brand boosting, and exclusions:
 
 ```java
 @Service
@@ -148,7 +154,7 @@ public class BoolQueryService {
     }
 
     public SearchHits<ProductDocument> nestedBoolSearch(String query,
-                                                         Map<String, String> filters) {
+                                                          Map<String, String> filters) {
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery()
             .must(QueryBuilders.matchQuery("name", query))
             .filter(QueryBuilders.termQuery("available", true));
@@ -177,6 +183,8 @@ public class BoolQueryService {
 ```
 
 ## Relevance Scoring and Boosting
+
+The `function_score` query lets you influence relevance ranking beyond BM25. Common use cases include: boosting by popularity (more popular = higher rank), boosting by recency (newer content ranks higher), and applying business rules (featured products get a boost). The script score variant gives full control via Painless, combining text score, popularity, and profit margin into a custom ranking formula:
 
 ```java
 @Service
@@ -238,6 +246,8 @@ public class RelevanceScoringService {
 
 ## Query Optimization
 
+The `search_after` parameter enables efficient deep pagination by encoding the sort values of the last hit — the next page starts after those values, avoiding the `from`/`size` overhead. Limiting returned fields via `withFields` reduces network payload. The `highlight` builder adds `<em>` tags around matched terms. The `suggest` feature provides autocomplete based on the `completion` field type:
+
 ```java
 @Component
 public class QueryOptimizer {
@@ -294,6 +304,8 @@ public class QueryOptimizer {
 
 ## Pagination with Search After
 
+Deep pagination with `from`/`size` becomes exponentially more expensive as the page number increases — each request must scan and discard all preceding documents. `search_after` solves this by using the last document's sort values as a cursor. The `Page` wrapper captures the last sort values for the next request:
+
 ```java
 @Component
 public class SearchAfterPagination {
@@ -332,7 +344,7 @@ public class SearchAfterPagination {
 
     // Search after using specific field values
     public SearchHits<ProductDocument> searchAfterField(SearchRequest request,
-                                                         Object searchAfterValue) {
+                                                          Object searchAfterValue) {
         NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
             .withQuery(buildQuery(request))
             .withSort(SortBuilders.fieldSort("createdAt")
@@ -352,6 +364,8 @@ public class SearchAfterPagination {
 ```
 
 ## Query Validation and Debugging
+
+Elasticsearch provides the `_explain` API to understand why a document matched (or did not match) a query and how its score was computed. The `_profile` API shows the time spent in each query phase across shards, invaluable for identifying slow components:
 
 ```java
 @Component
@@ -417,6 +431,8 @@ public class QueryDebugger {
 
 ### Using Wildcard Queries
 
+Leading wildcard queries (e.g., `*phone*`) force a full scan of all terms in the inverted index, bypassing the index's ability to look up terms efficiently. They should be avoided in production search:
+
 ```java
 // Wrong: Leading wildcard causes full scan
 QueryBuilders.wildcardQuery("name", "*phone*");
@@ -430,6 +446,8 @@ QueryBuilders.matchQuery("name", "phone")
 ```
 
 ### Deep Pagination with From/Size
+
+Requesting page 500 with `from=10000` requires Elasticsearch to fetch, sort, and discard 10,000 documents. This consumes memory on the coordinating node and slows with every additional page:
 
 ```java
 // Wrong: Deep pagination is expensive

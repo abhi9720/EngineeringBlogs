@@ -22,6 +22,8 @@ GraphQL APIs present unique security challenges compared to REST. The flexible q
 
 ## Authentication
 
+GraphQL authentication should happen at the transport layer, before the query is executed. A `WebGraphQlInterceptor` intercepts incoming HTTP requests, extracts credentials (typically a JWT from the `Authorization` header), validates them, and populates the GraphQL context with user information. This approach ensures authentication logic is centralized and consistent across all queries and mutations, rather than scattered across individual resolvers. The authenticated user is then accessible in resolvers through the context, allowing them to enforce authorization rules.
+
 ### JWT Authentication with GraphQL
 
 ```java
@@ -61,6 +63,8 @@ public class GraphQLAuthenticationInterceptor implements WebGraphQlInterceptor {
 }
 ```
 
+Once authentication populates the context with user information, resolvers access it via `@ContextValue` injection. The `currentUser` query returns the authenticated user, `myOrders` filters data by the current user's ID, and `createOrder` enforces that the order's owner matches the authenticated user — never trust the client-provided userId in mutation input. This pattern ensures that authentication context is consistently applied across all resolvers without repetitive header parsing code.
+
 ### Authentication Checks in Resolvers
 
 ```java
@@ -92,7 +96,11 @@ public class SecureResolver {
 
 ## Authorization
 
+Authorization in GraphQL requires special care because the flexible query language can access any field in the schema. Field-level authorization — checking permissions per field — is essential to prevent unauthorized data access through deeply nested queries. Unlike REST where authorization is typically checked at the endpoint level, GraphQL requires checks at both the query level (can this user call this mutation?) and the field level (can this user see this user's salary?).
+
 ### Role-Based Access Control
+
+A centralized `AuthorizationChecker` provides reusable permission and resource access checks. The `ROLE_PERMISSIONS` map defines which permissions each role has. Permission checks are granular — `READ_ALL`, `WRITE_OWN`, `MANAGE_USERS` — allowing fine-grained control. Resource access checks ensure users can only access their own data unless they have admin or manager privileges. This approach keeps authorization logic testable and consistent across all resolvers.
 
 ```java
 @Component
@@ -151,6 +159,8 @@ public class AuthorizedResolver {
 }
 ```
 
+Field-level authorization is a GraphQL-specific security requirement. In REST, if an endpoint returns user data, you check authorization once for the whole response. In GraphQL, a single query might include fields with different authorization requirements — `email` might be visible to the user and admins, while `salary` requires a `VIEW_SALARY` permission. Field-level resolvers with authorization checks handle this by checking permissions individually and returning null for unauthorized fields. GraphQL's null propagation ensures that unauthorized fields simply appear as null rather than erroring the entire query.
+
 ### Field-Level Authorization
 
 ```java
@@ -180,6 +190,8 @@ public class FieldLevelSecurity implements GraphQLResolver<User> {
 ---
 
 ## Query Depth Limiting
+
+GraphQL's flexibility allows clients to craft deeply nested queries that can overwhelm the server. A malicious query like `user { posts { comments { author { posts { ... } } } } }` could nest 100 levels deep, causing exponential resource consumption. Query depth limiting rejects queries that exceed a configured maximum nesting depth (typically 5-7 levels). The depth calculation walks the query's abstract syntax tree and computes the maximum nesting level across all fields.
 
 ### Limit Query Depth
 
@@ -233,6 +245,8 @@ public class QueryDepthLimiter implements DocumentParser {
     }
 }
 ```
+
+Query depth limiting alone is not sufficient — a shallow query can still be expensive if it requests many resources (e.g., `users(first: 10000) { orders { items { product { ... } } } }`). Query complexity analysis assigns a cost weight to each field and computes the total complexity of a query. Expensive fields like `allOrders` or `search` get higher costs. If the total exceeds a threshold, the query is rejected before execution. This provides fine-grained protection against resource-intensive queries regardless of depth.
 
 ### Query Complexity Analysis
 
@@ -302,7 +316,11 @@ public class QueryComplexityAnalyzer implements Instrumentation {
 
 ## Rate Limiting
 
+Rate limiting for GraphQL is more nuanced than REST because a single GraphQL request can be as cheap as a simple field lookup or as expensive as a deeply nested query spanning multiple services. Effective rate limiting considers not just request count but also query cost. Per-user and per-IP rate limiting prevents individual clients from monopolizing server resources, while mutation-specific limits protect write-heavy operations from abuse.
+
 ### Per-User Rate Limiting
+
+GraphQL rate limiting should differentiate between authenticated and anonymous users (authenticated users get higher limits) and between query types (mutations get stricter limits than queries since they modify state). The `WebGraphQlInterceptor` extracts the user identity from the GraphQL context and applies separate rate limit counters for different operation types. Anonymous users are identified by IP address and given the strictest limits to prevent abuse.
 
 ```java
 @Component
@@ -364,7 +382,11 @@ public class RateLimiterService {
 
 ## Batching Attack Prevention
 
+GraphQL's support for batching multiple queries in a single request is a powerful feature but also an attack vector. An attacker could send a batch of hundreds of queries, each designed to exploit a different vulnerability or exhaust server resources. Batch limits, alias limits, and persisted queries are three defenses that prevent this class of attacks while preserving legitimate use cases.
+
 ### Limiting Batch Size
+
+Batched requests send an array of query objects in a single HTTP request. While this can improve efficiency for clients that need multiple independent data fetches, it also allows attackers to amplify their request rate by a factor equal to the batch size. Limiting the batch size to a reasonable maximum (10-20 queries per request) balances efficiency with security. Validate the batch size before executing any of the queries to avoid partial execution.
 
 ```java
 @Component
@@ -395,6 +417,8 @@ public class BatchQueryValidator implements WebGraphQlInterceptor {
     }
 }
 ```
+
+Aliases allow clients to request the same field multiple times with different arguments. While useful for legitimate queries (comparing data), aliases can be used to construct expensive queries that request the same resource many times with different parameters. An attacker could alias `user` 100 times with different IDs and arguments, each potentially triggering a separate database query. Limiting the number of aliases per query prevents this amplification attack while preserving legitimate use cases.
 
 ### Aliases Attack Prevention
 
@@ -449,7 +473,11 @@ public class AliasLimiter implements DocumentParser {
 
 ## Introspection Protection
 
+GraphQL introspection is invaluable during development — it powers tools like GraphiQL and enables automatic documentation generation. However, in production, exposing your full schema through introspection reveals every type, field, argument, and relationship to potential attackers. This information helps attackers identify query paths, find unauthenticated fields, and craft efficient denial-of-service queries. Introspection should be disabled in production, or restricted to authenticated clients.
+
 ### Disabling Introspection in Production
+
+The production environment should either remove introspection types from the schema or block introspection queries at runtime. Schema-level removal is cleaner — it prevents introspection queries from being parsed at all. The runtime blocking approach shown here checks if the query contains `__schema` or `__type` keywords and rejects it. For internal tooling, consider implementing a separate GraphQL endpoint with introspection enabled but protected by authentication and IP allowlisting.
 
 ```java
 @Configuration
@@ -499,6 +527,8 @@ public class GraphQLSecurityConfig {
 ---
 
 ## Best Practices
+
+GraphQL security requires a defense-in-depth approach because the flexible query language introduces unique attack surfaces not present in REST. Multiple layers of protection — transport authentication, field-level authorization, query analysis, rate limiting, and input validation — work together to create a secure API.
 
 1. **Authenticate at transport level**: Validate JWT/tokens before GraphQL execution
 2. **Authorize at field level**: Check permissions per field

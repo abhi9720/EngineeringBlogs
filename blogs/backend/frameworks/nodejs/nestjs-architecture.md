@@ -18,26 +18,48 @@ NestJS is a progressive Node.js framework for building efficient, reliable, and 
 
 ## Core Architecture
 
-```
-Application
-  |
-  +-- Module (Root)
-       |
-       +-- Module (Feature)
-       |    |
-       |    +-- Controllers (Routes)
-       |    +-- Providers (Services)
-       |    +-- Exports
-       |
-       +-- Module (Shared)
-            |
-            +-- Guards (Authentication)
-            +-- Interceptors (Transformation)
-            +-- Pipes (Validation)
-            +-- Filters (Error Handling)
+```mermaid
+graph TD
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    App[Application]
+    Root[Module Root]
+    Feature[Module Feature]
+    Shared[Module Shared]
+    Controllers[Controllers Routes]
+    Providers[Providers Services]
+    Exports[Exports]
+    Guards[Guards Authentication]
+    Interceptors[Interceptors Transformation]
+    Pipes[Pipes Validation]
+    Filters[Filters Error Handling]
+
+    App --> Root
+    Root --> Feature
+    Root --> Shared
+    Feature --> Controllers
+    Feature --> Providers
+    Feature --> Exports
+    Shared --> Guards
+    Shared --> Interceptors
+    Shared --> Pipes
+    Shared --> Filters
+
+    class App green
+    class Root blue
+    class Feature pink
+    class Shared yellow
+    class Controllers,Providers,Exports green
+    class Guards,Interceptors,Pipes,Filters blue
 ```
 
 ## Modules
+
+NestJS uses modules as the primary organizational unit. Every application has at least a root module, and feature modules group related controllers, providers, and sub-modules. Modules are singletons by default — a module is instantiated once and its providers are shared across all modules that import it. The `@Module()` decorator configures imports, controllers, providers, and exports.
 
 ### Feature Module
 
@@ -61,6 +83,8 @@ import { User, UserSchema } from './schemas/user.schema';
 export class UsersModule {}
 ```
 
+The feature module pattern is consistent: `imports` brings in external modules (like Mongoose for database), `controllers` registers route handlers, `providers` registers injectable services, and `exports` makes selected providers available to importing modules. The `forwardRef(() => AuthModule)` pattern handles circular dependencies where two modules need each other's providers.
+
 ### Root Module
 
 ```typescript
@@ -83,6 +107,8 @@ import { OrdersModule } from './orders/orders.module';
 })
 export class AppModule {}
 ```
+
+The root module orchestrates the entire application. It imports feature modules and global configuration modules like `ConfigModule.forRoot()` and `MongooseModule.forRoot()`. The `isGlobal: true` option in `ConfigModule` makes the `ConfigService` available throughout the application without explicit imports — a common pattern for cross-cutting configuration.
 
 ## Controllers
 
@@ -134,6 +160,8 @@ export class UsersController {
   }
 }
 ```
+
+Controllers handle HTTP concerns — parsing requests, validating input, and returning responses. They delegate business logic to providers. The `@Controller('users')` decorator sets the route prefix. Method decorators (`@Get`, `@Post`, `@Param`, `@Body`) define endpoints and extract request data. Guards, pipes, and interceptors can be applied at both the controller and method level, enabling fine-grained control over request processing.
 
 ## Providers (Services)
 
@@ -189,6 +217,8 @@ export class UsersService {
   }
 }
 ```
+
+Services are the business logic layer. Annotated with `@Injectable()`, they are registered as providers in a module. NestJS supports constructor injection — dependencies are listed as constructor parameters and automatically resolved by the DI container. The `@InjectModel()` decorator is how Mongoose models are injected in NestJS. Services typically orchestrate database operations, external API calls, and cross-cutting concerns like caching or email.
 
 ## Guards
 
@@ -264,6 +294,8 @@ export class RolesGuard implements CanActivate {
 }
 ```
 
+Guards are the first line of defense in request processing. They implement `CanActivate` and return `true` (allow) or `false` (deny). Guards run after middleware but before pipes and interceptors. The `JwtAuthGuard` here also supports public routes via a custom `@Public()` decorator and `Reflector` — NestJS's mechanism for reading custom metadata attached to handlers. Guards can be applied globally, per controller, or per route.
+
 ## Interceptors
 
 ```typescript
@@ -323,6 +355,8 @@ export class LoggingInterceptor implements NestInterceptor {
 }
 ```
 
+Interceptors wrap the handler execution, enabling pre- and post-processing. The `TransformInterceptor` uses RxJS `map` operator to wrap every response in a standard envelope with `statusCode`, `message`, `data`, and `timestamp`. The `LoggingInterceptor` uses `tap` to log request duration without modifying the response. Interceptors are ideal for cross-cutting concerns that should not pollute business logic.
+
 ## Pipes
 
 ```typescript
@@ -365,6 +399,8 @@ export class ValidationPipe implements PipeTransform<any> {
 }
 ```
 
+Pipes transform and validate input data. The `ValidationPipe` uses `class-validator` and `class-transformer` — it converts plain JSON to a typed DTO instance and runs validation decorators. Pipes can be method-scoped, controller-scoped, or global. The built-in `ValidationPipe` from `@nestjs/common` covers most use cases, but custom pipes are useful for specialized transformations like object ID parsing or string sanitization.
+
 ## Exception Filters
 
 ```typescript
@@ -402,6 +438,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
   }
 }
 ```
+
+Exception filters catch unhandled exceptions and return consistent error responses. The `AllExceptionsFilter` catches any exception, determines the HTTP status code, and returns a JSON envelope with `statusCode`, `message`, `timestamp`, and `path`. The `@Catch()` decorator specifies which exception types to handle — empty parentheses means all exceptions. Filters can be scoped globally, per controller, or per method.
 
 ## Testing
 

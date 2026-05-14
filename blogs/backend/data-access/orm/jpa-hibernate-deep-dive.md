@@ -24,6 +24,8 @@ JPA (Jakarta Persistence) is the standard Java specification for object-relation
 
 ### Core Components
 
+Hibernate's architecture is layered. At the top is the `SessionFactory`, a thread-safe, immutable object created once per database. It produces `Session` instances (wrapping JPA's `EntityManager`), which represent a single unit of work and are not thread-safe. Each session has its own `PersistenceContext` that tracks entity states. The configuration below sets up batch processing optimizations: `hibernate.jdbc.batch_size` groups SQL statements, and `order_inserts`/`order_updates` groups statements by table type to maximize batch efficiency.
+
 ```java
 @Configuration
 public class HibernateArchitectureConfig {
@@ -63,6 +65,8 @@ public class HibernateArchitectureConfig {
 ```
 
 ### Entity and Mapping
+
+The `Order` entity below demonstrates several Hibernate mapping features. `@DynamicUpdate` generates SQL that only includes changed columns, reducing the `UPDATE` statement size and improving cache efficiency. `@SelectBeforeUpdate` checks whether the entity actually changed before issuing an update. Bidirectional relationship management is handled through `addItem()` and `removeItem()` helper methods, which maintain both sides of the `@OneToMany`/`@ManyToOne` association and recalculate the order total.
 
 ```java
 @Entity
@@ -128,6 +132,8 @@ public class Order {
 ## Persistence Context
 
 ### Entity States
+
+The persistence context is Hibernate's in-memory cache of managed entities. Every entity loaded, persisted, or created within a session is tracked here. The demonstration below shows each state: **Transient** (no database identity, not tracked), **Managed** (persisted and tracked), **Detached** (removed from tracking), and **Removed** (scheduled for deletion). Note that modifications to a managed entity require no explicit `save()` call—Hibernate's dirty checking detects the change automatically during flush.
 
 ```java
 @Service
@@ -196,6 +202,8 @@ public class EntityStateDemoService {
 
 ### Dirty Checking Mechanism
 
+Hibernate's dirty checking works by taking a snapshot of every entity's state when it is loaded. At flush time, Hibernate compares the current state against the snapshot. If any field differs, an `UPDATE` is generated. By default, this comparison is field-by-field for all persistent attributes. `@DynamicUpdate` optimizes the generated SQL to include only changed columns. Bytecode enhancement (via Hibernate's build-time instrumentation) takes this further by tracking exactly which fields were modified, avoiding the comparison entirely.
+
 ```java
 @Component
 public class DirtyCheckingDemo {
@@ -238,6 +246,8 @@ public class DirtyCheckingDemo {
 ## Session Management
 
 ### Session Lifecycle
+
+The session is opened when a transaction starts and closed when it ends (either committed or rolled back). The `Session` API provides access to Hibernate-specific features like `Statistics`, which lets you monitor the number of managed entities and collections in the persistence context. Clearing the persistence context periodically is essential in batch operations to prevent memory exhaustion.
 
 ```java
 @Service
@@ -310,6 +320,8 @@ public class SessionManagementService {
 ## Performance Optimization
 
 ### Batch Processing
+
+Batch processing is where Hibernate's performance tuning has the most impact. The naive approach of calling `userRepository.save()` for each entity in a loop generates N separate `INSERT` statements and N round trips. The batched approach uses `flush()` and `clear()` every 50 entities, grouping the inserts into a single JDBC batch. For maximum performance, `StatelessSession` bypasses the persistence context entirely—no dirty checking, no L1 cache, no cascading—making it the fastest option for bulk operations but also removing all the safety nets of managed entities.
 
 ```java
 @Service
@@ -389,6 +401,8 @@ properties.put("hibernate.batch_versioned_data", true);
 
 ### Mistake 1: EAGER Fetching on Relationships
 
+EAGER fetching on `@ManyToOne` or `@OneToMany` causes Hibernate to always load the related data, even when it is not needed. This either generates extra queries (N+1) or creates massive Cartesian-product joins. Default to LAZY and use `JOIN FETCH` in specific query methods.
+
 ```java
 // WRONG: EAGER fetches everything every time
 @ManyToOne(fetch = FetchType.EAGER)
@@ -400,6 +414,8 @@ private User user;
 ```
 
 ### Mistake 2: Modifying Entities Outside Transaction
+
+The `LazyInitializationException` occurs when accessing a lazy proxy after the Hibernate session has been closed. Always ensure that lazy data is accessed within the same `@Transactional` boundary.
 
 ```java
 // WRONG: LazyInitializationException
@@ -423,6 +439,8 @@ public User getUserWithOrders(Long id) {
 ```
 
 ### Mistake 3: Not Using Batch Processing
+
+Calling `save()` on each entity individually is the most common Hibernate performance mistake. Each call triggers a flush and a separate SQL statement. Batch with periodic `flush()` and `clear()` to reduce round trips and memory usage.
 
 ```java
 // WRONG: Saving 10000 entities one by one

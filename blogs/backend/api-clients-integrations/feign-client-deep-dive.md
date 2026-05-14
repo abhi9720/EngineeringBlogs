@@ -76,6 +76,8 @@ class FeignInvocationHandler implements InvocationHandler {
 }
 ```
 
+Feign uses Java's `Proxy.newProxyInstance` to generate implementations at runtime. The `Contract` parses the interface's annotations (Spring MVC or Feign-native) and builds `MethodHandler` entries for each method. When a method is called, Feign constructs an HTTP request from the annotations, runs through `RequestInterceptor` instances to add headers or modify the request, executes via the configured HTTP client, and finally decodes the response using the configured `Decoder`. This pipeline makes Feign highly extensible — each stage can be customized independently.
+
 ### Client Resolution with Load Balancing
 
 ```java
@@ -121,6 +123,8 @@ public class LoadBalancerFeignClient implements Client {
     }
 }
 ```
+
+When using service discovery (Eureka, Kubernetes), Feign URLs contain logical service names like `http://user-service/api/users` instead of concrete hostnames. The `LoadBalancerFeignClient` intercepts the request, resolves the service name to an available instance via the load balancer, substitutes the host and port, and delegates execution. This integration is seamless — Feign clients simply declare the service name and Spring Cloud handles instance selection, retry on different nodes, and failure awareness.
 
 ---
 
@@ -188,6 +192,8 @@ public class OrderServiceFeignConfig {
 }
 ```
 
+Per-client configuration classes allow fine-tuning for each downstream service's characteristics. The `order-service` client gets aggressive timeouts (2s connect, 5s read) because order processing should fail fast rather than hang. The `correlationIdInterceptor` propagates the MDC correlation ID across service boundaries — critical for distributed tracing in microservice architectures. Note that configuration classes are instantiated by Feign and should not be annotated with `@Configuration` themselves to avoid being picked up by component scanning; instead, reference them via the `configuration` attribute of `@FeignClient`.
+
 ### Decoder and Encoder Customization
 
 ```java
@@ -230,6 +236,8 @@ public class FeignCodecConfig {
     }
 }
 ```
+
+Custom decoders and encoders give full control over serialization. The `ResponseEntityDecoder` wraps another decoder and preserves HTTP response metadata (status code, headers) alongside the deserialized body — useful when callers need to inspect response headers. The `SpringMvcContract` enables the use of familiar Spring MVC annotations (`@GetMapping`, `@PostMapping`, `@PathVariable`) on Feign interfaces rather than Feign-native annotations (`@RequestLine`, `@Param`). This keeps Feign client code consistent with the rest of your Spring application.
 
 ---
 
@@ -278,6 +286,8 @@ public class ResponseLoggingDecoder implements Decoder {
     }
 }
 ```
+
+Feign's interceptor model is request-only — interceptors modify requests before they are sent. For response interception, the pattern is to decorate the `Decoder`. The `ResponseLoggingDecoder` wraps the real decoder, logs the response status and headers, then delegates deserialization. This decorator pattern is idiomatic Feign: because the request and response pipelines are separate, you compose cross-cutting behavior by wrapping `Client`, `Decoder`, or `Encoder` instances rather than using a unified interceptor chain.
 
 ### Authentication Interceptors
 
@@ -332,6 +342,8 @@ public class ApiKeyInterceptor implements RequestInterceptor {
 }
 ```
 
+Authentication interceptors handle credential injection transparently. The `OAuth2FeignInterceptor` checks whether an Authorization header already exists (to avoid overwriting explicit credentials), falls back to the OAuth2 client context, and triggers token refresh if the access token is expired. The guard against duplicate headers is important when clients might already have a token from a parent context. The `ApiKeyInterceptor` demonstrates decrypting stored secrets at runtime — never hardcode API keys or store them in plaintext configuration files; use a secrets manager or encrypted configuration properties.
+
 ### Correlation ID Propagation
 
 ```java
@@ -369,6 +381,8 @@ public class TracingFeignConfig {
     }
 }
 ```
+
+Correlation ID propagation is essential for debugging request flows across microservices. The `CorrelationIdInterceptor` reads from SLF4J's MDC context, which is populated by a servlet filter or Spring Cloud Sleuth at the entry point. If no correlation ID exists (e.g., the request originated from a scheduled task), a new UUID is generated. The `TracingFeignConfig` demonstrates Sleuth/Zipkin B3 propagation headers, enabling end-to-end trace visualization in tools like Jaeger or Zipkin — without this, a single user request that traverses five services produces five unrelated log entries.
 
 ---
 
@@ -436,6 +450,8 @@ public class ProductServiceErrorDecoder implements ErrorDecoder {
     }
 }
 ```
+
+A well-designed `ErrorDecoder` is the cornerstone of Feign error handling. This implementation groups errors by 4xx/5xx category, logs a unique error ID for correlation, and maps each status code to a specific domain exception. The `extractResponseBody` method reads the response body carefully without leaking resources — Feign's `Response` body can be consumed only once, so the method reads it into a string within a try-catch. The error ID generated via `getErrorId()` is logged and should be returned to upstream callers so they can reference it in support tickets.
 
 ### Fallback with FallbackFactory
 
@@ -506,6 +522,8 @@ public interface InventoryServiceClient {
 }
 ```
 
+`FallbackFactory` is more powerful than simple `fallback` because it provides access to the triggering `Throwable`. This allows context-aware fallback logic: read operations like `checkStock` return safe defaults (unavailable, estimated restock), while write operations like `reserveStock` throw an exception to signal that the operation did not complete — the caller must handle this explicitly rather than silently accepting a no-op. The factory logs the cause for observability. Always provide sensible defaults for read operations that allow the system to degrade gracefully.
+
 ### Retry Logic
 
 ```java
@@ -572,6 +590,8 @@ public class RetryConfig {
 }
 ```
 
+Feign's `Retryer` interface provides simple retry logic at the transport level, before response deserialization. The custom implementation above implements exponential backoff with jitter-like behavior via the multiplier — delays grow as 200ms, 400ms, 800ms. The `isRetryable` check ensures only transient errors (502, 503, 429, connection failures) trigger retries; 4xx client errors are never retried. The `clone()` method is required because Feign creates a new `Retryer` instance per client invocation, and each instance maintains its own attempt counter.
+
 ---
 
 ## Performance Optimization
@@ -622,6 +642,8 @@ public class OkHttpFeignConfig {
 }
 ```
 
+Feign's default client uses `java.net.HttpURLConnection`, which has limited connection pooling and lacks timeout configurability. Replacing it with Apache HttpClient or OkHttp is essential for production deployments. The Apache configuration above sets 200 total connections with 50 per route, 30-second TTL, and idle connection eviction — matching the patterns from RestTemplate best practices. OkHttp offers a lighter alternative with built-in connection pooling and `retryOnConnectionFailure(true)` for transparent recovery from transient network issues. Choose Apache for maximum configurability or OkHttp for a leaner dependency footprint.
+
 ### Compression
 
 ```java
@@ -642,6 +664,8 @@ public class FeignCompressionConfig {
 // feign.compression.request.min-request-size=2048
 // feign.compression.response.enabled=true
 ```
+
+Request and response compression reduces bandwidth usage and latency for large payloads. The `GzipEncoder` wraps the `JacksonEncoder`, compressing request bodies before sending, while Spring Cloud's `feign.compression` properties enable response decompression automatically. Setting `min-request-size=2048` avoids compressing tiny payloads where compression overhead outweighs savings. Compression is particularly beneficial when communicating with services over limited-bandwidth connections or when paying for egress in cloud environments.
 
 ### HTTP/2 Support
 
@@ -692,6 +716,8 @@ public class Http2Client implements Client {
     }
 }
 ```
+
+HTTP/2 multiplexes multiple requests over a single TCP connection, reducing connection overhead and enabling server push. The custom client delegates HTTP/1.1 requests to the default client and uses Apache HttpClient with HTTP/2 for HTTPS endpoints. In practice, HTTP/2 provides the most benefit when calling services that support it natively and when making many concurrent requests to the same server. Note that HTTP/2 requires TLS, so the optimization is only applied to `https://` URLs.
 
 ---
 
@@ -757,6 +783,8 @@ class FeignWireMockTest {
 }
 ```
 
+Integration testing with Feign requires careful setup because the client relies on Spring's dependency injection and, optionally, service discovery. The first test uses `@SpringBootTest` with the full application context, validating that autowiring and configuration work correctly. The WireMock approach is more targeted — it starts a lightweight HTTP server on a known port and stubs specific endpoints, allowing tests to verify serialization, error handling, and retry behavior without depending on an external service. WireMock also supports verifying that the expected request was made with correct headers and body, making it ideal for testing interceptor and authentication logic.
+
 ---
 
 ## Common Mistakes
@@ -790,6 +818,8 @@ public class CorrectFallback implements UserClient {
 }
 ```
 
+A fallback that calls the same Feign client creates an infinite recursion — the call triggers the circuit breaker, which calls the fallback, which calls the client, which triggers the circuit breaker again. Feign does not detect this cycle; it simply exhausts the thread pool or stack. Fallbacks must return a value or throw an exception, never delegate back to the original client. For complex fallback logic, use `FallbackFactory` with access to the cause exception to determine the appropriate response.
+
 ### Mistake 2: Missing @RequestBody on Feign Methods
 
 ```java
@@ -809,6 +839,8 @@ public interface CorrectPaymentClient {
     PaymentResponse processPayment(@RequestBody PaymentRequest request);
 }
 ```
+
+Without `@RequestBody`, Spring MVC's `DispatcherServlet` does not know that the parameter should be serialized as the request body. Feign's `SpringMvcContract` relies on these annotations to build the `RequestTemplate`. The missing annotation causes Feign to treat the parameter as a query parameter or ignore it entirely, resulting in empty or malformed requests. As a rule, all POST, PUT, and PATCH method parameters that represent the request payload must be annotated with `@RequestBody`.
 
 ### Mistake 3: Using Spring MVC Annotations Without Spring Cloud
 
@@ -830,6 +862,8 @@ public interface CorrectClient {
     Data getData(@RequestParam("id") String id);
 }
 ```
+
+The `@FeignClient` annotation and Spring MVC annotations (`@GetMapping`, `@RequestParam`) come from different libraries. `@FeignClient` is from Spring Cloud OpenFeign, while `@GetMapping` is from Spring Web. They work together only when a `SpringMvcContract` bean is registered — Spring Cloud OpenFeign provides this automatically. If you use Feign standalone (without Spring Cloud), you must use Feign-native annotations (`@RequestLine`, `@Param`). Always verify that `spring-cloud-starter-openfeign` is on the classpath when using Spring MVC annotations on Feign interfaces.
 
 ### Mistake 4: Not Setting Timeout for Each Client
 
@@ -862,6 +896,8 @@ public class SlowServiceConfig {
 }
 ```
 
+A single global `Request.Options` bean applies to all Feign clients, forcing services with different latency profiles to share the same timeout. A fast in-memory cache service might respond in 10ms, while a legacy batch service needs 30 seconds. Using a global 1-second timeout would cause the batch service to fail constantly. Configure timeouts per client by providing a dedicated configuration class in the `@FeignClient` annotation. Each client then receives appropriate timeouts based on the downstream service's actual performance characteristics.
+
 ### Mistake 5: Ignoring Feign Exception Types
 
 ```java
@@ -888,19 +924,21 @@ try {
 }
 ```
 
+Feign throws distinct exception types: `FeignClientException` (4xx responses), `FeignServerException` (5xx responses), and `RetryableException` (when retries are exhausted). Catching generic `Exception` loses this semantic information. The correct approach handles each type separately: client exceptions indicate caller errors that should propagate to the user, server exceptions indicate downstream failures that might trigger circuit breakers, and `RetryableException` signals that the system is truly unavailable after exhausting retries. Always handle `RetryableException` at the call boundary to provide a meaningful user experience.
+
 ---
 
 ## Summary
 
 Feign is a powerful tool for simplifying HTTP communication in microservices. Key takeaways:
 
-1. **Declarative clients**: Define interfaces, get implementations automatically
-2. **Integration**: Deep integration with Spring Cloud, Eureka, and Resilience4j
-3. **Customization**: Interceptors, decoders, error decoders for full control
-4. **Resilience**: FallbackFactory, Retryer, and circuit breaker integration
-5. **Performance**: Connection pooling, compression, HTTP/2 support
+1. **Declarative clients**: Define interfaces with annotations and Feign generates the implementation via JDK dynamic proxies, eliminating boilerplate HTTP code entirely.
+2. **Integration**: Deep integration with Spring Cloud, Eureka, and Resilience4j means service discovery, load balancing, and circuit breakers work with minimal configuration.
+3. **Customization**: Interceptors modify requests, custom decoders/encoders control serialization, and `ErrorDecoder` maps HTTP errors to typed exceptions — each pipeline stage is independently customizable.
+4. **Resilience**: `FallbackFactory` provides context-aware fallback logic, `Retryer` handles transient failures with exponential backoff, and Resilience4j annotations add circuit breaker, rate limiter, and bulkhead patterns.
+5. **Performance**: Connection pooling via Apache HttpClient or OkHttp, GZip compression for large payloads, and HTTP/2 multiplexing all contribute to production-grade throughput.
 
-When used correctly, Feign eliminates boilerplate HTTP code while maintaining flexibility for advanced use cases.
+When used correctly, Feign eliminates boilerplate HTTP code while maintaining flexibility for advanced use cases. The key to success is per-client configuration — each downstream service has unique latency, error, and resilience requirements that should be expressed through its own Feign configuration class.
 
 ---
 
@@ -912,7 +950,5 @@ When used correctly, Feign eliminates boilerplate HTTP code while maintaining fl
 - [Baeldung - Feign Guide](https://www.baeldung.com/spring-cloud-feign)
 
 ---
-
-Happy Coding 👨‍💻
 
 Happy Coding

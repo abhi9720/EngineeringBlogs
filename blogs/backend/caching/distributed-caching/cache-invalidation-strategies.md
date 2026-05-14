@@ -30,6 +30,8 @@ Cache invalidation is one of the hardest problems in computer science. Choosing 
 
 ### Implementation
 
+TTL-based invalidation is the simplest strategy: each cache entry has a time-to-live, after which it is automatically evicted. The trade-off is that data can be stale for up to the TTL duration.
+
 ```java
 @Service
 public class TtlInvalidationService {
@@ -76,11 +78,15 @@ public class TtlInvalidationService {
 }
 ```
 
+TTL jitter adds randomness to expiration times, preventing all keys from expiring simultaneously (which would cause a thundering herd against the database). Adaptive TTL extends the lifetime of frequently accessed entries, keeping hot data in cache longer.
+
 ---
 
 ## Write-Invalidate
 
 ### Pattern Implementation
+
+Write-invalidate is the most common invalidation strategy: when data is updated, the corresponding cache entries are removed. The next read will miss the cache and load fresh data from the database.
 
 ```java
 @Service
@@ -120,6 +126,8 @@ public class WriteInvalidateService {
 ```
 
 ### Multi-Cache Invalidation
+
+When data appears in multiple cache entries (e.g., by ID and by SKU), all affected entries must be invalidated. Pattern-based deletion handles related keys efficiently.
 
 ```java
 @Service
@@ -165,6 +173,8 @@ public class MultiCacheInvalidationService {
 ## Write-Update
 
 ### Implementation
+
+Write-update keeps the cache always fresh by updating it synchronously with the database write. This ensures read-after-write consistency at the cost of increased write latency.
 
 ```java
 @Service
@@ -222,6 +232,8 @@ public class WriteUpdateService {
 
 ### Conditional Write-Update
 
+Conditional updates use a Lua script in Redis to atomically check a condition (like a timestamp) before updating. This prevents overwriting newer data with older data when updates arrive out of order.
+
 ```java
 @Service
 public class ConditionalWriteUpdateService {
@@ -265,6 +277,8 @@ public class ConditionalWriteUpdateService {
 ---
 
 ## Scheduled Invalidation
+
+Scheduled invalidation periodically clears and warms the cache. This is suitable for reference data that changes on a known schedule (e.g., nightly price updates).
 
 ```java
 @Component
@@ -324,6 +338,8 @@ public class ScheduledInvalidationService {
 
 ### 1. Use a Hybrid Approach
 
+Combining TTL with write-invalidate provides defense in depth. TTL acts as a safety net for missed invalidations.
+
 ```java
 // Combine TTL with write-invalidate for defense in depth
 // TTL as safety net for missed invalidations
@@ -344,6 +360,8 @@ public class HybridInvalidationConfig {
 
 ### 2. Log Invalidation Events
 
+Logging invalidations helps debug stale data issues and provides an audit trail.
+
 ```java
 @CacheEvict(value = "products", key = "#product.id")
 public Product saveProduct(Product product) {
@@ -353,6 +371,8 @@ public Product saveProduct(Product product) {
 ```
 
 ### 3. Monitor Invalidation Health
+
+Track invalidation rates per cache and strategy to detect anomalies (e.g., excessive invalidations causing low hit rates).
 
 ```java
 @Component
@@ -376,6 +396,8 @@ public class InvalidationMetrics {
 
 ### Mistake 1: No TTL Safety Net
 
+Relying solely on write-invalidation is risky — if a code path misses the invalidation call, the data is stale forever.
+
 ```java
 // WRONG: No TTL, only write-invalidate
 // If invalidation is missed, data is stale forever
@@ -390,6 +412,8 @@ public Product get(Long id) { ... }
 ```
 
 ### Mistake 2: Invalidating Too Aggressively
+
+Invalidating the entire cache for a single change causes a cache miss storm. Target specific entries instead.
 
 ```java
 // WRONG: Invalidating entire cache for a single change
@@ -407,6 +431,8 @@ public Product updateOneProduct(Product product) {
 ```
 
 ### Mistake 3: Not Invalidating Related Caches
+
+When a product's price changes, both the product cache and the search index cache need invalidation.
 
 ```java
 // WRONG: Only invalidating direct cache

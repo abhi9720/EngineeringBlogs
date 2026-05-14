@@ -26,12 +26,37 @@ Spring Security uses a delegation pattern where `FilterChainProxy` (a single fil
 
 ### The Security Filter Chain Architecture
 
-When you annotate a class with `@EnableWebSecurity`, Spring creates a `SecurityFilterChain` bean that contains all security filters in a specific order:
+When you annotate a class with `@EnableWebSecurity`, Spring creates a `SecurityFilterChain` bean that contains all security filters in a specific order. The `FilterChainProxy` matches incoming requests against registered filter chains by URL pattern and executes the first matching chain.
 
-```
-Request → SecurityFilterChain → Filter 1 → Filter 2 → ... → Filter N → Controller
-                                    ↓
-                              SecurityContext updated
+Each filter in the chain has a single responsibility. The ordering is critical: authentication filters must run before authorization filters, and exception translation must happen late so that earlier filters can add their own behavior. The diagram below shows the flow from request to controller through the filter chain.
+
+```mermaid
+flowchart LR
+    Request[HTTP Request] --> FCP[FilterChainProxy]
+    FCP --> F1[ChannelProcessingFilter]
+    F1 --> F2[SecurityContextPersistenceFilter]
+    F2 --> F3[CorsFilter]
+    F3 --> F4[LogoutFilter]
+    F4 --> F5[UsernamePasswordAuthFilter]
+    F5 --> F6[ConcurrentSessionFilter]
+    F6 --> F7[JwtAuthFilter<br/>custom]
+    F7 --> F8[RequestCacheAwareFilter]
+    F8 --> F9[SecurityContextHolderAwareFilter]
+    F9 --> F10[AnonymousAuthFilter]
+    F10 --> F11[SessionManagementFilter]
+    F11 --> F12[ExceptionTranslationFilter]
+    F12 --> F13[FilterSecurityInterceptor]
+    F13 --> Controller
+
+    linkStyle default stroke:#278ea5
+
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+
+    class F1,F2,F3,F4,F5,F6,F8,F9,F10,F11,F12,F13 blue
+    class F7 pink
+    class Controller green
 ```
 
 The default filter chain (in order) includes:
@@ -52,7 +77,9 @@ The default filter chain (in order) includes:
 
 ### Filter Registration and Order
 
-In modern Spring Security (Spring Boot 2.7+ / Spring Security 5.7+), you configure the filter chain without extending `WebSecurityConfigurerAdapter`:
+In modern Spring Security (Spring Boot 2.7+ / Spring Security 5.7+), you configure the filter chain without extending `WebSecurityConfigurerAdapter`. The lambda DSL provides a more readable configuration. Use `addFilterBefore` and `addFilterAfter` to position custom filters relative to existing ones.
+
+The position of your custom filter matters: placing it before `UsernamePasswordAuthenticationFilter` means it runs before form login processing, which is appropriate for a JWT filter. Placing it before `FilterSecurityInterceptor` would mean authentication hasn't happened when your filter runs, which is likely wrong.
 
 ```java
 @Configuration
@@ -91,7 +118,9 @@ public class SecurityConfig {
 
 ### The SecurityContextHolder Deep Dive
 
-The `SecurityContextHolder` is where Spring Security stores the authenticated user information. It uses a strategy pattern that defaults to `ThreadLocal` storage:
+The `SecurityContextHolder` is where Spring Security stores the authenticated user information. It uses a strategy pattern that defaults to `ThreadLocal` storage.
+
+The three strategies serve different deployment scenarios. `MODE_THREADLOCAL` is the default and works for standard servlet containers where each request is handled by a single thread. `MODE_INHERITABLETHREADLOCAL` is needed when child threads are spawned and should inherit the parent's security context. `MODE_GLOBAL` is rarely used and is only appropriate for standalone applications that don't handle multiple concurrent users.
 
 ```java
 // Three strategies for storing security context
@@ -137,7 +166,9 @@ public interface Authentication extends Serializable {
 
 ### How Filters Chain Together
 
-When a request arrives, here's the exact sequence:
+When a request arrives, here's the exact sequence. `FilterChainProxy` iterates through its registered `SecurityFilterChain` instances, matching each against the request URL. The first match wins, and its list of filters is executed via `VirtualFilterChain`.
+
+`VirtualFilterChain` is an inner class that maintains an index into the filter list. Each filter's `doFilter` method either handles the request completely (short-circuiting the chain) or calls `chain.doFilter()` to pass control to the next filter. The last filter in the chain calls the original servlet container filter chain, which eventually reaches the DispatcherServlet and your controller.
 
 ```java
 // Simplified flow in FilterChainProxy
@@ -207,7 +238,9 @@ private static class VirtualFilterChain implements FilterChain {
 
 ### Case 1: Custom JWT Authentication Filter
 
-Implementing a production-grade JWT filter that handles token validation, user loading, and proper error handling:
+Implementing a production-grade JWT filter that handles token validation, user loading, and proper error handling. The filter extracts the Bearer token from the Authorization header, validates it (signature + expiration + issuer), and loads the `UserDetails` from database/cache to get the full set of granted authorities.
+
+Note the use of `WebAuthenticationDetailsSource` to attach request metadata (IP address, session ID) to the authentication object. This metadata can be used for audit logging or risk-based authentication downstream.
 
 ```java
 @Component
@@ -275,7 +308,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 ### Case 2: Rate Limiting Filter
 
-Implementing a token bucket algorithm for API rate limiting:
+Implementing a token bucket algorithm for API rate limiting. The filter tracks per-client token usage using a `ConcurrentHashMap`. Each client has a token bucket with a maximum capacity and a refill rate (tokens per second).
+
+The token bucket algorithm is preferred over a simple counter because it handles burst traffic gracefully — a client can use up its entire capacity in a short burst and then must wait for refill. The `X-RateLimit-Remaining` header lets clients manage their consumption proactively.
 
 ```java
 @Component
@@ -364,7 +399,9 @@ public class TokenBucket {
 
 ### Case 3: Request/Response Logging and Audit Filter
 
-For compliance and debugging, log all API access:
+For compliance and debugging, log all API access. The filter below wraps the response to capture the status code after the controller executes, then logs the complete request/response pair with timing information. The request ID is generated early and attached as a request attribute, making it available to the rest of the application.
+
+The `ContentCachingResponseWrapper` is essential: it buffers the response body so the filter can read the status code and content length without consuming the output stream. Without this wrapper, the filter would see no response data because the original response stream is already committed.
 
 ```java
 @Component
@@ -442,7 +479,9 @@ public class AuditLoggingFilter extends OncePerRequestFilter {
 
 ### Case 4: CSRF Token Validation Filter
 
-If you're using stateless authentication with JWT but need CSRF protection:
+If you're using stateless authentication with JWT but need CSRF protection, a custom filter can skip CSRF for API requests (which are protected by the Bearer token). The filter checks whether the request targets an API endpoint — if so, it bypasses CSRF validation because JWT tokens are immune to CSRF attacks (browsers don't automatically attach Authorization headers on cross-origin form submissions).
+
+For non-API requests (HTML form posts), the filter lets Spring Security's `CsrfFilter` handle validation normally. The `_csrf` request attribute is populated by the `CsrfFilter` earlier in the chain.
 
 ```java
 @Component
@@ -514,7 +553,9 @@ public class CsrfTokenValidationFilter extends OncePerRequestFilter {
 
 ### 1. Filter Order and Performance
 
-Filter order significantly impacts behavior and performance:
+Filter order significantly impacts behavior and performance. A misordered filter can create security vulnerabilities: if your authentication filter runs after the authorization filter, unauthenticated requests might be authorized incorrectly. Conversely, if a heavy logging filter runs before authentication, you'll log requests from unauthenticated users unnecessarily.
+
+The general rule is: CORS first (needed for browsers to even make the request), then authentication, then session management, then authorization, then exception handling.
 
 ```java
 @Configuration
@@ -544,7 +585,9 @@ public class SecurityFilterOrder {
 
 ### 2. SecurityContext and Thread Safety
 
-In async scenarios, SecurityContext isn't automatically propagated:
+In async scenarios, SecurityContext isn't automatically propagated. When a controller method returns a `CompletableFuture` or `DeferredResult`, the processing continues on a different thread — one that doesn't have the SecurityContext from the original request thread.
+
+Spring provides `DelegatingSecurityContextExecutor` and `DelegatingSecurityContextRunnable` to explicitly propagate the context. For `@Async` methods, configure a custom Executor bean that wraps the task executor with security context propagation.
 
 ```java
 // WRONG - Context not propagated to async thread
@@ -609,7 +652,9 @@ public class DataController {
 
 ### 3. Error Handling in Filters
 
-Filters must handle exceptions properly to avoid leaking information:
+Filters must handle exceptions properly to avoid leaking information. An uncaught exception in a filter propagates to the servlet container, which typically returns a generic error page or HTML error — not a structured JSON response.
+
+The pattern below catches specific authentication exceptions and returns structured JSON with appropriate status codes. The catch-all for `Exception.class` logs the full details server-side but returns only a generic error message to the client, preventing information leakage.
 
 ```java
 @Component
@@ -661,7 +706,9 @@ public class SecureAuthenticationFilter extends OncePerRequestFilter {
 
 ### 4. Session Management Configuration
 
-For stateless APIs, configure session management appropriately:
+For stateless APIs, configure session management appropriately. JWT-based authentication should never create HTTP sessions — the token itself is the session. Setting `SessionCreationPolicy.STATELESS` prevents Spring Security from creating or using sessions.
+
+If you need to disable sessions entirely (even for other purposes), the `StatelessSessionFilter` shown below sets an empty session repository, preventing any session creation anywhere in the application.
 
 ```java
 @Configuration
@@ -730,7 +777,9 @@ public class EmptySessionRepository implements HttpSessionRepository<Session> {
 
 ### 5. Testing Filter Security
 
-Comprehensive testing is essential:
+Comprehensive testing is essential for security filters. Test each filter with valid tokens, expired tokens, invalid signatures, missing tokens, and tokens with insufficient scope. The `@WithMockUser` annotation provides a convenient way to set up the security context for positive tests.
+
+For negative tests (invalid tokens), make requests without setting up the security context. The filter chain should reject these requests with 401 or 403 status codes. Use `MockMvc` for servlet-based testing and `WebTestClient` for reactive testing.
 
 ```java
 @SpringBootTest

@@ -21,6 +21,8 @@ RabbitMQ is a feature-rich message broker implementing AMQP (Advanced Message Qu
 
 ## Architecture
 
+RabbitMQ's core model is simple: producers send messages to an exchange, which routes them to queues based on bindings. Consumers then pull messages from queues. The diagram below shows this flow — a producer sends to an exchange, which routes to a queue, and the consumer receives it. A dead-letter queue (DLQ) catches messages that couldn't be processed, providing a safety net for failed messages.
+
 ```mermaid
 flowchart TB
 
@@ -36,6 +38,7 @@ flowchart TB
     classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
     classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
     classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
 
     class Queue,DLQ green
     class Exchange,Producer,Consumer blue
@@ -46,6 +49,8 @@ flowchart TB
 ## Exchange Types
 
 ### Direct Exchange
+
+A direct exchange routes messages to queues where the routing key exactly matches the binding key. In this example, a message with routing key `order.urgent` goes only to the `orders.urgent` queue. This is the simplest exchange type and is ideal for unicast or single-worker patterns where you need precise message routing.
 
 ```java
 // Direct: Exact matching on routing key
@@ -89,6 +94,8 @@ public class OrderProducer {
 
 ### Topic Exchange
 
+Topic exchanges use wildcard patterns for flexible routing. The `#` wildcard matches zero or more words, while `*` matches exactly one word. Here, `notification.email.#` matches `notification.email`, `notification.email.order`, `notification.email.order.created`, etc. This is ideal for publish-subscribe scenarios where consumers want only a subset of messages based on a hierarchical routing key.
+
 ```java
 // Topic: Pattern-based matching
 @Configuration
@@ -125,6 +132,8 @@ public class TopicExchangeConfig {
 
 ### 1. Task Queue
 
+The task queue pattern distributes work across multiple workers. The `TaskProducer` sends tasks to the `tasks` queue, and multiple `TaskWorker` instances consume them in a competing-consumers pattern. RabbitMQ delivers each message to exactly one consumer, making it perfect for load-balanced background job processing. If a worker dies mid-processing, the message is requeued (if not acknowledged) and delivered to another worker.
+
 ```java
 @Service
 public class TaskProducer {
@@ -149,6 +158,8 @@ public class TaskWorker {
 ```
 
 ### 2. Dead Letter Queue
+
+A dead letter queue (DLQ) provides a safety net for messages that cannot be processed. The main queue (`orders`) is configured with `x-dead-letter-exchange` and `x-dead-letter-routing-key`. When a message is rejected (nack'd with `requeue=false`) or expires, RabbitMQ routes it to the specified exchange with the dead routing key. The `deadLetterQueue` then holds these failed messages for diagnosis and reprocessing — no message is ever lost.
 
 ```java
 @Configuration
@@ -185,6 +196,8 @@ public class DLQConfig {
 
 ## Production Configuration
 
+The production configuration below sets manual acknowledgment (`acknowledge-mode: manual`) for reliable processing, a prefetch count of 10 (how many messages are sent to a consumer at once), and concurrent consumers between 5 and 10 for throughput. Publisher confirms (`publisher-confirm-type: correlated`) ensure the producer knows when the broker has received the message.
+
 ```yaml
 spring:
   rabbitmq:
@@ -209,6 +222,8 @@ spring:
 
 ### Mistake 1: Not Using DLQ
 
+Without a dead letter queue, messages that fail processing are either lost (if nack'd with `requeue=false`) or cause infinite redelivery loops (if nack'd with `requeue=true`). Always configure a DLQ to capture failed messages for monitoring and reprocessing.
+
 ```java
 // WRONG: Lost messages when consumer fails
 
@@ -216,6 +231,8 @@ spring:
 ```
 
 ### Mistake 2: Not Acknowledging Messages
+
+If a `@RabbitListener` method returns without acknowledging, the message remains unacknowledged in the queue. Eventually, when the consumer channel is closed, the message is redelivered — but until then, it appears consumed. Always explicitly acknowledge (or nack) messages to give RabbitMQ clear signals about delivery status.
 
 ```java
 // WRONG
@@ -258,4 +275,4 @@ public void process(Task task, Channel channel,
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

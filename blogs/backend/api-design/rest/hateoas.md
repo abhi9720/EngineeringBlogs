@@ -22,7 +22,11 @@ HATEOAS (Hypermedia As The Engine Of Application State) is a constraint of REST 
 
 ## Understanding HATEOAS
 
+HATEOAS (Hypermedia As The Engine Of Application State) is a constraint of the REST architectural style that enables API discoverability through hypermedia links. Instead of clients hard-coding URLs for every possible action, the server includes navigational links in responses that tell clients what actions are available next. This decouples clients from URL structures — the server can change URLs without breaking clients as long as the link relations (rel values) remain stable.
+
 ### Core Concept
+
+The traditional response (top) requires the client to know all possible actions and their URLs. The HATEOAS response (bottom) includes a `_links` object with rel → URL mappings that the client can follow dynamically. The client reads the "self" link for the resource's own URL, "cancel" and "pay" for available actions, and "items" for related sub-resources. Crucially, the available links depend on the resource state — a PENDING order shows cancel and pay links, while a PAID order shows refund and ship links. This state-driven linking makes the response self-descriptive and reduces coupling between client and server.
 
 ```java
 // Traditional response - client must know URLs
@@ -45,6 +49,8 @@ HATEOAS (Hypermedia As The Engine Of Application State) is a constraint of REST 
     }
 }
 ```
+
+Spring HATEOAS provides the `EntityModel` and `Link` classes for building hypermedia responses. The `EntityModel.of(order)` wraps the order entity, and links are added with `model.add()`. The key design pattern is conditional linking — links are added based on the resource's current state. A PENDING order gets cancel and pay links; a PAID order gets refund and ship links. This pattern guides clients toward valid state transitions and prevents them from attempting invalid operations.
 
 ### Spring HATEOAS Implementation
 
@@ -86,6 +92,8 @@ public class OrderController {
 
 ## Hypermedia Link Types
 
+Links in HATEOAS responses use link relations (the `rel` attribute) to describe the relationship between the current resource and the linked resource. Standard relations like `self`, `next`, `prev`, `first`, `last` are registered with IANA and have well-defined semantics. Custom relations allow domain-specific navigation. The choice between standard and custom relations affects client portability — standard relations are understood by generic HTTP clients, while custom relations require domain-specific client logic.
+
 ### Standard Link Relations
 
 ```java
@@ -122,6 +130,8 @@ public class UserOrderController {
     }
 }
 ```
+
+Custom link relations use fully-qualified URIs (like `http://api.example.com/rels/cancel`) to describe domain-specific relationships. These URIs can link to documentation pages that explain the action, its expected input, and its effects. Using URIs for custom relations prevents naming conflicts and makes the relation semantics globally unique. The `OrderLinkBuilder` centralizes custom link construction, ensuring consistent relation URIs across the API. Document each custom relation so consumers can discover and understand available state transitions.
 
 ### Custom Link Relations
 
@@ -171,6 +181,8 @@ public class RichOrderController {
 
 ## RepresentationModel and Resource Assembly
 
+Spring HATEOAS provides `RepresentationModel` as a base class for models that need to carry links. Extending `RepresentationModel<T>` gives your resource classes the ability to add links and be wrapped in `EntityModel` or `CollectionModel`. The `OrderModel` extends `RepresentationModel` and includes both data fields and link management. This pattern keeps your domain entities separate from their hypermedia representations, following the DTO pattern where the hypermedia-enriched model is what the API returns.
+
 ### Using RepresentationModel
 
 ```java
@@ -209,6 +221,8 @@ public class OrderItemModel extends RepresentationModel<OrderItemModel> {
     }
 }
 ```
+
+The Resource Assembler pattern centralizes the logic for converting domain entities into hypermedia-enriched models. `OrderModelAssembler` implements `RepresentationModelAssembler<Order, OrderModel>` and is responsible for both the model conversion and link addition. This separation keeps controllers clean (they just call `assembler.toModel()`) and makes link logic testable and reusable. The assembler also handles collection-level links — the `toCollectionModel` method adds a self link to the collection response.
 
 ### Resource Assembler Pattern
 

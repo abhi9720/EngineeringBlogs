@@ -22,7 +22,11 @@ Scaling WebSocket connections horizontally is challenging because WebSocket conn
 
 ## The Scaling Challenge
 
+Scaling WebSocket connections horizontally is fundamentally different from scaling HTTP requests because WebSockets maintain stateful, long-lived connections. While HTTP requests are stateless and can be routed to any server instance, a WebSocket connection stays bound to the specific instance that handled its initial HTTP upgrade handshake. This stateful nature creates unique challenges for multi-instance deployments, load balancing, and fault tolerance.
+
 ### Why WebSockets Are Hard to Scale
+
+The core problem is shown in the contrast between HTTP and WebSocket handlers. An HTTP controller can handle any request on any instance because each request is independent. A WebSocket handler stores sessions in a local `ConcurrentHashMap` — those sessions exist only on the instance where the connection was established. Broadcasting a message calls `localSessions.values().forEach(...)`, which only reaches connections on the current instance. To broadcast to all connected clients, you need a mechanism to communicate across instances.
 
 ```java
 // Stateless HTTP - easy to scale
@@ -59,7 +63,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
 ## Sticky Sessions (Session Affinity)
 
+Sticky sessions, also known as session affinity, ensure that all requests from a client are routed to the same server instance. For WebSocket connections, this means the load balancer must consistently route the connection and subsequent messages to the instance that handled the initial handshake. Without sticky sessions, a WebSocket connection might be established on instance A but subsequent messages could be routed to instance B, which has no record of the connection.
+
 ### Load Balancer Configuration
+
+Sticky sessions can be configured through load balancer strategies like `ip_hash` (routing based on client IP) or cookie-based affinity (setting a session cookie on the first request). The nginx configuration shows `ip_hash`, which ensures the same client IP always goes to the same backend server. For more dynamic load balancing, use a Redis-backed session store with Spring Session — this stores session metadata externally so any instance can recover session state if needed.
 
 ```java
 @Configuration
@@ -106,7 +114,11 @@ public class SessionConfig {
 
 ## Pub/Sub Backplane Pattern
 
+A pub/sub backplane is the standard solution for cross-instance messaging in WebSocket deployments. When a message needs to be broadcast to all connected clients (regardless of which instance they're connected to), the publishing instance sends the message to a shared pub/sub channel. All instances subscribe to this channel and forward messages to their local connections. Redis Pub/Sub is the most common backplane implementation, but Kafka, RabbitMQ, or NATS are also viable options depending on throughput requirements and existing infrastructure.
+
 ### Redis Pub/Sub for Cross-Instance Communication
+
+The `RedisPubSubBackplane` implements the backplane pattern with Redis. When a client joins a room, the instance subscribes to the Redis channel for that room. When a message is broadcast: (1) it's sent directly to local sessions in the same room, (2) it's published to Redis for the room's channel. Other instances receive the Redis message in their subscription callback and forward it to their local sessions in that room. The `subscribeToChannels` method ensures instances only subscribe to channels for rooms that have active local subscribers, minimizing Redis channel subscription overhead.
 
 ```java
 @Component

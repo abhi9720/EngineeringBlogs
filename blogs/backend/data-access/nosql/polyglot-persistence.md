@@ -24,6 +24,8 @@ Polyglot persistence is the practice of using multiple database technologies in 
 
 ### Choosing the Right Database
 
+The first step in polyglot persistence is understanding the strengths of each database category. Relational databases like PostgreSQL provide ACID compliance and complex join support for structured data with relationships. Document stores like MongoDB offer flexible schemas for semi-structured data with embedded documents. Key-value stores like Redis provide sub-millisecond latency for simple key-based lookups. Search engines like Elasticsearch excel at full-text search and aggregations. Time-series databases like InfluxDB optimize for append-heavy metric ingestion with retention policies. Graph databases like Neo4j shine for highly connected data with relationship traversal patterns. The key is matching the database to the access pattern, not the other way around.
+
 ```java
 public class DatabaseSelectionGuide {
 
@@ -72,6 +74,8 @@ public class DatabaseSelectionGuide {
 ## Multi-Database Architecture
 
 ### Service Layer with Multiple Databases
+
+In a polyglot persistence architecture, a single service can interact with multiple databases, each serving a different purpose. In the example below, `OrderPolyglotService` uses PostgreSQL as the source of truth (ACID for writes), Redis as a cache (sub-millisecond reads), Elasticsearch for full-text search, and an event store for the audit trail. The write path is synchronous to PostgreSQL and async to the secondary stores. The read path tries Redis first, falling back to PostgreSQL on cache miss—a standard cache-aside pattern.
 
 ```java
 @Service
@@ -168,6 +172,8 @@ public class OrderPolyglotService {
 
 ### Event-Driven Synchronization
 
+Keeping multiple databases in sync is the central challenge of polyglot persistence. The event-driven approach uses Spring's `@TransactionalEventListener` with `AFTER_COMMIT` phase to publish synchronization events only after the primary transaction has successfully committed. This prevents syncing data that later gets rolled back. The sync methods are `@Async` so they do not block the HTTP response. Failures are logged and optionally queued for retry.
+
 ```java
 @Component
 public class DataSyncOrchestrator {
@@ -236,6 +242,8 @@ public class DataSyncOrchestrator {
 ```
 
 ### CDC (Change Data Capture)
+
+Change Data Capture (CDC) with tools like Debezium provides an alternative to application-level event publishing. Debezium connects to the database's transaction log (WAL in PostgreSQL, binlog in MySQL) and emits events for every insert, update, and delete. The advantage is that CDC captures all changes, including those made by batch jobs, direct SQL updates, or other applications that bypass your event publishing code.
 
 ```java
 @Component
@@ -328,6 +336,8 @@ public class ChangeDataCaptureService {
 
 ### Saga Pattern for Multi-Database Transactions
 
+When a single business transaction spans multiple databases or services, distributed two-phase commit is not practical across heterogeneous stores. The Saga pattern breaks the transaction into a sequence of local transactions with compensating actions for rollback. The orchestrator below creates an order in PostgreSQL, reserves inventory in MongoDB, processes payment via an external service, and sends a notification—all within a try-catch that triggers compensation on any failure.
+
 ```java
 @Component
 public class OrderSagaOrchestrator {
@@ -403,6 +413,8 @@ public class OrderSagaOrchestrator {
 9. **Plan for data migration**: Moving data between stores
 10. **Test failure scenarios**: Network partitions, store outages
 
+Monitoring synchronization health is essential in a polyglot architecture. The scheduled check below compares record counts between PostgreSQL and Elasticsearch, alerting when the lag exceeds a threshold.
+
 ```java
 // Synchronization health monitoring
 @Component
@@ -431,6 +443,8 @@ public class SyncHealthMonitor {
 
 ### Mistake 1: Distributed Transactions Across Stores
 
+Attempting to use `@Transactional` across PostgreSQL and MongoDB in the same method does not work—each database manages its own transaction manager. The first `save()` might commit while the second fails, leaving the system in an inconsistent state.
+
 ```java
 // WRONG: Two-phase commit across different databases
 @Transactional
@@ -448,6 +462,8 @@ public void createOrder(Order order) {
 ```
 
 ### Mistake 2: Not Handling Sync Failures
+
+Silently swallowing exceptions in synchronization code leads to silent data inconsistencies. The worst case is a search index that is permanently out of sync with the primary database because a transient network error was ignored.
 
 ```java
 // WRONG: Silently failing on sync
@@ -473,6 +489,8 @@ public void syncToES(Order order) {
 ```
 
 ### Mistake 3: Over-Complicating with Too Many Databases
+
+Adding databases introduces operational complexity—more infrastructure to manage, more failure modes, more consistency issues. Start with the simplest setup that meets your needs, and add databases only when the access pattern clearly demands it.
 
 ```java
 // WRONG: Unnecessary database diversity

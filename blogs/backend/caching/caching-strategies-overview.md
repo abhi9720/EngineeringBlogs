@@ -33,7 +33,7 @@ This overview covers the fundamental caching strategies, when to use each, and h
 
 ### 1. Cache-Aside (Lazy Loading)
 
-The application reads from cache first, and only loads from the database on a miss:
+The application reads from cache first, and only loads from the database on a miss. This is the most widely used pattern because it is simple, resilient, and handles cache failures gracefully — if the cache is down, the application falls back to the database naturally.
 
 ```java
 @Service
@@ -68,9 +68,11 @@ public class CacheAsideService {
 **Pros**: Simple, handles cache failures gracefully, only caches what is requested.
 **Cons**: Cache miss penalty (three round trips), stale data until invalidation.
 
+The cache miss penalty is three network hops: one to check cache, one to query the database (if miss), and one to populate the cache. For read-heavy workloads with high cache hit rates (>90%), this penalty is negligible.
+
 ### 2. Read-Through
 
-The cache layer itself loads data from the database on a miss:
+The cache layer itself loads data from the database on a miss. This is transparent to the application code — the service simply calls the cache and the cache handles the rest.
 
 ```java
 @Configuration
@@ -102,9 +104,11 @@ public class ProductService {
 **Pros**: Transparent to application code, consistent behavior.
 **Cons**: Cache provider must support read-through, less control over fallback.
 
+Spring's `@Cacheable` annotation provides read-through semantics — the first invocation loads from the database and caches the result; subsequent invocations return the cached value. The `sync` attribute can prevent concurrent cache misses (cache stampede).
+
 ### 3. Write-Through
 
-Data is written to cache first, then synchronously to the database:
+Data is written to cache first, then synchronously to the database. This ensures the cache is always up-to-date at the cost of increased write latency.
 
 ```java
 // Redis with write-through via Spring
@@ -136,9 +140,11 @@ public class ManualWriteThroughService {
 **Pros**: Cache is always up-to-date, no stale reads.
 **Cons**: Write latency increases, cache failure breaks writes.
 
+Write-through is ideal when read-after-write consistency is critical — for example, after updating a user's profile, the next read must return the new data. The trade-off is that every write waits for both cache and database updates.
+
 ### 4. Write-Behind (Write-Back)
 
-Data is written to cache, then asynchronously persisted to the database:
+Data is written to cache, then asynchronously persisted to the database. This provides the fastest write performance at the cost of potential data loss.
 
 ```java
 @Service
@@ -164,6 +170,8 @@ public class WriteBehindService {
 **Pros**: Very fast writes, buffers database load.
 **Cons**: Potential data loss on cache failure, complex consistency.
 
+Write-behind is suitable for use cases like page view counters or analytics events where losing a few data points is acceptable. Production implementations should include a persistent write queue with retry and dead-letter mechanisms.
+
 ---
 
 ## Strategy Comparison
@@ -179,7 +187,7 @@ public class WriteBehindService {
 
 ## Multi-Tier Caching
 
-Combine local (L1) and distributed (L2) caches for optimal performance:
+Combining a local (L1) cache with a distributed (L2) cache provides the best of both worlds: the speed of in-process memory + the capacity and sharing of a distributed cache.
 
 ```java
 @Configuration
@@ -215,6 +223,8 @@ public class MultiTierService {
 }
 ```
 
+The L1 cache (Caffeine) provides microsecond latency for hot data. The L2 cache (Redis) provides shared capacity across application instances. On a cache miss, L1 is checked first, then L2, then the database.
+
 ---
 
 ## Cache Eviction Policies
@@ -248,11 +258,15 @@ public class EvictionConfig {
 }
 ```
 
+TTL-based eviction is the simplest: data expires after a fixed duration regardless of access patterns. LRU is common for memory-constrained caches — when the cache is full, the least recently accessed entry is evicted. LFU is better for skewed access patterns where a small set of keys gets most requests.
+
 ---
 
 ## Common Mistakes
 
 ### Mistake 1: Using Cache as Primary Data Store
+
+A cache is not a database. If the cache is the only copy of data, clearing the cache or a restart causes permanent data loss.
 
 ```java
 // WRONG: Cache as source of truth
@@ -285,6 +299,8 @@ public class CorrectService {
 
 ### Mistake 2: Ignoring Cache Stampede
 
+When a popular cache key expires, hundreds of concurrent requests may hit the database simultaneously, overwhelming it.
+
 ```java
 // WRONG: Multiple concurrent misses overload the database
 @Cacheable(value = "products", key = "#id")
@@ -310,6 +326,8 @@ public class StampedePreventionService {
 ```
 
 ### Mistake 3: Caching Without Invalidation Strategy
+
+Writing to the database without invalidating or updating the cache leaves stale data until the TTL expires.
 
 ```java
 // WRONG: Write without cache invalidation

@@ -24,6 +24,8 @@ CQRS (Command Query Responsibility Segregation) separates read and write operati
 
 ### Command Model (Write Side)
 
+In CQRS, the command model is responsible for validating business rules and mutating state. Commands are intent-based objects named after the user's goal (e.g., `CreateOrderCommand`) rather than CRUD operations. They are immutable and carry only the data needed to execute the operation. The command handler processes the command—it loads the aggregate, applies business logic, persists changes, and publishes events that other components can react to. This separation ensures that the write side is optimized for consistency and validation, not for data retrieval.
+
 ```java
 // Command - represents an intent to change state
 public class CreateOrderCommand {
@@ -105,6 +107,8 @@ public class CreateOrderCommandHandler implements CommandHandler<CreateOrderComm
 
 ### Query Model (Read Side)
 
+The read model is completely separate from the command model—it is denormalized, often stored in a different database, and optimized specifically for the queries the UI needs to perform. Unlike the write side, the read side does not enforce business rules; it simply provides data in the shape the frontend requires. This freedom allows complex joins, aggregations, and computed fields to be pre-materialized, making queries extremely fast. The read model gets updated asynchronously by consuming events published by the command side.
+
 ```java
 // Read model - optimized for queries, denormalized
 @Document(collection = "order_read_model")
@@ -177,6 +181,8 @@ public class OrderQueryService {
 
 ### Event Store
 
+In Event Sourcing, the current state of an aggregate is derived by replaying a sequence of events. Each `DomainEvent` captures a specific fact that occurred in the system—an order was created, an order was shipped, etc. Events are immutable and stored in append-only fashion, providing a complete audit trail. The `version` field enables optimistic concurrency control: before saving a new event, the event store checks that the aggregate has not been modified concurrently, throwing a `ConcurrencyException` if a version conflict is detected.
+
 ```java
 // Base event
 public abstract class DomainEvent {
@@ -237,6 +243,8 @@ public class OrderCancelledEvent extends DomainEvent {
 ```
 
 ### Event Sourced Aggregate
+
+The aggregate is the core building block of Event Sourcing on the write side. It encapsulates business logic and emits events for every state change. The `when()` methods on the aggregate handle each event type to reconstruct the current state. The `replay()` static method allows reconstructing an aggregate from its full event stream—useful for rebuilds, debugging, and temporal queries. Note that aggregate methods like `ship()` and `cancel()` enforce business rules (e.g., "can only ship confirmed orders") before calling `applyChange()` to emit a new event.
 
 ```java
 public class OrderAggregate {
@@ -321,6 +329,8 @@ public class OrderAggregate {
 
 ### Event Store Implementation
 
+The event store is the persistence layer for events. It stores events as serialized JSON blobs in a relational table, keyed by aggregate ID and ordered by version. The implementation below uses JDBC for direct control over the SQL, with Jackson for serialization. The version check at the beginning of `saveEvents()` implements optimistic concurrency: if the current version in the database does not match the expected version, another thread has already committed an event for this aggregate and the operation is rejected with a `ConcurrencyException`. The `loadEvents()` method retrieves all events for a given aggregate in order, which can then be passed to `OrderAggregate.replay()` to reconstruct the current state.
+
 ```java
 @Repository
 public class EventStoreRepository {
@@ -389,6 +399,8 @@ public class EventStoreRepository {
 
 ### Event Handlers for Projections
 
+Projections are the mechanism that keeps read models in sync with the event stream. Each projection is a `@EventListener` method that responds to a specific event type and updates the corresponding read model. For example, when an `OrderCreatedEvent` is published, the projection creates a new denormalized document in MongoDB (or any other read-optimized store). Because projections are event-driven and typically asynchronous, the read models are eventually consistent with the write side—there is a small lag between the command being processed and the read model being updated.
+
 ```java
 @Component
 public class OrderProjectionUpdater {
@@ -456,6 +468,8 @@ public class OrderProjectionUpdater {
 9. **Test event replay**: Verify projections rebuild correctly
 10. **Consider Axon Framework**: Mature CQRS/ES framework for Java
 
+As aggregates accumulate thousands of events, replaying from the beginning becomes expensive. Snapshotting solves this by periodically persisting a full aggregate state checkpoint. When loading the aggregate, the system reads the latest snapshot and replays only events that occurred after it, dramatically reducing replay time for long-lived aggregates.
+
 ```java
 // Snapshot configuration
 @Service
@@ -485,6 +499,8 @@ public class SnapshotService {
 
 ### Mistake 1: Same Model for Read and Write
 
+Using the same entity model for both commands and queries forces you to compromise on both. The write model needs aggregates with encapsulated business logic, while the read model needs flat, denormalized structures optimized for fast retrieval. Force-fitting both into a single model leads to complex, hard-to-maintain code.
+
 ```java
 // WRONG: Single model for both operations
 @Entity
@@ -498,6 +514,8 @@ public class Order {
 
 ### Mistake 2: Strong Consistency for Read Models
 
+Expecting read models to be immediately consistent after a command executes is a common misconception. In practice, there is always some propagation delay—the event must be persisted, the projection must process it, and the new data must become queryable. Architect your application to handle this eventual consistency gracefully, for example by showing a "processing" state or polling for updates.
+
 ```java
 // WRONG: Expecting read model to be immediately consistent
 orderService.createOrder(command);
@@ -508,6 +526,8 @@ OrderReadModel order = orderQueryService.getOrder(orderId);
 ```
 
 ### Mistake 3: Not Versioning Events
+
+Events are permanent and immutable once stored. If you change an event class (e.g., rename a field), all existing serialized events become unreadable. Always version your event schemas and use upcasting or migration strategies to handle schema evolution over time.
 
 ```java
 // WRONG: Event schema changes without versioning

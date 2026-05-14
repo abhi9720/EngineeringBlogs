@@ -22,35 +22,35 @@ The OAuth2 authorization code flow is the most secure grant type for client-serv
 
 ## Flow Diagram
 
-```
-User (Browser)    Client App (SPA)    Authorization Server    Resource Server
-      |                  |                     |                     |
-      |-- Login click -->|                     |                     |
-      |                  |-- Redirect to Auth -|                     |
-      |<-- Auth page ----|                     |                     |
-      |-- Authenticate -->|-------------------->|                     |
-      |                  |                     |-- Authenticate user |
-      |                  |                     |-- Generate auth code|
-      |                  |<-- Redirect with ---|                     |
-      |<-- Code in URL --|    authorization    |                     |
-      |                  |    code             |                     |
-      |                  |                     |                     |
-      |                  |-- POST /token ----->|                     |
-      |                  |   (code +           |                     |
-      |                  |    client_secret)   |-- Verify code       |
-      |                  |                     |-- Generate tokens   |
-      |                  |<-- access_token ----|                     |
-      |                  |    refresh_token    |                     |
-      |                  |    id_token         |                     |
-      |                  |                     |                     |
-      |                  |-- GET /api/data --->|-------------------->|
-      |                  |   (Bearer token)    |                     |
-      |<-- Data ---------|                     |<-- Validate token -|
+```mermaid
+sequenceDiagram
+    participant U as User (Browser)
+    participant C as Client App (SPA)
+    participant AS as Authorization Server
+    participant RS as Resource Server
+
+    U->>C: Login click
+    C->>U: Redirect to Auth
+    U->>AS: Authenticate
+    AS->>AS: Generate auth code
+    AS-->>U: Redirect with auth code
+    U->>C: Code in URL
+
+    C->>AS: POST /token (code + client_secret)
+    AS->>AS: Verify code
+    AS-->>C: access_token + refresh_token + id_token
+
+    C->>RS: GET /api/data (Bearer token)
+    RS->>RS: Validate token
+    RS-->>C: Data
+    C->>U: Data
 ```
 
 ## Authorization Request
 
 ### Step 1: Client Registration
+
+The client must register with the authorization server to obtain a `client_id` and `client_secret`. The registration below configures the authorization code grant type with OpenID Connect scopes (`openid`, `profile`, `email`). The `redirect_uri` template uses Spring Security's convention for automatic expansion:
 
 ```java
 @Configuration
@@ -79,6 +79,8 @@ public class OAuth2ClientConfig {
 ```
 
 ### Step 2: Building the Authorization URL
+
+The authorization URL includes `response_type=code`, the client ID, redirect URI, requested scopes, and a random `state` parameter. The state parameter is critical for CSRF protection — it must be stored server-side and validated when the authorization server redirects back:
 
 ```java
 @Service
@@ -121,7 +123,7 @@ public class AuthorizationRequestBuilder {
 
 ### Step 3: Token Exchange
 
-When the authorization server redirects back with an authorization code, the client exchanges it for tokens:
+When the authorization server redirects back with an authorization code, the client exchanges it for tokens. The request includes the code, the client's credentials (via Basic Auth header), and the redirect URI for verification. The `state` parameter is validated against the stored value to prevent CSRF:
 
 ```java
 @Component
@@ -189,28 +191,28 @@ public class TokenResponse {
 
 ## PKCE (Proof Key for Code Exchange)
 
-PKCE protects authorization code flow for public clients (SPAs, mobile apps) that cannot securely store a client secret.
+PKCE protects authorization code flow for public clients (SPAs, mobile apps) that cannot securely store a client secret. Instead of a secret, the client generates a random `code_verifier` and sends its SHA-256 hash as the `code_challenge` in the authorization request. When exchanging the code, the client sends the original `code_verifier`, and the authorization server verifies it matches the challenge.
 
 ### PKCE Flow
 
-```
-Client (SPA)              Authorization Server
-     |                            |
-     |-- Generate code_verifier ->|  (random 43-128 char string)
-     |-- Compute code_challenge ->|  (SHA256(verifier) -> Base64URL)
-     |                            |
-     |-- /authorize?             ->|
-     |   code_challenge=SHA256... |  (challenge sent in auth request)
-     |                            |
-     |<-- authorization_code ----|
-     |                            |
-     |-- /token?                 ->|
-     |   code_verifier=original   |  (verifier sent in token request)
-     |                            |-- Verify: SHA256(verifier) == challenge
-     |<-- tokens -----------------|
+```mermaid
+sequenceDiagram
+    participant C as Client (SPA)
+    participant AS as Authorization Server
+
+    C->>C: Generate code_verifier (random 43-128 char string)
+    C->>C: Compute code_challenge = SHA256(verifier)
+    C->>AS: /authorize?code_challenge=SHA256(verifier)
+    AS-->>C: authorization_code
+
+    C->>AS: /token?code_verifier=original
+    AS->>AS: Verify SHA256(verifier) == challenge
+    AS-->>C: tokens
 ```
 
 ### PKCE Implementation
+
+The `PkceManager` generates a cryptographically random verifier, computes the SHA-256 challenge, and includes both in the authorization URL. For the token exchange, the verifier is sent instead of a client secret:
 
 ```java
 @Component
@@ -307,6 +309,8 @@ public class PkcePair {
 
 ### application.yml
 
+Spring Security auto-configures OAuth2 clients from properties. The GitHub provider registers with minimal configuration (Spring auto-fills the endpoints from its common provider registry). The Okta provider is fully custom:
+
 ```yaml
 spring:
   security:
@@ -337,6 +341,8 @@ spring:
 ```
 
 ### Security Configuration
+
+The configuration below sets up the complete OAuth2 login flow with PKCE auto-enabled for public clients. The resource server configuration validates access tokens for API requests:
 
 ```java
 @Configuration
@@ -395,6 +401,8 @@ public class OAuth2SecurityConfig {
 
 ## Token Validation on Resource Server
 
+The resource server validates access tokens before granting access to APIs. The `JwtAuthenticationConverter` maps JWT claims (scopes) to Spring Security authorities:
+
 ```java
 @Configuration
 @EnableResourceServer
@@ -437,6 +445,8 @@ public class ResourceServerConfig {
 
 ### Mistake 1: Using Implicit Flow (Deprecated)
 
+The implicit flow returned the access token in the URL fragment, making it visible in browser history, server logs, and Referer headers. It has been deprecated in favor of the authorization code flow with PKCE:
+
 ```java
 // WRONG: Implicit flow exposes access token in URL fragment
 // https://app.example.com/callback#access_token=eyJ...&token_type=Bearer
@@ -449,6 +459,8 @@ public class ResourceServerConfig {
 ```
 
 ### Mistake 2: Not Validating State Parameter
+
+Without state validation, an attacker can inject an authorization code they obtained (via their own client) into the victim's session:
 
 ```java
 // WRONG: Missing CSRF protection
@@ -474,6 +486,8 @@ public String callback(@RequestParam("code") String code,
 ```
 
 ### Mistake 3: Leaking Client Secret in Public Clients
+
+A client secret embedded in a mobile app or SPA can be extracted by anyone who inspects the binary or JavaScript bundle:
 
 ```javascript
 // WRONG: Client secret in SPA (public client)

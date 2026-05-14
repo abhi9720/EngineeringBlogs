@@ -34,7 +34,7 @@ Redis offers two persistence models: **RDB** (Redis Database) snapshots and **AO
 
 ### How RDB Works
 
-RDB creates point-in-time snapshots of the entire dataset:
+RDB creates point-in-time snapshots of the entire dataset. The save conditions define when snapshots are triggered based on the number of key changes within a time window.
 
 ```conf
 # redis.conf - RDB Configuration
@@ -71,6 +71,8 @@ redis-cli LASTSAVE
 ```
 
 ### RDB Internals
+
+RDB uses fork() to create a child process that writes the snapshot while the parent continues serving requests. This means memory usage may spike during BGSAVE due to copy-on-write.
 
 ```java
 // RDB creates a fork of the Redis process
@@ -120,7 +122,7 @@ public class RdbManager {
 
 ### How AOF Works
 
-AOF logs every write operation to a file:
+AOF logs every write operation to a file. On restart, Redis replays the log to reconstruct the dataset. The `appendfsync` policy controls the durability-performance trade-off.
 
 ```conf
 # redis.conf - AOF Configuration
@@ -151,6 +153,8 @@ aof-use-rdb-preamble yes
 ```
 
 ### AOF Rewrite
+
+Over time, AOF logs grow as they accumulate every write operation. An AOF rewrite compacts the log by removing redundant operations — for example, 1000 increments of a key become a single SET with the final value.
 
 ```java
 @Service
@@ -272,6 +276,8 @@ public class AofManager {
 
 ### Configuration
 
+Hybrid persistence combines the fast load of RDB with the durability of AOF. The AOF file starts with an RDB binary preamble (full snapshot) followed by incremental AOF entries (recent changes).
+
 ```conf
 # redis.conf - Hybrid persistence (Redis 5+)
 appendonly yes
@@ -291,21 +297,30 @@ auto-aof-rewrite-min-size 64mb
 
 ### How Hybrid Works
 
-```
-AOF file structure with RDB preamble:
+The hybrid AOF file contains both an RDB snapshot (for fast bulk load) and incremental AOF data (for recent changes). On restart, Redis loads the RDB preamble first (fast), then applies the AOF increments (small).
 
-┌─────────────────────────────┐
-│    RDB binary data          │  ← Full snapshot (fast load)
-│    (all keys up to point)   │
-├─────────────────────────────┤
-│    AOF incremental data     │  ← Recent commands
-│    (changes after snapshot) │  ← Small size
-│                             │
-└─────────────────────────────┘
+```mermaid
+graph TD
+    subgraph "Hybrid AOF File Structure"
+        RDB["RDB binary data<br/>Full snapshot (fast load)<br/>All keys up to save point"]
+        AOF["AOF incremental data<br/>Changes after snapshot<br/>Small size"]
+    end
 
-On restart:
-1. Load RDB preamble (fast, like RDB)
-2. Apply AOF increments (fast, small log)
+    RDB --> AOF
+
+    subgraph "On Restart"
+        S1["1. Load RDB preamble<br/>Fast like RDB snapshot"]
+        S2["2. Apply AOF increments<br/>Fast - small log size"]
+    end
+
+    RDB -.-> S1
+    AOF -.-> S2
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
 ```
 
 ---
@@ -313,6 +328,8 @@ On restart:
 ## Persistence Monitoring
 
 ### Monitoring Scripts
+
+Regular monitoring of persistence health catches failed BGSAVEs and oversized AOF files before they cause problems.
 
 ```java
 @Component
@@ -380,6 +397,8 @@ redis_aof_current_size_bytes
 
 ### Automated Backups
 
+The backup script triggers a BGSAVE, waits for completion, copies the RDB and AOF files, compresses them, and cleans up old backups.
+
 ```bash
 #!/bin/bash
 # redis-backup.sh
@@ -418,6 +437,8 @@ echo "Backup completed: redis_$TIMESTAMP.rdb.gz"
 
 ### 1. Production Recommendation
 
+For production, use hybrid persistence (AOF with RDB preamble) for the best balance of durability, load time, and file size.
+
 ```conf
 # Production persistence configuration
 appendonly yes
@@ -431,6 +452,8 @@ save 60 10000
 ```
 
 ### 2. Monitor Disk Space
+
+AOF files can grow significantly between rewrites. Monitor and alert on excessive growth.
 
 ```java
 // AOF files can grow significantly between rewrites
@@ -456,6 +479,8 @@ public boolean checkAofDiskAvailable() {
 
 ### Mistake 1: Disabling Persistence in Production
 
+Without persistence, a Redis restart loses all data. This is acceptable for pure caches but not for any stateful use.
+
 ```conf
 # WRONG: No persistence in production
 # save ""
@@ -468,6 +493,8 @@ save 60 10000
 
 ### Mistake 2: Incompatible AOF fsync Settings
 
+`appendfsync always` fsyncs after every write, which kills write throughput. Use `everysec` for most use cases.
+
 ```conf
 # WRONG: appendfsync always with high write throughput
 # FSync after every write kills performance
@@ -477,6 +504,8 @@ appendfsync everysec
 ```
 
 ### Mistake 3: Not Configuring Rewrite Limits
+
+Without rewrite limits, the AOF file grows unbounded, consuming disk space and slowing recovery.
 
 ```conf
 # WRONG: Never rewriting AOF

@@ -26,7 +26,7 @@ These practices come from real-world production systems handling millions of req
 
 ### Resource Naming
 
-Use nouns for resources, not verbs. Resources should be collections or elements:
+Use nouns for resources, not verbs. Resources should be collections or elements. The URL should represent the resource hierarchy, and the HTTP method should represent the action. This separation of concerns makes the API predictable: any developer who understands REST knows that `DELETE /api/users/123` deletes user 123, without reading documentation.
 
 ```java
 // WRONG: Using verbs in URLs
@@ -56,7 +56,9 @@ public class UserController {
 
 ### HTTP Methods Usage
 
-Each HTTP method has specific semantics:
+Each HTTP method has specific semantics that must be respected. GET is for safe, idempotent retrieval. POST is for creation (non-idempotent). PUT is for full replacement (idempotent). PATCH is for partial updates. DELETE is for removal (idempotent).
+
+Using correct HTTP methods matters because intermediaries (proxies, CDNs, browsers) make assumptions based on the method. GET requests can be cached and prefetched. PUT and DELETE are idempotent, so clients can safely retry on network failures. POST is not idempotent and should not be retried without client-side deduplication logic.
 
 ```java
 // GET: Retrieve resources - idempotent, no side effects
@@ -118,7 +120,9 @@ public void deleteUser(@PathVariable Long id) {
 
 ### Response Structure
 
-Use consistent response structures across your API:
+Use consistent response structures across your API. A standard wrapper with `data`, `errors`, and `metadata` fields lets clients write generic handling code. Paginated endpoints should return the same envelope but also include page, size, total elements, and total pages.
+
+The `ApiResponse` wrapper returns a 200 status even for error responses, with the error details in the body. Some APIs prefer using HTTP status codes exclusively. Both approaches are valid, but pick one and be consistent — mixing approaches confuses clients.
 
 ```java
 // Generic response wrapper
@@ -182,6 +186,10 @@ public class PagedResponse<T> {
 ## Real-World Backend Use Cases
 
 ### Case 1: Complete CRUD API
+
+A complete CRUD controller handles the full lifecycle of a resource. The pattern below shows paginated listing, single-item retrieval, creation, full update (PUT), and deletion. Each method returns the appropriate HTTP status code and uses the consistent `ApiResponse` wrapper.
+
+Input validation happens at the DTO level with Jakarta Validation annotations (`@NotBlank`, `@NotNull`, `@Positive`). The `@Valid` annotation on the controller parameter triggers validation, and any constraint violations are automatically handled by the global exception handler.
 
 ```java
 @RestController
@@ -263,6 +271,10 @@ public class UpdateProductRequest {
 
 ### Case 2: Filtering and Search API
 
+For search and filtering, encapsulating criteria in a dedicated `ProductSearchCriteria` object keeps controllers clean and makes the search logic reusable across different endpoints. Parameterized queries in the service layer (using Specifications or QueryDSL) build the final query dynamically without string concatenation.
+
+Faceted search results add a `facets` map alongside the results, allowing clients to render drill-down navigation without additional requests.
+
 ```java
 @RestController
 @RequestMapping("/api/products")
@@ -320,6 +332,10 @@ public class ProductSearchCriteria {
 ```
 
 ### Case 3: Bulk Operations
+
+Bulk operations allow clients to create or update multiple resources in a single request. The key design decision is whether to make the operation atomic (all succeed or all fail) or partially successful. The partial approach is shown below: each item is processed independently, and the response includes both successful results and individual errors with their index.
+
+Clients use the index to correlate errors back to the input. This is more complex to implement but provides a better user experience when processing large batches where a single failure shouldn't block the entire operation.
 
 ```java
 @RestController
@@ -381,7 +397,9 @@ public class BulkProductController {
 
 ### Case 4: Async Operations
 
-For long-running operations, use async processing:
+For long-running operations, the synchronous request-response model is inappropriate. The async pattern below accepts a request, returns immediately with a job ID, and provides a status endpoint the client can poll. When the operation completes, the result is available at a separate endpoint.
+
+The job status endpoint returns HTTP 423 (Locked) while processing and eventually redirects or provides the result. Clients should poll the status endpoint with exponential backoff to avoid overwhelming the server. Consider adding webhook notification as an alternative to polling for long-running jobs.
 
 ```java
 @RestController
@@ -443,6 +461,10 @@ public class ReportController {
 ## Error Handling
 
 ### Centralized Exception Handling
+
+A centralized exception handler ensures consistent error formatting across all endpoints. Every exception type maps to a specific HTTP status code and error code. The handler returns structured `ApiResponse` objects rather than raw error pages or HTML.
+
+The pattern below covers validation errors (400), not found (404), business exceptions (400), authentication (401), authorization (403), and a catch-all for unexpected errors (500). The catch-all logs the full stack trace server-side but returns only a generic message to the client.
 
 ```java
 @RestControllerAdvice
@@ -558,7 +580,7 @@ public class BusinessException extends RuntimeException {
 
 ### HTTP Status Codes
 
-Use appropriate status codes for different scenarios:
+Use appropriate status codes for different scenarios. The HTTP specification defines five categories: 2xx for success, 3xx for redirection, 4xx for client errors, and 5xx for server errors. Each status code has a precise meaning; using the correct one enables clients and intermediaries to handle responses properly without parsing the response body.
 
 ```java
 // 2xx - Success
@@ -612,6 +634,10 @@ public void handleRateLimit() { ... }
 
 ### URL-Based Versioning
 
+URL-based versioning is the simplest to implement and the easiest for clients to understand. Each version gets its own controller with a distinct URL prefix. The major version is embedded in the path (e.g., `/api/v1/products`). This approach makes backward-incompatible changes explicit: clients must update their URL to access the new version.
+
+The trade-off is code duplication — you may need to maintain multiple controller versions simultaneously. Mitigate this by sharing common code (services, DTOs) between versions and having the controller layer do the version-specific mapping.
+
 ```java
 @RestController
 @RequestMapping("/api/v1")
@@ -645,6 +671,10 @@ public class VersionConfig {
 
 ### Version Negotiation
 
+Header-based versioning keeps URLs clean and is preferred by some API design advocates. The client specifies the version via the `Accept` header or a custom header like `X-API-Version`. This approach avoids polluting the URL space and allows the same URL to serve different representations.
+
+The trade-off is discoverability: clients can't see the version from the URL alone, and testing becomes slightly harder because the version must be specified in the header rather than typed into a browser URL bar.
+
 ```java
 @Configuration
 public class VersionNegotiationConfig implements WebMvcConfigurer {
@@ -676,6 +706,10 @@ public class VersionedController {
 ---
 
 ## Documentation with OpenAPI
+
+OpenAPI (formerly Swagger) is the industry standard for API documentation. Springdoc integrates OpenAPI 3.0 with Spring Boot, generating interactive documentation from annotations. The configuration below sets up the API metadata, security scheme, and server information.
+
+Annotate controllers with `@Tag` for grouping and `@Operation` for endpoint descriptions. `@ApiResponse` annotations document the possible responses, making the generated documentation useful for client developers without requiring them to read the source code.
 
 ```java
 @Configuration
@@ -747,6 +781,10 @@ public class ProductController {
 
 ### Rate Limiting
 
+Rate limiting protects your API from abuse, whether malicious (DDoS) or accidental (misconfigured clients). A token bucket algorithm is the most common approach: each client has a bucket of tokens that refills at a fixed rate. Each request consumes one token. When the bucket is empty, the request is rejected with HTTP 429 (Too Many Requests).
+
+Implement rate limiting as a `OncePerRequestFilter` so it applies to all endpoints. Distinguish between authenticated and anonymous clients: authenticated users get higher limits based on their account tier, while anonymous users are limited by IP address.
+
 ```java
 @Configuration
 public class RateLimitingConfig {
@@ -792,6 +830,10 @@ public class RateLimitFilter extends OncePerRequestFilter {
 ```
 
 ### CORS Configuration
+
+Cross-Origin Resource Sharing controls which web origins are allowed to access your API. Configure CORS globally with specific origins, methods, and headers. Never use `Access-Control-Allow-Origin: *` with credentials or in production — specify exact origins.
+
+The `maxAge` header tells browsers how long to cache preflight (OPTIONS) responses, reducing the number of preflight requests. For APIs that serve web applications, ensure the CORS headers include the content types and authorization headers that your frontend needs.
 
 ```java
 @Configuration
@@ -1011,4 +1053,4 @@ API design is a contract with your consumers. Design it carefully, version it pr
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

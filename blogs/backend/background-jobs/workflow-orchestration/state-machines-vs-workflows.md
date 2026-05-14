@@ -18,6 +18,25 @@ This post compares both approaches with concrete implementations and provides de
 
 State machines model a system as a finite set of states with transitions between them. Each transition is triggered by an event and may have guards (conditions) and actions (side effects).
 
+```mermaid
+graph LR
+    PENDING[PENDING] -->|VALIDATE| VALIDATED[VALIDATED]
+    VALIDATED -->|RESERVE_INVENTORY| INVENTORY_RESERVED[INVENTORY_RESERVED]
+    INVENTORY_RESERVED -->|PROCESS_PAYMENT| PAYMENT_PENDING[PAYMENT_PENDING]
+    PAYMENT_PENDING -->|PAYMENT_CONFIRMED| PAYMENT_CONFIRMED[PAYMENT_CONFIRMED]
+    PAYMENT_CONFIRMED -->|SHIP| SHIPPED[SHIPPED]
+    SHIPPED -->|DELIVER| DELIVERED[DELIVERED]
+    PAYMENT_CONFIRMED -->|CANCEL| CANCELLED[CANCELLED]
+    SHIPPED -->|REFUND| REFUNDED[REFUNDED]
+    PENDING -->|CANCEL| CANCELLED
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+```
+
 ### Spring State Machine
 
 ```java

@@ -52,6 +52,8 @@ public class OrderServiceApplication {
 
 ### Simple Client
 
+The simplest Feign client requires only a service name and optional URL. When used with Eureka, the `name` value resolves to a list of registered instances and Ribbon handles load balancing. If `url` is provided, it bypasses service discovery.
+
 ```java
 @FeignClient(name = "payment-service", url = "${payment.service.url:}")
 public interface PaymentServiceClient {
@@ -68,6 +70,8 @@ public interface PaymentServiceClient {
 ```
 
 ### Client with Fallback
+
+`FallbackFactory` is preferred over a plain `fallback` class because it receives the underlying `Throwable` cause, allowing each method to react appropriately — throwing an exception for critical operations, returning a default for read queries, or silently logging for fire-and-forget calls.
 
 ```java
 @FeignClient(
@@ -119,6 +123,8 @@ public class InventoryClientFallbackFactory
 
 ## Custom Configuration
 
+Fine-tuning happens through a dedicated configuration class per client. The logger level (`FULL` logs headers, body, and metadata) is invaluable during development but should be reduced in production to avoid excessive log volume. The `RequestInterceptor` adds correlation IDs and auth tokens to every outgoing request automatically.
+
 ```java
 public class InventoryClientConfig {
 
@@ -160,6 +166,8 @@ public class InventoryClientConfig {
 
 ## Custom Error Decoder
 
+The default Feign error decoder throws a generic `FeignException`. A custom decoder maps HTTP status codes to domain-specific exceptions, enabling the caller to handle `404 Not Found` differently from `503 Service Unavailable` — without parsing error strings.
+
 ```java
 public class InventoryErrorDecoder implements ErrorDecoder {
 
@@ -190,6 +198,8 @@ public class InventoryErrorDecoder implements ErrorDecoder {
 ```
 
 ## Request/Response Interceptors
+
+Interceptors provide a hook into every request/response lifecycle. The request interceptor adds distributed tracing headers and correlation IDs before the call is sent. The response interceptor can log status codes, capture metrics, or transform responses — all without changing the client interface.
 
 ```java
 @Component
@@ -227,6 +237,8 @@ public class FeignResponseInterceptor implements ResponseInterceptor {
 
 ## Circuit Breaker Integration
 
+Circuit breaker configuration can be scoped per Feign client method using the naming convention `ClientName#methodName`. This allows fine-grained tuning — a critical payment method may have stricter thresholds (40% failure rate) than a less critical inventory check (50% failure rate).
+
 ```yaml
 # application.yml
 resilience4j:
@@ -258,6 +270,8 @@ public interface PaymentServiceClient {
 ```
 
 ## Client-Side Load Balancing
+
+Feign integrates with Spring Cloud LoadBalancer for client-side load balancing. By referencing a service name instead of a URL, the client dynamically resolves available instances and distributes requests across them. The `FeignBlockingLoadBalancerClient` wraps the default client with load-balancing capabilities.
 
 ```java
 @FeignClient(name = "order-service")  // Uses service discovery

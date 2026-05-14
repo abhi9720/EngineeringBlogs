@@ -31,6 +31,8 @@ Content Delivery Networks (CDNs) are not just for static assets. Modern CDNs can
 
 ### Cloudflare Workers Integration
 
+Cloudflare Workers run JavaScript at the edge, allowing fine-grained control over caching behavior. The worker below implements a cache-aside pattern at the CDN level with stale-while-revalidate for resilience.
+
 ```javascript
 // Cloudflare Worker for API caching
 addEventListener('fetch', event => {
@@ -75,7 +77,11 @@ async function handleRequest(request) {
 }
 ```
 
+The Worker uses `caches.default` (the Cloudflare edge cache) and only caches successful JSON/text GET responses. The `stale-while-revalidate=86400` directive allows the CDN to serve stale content for up to 24 hours while fetching a fresh copy in the background.
+
 ### Spring Boot Configuration
+
+Spring Boot's server compression reduces response sizes for faster CDN delivery. ETag support enables conditional requests at the CDN level.
 
 ```yaml
 spring:
@@ -120,6 +126,8 @@ public class CacheHeaderConfig implements WebMvcConfigurer {
 
 ### Cacheable Endpoints
 
+Different API endpoints have different caching requirements. Reference data (categories) can be cached for hours, while product details benefit from shorter TTLs with ETag validation.
+
 ```java
 @RestController
 @RequestMapping("/api")
@@ -162,6 +170,8 @@ public class CachedApiController {
 
 ### GraphQL Caching
 
+GraphQL queries can be cached using auto-persisted queries (APQ) — the query is identified by a hash, enabling deterministic cache keys. Mutations are never cached because they change state.
+
 ```java
 @Controller
 public class CachedGraphQLController {
@@ -187,6 +197,8 @@ public class CachedGraphQLController {
 
 ### Stale-While-Revalidate
 
+Stale-while-revalidate provides instant responses even when the cache is stale. The CDN serves the stale copy immediately while fetching the fresh version in the background.
+
 ```java
 // Serve stale data from CDN while refreshing in background
 // This provides instant responses while keeping data fresh
@@ -204,14 +216,24 @@ public ResponseEntity<List<Product>> getPublicProducts() {
 
 ### Tiered Caching
 
-```
-Browser Cache (private)
-    ↓ miss
-CDN Edge Cache (shared)
-    ↓ miss
-Regional Cache
-    ↓ miss
-Origin Server
+Tiered caching sets different TTLs at each cache level. The browser caches for 1 day, the CDN edge for 7 days, and the CDN can serve stale content for up to 30 days while revalidating.
+
+```mermaid
+graph TD
+    BC["Browser Cache (private)<br/>TTL: 1 day"]
+    CDN["CDN Edge Cache (shared)<br/>TTL: 7 days"]
+    REG["Regional Cache<br/>TTL: 30 days stale"]
+    ORIGIN["Origin Server"]
+
+    BC -- "miss" --> CDN
+    CDN -- "miss" --> REG
+    REG -- "miss" --> ORIGIN
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
 ```
 
 ```java
@@ -236,6 +258,8 @@ public ResponseEntity<List<Country>> getCountries() {
 ## API Key Considerations
 
 ### Cache Key Strategy
+
+The default cache key is the request URL (path + query parameters). For authenticated endpoints, the `Vary: Authorization` header ensures different users get different cached responses. Public endpoints should not vary on Authorization.
 
 ```java
 // Default cache key includes URL + query params
@@ -270,6 +294,8 @@ public ResponseEntity<List<Product>> getProducts() {
 
 ### Fastly/Cloudflare Surrogate Keys
 
+Surrogate keys allow targeted cache invalidation. Instead of purging all cache or waiting for TTL, you can purge specific resources by key — for example, purging all product-related cache entries when inventory changes.
+
 ```java
 @GetMapping("/api/products")
 public ResponseEntity<List<Product>> getProducts() {
@@ -288,6 +314,8 @@ public ResponseEntity<List<Product>> getProducts() {
 ```
 
 ### Purge API
+
+The purge service uses the CDN's API to invalidate cache by surrogate key or purge everything. This is typically called from the application's write path.
 
 ```java
 @Service
@@ -319,6 +347,8 @@ public class CdnPurgeService {
 
 ### 1. Use Stale-While-Revalidate
 
+Always serve something to users rather than an error or timeout. Stale data is almost always better than no data.
+
 ```java
 // Always serve something to users
 // Stale data is better than an error or timeout
@@ -329,6 +359,8 @@ CacheControl cc = CacheControl.maxAge(60, TimeUnit.SECONDS)
 ```
 
 ### 2. Set Appropriate Vary Headers
+
+Vary tells CDNs what request characteristics affect the response. Common Vary values include Accept-Encoding (compression), Accept-Language (localization), and Authorization (authentication).
 
 ```java
 // Vary tells CDN what request characteristics affect the response
@@ -348,6 +380,8 @@ public ResponseEntity<List<Post>> getPosts(
 ```
 
 ### 3. Monitor Cache Hit Rates
+
+Monitor cache hit rates to tune TTLs. A low hit rate suggests too-short TTLs or incorrect Vary headers. Use metrics to track per-endpoint performance.
 
 ```java
 @Component
@@ -377,6 +411,8 @@ public class CdnMetricsService {
 
 ### Mistake 1: Caching Authenticated Responses at Edge
 
+Caching user-specific data at a shared CDN is a security risk — one user may see another user's private data.
+
 ```java
 // WRONG: Caching private user data at CDN
 @GetMapping("/api/users/orders")
@@ -398,6 +434,8 @@ public ResponseEntity<List<Order>> getOrders() {
 
 ### Mistake 2: No Stale-While-Revalidate
 
+Hard expiration at the edge causes a thundering herd problem — at the moment of expiration, every concurrent request hits the origin simultaneously.
+
 ```java
 // WRONG: Hard expiration at edge
 CacheControl.maxAge(5, TimeUnit.MINUTES);
@@ -410,6 +448,8 @@ CacheControl.maxAge(5, TimeUnit.MINUTES)
 ```
 
 ### Mistake 3: Cache Poisoning via Headers
+
+Accepting arbitrary Vary headers allows attackers to poison the cache with many variations.
 
 ```java
 // WRONG: Accepting arbitrary Vary headers

@@ -22,7 +22,11 @@ GraphQL Subscriptions provide real-time communication between server and clients
 
 ## Subscription Schema Design
 
+Subscription types define the real-time events that clients can subscribe to. Unlike queries and mutations which follow a request-response pattern, subscriptions maintain a persistent connection and push data to clients as events occur. Each subscription field accepts arguments (for filtering which events the client receives) and returns the event payload. The schema should clearly document what events each subscription delivers and what arguments are available for filtering.
+
 ### Defining Subscription Types
+
+Each subscription field represents a different type of real-time event. Notice the argument patterns: some subscriptions filter by entity ID (`orderUpdated(orderId: ID!)`), some return a specific payload type (`orderStatusChanged: OrderStatusPayload!`), and some are general streams (`serverMetrics: MetricsPayload!`). The argument design is crucial — well-designed filter arguments reduce unnecessary data transfer by letting clients subscribe only to relevant events. For example, `orderUpdated(orderId: ID!)` ensures a client only receives updates for the order they care about, not all order updates in the system.
 
 ```graphql
 type Subscription {
@@ -59,6 +63,8 @@ type Notification {
   createdAt: String!
 }
 ```
+
+Subscription resolvers in Spring GraphQL return `Flux<T>` — a reactive stream of events. Each subscription method is annotated with `@SubscriptionMapping` and returns a Flux that emits items of the declared type. The resolver's responsibility is to create a Flux from an event publisher and apply client-provided filters (like `orderId`) to reduce unnecessary data flow. Spring GraphQL's subscription support is built on WebSocket transport with the GraphQL-over-WebSocket protocol, handling connection lifecycle, serialization, and backpressure automatically.
 
 ### Spring GraphQL Subscription Implementation
 
@@ -106,7 +112,11 @@ public class OrderSubscriptionController {
 
 ## Event Publishing Pipeline
 
+The event publishing pipeline connects mutations (which trigger state changes) to subscriptions (which notify clients of those changes). When a mutation like `createOrder` executes, it persists the order and then publishes an event through the event publisher. The subscription's `Flux` picks up this event and streams it to all subscribed clients. This publish-subscribe decoupling ensures mutations don't need to know which clients are subscribed or how many there are.
+
 ### Publisher Implementation
+
+The `OrderEventPublisher` uses a `FluxProcessor` and `FluxSink` to create a hot stream of order events. Hot streams are essential for subscriptions — they broadcast events to all current subscribers regardless of when they subscribed (cold streams would replay the entire event history to each new subscriber). The `share()` method on the Flux creates a shared stream where multiple subscribers receive the same events. Production systems typically use a message broker (Redis, Kafka, RabbitMQ) as the event bus instead of in-memory processors, especially in multi-instance deployments.
 
 ```java
 @Component
@@ -169,6 +179,8 @@ class OrderEvent {
 }
 ```
 
+Mutations are the source of events in a subscription pipeline. Each mutation method, after completing its core business logic, calls the event publisher to notify subscribers. The `createOrder` mutation publishes an `ORDER_CREATED` event after persisting the order, and `updateOrderStatus` publishes a `STATUS_CHANGED` event with both the old and new status. This publish-after-write pattern ensures event consistency — events are only published after the database transaction commits, preventing subscribers from seeing phantom data.
+
 ### Mutation Publishing Events
 
 ```java
@@ -224,7 +236,11 @@ public class OrderMutationController {
 
 ## WebSocket Transport Configuration
 
+GraphQL subscriptions require a persistent transport protocol. The GraphQL-over-WebSocket protocol defines a message format (subscribe, complete, next, error) for managing subscription lifecycles over WebSocket connections. Spring Boot's WebSocket support provides the infrastructure for handling WebSocket handshakes, message serialization, and session management. The transport layer is separate from the business logic — you could swap WebSocket for SSE or another transport without changing the subscription resolvers.
+
 ### Spring Boot WebSocket Setup
+
+The WebSocket configuration registers a handler at the `/graphql` endpoint that manages subscription connections. The handler maintains a mapping of active subscriptions per session, cleaning them up when connections close. The protocol supports four message types: `connection_init` (authenticate and initialize), `subscribe` (start a subscription), `complete` (stop a subscription), and `next` (server pushes event data). The handler uses reactive execution (`graphQL.executeReactive()`) to get a `Flux<ExecutionResult>` that emits each time a matching event occurs.
 
 ```java
 @Configuration
@@ -329,7 +345,11 @@ public class GraphQLWebSocketHandler extends TextWebSocketHandler {
 
 ## Advanced Subscription Patterns
 
+Beyond basic event streaming, subscriptions support advanced patterns for filtering, authentication, backpressure handling, and rate limiting. These patterns become essential as the number of subscribers grows and the event volume increases.
+
 ### Filtered Subscriptions
+
+Server-side filtering reduces the data stream to only the events each client cares about. Without filtering, every subscriber receives every event — wasting bandwidth and processing power. The `notifications` subscription filters by user ID (ensuring users only get their own notifications) and optionally by event type. The `ordersByStatus` subscription lets clients subscribe to orders with a specific status, which is useful for order tracking dashboards. Filter criteria should be aligned with the schema arguments to minimize unnecessary data flow.
 
 ```java
 @Controller
@@ -358,6 +378,8 @@ public class FilteredSubscriptionController {
     }
 }
 ```
+
+WebSocket connections for subscriptions must be authenticated at connection time, not after. The `WebSocketInterceptor` validates the JWT token during the HTTP upgrade handshake and stores the authenticated user in the session attributes. This prevents unauthenticated clients from establishing WebSocket connections and ensures that subscription resolvers can access the user identity without additional authentication checks. Authenticated subscriptions also enable per-user filtering — the `myNotifications` subscription automatically scopes to the authenticated user without requiring a userId argument.
 
 ### Authenticated Subscriptions
 
@@ -407,6 +429,8 @@ public class AuthenticatedSubscriptionController {
 }
 ```
 
+Backpressure management prevents slow subscribers from overwhelming the server. When a client cannot consume events as fast as the server produces them, backpressure strategies determine what happens to excess events. `onBackpressureDrop` discards excess events (logging the drop), `onBackpressureBuffer` queues them up to a limit, and `limitRate` controls how many events the server sends per request cycle. `sample` reduces the event rate by emitting only the latest event within a time window. Choose the strategy based on your data semantics — metrics can be safely dropped or sampled, but financial transactions must be buffered or the client must acknowledge receipt.
+
 ### Reactive Stream Backpressure
 
 ```java
@@ -437,6 +461,8 @@ public class BackpressureSubscription {
 ---
 
 ## Best Practices
+
+Subscriptions add real-time capabilities to your GraphQL API but introduce new operational challenges around connection management, resource usage, and data consistency. The following practices help build reliable subscription infrastructure.
 
 1. **Use WebSocket transport**: Reliable bidirectional communication
 2. **Authenticate at connection time**: Validate tokens during handshake

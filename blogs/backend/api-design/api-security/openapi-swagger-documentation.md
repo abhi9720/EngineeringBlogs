@@ -22,6 +22,8 @@ OpenAPI Specification (formerly Swagger) is the industry standard for describing
 
 ## SpringDoc Configuration
 
+SpringDoc is the standard library for integrating OpenAPI 3.0 with Spring Boot. It automatically generates OpenAPI specifications from controller annotations, reducing the effort required to keep documentation in sync with implementation. Configuration is done through a Spring `@Configuration` class that customizes the API metadata, server URLs, security schemes, and external documentation links. The generated OpenAPI spec is available at `/v3/api-docs` and is rendered as interactive documentation by Swagger UI at `/swagger-ui.html`.
+
 ### Basic Setup
 
 ```java
@@ -53,6 +55,8 @@ public class OpenApiConfig {
     }
 }
 ```
+
+Security scheme configuration documents how clients authenticate with your API within the OpenAPI spec. SpringDoc supports all standard security schemes: HTTP bearer (JWT), API keys, OAuth 2.0 flows, OpenID Connect, and mutual TLS. Configuring security schemes in the OpenAPI spec ensures that tools like Swagger UI can include the appropriate `Authorization` headers in test requests, and code generators can include the authentication logic in generated clients.
 
 ### Security Scheme Configuration
 
@@ -91,6 +95,8 @@ public class OpenApiSecurityConfig {
 ---
 
 ## Documenting Controllers
+
+SpringDoc automatically generates OpenAPI documentation from Spring MVC annotations (`@GetMapping`, `@PostMapping`, etc.), but adding explicit `@Operation`, `@ApiResponse`, and `@Parameter` annotations produces richer, more accurate documentation. These annotations let you specify response codes, error conditions, parameter constraints, and example values that automated detection cannot infer. Well-documented controllers serve both as developer reference and as input for client code generation.
 
 ### Controller Annotations
 
@@ -206,6 +212,8 @@ public class ProductController {
 }
 ```
 
+Documenting request and response models with `@Schema` annotations is as important as documenting the endpoints themselves. These annotations provide field-level descriptions, example values, constraints, and access modes that appear in the generated API documentation. Good model documentation helps API consumers understand the shape and constraints of data without reading separate documentation — each field's purpose, format, and validation rules are visible directly in the interactive API explorer.
+
 ### Request/Response Models
 
 ```java
@@ -297,6 +305,8 @@ public class ErrorResponse {
 
 ## Grouped OpenAPI Documentation
 
+For large applications with multiple API modules (admin, public, internal), grouping endpoints into separate OpenAPI specifications improves organization and readability. Each group can have its own title, description, security requirements, and base path. SpringDoc's `GroupedOpenApi` bean configures this partitioning declaratively. Groups can be accessed at separate URLs (e.g., `/v3/api-docs/admin`, `/v3/api-docs/public`) and shown as separate entries in Swagger UI's dropdown.
+
 ### Multi-Module API Groups
 
 ```java
@@ -354,39 +364,9 @@ public class OpenApiGroupConfig {
 
 ## Code Generation from OpenAPI
 
+One of the most powerful features of OpenAPI is the ability to generate client SDKs and server stubs automatically from the specification. The OpenAPI Generator Maven plugin produces type-safe API clients, request/response models, and controller interfaces in multiple languages. This eliminates manual translation between spec and code, reduces integration errors, and ensures that the client code always matches the API contract. The generated code can be used within the same project (as server stubs) or published as a library for external consumers.
+
 ### Maven Plugin Configuration
-
-```xml
-<plugin>
-    <groupId>org.openapitools</groupId>
-    <artifactId>openapi-generator-maven-plugin</artifactId>
-    <version>6.6.0</version>
-    <executions>
-        <execution>
-            <goals>
-                <goal>generate</goal>
-            </goals>
-            <configuration>
-                <inputSpec>${project.basedir}/src/main/resources/openapi.yaml</inputSpec>
-                <generatorName>spring</generatorName>
-                <apiPackage>com.example.api</apiPackage>
-                <modelPackage>com.example.model</modelPackage>
-                <configOptions>
-                    <useSpringBoot3>true</useSpringBoot3>
-                    <useJakartaEe>true</useJakartaEe>
-                    <interfaceOnly>true</interfaceOnly>
-                    <skipDefaultInterface>true</skipDefaultInterface>
-                    <dateLibrary>java8</dateLibrary>
-                    <delegatePattern>true</delegatePattern>
-                    <generateApiTests>false</generateApiTests>
-                </configOptions>
-            </configuration>
-        </execution>
-    </executions>
-</plugin>
-```
-
-### Generated Controller Implementation
 
 ```java
 @RestController
@@ -414,6 +394,8 @@ public class ProductsApiController implements ProductsApi {
 ---
 
 ## Best Practices
+
+A well-maintained OpenAPI specification is the single source of truth for your API contract. It should be treated as a living document that evolves alongside your code. The following practices ensure your documentation remains accurate, useful, and valuable to API consumers.
 
 1. **Document every endpoint**: All public endpoints need OpenAPI docs
 2. **Provide examples**: Realistic examples for request/response models
@@ -452,6 +434,8 @@ class OpenApiValidationTest {
 
 ### Mistake 1: Missing Schema Definitions
 
+Without `@Schema` annotations on model classes, the generated OpenAPI spec lacks field descriptions, example values, and type constraints. This produces generic documentation that requires clients to guess field meanings and formats. Every public-facing model class should have `@Schema` annotations on both the class and each field, with meaningful descriptions and realistic example values. The effort invested in annotation pays dividends every time a developer uses your API documentation.
+
 ```java
 // WRONG: No schema annotation on response objects
 public class ProductResponse {
@@ -470,6 +454,8 @@ public class ProductResponse {
 
 ### Mistake 2: Outdated Documentation
 
+Documentation drift — where the OpenAPI spec no longer matches the actual implementation — is the most common complaint API consumers have. This happens when developers add or change endpoints without updating the spec. The solution is to treat the spec as code: include it in version control, validate it in CI/CD, and fail the build if the generated spec differs from the committed spec. Tools like `springdoc-openapi-maven-plugin` can auto-generate the spec during the build and fail if there are discrepancies.
+
 ```java
 // WRONG: Spec doesn't match implementation
 // Controller accepts new field, but spec doesn't show it
@@ -479,6 +465,8 @@ public class ProductResponse {
 ```
 
 ### Mistake 3: Exposing Internal Details
+
+Auto-generated documentation can inadvertently expose internal implementation details that should never be visible to API consumers. Fields like `passwordHash`, `internalNotes`, or database IDs that leak internal structure create security vulnerabilities and confuse consumers. Always use dedicated DTOs for API responses (never expose entity classes directly), and review the generated OpenAPI spec for fields that should be excluded. Use `@Schema(hidden = true)` or Jackson's `@JsonIgnore` to prevent internal fields from appearing in documentation.
 
 ```java
 // WRONG: Internal fields exposed in API response

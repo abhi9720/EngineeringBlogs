@@ -22,16 +22,28 @@ Apache JMeter is an open-source performance testing tool for measuring and analy
 
 ## Core Concepts
 
+```mermaid
+graph TD
+    TP["Test Plan"] --> TG["Thread Group<br/>(User Simulation)"]
+    TG --> CE["Config Elements<br/>(Defaults, Auth, Headers)"]
+    TG --> PP["Pre-Processors"]
+    TG --> SM["Samplers<br/>(HTTP Request, JDBC, etc.)"]
+    TG --> POP["Post-Processors<br/>(Extractors)"]
+    TG --> AS["Assertions<br/>(Response Validation)"]
+    TG --> LI["Listeners<br/>(Results, Reports)"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class TP green
+    class TG blue
+    class SM pink
+    class AS yellow
 ```
-Test Plan
- └── Thread Group (User Simulation)
-      ├── Config Elements (Defaults, Auth, Headers)
-      ├── Pre-Processors
-      ├── Samplers (HTTP Request, JDBC, etc.)
-      ├── Post-Processors (Extractors)
-      ├── Assertions (Response Validation)
-      └── Listeners (Results, Reports)
-```
+
+Every JMeter test plan follows this hierarchy. The Thread Group simulates virtual users, each user executes samplers (API calls), post-processors extract values from responses for chaining, assertions validate correctness, and listeners collect results. Config Elements set defaults shared across all samplers in the group, reducing duplication.
 
 ---
 
@@ -214,6 +226,8 @@ public class JMeterTestPlanGenerator {
 }
 ```
 
+The Java API approach above is useful when you need to generate test plans programmatically or integrate JMeter into custom tooling. Note the use of `__threadNum` as a JMeter function to generate unique customer IDs per virtual user—this prevents data conflicts when multiple threads create orders simultaneously.
+
 ---
 
 ## JMeter Command Line Execution
@@ -250,6 +264,8 @@ jmeter -g results.jtl -o /reports/html/
     <stringProp name="DurationAssertion.duration">${__P(maxResponseTime,2000)}</stringProp>
 </DurationAssertion>
 ```
+
+Parameterization via `__P()` allows the same test plan to run in different environments (dev, staging, production) by adjusting user count, ramp-up time, and host at runtime without modifying the JMX file. The second argument to `__P()` is the default value.
 
 ---
 

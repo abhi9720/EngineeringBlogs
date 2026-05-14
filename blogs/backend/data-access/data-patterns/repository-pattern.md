@@ -24,6 +24,8 @@ The Repository pattern mediates between the domain and data mapping layers, acti
 
 ### Core Repository Interface
 
+The repository interface defines a collection-like API over your persistent entities. The generic interface below captures the standard set of CRUD operations—`findById`, `findAll`, `save`, `delete`—parameterized by entity type and primary key type. This abstraction allows the business layer to work with domain objects without depending on any specific persistence technology.
+
 ```java
 // Generic repository interface
 public interface Repository<T, ID> {
@@ -51,6 +53,8 @@ public interface Repository<T, ID> {
 ```
 
 ### Domain-Specific Repository
+
+A domain-specific repository extends the generic interface with query methods that express business concepts. Rather than exposing generic `findByColumn` methods, the domain repository exposes operations like `findPendingOrdersByUser` or `hasActiveOrders`. This makes the calling code more readable and encapsulates query logic within the repository layer.
 
 ```java
 // Domain-oriented repository with business query methods
@@ -83,6 +87,8 @@ public interface OrderRepository extends Repository<Order, Long> {
 
 ### Repository Implementation
 
+Spring Data JPA provides automatic implementations of repository interfaces at runtime. Query methods are derived from method names (e.g., `findByUserIdAndStatusOrderByCreatedAtDesc` becomes a JPQL query automatically). The `@Query` annotation allows custom JPQL with join fetching, DTO projections, and modifying operations. The `@Modifying` annotation on update queries tells Spring Data to execute the query as an update rather than a select.
+
 ```java
 @Repository
 public interface OrderJpaRepository extends JpaRepository<Order, Long> {
@@ -108,6 +114,8 @@ public interface OrderJpaRepository extends JpaRepository<Order, Long> {
 ```
 
 ### Custom Repository Implementation
+
+For complex queries that cannot be expressed through method naming or JPQL, Spring Data JPA allows you to define a custom interface and provide an implementation using the Criteria API. The `CustomOrderRepository` below demonstrates dynamic query building with optional filters, pagination, sorting, bulk updates, and aggregation—all without writing any SQL.
 
 ```java
 // Custom repository interface
@@ -241,6 +249,8 @@ public interface OrderRepository extends JpaRepository<Order, Long>,
 
 ### Generic Repository
 
+A generic repository provides base CRUD functionality for any entity type. The `AbstractGenericRepository` below uses an `EntityManager` and implements `findById`, `save`, and `deleteById` in terms of JPA's `persist`, `merge`, and `remove`. The `save` method checks whether the entity is already managed (using `contains`) to decide between `persist` and `merge`.
+
 ```java
 // Generic CRUD repository
 public interface GenericRepository<T, ID> {
@@ -322,6 +332,8 @@ public class UserRepository extends AbstractGenericRepository<User, Long> {
 
 ### Domain-Specific Repository (Preferred)
 
+Domain-specific repositories are preferred over generic ones because they communicate intent. Rather than providing a generic `findAll`, the `ProductRepository` exposes `findByCategoryAndActiveTrue` and `findLowStockProducts`, which map directly to business concepts. This makes the repository a more meaningful part of the domain model rather than a purely technical abstraction.
+
 ```java
 // Domain-specific repositories expose meaningful business methods
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -347,7 +359,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 ## Testing with Repositories
 
-### Repository Testing
+Integration testing with repositories requires a database. Spring Boot's `@AutoConfigureTestDatabase` replaces the production data source with an embedded one (like H2) for testing. The `TestEntityManager` provides convenience methods for setting up test data. The test below verifies that `findPendingOrdersByUser` returns only the orders with the correct status.
 
 ```java
 @SpringBootTest
@@ -398,6 +410,8 @@ class OrderRepositoryTest {
 9. **Test repository behavior**: Integration tests with embedded database
 10. **Consider read/write separation**: Different repos for CQRS
 
+The `JpaSpecificationExecutor` interface enables reusable, composable query predicates. Each `Specification` is a single predicate that can be combined with `.and()` and `.or()` operators. This is particularly useful when the number of query combinations would otherwise explode into dozens of repository methods.
+
 ```java
 // Using Specifications for reusable queries
 public class OrderSpecifications {
@@ -440,6 +454,8 @@ List<Order> orders = orderRepository.findAll(
 
 ### Mistake 1: One Generic Repository for Everything
 
+A single generic repository used by every service is an anti-pattern. It couples all services to the same data access interface, makes it hard to add domain-specific query methods, and defeats the purpose of encapsulation.
+
 ```java
 // WRONG: Single generic repository for all entities
 @Repository
@@ -457,6 +473,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
 ### Mistake 2: Exposing Persistence Details
 
+Repository methods that expose JPQL strings, native SQL, or database-specific constructs leak persistence concerns into the business layer. If the implementation changes (e.g., from JPA to JDBC), all callers must be updated.
+
 ```java
 // WRONG: Repository methods leak JPA concepts
 public interface OrderRepository {
@@ -472,6 +490,8 @@ public interface OrderRepository {
 ```
 
 ### Mistake 3: Repository Methods for Every Possible Query
+
+Creating a separate repository method for every combination of filters leads to an explosion of method names. For dynamic queries, use the Criteria API or `Specification` pattern instead.
 
 ```java
 // WRONG: Too many specific methods

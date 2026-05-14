@@ -82,6 +82,8 @@ public class RoundRobinClient {
 }
 ```
 
+Round robin is the simplest and most predictable distribution: each backend gets an equal share of requests in a fixed cyclic order. Its limitation becomes apparent when request durations vary widely — a slow request to backend-1 ties up that connection while backend-2 and backend-3 are already idle and ready for new work. This is why least-connections is preferred for heterogeneous or variable-duration workloads. Round robin shines when all backends are equally sized and requests complete in roughly the same time — for example, in a fleet of identical stateless API servers serving uniform CRUD endpoints.
+
 ---
 
 ## Least Connections
@@ -137,6 +139,8 @@ public class LeastConnectionsLoadBalancer implements ServiceInstanceLoadBalancer
     }
 }
 ```
+
+The implementation tracks active connections per instance using `AtomicInteger` counters. `choose()` selects the instance with the smallest count and immediately increments it before the request starts; `releaseConnection()` is called when the response completes. In production, the counter approach must handle failures — if a backend crashes, its `AtomicInteger` never gets decremented, so the balancer should periodically reset counters for instances that fail health checks. Least connections performs best when request durations are variable (e.g., mixed fast queries and slow report generation), because it naturally distributes more fast requests to the same instance that is also handling a slow one.
 
 ---
 
@@ -200,6 +204,8 @@ public class ConsistentHashLoadBalancer {
     }
 }
 ```
+
+Consistent hashing is the best choice when backend affinity matters — for example, when each server maintains an in-memory cache, and you want the same user or same resource to always hit the same server to maximize cache hits. The `virtualNodes` parameter (150 in the implementation above) controls distribution smoothness: without virtual nodes, adding or removing a server causes uneven load distribution because the hash ring has only as many points as servers. With 150 virtual nodes per server, the ring has 600+ points, and removing one server redistributes only ~1/4 of its keys to each remaining server instead of causing a full rehash.
 
 ### Nginx Consistent Hashing
 

@@ -36,6 +36,8 @@ public class OrderService {
 }
 ```
 
+The violating example creates concrete dependencies inside the constructor. `OrderService` is now coupled to `PostgresOrderRepository` and `SmtpEmailService`. Testing requires a real Postgres database and an SMTP server. Switching to MongoDB or a different email provider means modifying `OrderService` itself. This is rigid, fragile, and hard to test.
+
 Applying DIP, both depend on abstractions:
 
 ```java
@@ -65,6 +67,8 @@ public interface NotificationService {
     void sendOrderConfirmation(Order order);
 }
 ```
+
+With DIP applied, `OrderService` depends on `OrderRepository` and `NotificationService` interfaces. The concrete implementations (`PostgresOrderRepository`, `SmtpEmailService`) are injected at construction time. The high-level module defines what it needs (the interface), and the low-level module fulfills that contract. Testing becomes trivial: pass mock implementations of the interfaces.
 
 ## DIP in Spring Boot
 
@@ -101,6 +105,8 @@ public interface TransactionLogger {
     void log(String transactionId, TransactionStatus status);
 }
 ```
+
+Spring's `@Component` annotation marks `PaymentProcessor` as a bean. The constructor parameters `PaymentGateway` and `TransactionLogger` are interfaces; Spring resolves them to concrete implementations at runtime. The `PaymentProcessor` never imports a concrete class — it operates entirely through abstractions. This means you can replace the payment gateway from Stripe to PayPal by adding a new implementation of `PaymentGateway` and changing configuration, without touching `PaymentProcessor`.
 
 ## Using Factories for Dynamic DIP
 
@@ -171,6 +177,8 @@ public class SmsNotificationSender implements NotificationSender {
     }
 }
 ```
+
+The `NotificationFactory` combines DIP with the factory pattern. All `NotificationSender` implementations are injected as a `List` by Spring's auto-collection feature. The factory builds a map from channel to sender. When a new notification channel (e.g., Push) needs to be added, you create a new `@Component` implementing `NotificationSender` — no factory code changes. This is the Open-Closed Principle in action: open for extension, closed for modification.
 
 ## Abstracting External APIs
 
@@ -271,6 +279,8 @@ public class PaymentService {
 }
 ```
 
+The `PaymentGateway` interface defines the complete payment lifecycle: authorize, capture, refund, void. `StripePaymentGateway` translates domain concepts to Stripe-specific API calls, isolating Stripe's exception types (`StripeException`) behind the `PaymentResult` abstraction. `PaymentService` depends only on the interface — switching from Stripe to PayPal requires writing a new `PaymentGateway` implementation and changing one bean definition.
+
 ## Testing with DIP
 
 DIP enables isolated testing by swapping real implementations with mocks or stubs:
@@ -313,6 +323,8 @@ class OrderServiceTest {
 }
 ```
 
+Because `OrderService` depends on interfaces, tests can use Mockito to create mock implementations. No database, no email server — just pure Java assertions. The second test verifies that when the repository fails, the notification service is never called. This granular behavior verification is impossible without DIP.
+
 ## Common Mistakes
 
 ### Constructor Does Real Work
@@ -343,6 +355,8 @@ public class ReportService {
 }
 ```
 
+Constructors should do assignment, not work. Creating concrete dependencies in the constructor makes testing impossible without those dependencies being fully initialized. The fix is trivial: accept dependencies as parameters.
+
 ### Using Field Injection
 
 ```java
@@ -370,6 +384,8 @@ public class UserService {
 }
 ```
 
+Field injection with `@Autowired` makes dependencies invisible to callers and prevents `final` fields. You cannot know what a `UserService` needs without reading the class body. Constructor injection makes every dependency visible in the constructor signature, enables `final` fields, and works with any DI container.
+
 ### Over-Abstraction
 
 ```java
@@ -388,6 +404,8 @@ public class StringUtilsImpl implements StringUtils {
 // Correct: Abstract external boundaries, not internal utilities
 // No need for DIP on stable standard library dependencies
 ```
+
+DIP is a tool for managing change at module boundaries. Wrapping `String.isEmpty()` behind an interface adds indirection without benefit — the standard library is not going to change its `isEmpty` behavior. Apply DIP at system boundaries: databases, networks, filesystems, external APIs.
 
 ## Best Practices
 

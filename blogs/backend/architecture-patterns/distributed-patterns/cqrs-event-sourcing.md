@@ -47,6 +47,8 @@ public record CancelOrderCommand(
 ) {}
 ```
 
+Commands are named in the imperative mood: `CreateOrderCommand`, not `OrderCreatedCommand` (that's an event). Each command represents a single user intent. Using Java records ensures commands are immutable and provide equals/hashCode/toString automatically. Commands carry the data needed to perform the operation — no more, no less.
+
 ### Query Model
 
 Queries retrieve data without side effects. The query model is optimized for reading and can be denormalized.
@@ -67,6 +69,8 @@ public record SearchOrdersQuery(
     LocalDate toDate
 ) {}
 ```
+
+Queries never modify state. They request data and return results. The query model can be structured differently from the command model — for example, a search query might return denormalized data that joins fields from multiple aggregates. This is the essence of CQRS: optimizing read and write models independently.
 
 ### Events
 
@@ -109,6 +113,8 @@ public record OrderItemEvent(
     int quantity
 ) {}
 ```
+
+Events are named in the past tense: `OrderCreatedEvent`, `ItemAddedEvent`. They are immutable records that describe what happened. The `sealed` interface restricts which types can implement `OrderEvent`, giving the compiler full knowledge of all possible events — this enables exhaustive pattern matching in switch expressions.
 
 ## Event Sourcing: The Event Store
 
@@ -158,6 +164,8 @@ public interface DomainEventRepository extends JpaRepository<DomainEventEntity, 
         String aggregateType, Long version);
 }
 ```
+
+The event store table stores each event as a row with an aggregate ID, event type, version, and serialized JSON payload. The `version` column enables optimistic concurrency control — when saving events, you check that the version hasn't changed since the aggregate was loaded. The query methods allow loading all events for an aggregate (for replay) and reading events after a specific version (for event catch-up).
 
 ## Event Store Service
 
@@ -227,6 +235,8 @@ public class EventStore {
     }
 }
 ```
+
+The `saveEvents` method implements optimistic concurrency. It loads existing events for the aggregate, checks that the version matches `expectedVersion`, appends new events with incremented versions, and saves them in a single batch. If another process has already appended events, the version check fails and a `ConcurrencyException` is thrown — the caller must retry by reloading the aggregate and reapplying business logic.
 
 ## Aggregate Root with Event Sourcing
 
@@ -325,6 +335,8 @@ public class OrderAggregate {
 }
 ```
 
+The aggregate uses the event-sourcing pattern. `loadFromHistory` replays all past events to rebuild the current state. `applyEvent` both mutates state (through `apply`) and collects the new event in `uncommittedEvents`. After saving to the event store, `markEventsAsCommitted` clears the pending list. Business methods like `confirm()` and `cancel()` check invariants (e.g., cannot confirm an empty order) and then apply a new event — the event is the source of truth, and the state is derived from it.
+
 ## Command Handler
 
 ```java
@@ -396,6 +408,8 @@ public class OrderCommandHandler {
     }
 }
 ```
+
+Each command handler follows the same pattern: load the aggregate from event history, execute the business method (which produces new events), save the new events to the event store (with optimistic concurrency), publish events to the event bus, and mark events as committed. This sequence ensures that events are never published unless they are safely stored.
 
 ## Query Model (Projections)
 
@@ -530,6 +544,8 @@ public interface OrderViewRepository extends JpaRepository<OrderView, String> {
 }
 ```
 
+Projections listen to events and update denormalized read models. The `OrderView` is an entity optimized for querying — it has no business logic, just persisted data ready for fast reads. Each event handler updates only the relevant part of the view. The `updateOrderTotal` recalculates the total whenever items change. Since the read model is derived from events, it can always be rebuilt by replaying all events from the event store.
+
 ## Query Handler
 
 ```java
@@ -562,6 +578,8 @@ public class OrderQueryHandler {
     }
 }
 ```
+
+Query handlers are simple — they read from the denormalized view tables and return DTOs. No business logic, no validation, no side effects. This keeps query latency low and makes read models trivially testable.
 
 ## Common Mistakes
 

@@ -22,7 +22,11 @@ Content negotiation allows REST APIs to serve different representations of resou
 
 ## HTTP Content Negotiation Headers
 
+Content negotiation is a core feature of HTTP that allows a single endpoint to serve multiple representations of the same resource. The client expresses its preferences through standard HTTP headers (`Accept`, `Content-Type`), and the server selects the most appropriate representation. This decouples client capability from server implementation — the server can add new formats without breaking existing clients, and clients can specify their preferred format without changing URLs.
+
 ### Request Headers
+
+The `Accept` header tells the server which media types the client can handle, in order of preference. The server uses the `produces` attribute in `@GetMapping` to declare which formats it supports. Spring automatically selects the best match based on the client's `Accept` header and the server's declared capabilities. The example supports four media types: standard JSON, standard XML, version 1 vendor-specific JSON, and version 2 vendor-specific JSON. Vendor-specific media types (like `application/vnd.api.v1+json`) provide a clean way to version resources at the representation level without changing URLs.
 
 ```java
 @RestController
@@ -47,6 +51,8 @@ public class ContentNegotiationController {
     }
 }
 ```
+
+Content negotiation configuration in Spring gives fine-grained control over how media types are resolved. The `configureContentNegotiation` method supports multiple strategies: `favorParameter(true)` allows clients to specify the format via a query parameter (`?format=json`), path extension (`.json`), or the `Accept` header. For production APIs, prefer `Accept` header-based negotiation for REST purity, but offer query parameter fallback for simpler client integration. The `defaultContentType` ensures clients that don't specify a preference still receive a valid response.
 
 ### Custom Media Types for Versioning
 
@@ -73,7 +79,11 @@ public class WebConfig implements WebMvcConfigurer {
 
 ## Media Type Versioning
 
+Versioning through media types uses custom vendor-specific MIME types to differentiate API versions. Unlike URL path versioning (which changes the resource identifier), media type versioning keeps the URL stable and varies the representation. This approach aligns with REST principles — the same resource identifier returns different representations based on content negotiation. The trade-off is reduced discoverability: clients must know which media type to request, and it's harder to test from a browser.
+
 ### Versioned Media Types
+
+The example shows V1 and V2 endpoints for the same user resource, distinguished only by the `produces` media type. V1 returns a `UserV1` with basic fields (id, name, email), while V2 returns `UserV2` with additional fields (phone, role, department, createdAt). Both endpoints use the same URL path `/api/users/{id}` — the client selects the version by sending `Accept: application/vnd.api.v1+json` or `Accept: application/vnd.api.v2+json`. This approach scales well because each version is a separate method with its own response DTO, and old versions can be deprecated independently.
 
 ```java
 @RestController
@@ -147,6 +157,8 @@ class UserV2 {
 }
 ```
 
+The `Content-Type` header on requests tells the server how the request body is encoded. By specifying `consumes` on a `@PostMapping`, the controller restricts which request formats it accepts. If the client sends an unsupported content type, Spring automatically returns 415 Unsupported Media Type. Supporting multiple input formats (JSON and XML in this example) makes your API more flexible for diverse clients while maintaining strict validation of the accepted formats.
+
 ### Request Content Type
 
 ```java
@@ -172,7 +184,11 @@ public class MultiFormatUserController {
 
 ## Custom Serialization with Jackson
 
+Custom serializers give you fine-grained control over how objects are converted to JSON (or XML). While Jackson's default serialization works well for simple cases, custom serializers enable conditional field inclusion, data masking, format customization, and backward-compatible output changes. Use custom serializers sparingly — they add maintenance overhead and can make the serialization behavior harder to reason about.
+
 ### Custom Serializers
+
+The `UserSerializer` demonstrates several advanced serialization patterns: conditional field inclusion (address only shown if present), data masking (phone number partially masked for security), and custom field naming. This level of control is useful for APIs that serve multiple client types with different data sensitivity requirements. However, consider whether a DTO-based approach (separate response classes for different contexts) would be simpler and more maintainable than custom serializers.
 
 ```java
 @Component
@@ -212,6 +228,8 @@ public class User {
     // Fields
 }
 ```
+
+Custom deserializers handle the reverse direction — converting incoming data to Java objects. They are particularly useful for accepting flexible input formats from clients. The `FlexibleDateDeserializer` example accepts multiple date formats (ISO, slash-separated, date-only) and converts them to `LocalDateTime`. This graceful format handling improves client developer experience by not requiring an exact date format. However, prefer accepting a single, well-documented format for new APIs — flexible deserialization adds complexity and can mask client errors.
 
 ### Custom Deserializers
 

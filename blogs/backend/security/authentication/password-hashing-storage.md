@@ -33,7 +33,7 @@ When a database is compromised, hashed passwords must be computationally expensi
 
 A salt is a unique, random value added to each password before hashing:
 
-```
+```text
 hash = hashFunction(password + salt)
 ```
 
@@ -58,6 +58,8 @@ bob       d4e5f6     pass123     hash("pass123" + "d4e5f6") = efgh...
 Every identical password produces a different hash. Rainbow tables become useless because the attacker would need a separate table for each possible salt.
 
 ### Salt Generation
+
+A salt must be cryptographically random — `SecureRandom` provides this. 128 bits (16 bytes) is the minimum recommended length:
 
 ```java
 @Component
@@ -102,7 +104,7 @@ CREATE TABLE users (
 
 bcrypt is designed to be slow. It uses the Blowfish cipher with a configurable cost factor:
 
-```
+```text
 bcrypt(cost, salt, password) = hash
 
 cost = 2^cost iterations
@@ -111,6 +113,8 @@ output = 60-byte string: $2b$10$[22-char-salt][31-char-hash]
 ```
 
 #### Implementation
+
+Spring Security's `BCryptPasswordEncoder` handles salt generation and hash formatting automatically. The encoded hash includes the cost, salt, and hash in a single string:
 
 ```java
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -136,6 +140,8 @@ public class PasswordService {
 
 #### Cost Factor Scaling
 
+Higher cost factors increase resistance to brute-force attacks but degrade user experience during login:
+
 | Cost | Iterations | Time (approx) | Security Level |
 |------|------------|---------------|----------------|
 | 10   | 1024       | 80ms          | Minimum acceptable |
@@ -145,6 +151,8 @@ public class PasswordService {
 | 14   | 16384      | 1280ms        | Paranoia |
 
 #### How bcrypt Works Internally
+
+bcrypt's security comes from its expensive key schedule — the Blowfish cipher's P-array and S-boxes are repeatedly initialized with the password and salt, making hardware acceleration difficult:
 
 ```java
 // Simplified bcrypt inner workings
@@ -183,14 +191,14 @@ Argon2 is the winner of the 2015 PHC competition and is the most modern password
 
 #### Implementation
 
+Argon2's strength comes from three tunable parameters: memory cost (KB), time cost (iterations), and parallelism (threads). The example below uses 64 MB memory, 3 iterations, and 4 threads — making GPU-based attacks extremely expensive:
+
 ```xml
 <dependency>
     <groupId>org.springframework.security</groupId>
     <artifactId>spring-security-crypto</artifactId>
 </dependency>
 ```
-
-If Spring Security doesn't include Argon2 directly, use Bouncy Castle:
 
 ```xml
 <dependency>
@@ -310,6 +318,8 @@ public class Argon2PasswordHasher {
 
 ### Configuring Bcrypt
 
+Spring Security's `BCryptPasswordEncoder` is the most common choice for existing projects. A cost factor of 12 balances security with user experience:
+
 ```java
 @Configuration
 public class PasswordEncoderConfig {
@@ -323,6 +333,8 @@ public class PasswordEncoderConfig {
 ```
 
 ### Delegating Password Encoder (for migrating algorithms)
+
+The `DelegatingPasswordEncoder` supports multiple encoding schemes simultaneously, enabling gradual algorithm migration. New passwords are hashed with the preferred algorithm (bcrypt in this case), while stored passwords using older algorithms (argon2, pbkdf2) continue to verify. On successful login, the password can be rehashed to the new algorithm:
 
 ```java
 @Bean
@@ -339,6 +351,8 @@ public PasswordEncoder passwordEncoder() {
 ```
 
 ### Usage in User Creation
+
+Password strength validation combined with hashing ensures that weak passwords are rejected before they reach the database:
 
 ```java
 @Service
@@ -389,6 +403,8 @@ public class UserRegistrationService {
 
 ## Secure Authentication
 
+A common security flaw is user enumeration — when the response time or message differs between "user exists" and "user does not exist," attackers can probe for valid usernames. The solution below always performs a hash comparison, even for non-existent users, using a dummy hash value:
+
 ```java
 @Service
 public class AuthenticationService {
@@ -425,6 +441,8 @@ public class AuthenticationService {
 
 ### Mistake 1: Using Fast Hash Functions (MD5, SHA-256)
 
+Fast hash functions are designed for speed — a modern GPU can compute billions of SHA-256 hashes per second, making password cracking trivial:
+
 ```java
 // WRONG: Fast hash functions are designed for speed
 // A modern GPU can compute billions of SHA-256 hashes per second
@@ -440,6 +458,8 @@ String hash = encoder.encode(password);
 ```
 
 ### Mistake 2: Using a Static Salt
+
+A global salt applied to all passwords is equivalent to having no salt — one rainbow table still cracks all users:
 
 ```java
 // WRONG: Hardcoded salt
@@ -460,6 +480,8 @@ public class UserService {
 
 ### Mistake 3: Truncating or Modifying Hashes
 
+bcrypt output is a single 60-character string containing the cost, salt, and hash. Truncating it destroys the hash irreversibly:
+
 ```java
 // WRONG: Truncating bcrypt output
 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -474,6 +496,8 @@ user.setPasswordHash(fullHash);  // Store all 60 characters
 ```
 
 ### Mistake 4: Not Rehashing on Algorithm Upgrade
+
+When you upgrade your hashing algorithm (e.g., bcrypt cost 10 to 12, or SHA-256 to bcrypt), existing users' passwords are still stored with the old algorithm. Rehash them on next login:
 
 ```java
 // WRONG: Stuck on old algorithm forever

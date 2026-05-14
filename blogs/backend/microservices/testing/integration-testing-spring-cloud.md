@@ -18,6 +18,8 @@ Integration testing validates that microservice components work together correct
 
 ## Testcontainers for Databases
 
+Testcontainers spins up a real PostgreSQL instance inside a Docker container, providing a production-like database environment for tests. The `@DynamicPropertySource` overrides Spring's datasource properties at runtime. Using a real database catches SQL dialect differences, constraint violations, and migration issues that in-memory databases like H2 would miss.
+
 ```java
 @SpringBootTest
 @Testcontainers
@@ -105,6 +107,8 @@ class OrderRepositoryIntegrationTest {
 
 ## Embedded Kafka Testing
 
+Embedded Kafka starts an in-memory Kafka broker for integration tests without requiring an external Kafka cluster. The annotation configures partitions, topics, and shutdown behavior. The test sends a message via `KafkaTemplate`, then uses `KafkaTestUtils` to consume and verify it — validating the full produce-consume cycle.
+
 ```java
 @SpringBootTest
 @EmbeddedKafka(
@@ -189,6 +193,8 @@ class KafkaIntegrationTest {
 
 ### DataJpaTest
 
+Spring Boot test slicing loads only the JPA-related beans, keeping the test focused and fast. `@DataJpaTest` configures an embedded database, entity manager, and repositories — ideal for testing queries, constraints, and persistence logic without starting the full application context.
+
 ```java
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -214,6 +220,8 @@ class OrderRepositorySliceTest {
 ```
 
 ### WebMvcTest
+
+`@WebMvcTest` loads only the web layer — controllers, filters, and exception handlers — with all services mocked. This enables fast controller testing focused on request mapping, validation, and response formatting without database or external service setup.
 
 ```java
 @WebMvcTest(OrderController.class)
@@ -262,6 +270,8 @@ class OrderControllerSliceTest {
 
 ### Kafka Test Slices
 
+Kafka listener tests combine a sliced Spring context with an embedded broker to verify message-driven components. The test publishes an event and then verifies that the listener processed it — using Mockito's `verify` to assert interaction with downstream services.
+
 ```java
 @SpringBootTest(classes = KafkaTestConfiguration.class)
 @EmbeddedKafka
@@ -288,6 +298,8 @@ class KafkaListenerSliceTest {
 ```
 
 ## Test Configuration Management
+
+A dedicated `@TestConfiguration` class provides test-specific beans (like a fixed `Clock` for deterministic time assertions) without polluting the main application context. Using `@Primary` ensures these beans override production beans during tests.
 
 ```java
 @TestConfiguration
@@ -347,6 +359,8 @@ class OrderServiceWithTestConfigTest {
 
 ### Mistake: Using H2 in-memory database for testing
 
+H2 behaves differently from PostgreSQL in SQL syntax, constraint enforcement, and type handling — tests that pass on H2 can fail on PostgreSQL in production. Testcontainers eliminates this risk by running the same database engine in tests.
+
 ```java
 // Wrong - H2 behaves differently from PostgreSQL
 @SpringBootTest
@@ -367,6 +381,8 @@ class OrderRepositoryTest {
 ```
 
 ### Mistake: Mixing integration and unit tests
+
+Keeping integration tests separate from unit tests ensures fast feedback on code changes. Sliced tests (`@WebMvcTest`, `@DataJpaTest`) provide a middle ground — more realistic than pure unit tests but much faster than a full `@SpringBootTest`.
 
 ```java
 // Wrong - slow integration tests run on every build

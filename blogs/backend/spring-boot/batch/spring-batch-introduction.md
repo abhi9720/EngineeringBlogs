@@ -16,21 +16,38 @@ draft: false
 
 Spring Batch is a lightweight, comprehensive batch framework for processing large volumes of data. It provides reusable functions for logging/tracing, transaction management, job processing statistics, job restart, skip, and resource management.
 
+Spring Batch is not a scheduling framework — it focuses on the batch processing pipeline itself. You can trigger jobs via a scheduler (Quartz, cron), REST endpoints, or file system events. The framework handles the heavy lifting: managing state, ensuring restartability, and providing statistics.
+
 ## Core Concepts
 
 ### Architecture
 
-```
-Job Launcher
-    |
-    v
-   Job -----> JobInstance
-    |
-    +-- Step 1: Read -> Process -> Write (Chunk-oriented)
-    |
-    +-- Step 2: Read -> Process -> Write
-    |
-    +-- Step 3: Tasklet
+The domain model has three key abstractions: `Job` (a complete batch process), `Step` (a phase within a job), and `JobInstance`/`JobExecution` (runtime representations). A `JobLauncher` starts a `Job`, which creates a `JobExecution`. The job's `JobInstance` is identified by `JobParameters` — running the same job with different parameters creates different instances.
+
+Steps can be either chunk-oriented (read-process-write in groups) or tasklet-oriented (a single atomic task). Chunk steps are for data processing; tasklets are for setup, cleanup, or single operations like file deletion or sending a notification.
+
+```mermaid
+flowchart TB
+    JL[Job Launcher] --> Job
+    Job --> JI[JobInstance]
+
+    Job --> S1[Step 1<br/>Chunk-oriented]
+    Job --> S2[Step 2<br/>Chunk-oriented]
+    Job --> S3[Step 3<br/>Tasklet]
+
+    S1 --> R[Read] --> P[Process] --> W[Write]
+    S2 --> R2[Read] --> P2[Process] --> W2[Write]
+    S3 --> T[Execute Tasklet]
+
+    linkStyle default stroke:#278ea5
+
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+
+    class JL,Job,JI blue
+    class S1,S2,S3 green
+    class R,R2,P,P2,W,W2,T yellow
 ```
 
 ## Dependencies
@@ -52,6 +69,12 @@ Job Launcher
 ```
 
 ## Basic Job Configuration
+
+### Job and Step Definition
+
+A job is defined using `JobBuilder` and a step using `StepBuilder`. The `JobRepository` persists job state and is required by both builders. The `RunIdIncrementer` ensures each job execution has a unique identifier, allowing the job to be re-run with different parameters.
+
+The step below reads CSV records of type `User`, validates/transforms them to `User` (same type), and writes them to a database. The `faultTolerant()` block enables skip and retry for resilience: up to 5 records with `InvalidDataException` can be skipped, and `TransientDataAccessException` triggers up to 3 retries.
 
 ```java
 @Configuration
@@ -92,6 +115,10 @@ public class BatchConfig {
 
 ### Job Completion Listener
 
+The listener hooks into the job lifecycle. `beforeJob` fires when the job starts (useful for logging start time, expected record count). `afterJob` fires when the job completes, regardless of success or failure. The example below prints status and any failure exceptions.
+
+For production, use the listener to notify ops teams via email or Slack on job failure, increment metrics counters, or trigger downstream processes on successful completion.
+
 ```java
 @Component
 public class JobCompletionNotificationListener extends JobExecutionListenerSupport {
@@ -119,6 +146,10 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
 
 ### Flat File Reader
 
+The `FlatFileItemReader` is the most common reader for CSV and delimited files. It reads one line at a time, parsing according to the delimiter configuration. `linesToSkip` handles header rows. The `DefaultRecordSeparatorPolicy` handles quoted fields that span multiple lines.
+
+The `targetType` tells Spring Batch which class to map fields to, using property name matching. Field names in the file header or `.names()` parameter must match the property names of the target class.
+
 ```java
 @Bean
 public FlatFileItemReader<User> userItemReader() {
@@ -135,6 +166,10 @@ public FlatFileItemReader<User> userItemReader() {
 ```
 
 ### Database Reader
+
+Spring Batch provides both cursor-based and paging-based database readers. `JdbcCursorItemReader` opens a single database cursor and streams results — this is efficient for large datasets but holds the cursor open for the entire step. `JpaPagingItemReader` fetches results in pages with separate queries — this is better for long-running steps where the database connection may be interrupted.
+
+Choose cursor-based for high-throughput batch processing where the connection is stable. Choose paging for web applications or when the step may be paused or restarted.
 
 ```java
 @Bean
@@ -160,6 +195,10 @@ public JpaPagingItemReader<User> jpaReader(EntityManagerFactory entityManagerFac
 ```
 
 ## Item Processor
+
+The processor transforms each item. Returning null filters the item out — it won't be written. Throwing an exception can trigger skip or retry depending on configuration. The example below validates email, filters underage users, and produces a `ValidatedUser` with enriched fields.
+
+Processors should be stateless: they transform one item at a time without side effects. If you need state across items (e.g., a running total), use the step execution context.
 
 ```java
 @Component
@@ -189,6 +228,10 @@ public class UserValidationProcessor implements ItemProcessor<User, ValidatedUse
 
 ## Item Writer
 
+The writer receives a list of items and persists them. `JdbcBatchItemWriter` uses JDBC batch updates (via `PreparedStatement.executeBatch()`), which is much faster than individual INSERT statements. `FlatFileItemWriter` writes delimited output with optional headers and footers.
+
+Use `shouldDeleteIfExists(true)` to overwrite existing output files — without this, the job fails on the second run if the output file already exists.
+
 ```java
 @Bean
 public JdbcBatchItemWriter<ValidatedUser> databaseWriter(DataSource dataSource) {
@@ -216,6 +259,12 @@ public FlatFileItemWriter<ValidatedUser> flatFileWriter() {
 ```
 
 ## Running Jobs
+
+### Starting a Job
+
+The `JobLauncher` starts a job with `JobParameters`. Parameters are crucial for job identification: running the same job with different parameters creates different `JobInstance` objects. Spring Batch uses parameters to determine whether a job instance already exists and whether to run again.
+
+The `CommandLineRunner` below launches the import job on application startup. In production, you'd typically trigger jobs via a scheduler (Quartz, cron) or a REST endpoint, not at startup.
 
 ```java
 @SpringBootApplication
@@ -245,6 +294,8 @@ public class BatchApplication implements CommandLineRunner {
 ```
 
 ### Scheduled Jobs
+
+Use `@Scheduled` to trigger jobs on a cron schedule. Each execution should have unique `JobParameters` (typically a timestamp) to allow multiple runs. Without changing parameters, Spring Batch refuses to run the same `JobInstance` more than once.
 
 ```java
 @Component
@@ -276,6 +327,10 @@ public class ScheduledJobLauncher {
 
 ## Job Parameters and Execution Context
 
+`JobParameters` are inputs to the job and are used for identification. The `ExecutionContext` is mutable state that exists at both job and step levels. It's persisted in the database and available across job restarts. Use the execution context to pass data between steps.
+
+The `ParameterValidationTasklet` below validates that required parameters exist and stores derived state in the execution context for subsequent steps to consume. This pattern is common for validation-first multi-step jobs.
+
 ```java
 @Component
 public class ParameterValidationTasklet implements Tasklet {
@@ -305,6 +360,10 @@ public class ParameterValidationTasklet implements Tasklet {
 ```
 
 ## Multi-Step Jobs
+
+Jobs with multiple steps execute them sequentially. Each step can use the data written by the previous step (through the database) or pass metadata through the execution context. The pattern below chains validation, processing, aggregation, and notification steps.
+
+The notification step is a tasklet (not chunk-oriented) because it's a single operation — send an email. Tasklets are ideal for administrative tasks that don't process bulk data.
 
 ```java
 @Configuration
@@ -348,6 +407,10 @@ public class MultiStepJobConfig {
 ```
 
 ## Testing Batch Jobs
+
+Spring Batch provides `JobLauncherTestUtils` for testing jobs in isolation. The test below verifies that a job completes successfully and checks individual step statistics (read count equals write count, indicating no items were filtered or failed).
+
+Use `@SpringBootTest` to load the full application context, or a more focused configuration with embedded databases for faster test execution.
 
 ```java
 @SpringBootTest
@@ -406,6 +469,8 @@ public Step fragileStep(JobRepository jobRepository,
 }
 ```
 
+Without fault tolerance, a single bad record causes the entire step to fail. For a 100,000 record file, one malformed entry means no records are processed. Fault tolerance lets valid records succeed while skipping or retrying problematic ones, with configurable limits per exception type.
+
 ```java
 // Correct: Configure skip and retry
 @Bean
@@ -441,6 +506,8 @@ public class StatefulProcessor implements ItemProcessor<User, User> {
     }
 }
 ```
+
+Processors should be stateless. If the step is restarted after a failure, the processor state is reset but the read position may have already moved past the reset point, causing the count to be wrong. Use `ItemStream` and the execution context for any state that must survive restarts.
 
 ```java
 // Correct: Use execution context for state

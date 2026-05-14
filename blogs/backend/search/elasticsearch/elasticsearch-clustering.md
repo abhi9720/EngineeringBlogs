@@ -18,6 +18,8 @@ This post covers cluster topology, node roles, sharding strategies, discovery, a
 
 ### Node Roles
 
+Elasticsearch nodes can be assigned dedicated roles to optimize resource utilization. **Master-eligible nodes** handle cluster-wide operations (creating indices, adding/removing nodes). **Data nodes** store shards and execute queries. **Ingest nodes** pre-process documents before indexing. **Coordinating-only nodes** route requests and merge results without storing data. In production, separate these roles to avoid resource contention — dedicated master nodes prevent cluster instability caused by heavy indexing on the same node:
+
 ```yaml
 # elasticsearch.yml
 
@@ -54,6 +56,8 @@ node.attr.role: coordinating
 
 ### Cluster Configuration
 
+The cluster configuration below sets up a three-master-node cluster with Zen2 discovery. `cluster.initial_master_nodes` lists the master-eligible nodes that participate in the initial election. `gateway.recover_after_nodes` controls how many nodes must join before recovery begins, preventing premature recovery during a rolling restart. Memory locking (`bootstrap.memory_lock`) prevents the JVM heap from being swapped to disk, which would devastate performance:
+
 ```yaml
 # Cluster settings
 cluster.name: production-logs
@@ -89,6 +93,8 @@ indices.recovery.max_bytes_per_sec: 100mb
 ```
 
 ## Sharding and Replication
+
+Shards are the unit of parallelism in Elasticsearch. A primary shard holds the authoritative copy of a subset of documents, and replica shards are copies used for failover and read scaling. The `IndexShardManager` below demonstrates how to adjust replica count, set `total_shards_per_node` to prevent over-concentration, and enable delayed reallocation (`delayed_timeout`) so that a temporarily disconnected node has time to rejoin before its shards are reassigned — avoiding unnecessary I/O during transient failures:
 
 ```java
 @Component
@@ -172,6 +178,8 @@ public class IndexShardManager {
 
 ## Cluster Health Monitoring
 
+The cluster health API returns the status (`green`, `yellow`, `red`) and detailed shard counts. `green` means all primary and replica shards are active; `yellow` means replicas are unassigned (data is still available but redundancy is reduced); `red` means some primaries are unassigned (data loss risk). The monitor below logs health every 30 seconds and triggers alerts on `red` or `yellow`:
+
 ```java
 @Component
 public class ClusterHealthMonitor {
@@ -248,6 +256,8 @@ public class ClusterHealthMonitor {
 
 ## Node Discovery and Fault Tolerance
 
+When a node fails, Elasticsearch automatically detects it via the discovery mechanism and reassigns its shards to remaining nodes. The `NodeDiscoveryManager` handles listing nodes, checking connectivity, and triggering shard reallocation after a failure. Calling `RetryFailedAllocation` tells the cluster to retry allocating shards that previously failed due to transient errors:
+
 ```java
 @Component
 public class NodeDiscoveryManager {
@@ -319,6 +329,8 @@ public class NodeDiscoveryManager {
 
 ## Cluster Scaling
 
+Scaling a cluster involves adding or removing nodes and rebalancing shards. The `ClusterScaler` shows the pattern: scale up by provisioning nodes and waiting for them to join, scale down by decommissioning nodes. The `excludeNode` method uses routing allocation settings to migrate shards off a node before taking it offline — a safe decommissioning pattern:
+
 ```java
 @Component
 public class ClusterScaler {
@@ -380,6 +392,8 @@ public class ClusterScaler {
 
 ## Hot-Warm-Cold Architecture
 
+Time-series data (logs, metrics, events) benefits from a tiered storage approach. **Hot** nodes use fast SSDs for recent data that is frequently queried. **Warm** nodes use cheaper storage for older data that is queried less often. **Cold** nodes use the cheapest storage for archival data. The template below allocates new indices to the hot tier, then moves them to warm and force-merges to one segment per shard — reducing storage and improving read performance:
+
 ```yaml
 # Data node configuration with tier attributes
 node.attr.data_tier: hot
@@ -413,6 +427,8 @@ POST /logs-2026.04.01/_forcemerge?max_num_segments=1
 
 ### Insufficient Heap Size
 
+Elasticsearch runs inside the JVM. The default 1 GB heap is far too small for production. Set heap to 50% of available RAM, but never exceed 32 GB (the JVM's compressed OOPs limit). Beyond 32 GB, JVM pointers switch to 64-bit, consuming more memory for the same data:
+
 ```java
 // Wrong: Default heap is too small
 // ES_JAVA_OPTS="-Xms1g -Xmx1g" // 1GB for production
@@ -423,6 +439,8 @@ POST /logs-2026.04.01/_forcemerge?max_num_segments=1
 
 ### Not Enabling Memory Locking
 
+Without `bootstrap.memory_lock`, the OS may swap Elasticsearch's JVM heap to disk during memory pressure, causing catastrophic performance degradation and long GC pauses:
+
 ```yaml
 # Wrong: Heap can be swapped to disk
 # bootstrap.memory_lock not set
@@ -432,6 +450,8 @@ bootstrap.memory_lock: true
 ```
 
 ### Over-Allocating Shards
+
+Each shard has overhead for segment metadata and cluster coordination. A 500 GB index with 50 shards means ~10 GB per shard — too small, leading to many small segments and wasted resources. With 15 shards at ~33 GB each, you get better utilization:
 
 ```java
 // Wrong: Too many shards

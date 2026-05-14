@@ -24,17 +24,30 @@ A testing strategy defines what to test, how to test it, and when to run each ty
 
 The test pyramid describes test distribution across different levels:
 
-```
-          ╱──────╲
-         ╱  E2E   ╲       Few: Critical user journeys, slow
-        ╰──────────╯       Cost per test: High
-       ╱────────────╲      Confidence: High (system level)
-      ╱ Integration  ╲     Some: Service interactions, medium
-     ╰────────────────╯    Cost per test: Medium
-    ╱──────────────────╲   Confidence: Medium (component level)
-   ╱   Unit Tests       ╲  Many: Isolated, fast, deterministic
-  ╰──────────────────────╯ Cost per test: Low
-                           Confidence: Low (isolated level)
+```mermaid
+graph TD
+    subgraph E2E["E2E (Few)"]
+        direction LR
+        E2E_desc["Critical user journeys, slow<br/>Cost per test: High<br/>Confidence: High (system level)"]
+    end
+    subgraph Integration["Integration (Some)"]
+        direction LR
+        Int_desc["Service interactions, medium<br/>Cost per test: Medium<br/>Confidence: Medium (component level)"]
+    end
+    subgraph Unit["Unit Tests (Many)"]
+        direction LR
+        Unit_desc["Isolated, fast, deterministic<br/>Cost per test: Low<br/>Confidence: Low (isolated level)"]
+    end
+    Unit --> Integration --> E2E
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class Unit green
+    class Integration blue
+    class E2E pink
 ```
 
 ### Why the Pyramid?
@@ -56,26 +69,31 @@ Goal: Pareto-distribute effort: 70% unit, 20% integration, 10% E2E.
 
 Brian Marick's testing quadrants organize tests by purpose (business vs. technology facing, supporting vs. critiquing):
 
-```
-                         Supporting the Team
-                               │
-        Q2: Business-facing    │    Q1: Technology-facing
-        (Confidence)           │    (Correctness)
-        • Acceptance tests     │    • Unit tests
-        • User story tests     │    • Component tests
-        • Exploratory testing  │    • Integration tests
-        • UAT                  │    • Contract tests
-                               │
-    ───────────────────────────┼──────────────────────────
-                               │
-        Q3: Business-facing    │    Q4: Technology-facing
-        (Critique)             │    (Quality attributes)
-        • Usability testing    │    • Performance tests
-        • A/B testing          │    • Security tests
-        • Smoke testing        │    • Stress/Soak tests
-        • Beta testing         │    • Chaos engineering
-                               │
-                         Critiquing the Product
+```mermaid
+quadrantChart
+    title Brian Marick's Testing Quadrants
+    x-axis "Technology Facing" --> "Business Facing"
+    y-axis "Supporting the Team" --> "Critiquing the Product"
+    quadrant-1 "Q1: Technology-facing (Correctness)"
+    quadrant-2 "Q2: Business-facing (Confidence)"
+    quadrant-3 "Q3: Business-facing (Critique)"
+    quadrant-4 "Q4: Technology-facing (Quality attributes)"
+    "Unit tests": [0.15, 0.85]
+    "Component tests": [0.25, 0.75]
+    "Integration tests": [0.35, 0.65]
+    "Contract tests": [0.45, 0.55]
+    "Acceptance tests": [0.65, 0.85]
+    "User story tests": [0.75, 0.75]
+    "Exploratory testing": [0.85, 0.65]
+    "UAT": [0.95, 0.55]
+    "Usability testing": [0.85, 0.35]
+    "A/B testing": [0.75, 0.25]
+    "Smoke testing": [0.65, 0.15]
+    "Beta testing": [0.55, 0.05]
+    "Performance tests": [0.25, 0.25]
+    "Security tests": [0.15, 0.15]
+    "Stress/Soak tests": [0.35, 0.10]
+    "Chaos engineering": [0.05, 0.35]
 ```
 
 ---
@@ -112,6 +130,8 @@ class OrderServiceUnitTest {
 }
 ```
 
+The unit test above uses Mockito to mock external dependencies (`OrderRepository`, `InventoryClient`) while testing only the `OrderService` logic. This keeps the test fast (milliseconds) and deterministic since no database or network calls are involved. The `@InjectMocks` annotation automatically injects the mocks into the service constructor.
+
 ### Layer 2: Integration Tests (20%)
 
 Test service interactions with real infrastructure:
@@ -142,6 +162,8 @@ class OrderRepositoryIntegrationTest {
 }
 ```
 
+Integration tests like this one use Testcontainers to spin up a real PostgreSQL instance, ensuring the SQL dialect and constraints match production exactly. The `@DataJpaTest` annotation loads only JPA-related beans, keeping the context lightweight. The trade-off is slower execution (seconds vs milliseconds) but higher confidence in database interactions.
+
 ### Layer 3: Contract Tests (5%)
 
 Verify API compatibility between services:
@@ -167,6 +189,8 @@ class OrderServiceContractTest {
     }
 }
 ```
+
+Contract tests sit between integration and E2E on the pyramid. They verify that the provider API satisfies all consumer expectations without deploying the entire system. The `@State` annotations on the provider side set up specific data scenarios before each verification, ensuring deterministic results.
 
 ### Layer 4: E2E Tests (5%)
 
@@ -203,6 +227,8 @@ class OrderE2ETest {
     }
 }
 ```
+
+E2E tests provide the highest confidence at the system level but are slow, flaky, and expensive to maintain. Use them sparingly for critical user journeys only. The pattern above chains multiple API calls to simulate a real user flow—note that failures at any step require debugging across service boundaries.
 
 ---
 
@@ -293,47 +319,96 @@ public class TestingMetrics {
 }
 ```
 
+The `TestingMetrics` class above defines SLAs for the test suite. The `passRate` threshold of 99.5% ensures that no more than 0.5% of tests fail due to real regressions. The `flakyRate` threshold of <1% prevents unreliable tests from eroding trust. Monitoring these metrics in CI helps teams detect when the test pyramid is getting unbalanced or when flakiness is creeping in.
+
 ---
 
 ## Common Testing Anti-Patterns
 
 ### 1. Ice Cream Cone (Inverted Pyramid)
 
-```
-    Too many E2E tests
-   ╱──────────────────╲
-  ╱   Many E2E tests   ╲     Slow, flaky, expensive
- ╰──────────────────────╯
-  ╲   Few integration   ╱
-   ╲──────────────────╱
-    ╲     Few unit    ╱
-     ╲──────────────╱
+Too many E2E tests, too few unit tests:
+
+```mermaid
+graph TD
+    subgraph E2E_Many["Too Many E2E Tests"]
+        direction LR
+        E2E_M_desc["Slow, flaky, expensive"]
+    end
+    subgraph Int_Few["Few Integration Tests"]
+        direction LR
+    end
+    subgraph Unit_Few["Few Unit Tests"]
+        direction LR
+    end
+    Unit_Few --> Int_Few --> E2E_Many
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class Unit_Few green
+    class Int_Few blue
+    class E2E_Many pink
 ```
 
 **Fix**: Add more unit tests, reduce E2E scope.
 
 ### 2. Hourglass Pattern
 
-```
-  ╱──────╲              Many unit tests (good)
- ╰────────╯
- ╱────────────╲
-╰──────────────╯    Few integration tests!
-╱──────────────────╲
-╰──────────────────╯         Many E2E tests
+Many unit and E2E tests, but few integration tests:
+
+```mermaid
+graph TD
+    subgraph Unit_Many_HG["Many Unit Tests (good)"]
+        direction LR
+    end
+    subgraph Int_Few_HG["Few Integration Tests (missing!)"]
+        direction LR
+    end
+    subgraph E2E_Many_HG["Many E2E Tests"]
+        direction LR
+    end
+    Unit_Many_HG --> Int_Few_HG --> E2E_Many_HG
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class Unit_Many_HG green
+    class Int_Few_HG blue
+    class E2E_Many_HG pink
 ```
 
 **Fix**: Add integration tests to fill the gap.
 
 ### 3. Diamond Pattern
 
-```
-   ╱──────╲        Few unit tests
-  ╰────────╯
- ╱────────────╲
-╰──────────────╯   Many integration tests
-╱──────────────────╲
-╰──────────────────╯   Few E2E tests
+Too many integration tests, too few unit and E2E tests:
+
+```mermaid
+graph TD
+    subgraph Unit_Few_D["Few Unit Tests"]
+        direction LR
+    end
+    subgraph Int_Many_D["Many Integration Tests"]
+        direction LR
+    end
+    subgraph E2E_Few_D["Few E2E Tests"]
+        direction LR
+    end
+    Unit_Few_D --> Int_Many_D --> E2E_Few_D
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class Unit_Few_D green
+    class Int_Many_D blue
+    class E2E_Few_D pink
 ```
 
 **Fix**: Integration tests are slow. Move logic to unit tests.

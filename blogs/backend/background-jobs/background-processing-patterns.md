@@ -14,6 +14,36 @@ Background processing allows applications to execute work asynchronously outside
 
 Background jobs fall into three broad categories: scheduled tasks triggered by time, message-driven tasks triggered by events, and workflow orchestration coordinating multi-step processes.
 
+```mermaid
+graph TD
+    subgraph Scheduling[Scheduling Patterns]
+        A[Fixed Interval] --> B[Execute at regular intervals]
+        C[Cron-Based] --> D[Execute at specific times]
+        E[Distributed] --> F[Prevent duplicate execution across nodes]
+    end
+
+    subgraph MessageDriven[Message-Driven Patterns]
+        G[Work Queue] --> H[Distribute tasks among workers]
+        I[Priority Queue] --> J[Process high-priority tasks first]
+        K[Dead Letter Queue] --> L[Route failed messages for analysis]
+    end
+
+    subgraph Workflow[Workflow Orchestration]
+        M[Saga Orchestration] --> N[Compensating transactions for rollback]
+        O[State Machine] --> P[Explicit states, transitions, and guards]
+    end
+
+    Scheduling --> BackgroundJobs[Background Job Processing]
+    MessageDriven --> BackgroundJobs
+    Workflow --> BackgroundJobs
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+```
+
 ## Scheduling Patterns
 
 ### Fixed Interval Scheduling
@@ -37,7 +67,7 @@ public class CacheEvictionJob {
 
 ### Cron-Based Scheduling
 
-Precise scheduling using cron expressions for tasks that must run at specific times.
+Precise scheduling using cron expressions for tasks that must run at specific times. Unlike `fixedRate`, cron expressions give you second-level precision over exactly when a task fires — every day at 2:00 AM, every Monday at 9:30 AM, etc. This is ideal for business-aligned schedules such as end-of-day reporting or monthly billing cycles. However, cron schedules assume the application is running at the specified time; if the application was down, the execution is simply missed.
 
 ```java
 @Scheduled(cron = "0 0 2 * * ?")
@@ -48,7 +78,7 @@ public void generateDailyReports() {
 
 ### Distributed Scheduling
 
-When running multiple application instances, distributed scheduling prevents duplicate execution using locks.
+When running multiple application instances, distributed scheduling prevents duplicate execution using locks. The trade-off here is between simplicity and safety: without distributed locking, every instance would fire the same cron expression, leading to duplicate database writes, duplicate API calls, or race conditions. The snippet below uses `@SchedulerLock` to guarantee that only one instance proceeds.
 
 ```java
 @Scheduled(cron = "0 0 3 * * ?")
@@ -62,7 +92,7 @@ public void cleanupOldRecords() {
 
 ### Work Queue
 
-Work queues distribute tasks among multiple workers for parallel processing and load balancing.
+Work queues distribute tasks among multiple workers for parallel processing and load balancing. The key design decision here is the concurrency model: a pool of identical workers each pull from the same queue. This gives you horizontal scaling for free — add more workers to increase throughput. The trade-off is that ordering guarantees weaken under concurrency, and a poison message (one that always fails) can block a worker slot if not handled with a dead-letter mechanism.
 
 ```java
 @Component
@@ -77,7 +107,7 @@ public class EmailNotificationConsumer {
 
 ### Priority Queue
 
-High-priority tasks are processed before lower-priority ones, ensuring critical operations are not delayed.
+High-priority tasks are processed before lower-priority ones, ensuring critical operations are not delayed. Priority queues introduce a subtle trade-off: strict priority-based processing can lead to starvation of low-priority tasks under sustained high-priority load. A common mitigation is to use aging — increasing a task's effective priority the longer it waits — or to cap how many consecutive high-priority tasks may be processed before a low-priority task is pulled.
 
 ```java
 @Component
@@ -93,7 +123,7 @@ public class PaymentProcessor {
 
 ### Dead Letter Queue
 
-Failed messages are routed to a dead letter queue for analysis and retry, preventing message loss.
+Failed messages are routed to a dead letter queue for analysis and retry, preventing message loss. A DLQ acts as the safety net of your messaging infrastructure: once a message exhausts its retry budget, it lands in the DLQ rather than being silently dropped. This enables post-mortem analysis, manual reprocessing via a replay mechanism, and alerting when the DLQ depth grows — an early indicator of systemic failures.
 
 ```java
 @Component
@@ -111,7 +141,7 @@ public class DeadLetterHandler {
 
 ### Saga Orchestration
 
-Distributed transactions across multiple services using compensation for rollback.
+Distributed transactions across multiple services using compensation for rollback. The saga pattern is the go-to alternative to distributed transactions (XA) in microservices. Instead of holding locks across services, each step publishes an event or calls the next service, and if any step fails, previously completed steps are undone via compensating actions. The orchestrated variant shown here centralises the coordination logic in a single class. Choreographed sagas, by contrast, distribute the logic across services via event handlers — less coupling but harder to reason about the overall flow.
 
 ```java
 @Component
@@ -139,7 +169,7 @@ public class OrderSagaOrchestrator {
 
 ### State Machine Orchestration
 
-Modeling business processes as state machines with explicit transitions and guards.
+Modeling business processes as state machines with explicit transitions and guards. State machines excel when the process is fundamentally about lifecycle management: an order can be PENDING, CONFIRMED, SHIPPED, or CANCELLED, and each transition is a well-defined atomic move. The trade-off against a full workflow engine is that state machines struggle with parallel branches, timed waits, and human-in-the-loop steps without custom scaffolding. Keep state machines focused on entity lifecycle and push complex multi-actor orchestration to a workflow engine.
 
 ```java
 public enum OrderState {

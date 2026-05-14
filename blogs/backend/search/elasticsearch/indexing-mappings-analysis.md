@@ -18,6 +18,8 @@ A well-designed index mapping is the foundation of good search performance and r
 
 ### Explicit Mapping
 
+The following configuration programmatically creates an Elasticsearch index with custom settings and explicit field mappings. The `product_analyzer` uses an `edge_ngram` filter for autocomplete support — it tokenizes input into progressively longer prefixes so that "phone" matches queries for "p", "ph", "pho", etc. A separate `search_analyzer` is applied at query time (without the ngram filter) so that the user's full query term is matched against the indexed prefixes:
+
 ```java
 @Configuration
 public class ProductIndexMapping {
@@ -152,6 +154,8 @@ public class ProductIndexMapping {
 
 ### Analyzer Configuration
 
+An analyzer is a pipeline of three stages: **char_filter** (preprocesses the raw text — stripping HTML, replacing characters), **tokenizer** (splits text into tokens), and **filter** (transforms tokens — lowercasing, stemming, stop-word removal, synonym expansion). The example below configures five analyzers for different use cases: `html_analyzer` strips HTML tags before analysis, `ngram_analyzer` generates substrings for partial matching, and `synonym_analyzer` expands terms using a synonym list:
+
 ```json
 {
   "settings": {
@@ -217,6 +221,8 @@ public class ProductIndexMapping {
 
 ### Java Configuration for Analyzers
 
+Elasticsearch's `_analyze` API lets you test how a specific analyzer processes text without indexing any documents. The `AnalyzerConfiguration` below provides a method to send text to this endpoint and inspect the resulting tokens — invaluable for debugging analysis chains before deploying them:
+
 ```java
 @Component
 public class AnalyzerConfiguration {
@@ -261,6 +267,8 @@ public class AnalyzerConfiguration {
 ```
 
 ## Dynamic Templates
+
+Dynamic templates let you control how unmapped fields are handled when documents are indexed. Instead of relying on default dynamic mapping (which might infer a `text` type for a string that should be `keyword`), you define patterns. The configuration below maps all strings to `keyword` by default, treats `long` values as `integer`, and recognizes fields ending in `_at` as dates. The `path_match` pattern applies to nested fields matching `attributes.*`:
 
 ```java
 @Configuration
@@ -319,6 +327,8 @@ public class DynamicTemplateMapping {
 ```
 
 ## Reindexing Strategies
+
+Reindexing is required when you need to change an index's mapping or settings. The zero-downtime pattern uses an alias: the application queries the alias, not the underlying index. You create a new index with the updated mapping, reindex data into it, atomically swap the alias, then delete the old index. The pipeline variant transforms documents during reindex, useful for data migration:
 
 ```java
 @Component
@@ -391,6 +401,8 @@ public class ReindexService {
 
 ## Index Lifecycle Management
 
+ILM automates the management of time-series indices through four phases. **Hot** — indices are actively written and queried; rollover triggers when the index reaches 50 GB or 30 days. **Warm** — indices are read-only, shrunk to a single shard, and force-merged. **Cold** — indices are frozen to reduce memory footprint. **Delete** — indices are removed after 365 days:
+
 ```java
 @Component
 public class IndexLifecycleManager {
@@ -460,6 +472,8 @@ public class IndexLifecycleManager {
 
 ### Using Text for All String Fields
 
+A `text` field is analyzed and cannot be used for sorting, terms aggregation, or exact filtering. Fields like email, status, and category should be `keyword`:
+
 ```java
 // Wrong: All strings as text
 "properties": {
@@ -484,6 +498,8 @@ public class IndexLifecycleManager {
 ```
 
 ### Not Using doc_values
+
+`doc_values` is an on-disk data structure optimized for sorting and aggregations. Without it, Elasticsearch must load the field's inverted index into memory, which is inefficient for these operations:
 
 ```java
 // Wrong: Missing doc_values for aggregations

@@ -142,6 +142,8 @@ public class ThreadDumpAnalyzer {
 }
 ```
 
+A single thread dump is a single data point — it may capture a transient state like a thread that happens to be mid-GC or mid-IO. Multiple dumps spaced 5 seconds apart reveal whether a thread's state is persistent. If the same thread appears `RUNNABLE` at the same method across all 5 dumps, it is likely in an infinite loop or a very long computation. If a thread pool's worker threads all show the same stack trace (e.g., all waiting on `RemoteService.call`), the pool is starved — every thread is blocked downstream and no work is progressing.
+
 ---
 
 ## Thread States
@@ -280,6 +282,8 @@ public class DeadlockExample {
 //   waiting to lock <0x000000076b5b4f40> (a java.lang.Object)
 //   which is held by "pool-1-thread-1"
 ```
+
+The classic dining-philosophers deadlock: thread-1 holds lockA and waits for lockB, while thread-2 holds lockB and waits for lockA. JVM thread dumps explicitly detect this cycle and print a "Found one Java-level deadlock" section. The remedy is always consistent lock ordering: if every thread locks resources in the same global order (e.g., always lockA then lockB), a cycle is impossible. In more complex systems, use `java.util.concurrent.locks.ReentrantLock` with `tryLock(timeout)` so threads can back off instead of waiting forever.
 
 ---
 

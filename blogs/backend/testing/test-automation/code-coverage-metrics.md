@@ -53,6 +53,8 @@ public String getStatus(double total) {
 // Branch coverage: 3/4 = 75% (missing the `total > 50` true path)
 ```
 
+Branch coverage is more meaningful than line coverage because it reveals untested decision paths. A method could have 100% line coverage but only 50% branch coverage if some conditional branches are never exercised.
+
 ### Mutation Coverage
 
 Evaluates test quality by introducing small code changes (mutations) and checking if tests catch them:
@@ -248,19 +250,28 @@ public class UserDto {
 
 ### Understanding the Report
 
-```
-Package: com.example.service          LINE   BRANCH
-  OrderService.java                   85%    72%
-  ├── placeOrder()                    100%   100%
-  ├── calculateDiscount()             90%    75%    ← Missing 10% lines
-  ├── validateOrder()                 70%    50%    ← Missing branches
-  └── sendNotification()              80%    n/a    ← No branches
+```mermaid
+graph TD
+    subgraph Package["Package: com.example.service"]
+        direction LR
+        PkgInfo["LINE: 85% | BRANCH: 72%"]
+    end
+    Package --> OrderService["OrderService.java<br/>LINE: 85% | BRANCH: 72%"]
+    OrderService --> PO["placeOrder()<br/>LINE: 100% | BRANCH: 100%"]
+    OrderService --> CD["calculateDiscount()<br/>LINE: 90% | BRANCH: 75%<br/> ← Missing 10% lines"]
+    OrderService --> VO["validateOrder()<br/>LINE: 70% | BRANCH: 50%<br/> ← Missing branches"]
+    OrderService --> SN["sendNotification()<br/>LINE: 80% | BRANCH: n/a<br/> ← No branches"]
 
-Elements:
-  Green  - Fully covered
-  Yellow - Partially covered
-  Red    - Not covered
-  Diamond - Branch (full = green, partial = yellow, none = red)
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+    class Package green
+    class PO green
+    class CD yellow
+    class VO pink
+    class SN blue
 ```
 
 ### Analyzing Coverage Gaps
@@ -409,6 +420,8 @@ public class CoverageGoals {
     }
 }
 ```
+
+Different layers of the application warrant different coverage targets. Service-layer business logic demands the highest coverage (90%+ branch), while auto-generated DTOs and configuration classes can be safely excluded. The JaCoCo per-class rules in the Maven plugin configuration above implement exactly this tiered approach.
 
 ---
 

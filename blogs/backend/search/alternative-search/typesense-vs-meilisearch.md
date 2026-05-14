@@ -16,7 +16,7 @@ This comparison helps you choose between them based on your specific requirement
 
 ## Typesense Architecture
 
-Typesense is written in C++ for performance. It stores the entire index in RAM for ultra-fast search.
+Typesense is written in C++ for performance. It stores the entire index in RAM for ultra-fast search. The Java client configuration below sets up a connection to a Typesense server running on port 8108, with configurable timeouts and health-check intervals. Unlike Meilisearch's single-API-key model, Typesense supports multiple API keys scoped to specific actions:
 
 ```java
 @Configuration
@@ -39,6 +39,8 @@ public class TypesenseConfiguration {
 ```
 
 ### Typesense Indexing
+
+Typesense requires an explicit schema before indexing — every field must declare its type and whether it is a facet. This upfront schema definition ensures predictable storage and query behavior. The `token_separators` and `symbols_to_index` options give fine-grained control over how text is tokenized:
 
 ```java
 @Component
@@ -103,6 +105,8 @@ public class TypesenseIndexer {
 ```
 
 ### Typesense Search
+
+Typesense's search parameters provide fine-grained control. The `queryBy` field specifies which fields to search and their relative weights (separated by commas). Filter expressions use a `field:=value` syntax with `&&` for AND composition. Typo tolerance is configured via `numTypos`, `minLen1typo`, and `minLen2typo` — setting the minimum word length for 1-typo and 2-typo corrections:
 
 ```java
 @Service
@@ -181,6 +185,8 @@ public class TypesenseSearchService {
 
 ## Meilisearch Implementation
 
+Meilisearch uses a different filter syntax (`field = "value"` with `AND` joining) compared to Typesense's `field:=value` with `&&`. The Meilisearch approach below shows the equivalent search. Unlike Typesense, Meilisearch auto-detects typo tolerance settings based on word length, though you can override them:
+
 ```java
 // (See meilisearch-getting-started.md for detailed Meilisearch implementation)
 // Key differences:
@@ -231,6 +237,8 @@ public class MeilisearchComparisonSearchService {
 
 ### Typesense
 
+Typesense's in-memory architecture delivers sub-millisecond search latencies, making it ideal for high-throughput scenarios. The trade-off is that the entire index must fit in RAM, which constrains dataset size by available memory. Scaling requires adding more nodes to increase aggregate RAM capacity:
+
 ```java
 // Typesense: Sub-millisecond search for in-memory data
 // Best for: High-throughput, low-latency search
@@ -264,6 +272,8 @@ public class TypesensePerformanceService {
 
 ### Meilisearch
 
+Meilisearch uses disk-based storage with memory-mapped files for caching, allowing it to handle datasets larger than available RAM. While slightly slower than Typesense for identical hardware, it scales vertically without the hard memory ceiling. Horizontal scaling requires a proxy-based approach rather than native clustering:
+
 ```java
 // Meilisearch: Fast disk-based search
 // Best for: General-purpose search, ease of use
@@ -293,6 +303,8 @@ public class MeilisearchPerformanceService {
 
 ### Choose Typesense When
 
+Typesense excels at ultra-low-latency workloads (sub-10ms), geo-spatial queries, and result grouping. However, you must ensure your dataset fits entirely in RAM. The decision guide below formalizes these criteria:
+
 ```java
 // When to use Typesense
 public class TypesenseDecisionGuide {
@@ -311,6 +323,8 @@ public class TypesenseDecisionGuide {
 ```
 
 ### Choose Meilisearch When
+
+Meilisearch is the better choice when developer experience and quick setup are priorities. It handles larger datasets (>100GB) gracefully and offers automatic typo tolerance with minimal configuration. Its larger community means more integrations and community support:
 
 ```java
 // When to use Meilisearch
@@ -333,6 +347,8 @@ public class MeilisearchDecisionGuide {
 
 ### Expecting Same Features
 
+Each engine has unique capabilities. Typesense supports geo-search and grouping natively; Meilisearch does not. Evaluate the feature matrix before committing:
+
 ```java
 // Wrong: Expecting Typesense geo features in Meilisearch
 // Typesense has geo-search built-in, Meilisearch does not (yet)
@@ -341,6 +357,8 @@ public class MeilisearchDecisionGuide {
 ```
 
 ### Ignoring Memory Requirements
+
+Typesense's in-memory architecture is a double-edged sword. Choosing it for a 1TB dataset without provisioning enough RAM will cause constant swapping and catastrophic performance degradation:
 
 ```java
 // Wrong: Choosing Typesense for 1TB dataset without enough RAM

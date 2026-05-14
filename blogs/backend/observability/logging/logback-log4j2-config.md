@@ -70,6 +70,8 @@ Logback and Log4j2 are the two primary logging frameworks for Java applications.
 </configuration>
 ```
 
+Logback uses `<springProperty>` to pull values from Spring's `application.properties` at runtime. The `rollingPolicy` compresses old log files with gzip (`.gz` extension), reducing disk usage by 80-90% for text logs. The `discardingThreshold` of 0 tells the async appender to never drop events—even when the queue is full, the application thread blocks rather than losing a log entry. Setting `neverBlock: true` reverses this: the application thread is never blocked, but events are silently dropped when the queue is full.
+
 ### Log4j2 Configuration
 
 ```xml
@@ -112,6 +114,8 @@ Logback and Log4j2 are the two primary logging frameworks for Java applications.
 </Configuration>
 ```
 
+Log4j2's `monitorInterval="30"` tells the framework to check for configuration file changes every 30 seconds—log levels can be adjusted without restarting the application. The `<Properties>` block uses `${sys:...}` syntax to reference system properties, and the abbreviated logger pattern `%c{1.}` shows only the last element of the class name (e.g., `MyService` instead of `com.myapp.service.MyService`), reducing log line length.
+
 ---
 
 ## Async Logging Deep Dive
@@ -138,6 +142,8 @@ public class LogbackAsyncService {
     }
 }
 ```
+
+Logback's `AsyncAppender` wraps another appender with a bounded blocking queue. When the queue reaches capacity, the `discardingThreshold` (default 20%) determines how aggressively events are dropped. At the default of 0.2, when the queue is 80% full, Logback starts dropping DEBUG and TRACE events—preserving higher-priority INFO, WARN, and ERROR events. This is a reasonable default for production, but for critical systems where no log should be dropped, set `discardingThreshold` to 0.
 
 ### Log4j2 Async Logger
 
@@ -175,6 +181,8 @@ public class Log4j2AsyncService {
 }
 ```
 
+Log4j2's async logger uses the LMAX Disruptor, a lock-free ring buffer, instead of a blocking queue. The ring buffer pre-allocates slots and uses CAS operations for coordination, avoiding lock contention under high throughput. The `includeLocation="false"` is a critical performance setting: when true, Log4j2 captures the caller's file name and line number by examining the call stack, which is 10-20x more expensive than omitting it.
+
 ---
 
 ## Performance Comparison
@@ -206,6 +214,8 @@ public class Log4j2AsyncService {
     </Appenders>
 </Configuration>
 ```
+
+Log4j2's garbage-free mode reuses thread-local buffers and direct encoders to avoid allocating objects during logging. In throughput benchmarks, this doubles performance and eliminates GC pauses attributable to logging. The trade-off is that thread-local buffers consume memory proportional to the number of logging threads—typically a few dozen KB per thread.
 
 ---
 
@@ -258,6 +268,8 @@ public class Log4j2AsyncService {
     </Loggers>
 </Configuration>
 ```
+
+The Routing Appender routes log events to different files based on the `serviceType` MDC value. Payment-related events go to `payment.log`, order events to `order.log`, and everything else to `general.log`. This is useful for compliance (keeping payment logs separate) or for reducing index sizes in centralized logging (different logs go to different Elasticsearch indices).
 
 ---
 

@@ -64,11 +64,15 @@ public class Order {
 // Customer fetched only when customer.getName() is called
 ```
 
+The fundamental difference between these two strategies lies in when the database query executes. With `EAGER` loading, Hibernate generates a SQL `LEFT JOIN` or a separate immediate query to fetch the related entity as part of the initial load. With `LAZY` loading, a proxy object is placed in the field instead—the real database query fires only when a method is called on that proxy. The trade-off is between guaranteed data availability (eager) and potential performance savings (lazy). Choosing incorrectly leads either to the `LazyInitializationException` when accessing proxies outside a transaction, or to the N+1 problem when lazy associations trigger queries in a loop.
+
 ---
 
 ## Real-World Use Cases
 
 ### Case 1: Proper Lazy Loading with Transactions
+
+The most common pitfall with lazy loading is accessing a proxy outside the Hibernate session boundary. The code below shows three scenarios: correct access within a `@Transactional` method, a broken pattern where the proxy is accessed after the session closes (throwing `LazyInitializationException`), and the recommended fix using a DTO that materializes all needed data inside the transaction.
 
 ```java
 @Service
@@ -116,6 +120,8 @@ public class GoodOrderService {
 
 ### Case 2: Eager Loading for Known Needs
 
+When you know in advance that a particular code path always needs the related data, you can override the default lazy strategy using `@EntityGraph` or `JOIN FETCH`. The `@EntityGraph` approach is declarative and clean, while `JOIN FETCH` in JPQL gives you more explicit control over the generated SQL. Both produce a single query with the necessary joins, avoiding the N+1 problem.
+
 ```java
 // When you know you'll need the related data
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -141,6 +147,8 @@ public class OrderDisplayService {
 ```
 
 ### Case 3: Batch Loading for Collections
+
+For `@OneToMany` associations that are too expensive to always fetch eagerly but are occasionally needed across multiple parent entities, `@BatchSize` provides a middle ground. Instead of fetching items one query at a time (the N+1 problem) or always joining (which can create Cartesian products with multiple collections), Hibernate batches the lazy loads into groups of the specified size. With `@BatchSize(size = 20)`, loading books for 100 authors generates only 1 query for authors plus 5 queries for books (100/20), rather than 100 individual queries.
 
 ```java
 @Entity
@@ -181,6 +189,8 @@ public class AuthorService {
 
 ### Mistake 1: Eager Loading Everything
 
+Marking every relationship as `EAGER` is a common beginner mistake. It forces Hibernate to load every related entity whenever the root entity is loaded, regardless of whether the data is needed. With multiple eager collections on the same entity, Hibernate may generate multiple queries or massive Cartesian-product joins. The rule of thumb is to default to `LAZY` and selectively eager-load only for specific query paths.
+
 ```java
 // WRONG: Eager load everything
 @Entity
@@ -211,6 +221,8 @@ public class Order {
 ```
 
 ### Mistake 2: Accessing Lazy Collections Outside Transaction
+
+The `LazyInitializationException` occurs when you try to access a lazy proxy or collection after the Hibernate session (and thus the persistence context) has been closed. The fix is to either ensure the data is accessed within the same `@Transactional` boundary, or to eagerly fetch the needed associations before the session closes.
 
 ```java
 // WRONG
@@ -243,6 +255,8 @@ public class FixedService {
 ```
 
 ### Mistake 3: Not Using @Transactional for Read Operations
+
+Even read operations accessed through Spring Data JPA repositories benefit from `@Transactional(readOnly = true)`. Without it, the Hibernate session is opened and closed around each individual repository call, so any lazy loading triggered incidentally by the calling code will fail.
 
 ```java
 // WRONG: No transaction, lazy loading fails
@@ -289,4 +303,4 @@ public class GoodController {
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

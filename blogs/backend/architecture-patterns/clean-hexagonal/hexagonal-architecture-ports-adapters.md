@@ -42,6 +42,8 @@ public interface InventoryService {
 }
 ```
 
+Ports are contracts. Inbound ports describe what the application can do ("place an order"). Outbound ports describe what the application needs ("save an order", "check inventory"). They are defined in the application core and are technology-agnostic — they import no framework annotations, no HTTP classes, no database drivers.
+
 ### Adapters
 
 Adapters implement ports for specific technologies. Each adapter translates between the port interface and the concrete technology.
@@ -100,6 +102,8 @@ public class OrderJpaAdapter implements OrderRepository {
 }
 ```
 
+The `OrderWebAdapter` translates HTTP JSON requests into `PlaceOrderCommand` objects and delegates to the use case. The `OrderJpaAdapter` translates between the domain `Order` and the JPA `OrderEntity`. Neither adapter contains business logic — they are pure translation layers. The core remains completely testable without HTTP or a database.
+
 ## Building the Hexagon Core
 
 The core contains domain entities and business logic with zero infrastructure dependencies:
@@ -153,6 +157,8 @@ public class Order {
 }
 ```
 
+The `Order` entity accepts an `InventoryService` (an outbound port) as a parameter to `place()` and `cancel()`. This is an important design choice: by injecting the port at the method level rather than in the constructor, the `Order` entity can interact with external services without violating the hexagonal boundary. The `PlaceOrderResult` return type encapsulates success or failure as a domain concept rather than throwing exceptions for predictable business rule violations.
+
 The application service orchestrates domain logic through ports:
 
 ```java
@@ -189,6 +195,8 @@ public class OrderApplicationService implements PlaceOrderUseCase {
     }
 }
 ```
+
+`OrderApplicationService` implements the inbound port. It creates domain objects, calls domain methods, and coordinates the flow between ports. The use case is intentionally thin — all business rules live in the domain entity. If the inventory check logic changes, you modify `Order.place()`, not this service.
 
 ## Database Adapter Implementation
 
@@ -277,6 +285,8 @@ public class OrderEntityMapper {
 }
 ```
 
+The persistence layer has three parts: the JPA entity (`OrderEntity`), the Spring Data repository (`SpringDataOrderRepository`), and the mapper (`OrderEntityMapper`). The mapper is the critical piece — it converts between the domain model (with value objects like `Money` and `OrderId`) and the persistence model (with primitives like `BigDecimal` and `String`). The `@Version` annotation on `OrderEntity` enables optimistic locking, preventing concurrent modifications.
+
 ## Testing Hexagonal Architecture
 
 The core can be tested in isolation by mocking ports:
@@ -318,6 +328,8 @@ class OrderTest {
 }
 ```
 
+The domain tests mock the `InventoryService` port to test both success and failure paths. The `Order` entity has no knowledge that `inventoryService` is a mock — it just calls the interface methods. This level of testing requires no Spring context, no database, and no stubs. It validates business logic in pure Java.
+
 ## Common Mistakes
 
 ### Leaking Adapter Code into the Core
@@ -338,6 +350,8 @@ public class Order {
     private final OrderId id;
 }
 ```
+
+A `@JsonProperty` annotation in a domain entity couples the core to Jackson's serialization behavior. If you later switch to a different JSON library or a binary serialization format, this annotation becomes meaningless or breaks. The core should have zero imports from external libraries.
 
 ### Multiple Adapters for the Same Port
 
@@ -369,6 +383,8 @@ public class InMemoryOrderRepository implements OrderRepository {
     }
 }
 ```
+
+The `InMemoryOrderRepository` is a test-only adapter that implements the same `OrderRepository` port. It uses a `ConcurrentHashMap` instead of a database. This can be used in integration tests to verify the application service behavior without setting up a database. The `@Primary` annotation ensures Spring uses the in-memory adapter during tests.
 
 ## Best Practices
 

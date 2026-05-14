@@ -35,16 +35,37 @@ Redis offers two high-availability solutions: **Sentinel** for automatic failove
 
 ### Architecture
 
-```
-Sentinel-1 ──┐
-              ├──> Master ──> Replica-1
-Sentinel-2 ──┤                   │
-              ├──> Sentinel-3    │
-              │                  └──> Replica-2
-Application ──┘
+Three Sentinel processes monitor the master and replicas. If the master fails, the Sentinels use a quorum-based election to promote a replica to master. The application connects through Sentinels to discover the current master.
+
+```mermaid
+graph LR
+    S1["Sentinel-1"]
+    S2["Sentinel-2"]
+    S3["Sentinel-3"]
+    M["Master"]
+    R1["Replica-1"]
+    R2["Replica-2"]
+    APP["Application"]
+
+    S1 --- M
+    S2 --- M
+    S3 --- M
+    M --> R1
+    M --> R2
+    APP --- S1
+    APP --- S2
+    APP --- S3
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
 ```
 
 ### Sentinel Configuration
+
+The quorum of 2 in `sentinel monitor` means at least 2 Sentinels must agree that the master is down before a failover is initiated. This prevents split-brain scenarios.
 
 ```conf
 # sentinel.conf
@@ -57,6 +78,8 @@ sentinel auth-pass mymaster mypassword
 ```
 
 ### Docker Compose
+
+The Docker Compose setup below deploys one master, two replicas, and three Sentinels. Each Sentinel has its own configuration file for independent monitoring.
 
 ```yaml
 version: '3.8'
@@ -156,6 +179,8 @@ networks:
 
 ### Spring Boot Sentinel Configuration
 
+Spring Boot's Lettuce client connects to the Sentinels to discover the current master. The `readFrom(REPLICA_PREFERRED)` setting routes reads to replicas, offloading the master.
+
 ```yaml
 spring:
   redis:
@@ -209,6 +234,8 @@ public class RedisSentinelConfig {
 
 ### Failover Testing
 
+During a failover, connections are disrupted for ~10 seconds while Sentinels detect the failure, elect a new master, and clients reconnect. The application should handle connection errors gracefully.
+
 ```java
 @Service
 public class SentinelFailoverTest {
@@ -250,18 +277,34 @@ public class SentinelFailoverTest {
 
 ### Architecture
 
-```
-                    ┌──────────────────┐
-                    │  Hash Slot 0-5461 │
-                    │    Master-1       │
-                    │    Replica-1      │
-                    └────────┬─────────┘
-                             │
-    ┌────────────────────┐   │   ┌────────────────────┐
-    │  Hash Slot 5462-10923     │     Hash Slot 10924-16383
-    │    Master-2              │       Master-3
-    │    Replica-2             │       Replica-3
-    └────────────────────┘       └────────────────────┘
+Redis Cluster distributes data across shards using hash slots. The diagram below shows 3 master nodes, each with a replica, covering all 16,384 hash slots.
+
+```mermaid
+graph TB
+    subgraph "Hash Slot 0-5461"
+        M1["Master-1"]
+        R1["Replica-1"]
+    end
+
+    subgraph "Hash Slot 5462-10923"
+        M2["Master-2"]
+        R2["Replica-2"]
+    end
+
+    subgraph "Hash Slot 10924-16383"
+        M3["Master-3"]
+        R3["Replica-3"]
+    end
+
+    M1 --- M2
+    M2 --- M3
+    M3 --- M1
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
 ```
 
 ### Cluster Configuration
@@ -277,6 +320,8 @@ daemonize no
 ```
 
 ### Docker Compose Cluster
+
+The Docker Compose setup creates 3 cluster nodes and an init container that runs the `redis-cli --cluster create` command to join them into a cluster.
 
 ```yaml
 version: '3.8'
@@ -352,6 +397,8 @@ networks:
 
 ### Spring Boot Cluster Configuration
 
+Spring Boot's Redis Cluster support automatically handles hash slot routing, redirects, and adaptive topology refresh.
+
 ```yaml
 spring:
   redis:
@@ -396,6 +443,8 @@ public class RedisClusterConfig {
 ```
 
 ### Hash Slot Awareness
+
+In Cluster mode, keys with the same hash tag (`{...}`) are guaranteed to be in the same hash slot, enabling multi-key operations within that slot.
 
 ```java
 @Service
@@ -447,6 +496,8 @@ public class ClusterAwareService {
 
 ### 1. Use Connection Pooling
 
+Lettuce connection pooling manages the number of concurrent connections to Redis, preventing resource exhaustion.
+
 ```yaml
 spring:
   redis:
@@ -460,6 +511,8 @@ spring:
 
 ### 2. Configure Read Preference
 
+Routing reads to replicas offloads the master, improving overall throughput for read-heavy workloads.
+
 ```java
 // Prefer replica reads for read-heavy workloads
 LettuceClientConfiguration.builder()
@@ -468,6 +521,8 @@ LettuceClientConfiguration.builder()
 ```
 
 ### 3. Handle Failover Gracefully
+
+Cache disruptions during failover with a database fallback to maintain availability.
 
 ```java
 @Service
@@ -490,6 +545,8 @@ public class ResilientRedisService {
 
 ### Mistake 1: Not Enough Sentinel Nodes
 
+A single Sentinel cannot form a quorum and creates a single point of failure for the monitoring system itself.
+
 ```conf
 # WRONG: Single sentinel
 sentinel monitor mymaster 127.0.0.1 6379 1
@@ -499,6 +556,8 @@ sentinel monitor mymaster 127.0.0.1 6379 2
 ```
 
 ### Mistake 2: Cross-Slot Multi-Key Operations in Cluster
+
+Keys in different hash slots cannot be operated on atomically in Cluster mode. Use hash tags to co-locate related keys.
 
 ```java
 // WRONG: Keys in different slots

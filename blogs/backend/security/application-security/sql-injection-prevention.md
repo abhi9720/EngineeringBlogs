@@ -24,7 +24,7 @@ SQL injection remains one of the most dangerous and prevalent web application vu
 
 ### Classic Injection
 
-Consider a login endpoint:
+Consider a login endpoint that builds a SQL query by concatenating user input. The normal request produces a valid query. The injection attack uses `--` to comment out the password check, bypassing authentication entirely:
 
 ```java
 // VULNERABLE
@@ -52,6 +52,8 @@ SELECT * FROM users WHERE username = 'admin'--' AND password = ''
 
 ### More Sophisticated Attacks
 
+Attackers can extract data through UNION queries, infer information through boolean-based blind injection, or trigger time delays to confirm vulnerability:
+
 ```
 Union-based injection:
 username=' UNION SELECT id, username, password FROM admins--
@@ -68,6 +70,8 @@ username=admin'; IF (SELECT COUNT(*) FROM users) > 0 WAITFOR DELAY '0:0:5'--
 ## Prevention Strategy 1: Parameterized Queries (Prepared Statements)
 
 ### With JDBC
+
+Parameterized queries separate SQL code from data. The `PreparedStatement` sends the SQL template to the database first, then binds parameters separately — the database driver escapes values before they reach the SQL parser, so malicious input cannot alter the query structure:
 
 ```java
 @Repository
@@ -122,6 +126,8 @@ public class UserJdbcRepository {
 
 ### With Spring Data JPA
 
+Spring Data JPA derived query methods are automatically parameterized. Even `@Query` with named parameters (`:username`) is safe because Hibernate uses `PreparedStatement` internally. Never concatenate values into JPQL strings:
+
 ```java
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -145,6 +151,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 ```
 
 ### With Native Queries
+
+Native SQL queries offer maximum flexibility but require the same parameterization discipline. Always use `setParameter` — never concatenate conditions into the SQL string:
 
 ```java
 @Repository
@@ -178,6 +186,8 @@ public class UserNativeQueryRepository {
 
 ## Prevention Strategy 2: Stored Procedures
 
+Stored procedures encapsulate SQL logic in the database and accept parameters safely. The procedure below takes a username parameter and returns matching non-deleted users:
+
 ```sql
 -- SECURE: Stored procedure with parameterized input
 CREATE PROCEDURE get_user_by_username(
@@ -201,6 +211,8 @@ Optional<User> findByUsernameStoredProcedure(@Param("p_username") String usernam
 ## Prevention Strategy 3: Input Validation (Defense in Depth)
 
 ### Whitelist Validation
+
+While parameterized queries prevent injection for data values, you sometimes need dynamic identifiers (table names, column names, sort directions) that cannot be parameterized. For these cases, validate against a strict whitelist:
 
 ```java
 @Component
@@ -231,6 +243,8 @@ public class SqlInputValidator {
 ```
 
 ### Safe Dynamic Sorting
+
+Dynamic sorting by user-controlled input is a common injection vector. The safe approach maps user-facing sort field names to known-safe column names in a whitelist map:
 
 ```java
 @Service
@@ -263,6 +277,8 @@ public class UserService {
 ## Prevention Strategy 4: ORM Safety Best Practices
 
 ### JPA Specification (Dynamic Queries)
+
+The JPA Criteria API and Spring Data Specifications build queries programmatically using type-safe API methods. The `CriteriaBuilder` automatically escapes values — there is no risk of injection because no string concatenation is involved:
 
 ```java
 public class UserSpecifications {
@@ -297,6 +313,8 @@ public class UserSearchService {
 ```
 
 ### QueryDSL
+
+QueryDSL takes type safety further by generating Q-classes from your entity model. The `BooleanBuilder` dynamically composes `WHERE` clauses with method calls — injection is structurally impossible:
 
 ```java
 // SECURE: QueryDSL generates type-safe queries
@@ -349,6 +367,8 @@ public class UserQueryRepository {
 
 ### Mistake 1: Dynamic Query Building with String Concatenation
 
+Building JPQL with string concatenation is just as dangerous as JDBC string concatenation. The Criteria API provides the same flexibility without the risk:
+
 ```java
 // WRONG: Building JPQL with string concatenation
 String jpql = "FROM User WHERE 1=1";
@@ -365,6 +385,8 @@ List<User> users = userRepository.findAll(spec);
 
 ### Mistake 2: Escaping Instead of Parameterizing
 
+Manual escaping (replacing `'` with `''`) is error-prone and does not protect against all injection vectors. Parameterized queries are the only reliable defense:
+
 ```java
 // WRONG: Manual escaping (it's very difficult to get right)
 String safeUsername = username.replace("'", "''");
@@ -379,6 +401,8 @@ ps.setString(1, username);
 ```
 
 ### Mistake 3: Logging Sensitive SQL
+
+Logging full SQL queries with parameter values leaks passwords and sensitive data into log files:
 
 ```java
 // WRONG: Logging the full SQL with parameters

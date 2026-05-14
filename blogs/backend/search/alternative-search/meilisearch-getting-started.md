@@ -18,6 +18,8 @@ Key features include typo tolerance, filtering, faceted search, synonym support,
 
 ### Running Meilisearch with Docker
 
+The fastest way to get started is via Docker. The following command mounts a local volume for persistent data and sets a master key for API authentication. The container listens on port 7700, which is the default Meilisearch HTTP port:
+
 ```bash
 docker run -d \
   --name meilisearch \
@@ -28,6 +30,8 @@ docker run -d \
 ```
 
 ### Spring Boot Integration
+
+To communicate with Meilisearch from a Java application, configure a `MeilisearchClient` bean. The host and API key are externalized via `application.properties` so they can vary between environments without code changes:
 
 ```java
 @Configuration
@@ -44,6 +48,8 @@ public class MeilisearchConfiguration {
 
 ### Maven Dependency
 
+Add the Meilisearch Java SDK to your `pom.xml`. The library provides a fluent API for index management, document CRUD, and search operations:
+
 ```xml
 <dependency>
     <groupId>com.meilisearch.sdk</groupId>
@@ -53,6 +59,10 @@ public class MeilisearchConfiguration {
 ```
 
 ## Creating an Index
+
+Meilisearch indexes are created on first use. Before indexing documents, configure the index settings to control search behavior. The `searchableAttributes` list defines which fields are searched, `filterableAttributes` enables faceted filtering, and `sortableAttributes` allows result ordering. Custom `rankingRules` let you prioritize typo tolerance, word proximity, attribute weight, and exactness in any order.
+
+The `TypoTolerance` configuration here sets the minimum word size for one typo to 3 characters and for two typos to 6 characters, balancing forgiveness against precision:
 
 ```java
 @Component
@@ -110,6 +120,10 @@ public class MeilisearchIndexManager {
 ```
 
 ## Indexing Documents
+
+Meilisearch uses an asynchronous task system for document operations, meaning `addDocuments`, `deleteDocument`, and `deleteAllDocuments` return a `TaskInfo` immediately. The `waitForTask` helper polls the task status until completion (or timeout), ensuring the operation is confirmed before proceeding. This pattern is critical for integration tests and indexing workflows that depend on data visibility.
+
+Batch indexing is significantly more efficient than one-by-one document insertion, as it reduces HTTP round-trips:
 
 ```java
 @Component
@@ -180,6 +194,8 @@ public class MeilisearchIndexer {
 ```
 
 ## Search Operations
+
+Meilisearch's search API supports filtering, sorting, faceting, and highlighting out of the box. The following service demonstrates a production-grade search endpoint. Filters are built dynamically — category, brand, price range, and availability are composed into a filter expression using the `AND` operator. Faceted search returns aggregated counts per category and brand, enabling drill-down navigation. Highlighting wraps matched terms in `<mark>` tags so the frontend can emphasize them:
 
 ```java
 @Service
@@ -291,6 +307,8 @@ public class MeilisearchSearchService {
 
 ## Synonym Configuration
 
+Synonyms improve recall by mapping equivalent terms. When a user searches "laptop", Meilisearch will also match documents containing "notebook", "macbook", or "chromebook". Synonyms are configured per index and can be updated dynamically without reindexing. Use synonyms judiciously — overly broad mappings can hurt precision:
+
 ```java
 @Component
 public class MeilisearchSynonymManager {
@@ -318,6 +336,8 @@ public class MeilisearchSynonymManager {
 ```
 
 ## Monitoring and Stats
+
+Meilisearch exposes index statistics — document count, database size, and last update timestamp — through its stats API. A health check endpoint returns the server status and version. Wrapping these in service methods allows you to integrate Meilisearch monitoring into your existing observability stack (e.g., exposing metrics via Actuator):
 
 ```java
 @Component
@@ -361,6 +381,8 @@ public class MeilisearchMonitor {
 
 ### Not Configuring Searchable Attributes
 
+By default, Meilisearch searches all fields, which can return irrelevant results and degrade performance. Always restrict searchable attributes to the fields that matter:
+
 ```java
 // Wrong: Default settings search all fields
 // Every field is searchable, causing irrelevant results
@@ -370,6 +392,8 @@ settings.setSearchableAttributes(List.of("name", "description"));
 ```
 
 ### Missing Filterable Attributes
+
+Filters fail silently if the attribute was not declared as `filterable` during setup. Plan your filtering requirements early to avoid reindexing:
 
 ```java
 // Wrong: Cannot use filters

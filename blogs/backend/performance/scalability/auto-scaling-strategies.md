@@ -120,6 +120,8 @@ spec:
         averageValue: 10
 ```
 
+Custom metrics decouple scaling from resource utilization (CPU/memory) and tie it directly to business signals. Scaling on requests per second is more responsive than CPU — a traffic spike shows up in RPS immediately, while CPU lags because threads spend time waiting on I/O before showing utilization. Queue depth is an even earlier signal: once the backlog starts growing, you already need more capacity. The HPA computes a desired replica count per metric and uses the maximum across all metrics, so a sudden queue spike can trigger a scale-up even if CPU is still low.
+
 ---
 
 ## Spring Boot Metrics for Auto-Scaling

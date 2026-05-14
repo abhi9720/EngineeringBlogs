@@ -18,6 +18,8 @@ FastAPI is a modern, fast web framework for building APIs with Python 3.7+ based
 
 ## Setup
 
+FastAPI's application constructor accepts metadata that powers automatic documentation. The `title`, `description`, and `version` fields populate the OpenAPI spec. The `docs_url` and `redoc_url` configure where Swagger UI and ReDoc are served. CORS middleware is added via `app.add_middleware()` — the `allow_origins` list should be restricted in production, not set to `["*"]`.
+
 ```python
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -45,6 +47,8 @@ if __name__ == "__main__":
 ```
 
 ## Path Operations
+
+FastAPI path operations map HTTP methods and paths to handler functions. Return types drive automatic response serialization via the `response_model` parameter — FastAPI validates responses against the declared model, ensuring API contracts are met. Path parameters are declared as function arguments with matching names in the URL template. Query parameters (`skip`, `limit`, `role`) are automatically parsed from URL queries.
 
 ### Basic Endpoints
 
@@ -110,6 +114,8 @@ async def delete_user(user_id: str):
         raise HTTPException(status_code=404, detail="User not found")
 ```
 
+FastAPI handles CRUD endpoints with minimal boilerplate. The `response_model=User` on GET endpoints filters outgoing data to match the schema. The `status_code=status.HTTP_201_CREATED` on POST sets the response status. Error handling uses `HTTPException`, which FastAPI serializes into the same JSON error format. The `exclude_unset=True` on `user.dict()` in PUT ensures only sent fields are updated — partial updates without accidentally clearing unset fields.
+
 ## Pydantic Models
 
 ```python
@@ -162,6 +168,8 @@ class User(UserBase):
             datetime: lambda v: v.isoformat()
         }
 ```
+
+Pydantic models define the API contract. Inheritance (`UserBase` -> `UserCreate`/`User`) reduces duplication — common fields are defined once. `Field(...)` marks required fields with constraints like `min_length` and `max_length`. The `@validator` decorator adds custom validation — here `validate_password` checks for uppercase letters and digits. `orm_mode = True` enables populating Pydantic models from ORM objects using attribute access instead of dict keys.
 
 ## Dependency Injection
 
@@ -217,6 +225,8 @@ async def admin_dashboard(admin: User = Depends(require_admin)):
     return {"message": "Admin dashboard data"}
 ```
 
+FastAPI's dependency injection system uses `Depends()` to declare dependencies. The `get_db` dependency yields a database connection and ensures cleanup via `try/finally` — making it an async context manager without the context manager syntax. The `get_current_user` dependency extracts the JWT token, verifies it, and returns the user. The `require_admin` dependency builds on `get_current_user`, composing dependencies like a middleware chain but with explicit typing and automatic injection.
+
 ### Dependency with Parameters
 
 ```python
@@ -247,6 +257,8 @@ async def list_items(
     return await items.to_list()
 ```
 
+Dependencies can accept parameters by using higher-order functions. The `pagination` function returns a dict and uses FastAPI's `Query()` validators with constraints like `ge=0` and `le=100`. Dependencies that return dicts can be injected as function parameters with dict type hints. This pattern is useful for reusable parameter groups — pagination, filtering, sorting — that appear across multiple endpoints.
+
 ## Error Handling
 
 ```python
@@ -276,6 +288,8 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"detail": "Internal server error"}
     )
 ```
+
+Custom exception handlers let you override FastAPI's default error responses. The `AppException` class carries a custom status code and message. `@app.exception_handler(AppException)` registers a handler that returns JSON responses with the custom status. The global `Exception` handler catches all unhandled errors, returning a generic 500 response — important for preventing stack traces from leaking in production.
 
 ## WebSocket
 
@@ -315,6 +329,8 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 ```
+
+FastAPI's WebSocket support uses the `@app.websocket()` decorator. The `ConnectionManager` pattern maintains a set of active connections and supports broadcasting messages to all connected clients. WebSocket endpoints use `while True` loops to continuously receive messages — the loop exits on `WebSocketDisconnect`, which is caught and used to clean up the connection from the manager.
 
 ## Testing
 
@@ -365,6 +381,8 @@ def test_unauthorized_access():
     response = client.get("/api/users/me")
     assert response.status_code == 401
 ```
+
+`TestClient` from Starlette provides a synchronous interface to test FastAPI applications without running a server. Tests use standard `pytest` patterns — `client.get()`, `client.post()` with JSON bodies — and assertions on status codes and response bodies. The test client handles request/response lifecycle internally, making tests fast and self-contained.
 
 ## Background Tasks
 

@@ -20,6 +20,8 @@ Blue-green deployment runs two identical environments (blue and green) with only
 
 ### Blue Deployment (Current Version)
 
+Blue and green are two fully independent deployments running side by side. At any given time only one (the "active" version) receives production traffic. Each deployment has its own database schema (`orders_v1` vs `orders_v2`) so schema changes for the new version don't affect the running production environment.
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -60,6 +62,8 @@ spec:
 
 ### Green Deployment (New Version)
 
+The green deployment runs the new version (v2.0.0) with its own database schema. During the deployment, both blue and green are running simultaneously. The readiness probe ensures green only receives traffic after it passes health checks.
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -99,6 +103,8 @@ spec:
 ```
 
 ### Service for Traffic Switching
+
+Traffic switching is done by updating the Kubernetes Service's selector label from `version: blue` to `version: green`. This is a single atomic change — until the selector is updated, all traffic continues flowing to the blue deployment, providing instant rollback capability.
 
 ```yaml
 apiVersion: v1
@@ -185,6 +191,8 @@ spec:
 
 ## Blue-Green with Spring Boot
 
+The Spring Boot application must be deployment-aware — it uses the `ACTIVE_PROFILE` environment variable to select the correct database schema and connection pool. The scheduled health verification ensures the active database connection is functional, catching schema mismatches early.
+
 ```java
 @Component
 public class BlueGreenRouter {
@@ -224,6 +232,8 @@ public class BlueGreenRouter {
 ```
 
 ## Database Migrations
+
+Database schema changes must be backward-compatible during the transition window. The old version (blue) reads from `orders_v1` while the new version (green) writes to `orders_v2`. A data sync job copies recent records from v1 to v2 so green has fresh data after the switch. Rollback simply drops the v2 schema.
 
 ```java
 @Component

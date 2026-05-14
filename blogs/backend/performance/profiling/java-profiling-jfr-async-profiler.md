@@ -96,6 +96,8 @@ public class JfrRecordingService {
 }
 ```
 
+The JFR API (`jdk.jfr.Recording`) gives programmatic control over which events are captured and at what frequency. Enabling `jdk.GarbageCollection` with `withStackTrace(true)` lets you see not just that a GC happened, but what code path triggered it (e.g., an allocation-heavy method). `jdk.ObjectAllocationInNewTLAB` tracks allocations inside Thread-Local Allocation Buffers — high rates here indicate allocation hotspots even if individual objects are small. `jdk.JavaMonitorEnter` captures lock contention events with stack traces, directly pointing to the `synchronized` block or `Lock` that bottlenecks throughput.
+
 ### JFR Event Types
 
 ```java
@@ -194,6 +196,8 @@ public class ProfilingController {
     }
 }
 ```
+
+Exposing profiling triggers as secured HTTP endpoints enables on-demand profiling in production without SSH access to every node. The `ProcessBuilder` approach invokes `asprof` (formerly `async-profiler`) as an external process, passing the JVM's PID via `ProcessHandle.current().pid()`. In production, this endpoint must be locked down — typically via a separate internal port, mTLS, or Spring Security IP allowlisting. The wall-clock event (`-e wall`) is especially useful for production: it samples the thread's state regardless of whether the CPU is active, revealing blocked threads that CPU profiling would miss entirely.
 
 ### Flame Graph Analysis
 

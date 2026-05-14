@@ -82,6 +82,8 @@ camunda:
 
 ### Service Task Delegate
 
+Each `JavaDelegate` maps to a service task in the BPMN diagram. The delegate receives a `DelegateExecution` which acts as the process context — it carries all process variables and allows reading and writing state. Communication between delegates happens entirely through process variables: `ValidateOrderDelegate` writes `orderValid`, `ProcessPaymentDelegate` reads `totalAmount` and writes `paymentSuccess`. This variable-based data flow is how the BPMN engine maintains state across activities. Note the use of `BpmnError` in `ProcessPaymentDelegate` — throwing a `BpmnError` with a specific error code triggers an error boundary event in the BPMN diagram, routing the process to a compensation or error-handling path rather than failing the entire instance.
+
 ```java
 // Java Delegate implementation
 @Component
@@ -216,6 +218,8 @@ public class SendNotificationDelegate implements JavaDelegate {
 
 ### Using Spring Beans in BPMN
 
+Spring beans can be referenced directly from BPMN expressions using the bean name. This is useful for simple routing decisions that can be expressed inline in the BPMN modeler — for example, a gateway condition like `${orderExpressionService.isHighValueOrder(execution)}`. The trade-off against using a full JavaDelegate is that expression-based services are harder to unit-test and cannot throw `BpmnError` for structured error handling. Use expressions for routing decisions and JavaDelegates for side-effecting operations.
+
 ```java
 @Component("orderExpressionService")
 public class OrderExpressionService {
@@ -259,6 +263,8 @@ public class DMNService {
 ```
 
 ## Starting Process Instances
+
+`startProcessInstanceByKey` launches a new instance of the process definition identified by `"orderProcess"`. The variables map is the initial process state — each key becomes a process variable accessible to all delegates and expressions downstream. Notice that `orderValid` and `paymentSuccess` are initialized to `null` rather than omitted — this makes the variable visible immediately in monitoring dashboards even before the corresponding delegate executes. Variables survive process persistence (Camunda stores them in its database), so they are available after restarts and across human task wait states.
 
 ```java
 @Component

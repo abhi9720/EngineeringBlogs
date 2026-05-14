@@ -24,6 +24,8 @@ The Unit of Work pattern maintains a list of objects affected by a business tran
 
 ### How Unit of Work Works
 
+A custom Unit of Work tracks entities in three maps: `newEntities` (to be inserted), `dirtyEntities` (to be updated), and `removedEntities` (to be deleted). When `commit()` is called, it processes the three categories in order: first persist new entities, then merge dirty ones, then remove deleted ones. The flush sends all pending SQL statements to the database in a single network round trip. The `rollback()` method discards all tracked changes without touching the database.
+
 ```java
 public class UnitOfWork<T> {
 
@@ -100,6 +102,8 @@ public class UnitOfWork<T> {
 
 ### Persistence Context
 
+Hibernate's persistence context is, in fact, a built-in Unit of Work. When you load an entity with `find()`, it becomes **managed**—Hibernate stores both the current state and a snapshot taken at load time. Any subsequent modifications are automatically detected during `flush()` through a process called dirty checking. Below, the order status is changed, a user's login timestamp is updated, a new item is persisted, and an old item is removed—all tracked transparently within the same persistence context. At commit time, Hibernate generates the appropriate `INSERT`, `UPDATE`, and `DELETE` statements, ordered to respect foreign key constraints, and executes them in a single database transaction.
+
 ```java
 @Service
 public class HibernateUnitOfWorkDemo {
@@ -149,6 +153,8 @@ public class HibernateUnitOfWorkDemo {
 ```
 
 ### Change Tracking Internals
+
+Hibernate's default dirty checking compares every persistent field of every managed entity against the snapshot taken at load time. For entities with many fields or for large persistence contexts, this can become expensive. The `Statistics` API exposes load, update, and flush counts that help diagnose inefficiencies. In batch operations, it is critical to periodically `flush()` and `clear()` the persistence context to prevent memory exhaustion—each managed entity stays in memory until the context is cleared.
 
 ```java
 @Component
@@ -209,6 +215,8 @@ public class ChangeTrackerDebug {
 ## Custom Unit of Work Implementation
 
 ### Generic Unit of Work
+
+When you need explicit control over transaction boundaries or when you are not using Hibernate, a custom Unit of Work implementation gives you the same pattern. The `JpaUnitOfWork` below wraps an `EntityManager` and an `EntityTransaction`, providing `registerNew`, `registerDirty`, and `registerRemoved` methods. The `close()` method from `AutoCloseable` enables the try-with-resources idiom, ensuring that the transaction is committed or rolled back automatically.
 
 ```java
 public interface IUnitOfWork extends AutoCloseable {
@@ -359,6 +367,8 @@ public class OrderServiceWithUoW {
 
 ### Coordinating Multiple Repositories
 
+When a single business operation spans multiple repositories, the Unit of Work coordinates the transaction boundaries. The `UnitOfWorkCoordinator` below accepts a callback that receives the Unit of Work, allowing multiple repositories to register changes within the same transaction. The callback pattern ensures that either all changes commit or none do.
+
 ```java
 // Unit of Work coordination class
 @Component
@@ -433,6 +443,8 @@ public class OrderRepositoryUoW {
 9. **Monitor persistence context size**: Prevent memory leaks
 10. **Use @Transactional for declarative UoW**: Spring manages transaction boundaries
 
+Spring's `@Transactional` is itself a declarative Unit of Work. The annotation wraps the method in a transaction with automatic session management, so you get all the benefits of the pattern without writing any tracking code.
+
 ```java
 // Spring's @Transactional is a declarative Unit of Work
 @Service
@@ -459,6 +471,8 @@ public class SpringUoWService {
 
 ### Mistake 1: Long-Living Unit of Work
 
+Keeping a Unit of Work open across HTTP requests or user interactions causes database connections to be held for too long, leading to connection pool exhaustion and stale data. The Unit of Work should span exactly one logical business operation.
+
 ```java
 // WRONG: UoW open across HTTP request
 @Service
@@ -481,6 +495,8 @@ public void addItemToCart(Cart cart, Item item) {
 
 ### Mistake 2: Ignoring Flush Order
 
+When a custom Unit of Work processes inserts, updates, and deletes, the order matters. New entities must be persisted first (to generate IDs), then updates applied, then deletions performed. Hibernate handles this ordering automatically, but a custom implementation must be explicit.
+
 ```java
 // WRONG: Not considering FK constraints
 // Hibernate orders SQL statements automatically
@@ -491,6 +507,8 @@ public void addItemToCart(Cart cart, Item item) {
 ```
 
 ### Mistake 3: Manual UoW Without Cleanup
+
+A custom Unit of Work that is not closed on exception leaks database resources. Always use try-with-resources or a finally block to ensure cleanup.
 
 ```java
 // WRONG: Not closing UoW on exception

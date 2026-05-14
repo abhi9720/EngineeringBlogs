@@ -18,9 +18,30 @@ Understanding cron syntax thoroughly is essential for any backend engineer deali
 
 A Quartz cron expression consists of seven fields separated by spaces:
 
-```
-Second Minute Hour DayOfMonth Month DayOfWeek Year (optional)
-  ?      ?      ?       ?        ?       ?         ?
+```mermaid
+graph LR
+    subgraph Fields[Cron Expression Fields]
+        A[Second<br/>0-59] --> B[Minute<br/>0-59]
+        B --> C[Hour<br/>0-23]
+        C --> D[DayOfMonth<br/>1-31]
+        D --> E[Month<br/>1-12]
+        E --> F[DayOfWeek<br/>0-7]
+        F --> G[Year<br/>optional]
+    end
+
+    H[?] --> A
+    I[?] --> B
+    J[?] --> C
+    K[?] --> D
+    L[?] --> E
+    M[?] --> F
+    N[?] --> G
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
 ```
 
 | Field | Required | Allowed Values | Allowed Special Characters |
@@ -50,6 +71,8 @@ Second Minute Hour DayOfMonth Month DayOfWeek Year (optional)
 
 ### Every Day Patterns
 
+The most common cron patterns are those that repeat throughout the day. The key distinction between these and Spring's `fixedRate`/`fixedDelay` is that cron schedules are tied to the wall clock — "every 5 minutes" here means at :00, :05, :10, etc., always aligned to the clock, not relative to when the application started or when the last execution finished.
+
 ```java
 // Every minute
 @Scheduled(cron = "0 * * * * *")
@@ -72,7 +95,11 @@ public void runEveryHour() {}
 public void runEverySixHours() {}
 ```
 
+Using `*/N` in the minute or hour field means "every N units starting from 0". The increment operator scans from the minimum allowed value forward. This is different from listing every value explicitly — `*/15` in minutes is equivalent to `0,15,30,45` but is far more readable.
+
 ### Daily Patterns
+
+Daily patterns pin execution to specific wall-clock times. Use the comma operator to specify multiple hours. The day-of-month field uses `*` (every day), and because day-of-week is also `*`, there is no conflict — Quartz accepts all values for both, which effectively means every day.
 
 ```java
 // Every day at midnight
@@ -94,6 +121,8 @@ public void runAtBusinessHours() {}
 
 ### Weekly Patterns
 
+Weekly patterns use the day-of-week field to constrain execution to specific days. Note the use of `?` in the day-of-month field for the bi-weekly pattern — since we are specifying a day-of-week rule (MON#1 meaning "first Monday"), we must set day-of-month to `?` to avoid a conflict. The `#` character is a Quartz extension and is not available in Unix cron or simpler libraries.
+
 ```java
 // Every Monday at 2:00 AM
 @Scheduled(cron = "0 0 2 * * MON")
@@ -113,6 +142,8 @@ public void runFirstAndThirdMonday() {}
 ```
 
 ### Monthly Patterns
+
+Monthly patterns use the day-of-month field to pick a specific date. The `L` character in `L * *` means "last day of the month" — Quartz automatically resolves this to 28, 29, 30, or 31 depending on the month. The `*/3` in the month field produces quarterly execution on January 1, April 1, July 1, and October 1.
 
 ```java
 // First day of every month at 1:00 AM

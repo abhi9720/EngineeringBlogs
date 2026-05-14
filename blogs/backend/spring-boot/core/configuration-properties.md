@@ -16,9 +16,13 @@ draft: false
 
 Spring Boot's @ConfigurationProperties provides type-safe, structured access to application properties. Unlike @Value which injects individual properties, @ConfigurationProperties binds entire property hierarchies to strongly-typed Java objects with built-in validation and IDE support.
 
+The fundamental advantage over `@Value` is structure. `@Value` scatters property access across your codebase as string literals, making refactoring and audit difficult. `@ConfigurationProperties` centralizes all related properties in one class with a defined prefix, enabling IDE auto-completion, type conversion, and validation at startup.
+
 ## Basic ConfigurationProperties
 
 ### Simple Binding
+
+The class below binds all `app.mail.*` properties. Default values are provided directly on fields, so the application works even without explicit configuration. The `@Component` annotation enables component scanning, making the properties injectable anywhere.
 
 ```java
 @ConfigurationProperties(prefix = "app.mail")
@@ -66,6 +70,8 @@ app:
 
 ### Enabling ConfigurationProperties
 
+There are three ways to enable `@ConfigurationProperties` binding. `@Component` on the properties class is the simplest for standalone applications. `@EnableConfigurationProperties` on a `@Configuration` class is better for libraries and starters. `@ConfigurationPropertiesScan` enables scanning across specific packages.
+
 ```java
 // Method 1: @EnableConfigurationProperties
 @SpringBootApplication
@@ -88,6 +94,10 @@ public class Application {
 ```
 
 ## Nested Properties
+
+Nested objects are created automatically by Spring Boot's binder. The `PoolConfig` and `ReplicaConfig` inner classes in `DataSourceProperties` are populated from the YAML hierarchy. Spring Boot matches the flattened property names (e.g., `app.datasource.pool.max-size`) to the nested object structure.
+
+This pattern keeps the configuration organized: top-level properties for the service, nested for related subsystems. The inner classes are typically `public static` so they can be instantiated by the binding framework.
 
 ```java
 @ConfigurationProperties(prefix = "app.datasource")
@@ -150,6 +160,10 @@ app:
 
 ## Lists and Maps
 
+Collections are bound naturally. Lists are populated from YAML sequences, and maps from key-value pairs. For maps with complex values, the value type's fields are bound from the nested YAML properties.
+
+The `CacheProperties` example below shows three collection patterns: a simple list of strings (`cacheNames`), a map of named cache configurations (`caches`), and a list of complex objects (`defaults`). Each pattern is bound by a different YAML structure.
+
 ```java
 @ConfigurationProperties(prefix = "app.cache")
 @Component
@@ -206,6 +220,10 @@ app:
 
 ## Validation
 
+Validation is enabled with the `@Validated` annotation on the properties class. Standard Jakarta Bean Validation annotations (`@NotEmpty`, `@Min`, `@Max`, `@Email`, `@Pattern`, `@URL`) work on individual fields. The `@Valid` annotation triggers validation on nested objects.
+
+Validation happens at startup, immediately after property binding. If validation fails, the application fails to start with a clear error message. This is far better than discovering configuration errors at runtime when a service call fails.
+
 ```java
 @ConfigurationProperties(prefix = "app.service")
 @Component
@@ -254,6 +272,10 @@ public class EndpointConfig {
 ```
 
 ## Immutable ConfigurationProperties
+
+`@ConstructorBinding` creates immutable properties classes. Instead of setters, the single constructor receives all bound values. This pattern is preferred for configuration objects because it enforces immutability — once bound, the configuration cannot be changed at runtime.
+
+Constructor binding works with both Java records and regular classes with a single constructor. Nested objects must also use constructor binding or be mutable inner classes.
 
 ```java
 @ConfigurationProperties(prefix = "app.kafka")
@@ -322,6 +344,10 @@ public class KafkaProperties {
 
 ### Custom Converters
 
+Spring Boot automatically converts String properties to common types (Duration, DataSize, InetAddress, etc.). For custom types, implement `Converter<String, T>` and annotate with `@ConfigurationPropertiesBinding`. Spring Boot discovers these converters automatically and uses them during property binding.
+
+The `CidrBlockConverter` below converts a string like `"10.0.0.0/8"` into a `CidrBlock` object. Without the converter, Spring Boot would fail to bind the property with a "Failed to convert value" error.
+
 ```java
 @ConfigurationProperties(prefix = "app.security")
 @Component
@@ -359,6 +385,14 @@ public record CidrBlock(String ip, int prefix) {
 
 ## Relaxed Binding
 
+Spring Boot's relaxed binding (also called "lenient binding") allows properties to be specified in multiple formats. This eliminates the friction between environment variable naming conventions (UPPER_CASE with underscores) and Java naming conventions (camelCase).
+
+The `jwtSecret` property below can be set as:
+- `app.security.jwt-secret` (kebab-case, recommended in .yml/.properties)
+- `app.security.jwt_secret` (underscore notation)
+- `app.security.JWT_SECRET` (UPPER_CASE)
+- `app.security.jwtSecret` (camelCase, as in Java)
+
 ```java
 // All of these will bind to the same property
 @ConfigurationProperties(prefix = "app.security")
@@ -378,6 +412,10 @@ app:
 ```
 
 ## @ConfigurationProperties vs @Value
+
+`@Value` is for simple, single-value injection, especially when you need SpEL expressions. `@ConfigurationProperties` is for structured, grouped configuration. The decision rule: if you have more than two related properties, use `@ConfigurationProperties`. If you need a single property with a default, `@Value` is fine.
+
+`@Value` supports SpEL (`#{...}`) which `@ConfigurationProperties` does not. However, `@ConfigurationProperties` supports relaxed binding, validation, IDE metadata, and nested objects.
 
 ```java
 // @Value - for simple, individual property injection
@@ -422,6 +460,8 @@ public class AppProperties {
 
 ## Using Properties in Beans
 
+Inject `@ConfigurationProperties` beans via constructor injection. The properties class is a regular Spring bean, so it participates in dependency injection normally. Using constructor injection ensures the properties are immutable and testable — you can construct the service with any properties instance in tests.
+
 ```java
 @Service
 public class EmailSender {
@@ -443,52 +483,6 @@ public class EmailSender {
         helper.setText(body);
 
         mailSender.send(message);
-    }
-}
-```
-
-## Third-Party Configuration Properties
-
-### Creating a Starter's Properties
-
-```java
-@ConfigurationProperties(prefix = "my.starter")
-public class MyStarterProperties {
-    private boolean enabled = true;
-    private String apiKey;
-    private String endpoint = "https://api.default.com";
-    private RetryConfig retry = new RetryConfig();
-    private CircuitBreakerConfig circuitBreaker = new CircuitBreakerConfig();
-
-    public boolean isEnabled() { return enabled; }
-    public void setEnabled(boolean enabled) { this.enabled = enabled; }
-    public String getApiKey() { return apiKey; }
-    public void setApiKey(String apiKey) { this.apiKey = apiKey; }
-    public String getEndpoint() { return endpoint; }
-    public void setEndpoint(String endpoint) { this.endpoint = endpoint; }
-    public RetryConfig getRetry() { return retry; }
-    public void setRetry(RetryConfig retry) { this.retry = retry; }
-    public CircuitBreakerConfig getCircuitBreaker() { return circuitBreaker; }
-    public void setCircuitBreaker(CircuitBreakerConfig circuitBreaker) { this.circuitBreaker = circuitBreaker; }
-
-    public static class RetryConfig {
-        private int maxAttempts = 3;
-        private Duration backoffDelay = Duration.ofSeconds(1);
-
-        public int getMaxAttempts() { return maxAttempts; }
-        public void setMaxAttempts(int maxAttempts) { this.maxAttempts = maxAttempts; }
-        public Duration getBackoffDelay() { return backoffDelay; }
-        public void setBackoffDelay(Duration backoffDelay) { this.backoffDelay = backoffDelay; }
-    }
-
-    public static class CircuitBreakerConfig {
-        private int failureThreshold = 5;
-        private Duration timeout = Duration.ofSeconds(10);
-
-        public int getFailureThreshold() { return failureThreshold; }
-        public void setFailureThreshold(int failureThreshold) { this.failureThreshold = failureThreshold; }
-        public Duration getTimeout() { return timeout; }
-        public void setTimeout(Duration timeout) { this.timeout = timeout; }
     }
 }
 ```

@@ -18,6 +18,8 @@ gRPC is a high-performance RPC framework using Protocol Buffers and HTTP/2. It s
 
 ## Protocol Buffer Definition
 
+The service definition in `.proto` files describes both the RPC methods and the data structures. The `stream` keyword enables server-side streaming (returning a list of orders), client-side streaming (receiving multiple events), and bidirectional streaming (real-time order processing). Each field has a unique numbered tag for binary encoding efficiency.
+
 ```protobuf
 syntax = "proto3";
 
@@ -108,6 +110,8 @@ message OrderStatus {
 
 ## Maven Configuration
 
+The protobuf-maven-plugin compiles `.proto` files into Java classes during the build. The `os-maven-plugin` detects the OS architecture to select the correct protoc binary. The grpc-netty-shaded dependency bundles Netty with gRPC, avoiding version conflicts with other Netty usages in the project.
+
 ```xml
 <build>
     <extensions>
@@ -173,6 +177,8 @@ message OrderStatus {
 ```
 
 ## gRPC Server Implementation
+
+The server extends the generated base class and implements each RPC method. Every unary method receives a request and a `StreamObserver` for sending the response — calling `onNext` followed by `onCompleted` signals successful completion. Errors are propagated through `onError` with gRPC status codes (INTERNAL, NOT_FOUND, etc.) for structured error handling.
 
 ```java
 @GrpcService
@@ -322,6 +328,8 @@ public class OrderGrpcService extends OrderServiceGrpc.OrderServiceImplBase {
 
 ## gRPC Client
 
+The client uses either a blocking stub (simple synchronous calls) or an async stub (reactive/streaming). Setting deadlines (`withDeadlineAfter`) is critical — without them, a hung gRPC call can exhaust resources indefinitely. The `Flux.create` pattern bridges the streaming gRPC observer into a reactive `Flux` for seamless integration with WebFlux pipelines.
+
 ```java
 @Service
 public class OrderGrpcClient {
@@ -409,6 +417,8 @@ public class OrderGrpcClient {
 
 ## Error Handling Interceptor
 
+Interceptors provide cross-cutting functionality for all gRPC calls. The server interceptor captures errors and attaches metadata (error details) before closing the call. This pattern is also used for authentication, logging, metrics collection, and request validation — all without modifying the service implementation.
+
 ```java
 @Component
 public class GrpcErrorHandlingInterceptor implements ServerInterceptor {
@@ -443,8 +453,8 @@ public class GrpcErrorHandlingInterceptor implements ServerInterceptor {
 
 ## Best Practices
 
-- Use gRPC for internal service-to-service communication where performance matters.
-- Define all protobuf schemas in a shared library module.
+- Use gRPC for internal service-to-service communication where performance matters. Protocol Buffers' binary serialization is 3-10x faster than JSON.
+- Define all protobuf schemas in a shared library module consumed by both provider and consumer teams.
 - Set deadlines on all gRPC calls to prevent resource exhaustion.
 - Use bidirectional streaming for real-time data processing.
 - Enable gRPC health checking for Kubernetes liveness probes.

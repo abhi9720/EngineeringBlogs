@@ -16,6 +16,8 @@ draft: false
 
 Quartz is a full-featured, open-source job scheduling library that can be integrated with Spring Boot. It supports persistent jobs, clustering, cron expressions, and dynamic job creation. This guide covers production-ready scheduling patterns with Quartz in Spring Boot.
 
+When to choose Quartz over Spring's `@Scheduled` annotation: Quartz provides persistence (jobs survive application restarts), clustering (only one node executes a job), advanced misfire handling, and dynamic job creation at runtime. Spring's `@Scheduled` is simpler but lacks these enterprise features. Use Quartz for critical scheduling that must be reliable and auditable.
+
 ## Dependencies
 
 ```xml
@@ -36,6 +38,10 @@ Quartz is a full-featured, open-source job scheduling library that can be integr
 ## Basic Job Configuration
 
 ### Simple Job
+
+A Quartz job extends `QuartzJobBean` and implements `executeInternal`. The `JobExecutionContext` provides access to the `JobDataMap`, which carries parameters set when the job was scheduled. The `JobDataMap` is the recommended way to parameterize jobs — it's persistent (stored in the database) and survives restarts.
+
+The example below demonstrates a job with retry logic. The `retryCount` is decremented each time the job fails, and the job is re-fired immediately if retries remain. This pattern is useful for jobs that depend on transient conditions (network availability, external service health).
 
 ```java
 @Component
@@ -70,6 +76,10 @@ public class EmailJob extends QuartzJobBean {
 
 ### Scheduling the Job
 
+Jobs and triggers are defined as Spring beans. The `JobDetail` defines the job class, identity, and data map (default parameters). The `Trigger` defines the schedule. Separating job detail from trigger allows multiple triggers to share the same job.
+
+The `storeDurably(true)` flag keeps the job in the store even without a trigger, enabling boundary cases like adding a trigger later. `requestRecovery(true)` tells the scheduler to re-execute the job if it was in progress when the scheduler shut down unexpectedly.
+
 ```java
 @Configuration
 public class QuartzSchedulerConfig {
@@ -99,6 +109,10 @@ public class QuartzSchedulerConfig {
 ```
 
 ## Cron Expressions
+
+Cron expressions can be intimidating. Quartz's `CronScheduleBuilder` provides type-safe helper methods that eliminate the need to write raw cron expressions for common schedules. The examples below use `dailyAtHourAndMinute`, `weeklyOnDayAndHourAndMinute`, and `monthlyOnDayAndHourAndMinute`.
+
+Each trigger on the same job fires independently. In the example below, the report generation job fires daily at 2 AM, weekly on Monday at 3 AM, and monthly on the 1st at 4 AM. This pattern is useful when the same logic needs to run on different schedules.
 
 ```java
 @Configuration
@@ -148,6 +162,10 @@ public class CronJobsConfig {
 
 ### Configuration
 
+Persist all job and trigger state in a database to survive application restarts. The `job-store-type: jdbc` tells Spring Boot to use the JDBC job store. Set `initialize-schema: always` during development to auto-create the Quartz tables; switch to `never` in production and manage schema migrations manually.
+
+The `LocalDataSourceJobStore` uses the application's configured data source. The `tablePrefix` defaults to `QRTZ_`. The `isClustered` flag enables clustering support.
+
 ```yaml
 spring:
   quartz:
@@ -174,6 +192,10 @@ spring:
 
 ## Clustered Scheduling
 
+In a clustered deployment, multiple application instances share the same Quartz database tables. The cluster configuration ensures that each job is executed by exactly one node. If a node fails, another node in the cluster picks up its jobs.
+
+Key settings: `isClustered: true` enables cluster mode, `instanceId: AUTO` generates a unique instance ID automatically, and `clusterCheckinInterval` controls how often instances check in with the database. A node is considered dead if it misses checkins for more than two intervals.
+
 ```yaml
 spring:
   quartz:
@@ -195,6 +217,10 @@ spring:
 ```
 
 ### Cluster-Aware Job
+
+A cluster-aware job should be idempotent and use database-level locks for distributed operations. The `getSchedulerInstanceId()` method returns which node is executing the job, which is useful for debugging and monitoring.
+
+If you use optimistic locking in your business logic (e.g., `@Version` on entities), concurrent execution across cluster nodes will cause `OptimisticLockException`. Design jobs to handle these gracefully via retry or by using database-level advisory locks.
 
 ```java
 @Component
@@ -223,6 +249,10 @@ public class ClusterJob extends QuartzJobBean {
 ## Dynamic Job Scheduling
 
 ### Job Controller
+
+A REST controller for managing jobs at runtime enables admin UIs for scheduling. The `Scheduler` API provides methods to schedule, delete, and list jobs. Dynamic scheduling is a key advantage of Quartz over Spring's `@Scheduled`.
+
+The `DynamicJob` class is a generic executor that delegates to a Spring bean based on the `jobType` parameter. This allows adding new job types without modifying the scheduling infrastructure — just create a new `JobExecutor` implementation and inject it into the `ApplicationContext`.
 
 ```java
 @RestController
@@ -298,6 +328,8 @@ public class JobSchedulerController {
 
 ### Dynamic Job Implementation
 
+The dynamic job resolves the executor at runtime based on `jobType`. This pattern allows the scheduling infrastructure to remain unchanged while business teams add new job types by implementing `JobExecutor`.
+
 ```java
 @Component
 public class DynamicJob extends QuartzJobBean {
@@ -331,6 +363,10 @@ public class DynamicJob extends QuartzJobBean {
 ```
 
 ## Job Listeners
+
+Global job listeners provide cross-cutting monitoring and logging. The listener below logs job start, completion, and failure with timing information. Register listeners on the `SchedulerFactoryBean` to apply them to all jobs.
+
+For per-job listeners, implement `JobListener` and register them on individual `JobDetail` beans. Per-job listeners are useful for job-specific metrics or notifications.
 
 ```java
 @Component
@@ -378,6 +414,12 @@ public class ListenerConfig {
 ```
 
 ## Misfire Handling
+
+Misfire handling determines what happens when a trigger misses its fire time. The three strategies are:
+
+- **Fire Now**: Re-fires the job immediately. Use for critical jobs that must not be skipped (e.g., payment processing).
+- **Do Nothing**: Skips the missed fire. Use for non-critical jobs where the next scheduled run suffices (e.g., hourly reports).
+- **Ignore Misfires**: Runs all missed fires immediately. Use for catch-up scenarios (e.g., batch jobs that must process every interval).
 
 ```java
 @Configuration
@@ -483,6 +525,8 @@ public Trigger trigger() {
 }
 ```
 
+The default misfire handling for cron triggers is `withMisfireHandlingInstructionFireAndProceed`, which fires immediately and then continues with the next scheduled time. This may not be appropriate: for critical jobs, you might want to fire all missed runs; for non-critical ones, you might want to skip and wait for the next schedule.
+
 ```java
 // Correct: Explicit misfire handling
 @Bean
@@ -509,6 +553,8 @@ public class DataSyncJob extends QuartzJobBean {
     }
 }
 ```
+
+If the job takes longer than its trigger interval, a second instance starts while the first is still running. For data synchronization jobs, this causes race conditions and duplicate processing. The `@DisallowConcurrentExecution` annotation prevents this by blocking subsequent executions until the current one finishes.
 
 ```java
 // Correct: Prevent concurrent execution

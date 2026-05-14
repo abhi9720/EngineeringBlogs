@@ -16,6 +16,8 @@ draft: false
 
 Cross-Site Request Forgery (CSRF) and Cross-Origin Resource Sharing (CORS) are critical security concerns for web applications. Spring Security provides comprehensive support for both. Understanding when and how to configure these protections is essential for building secure applications.
 
+CORS is a browser mechanism, not a server security mechanism. It prevents a malicious website from making requests to your API on behalf of an authenticated user — but only in browsers. Server-to-server calls are not affected by CORS. CSRF protects against forged requests, but is unnecessary for stateless token-based APIs.
+
 ## CORS Configuration
 
 ### Understanding CORS
@@ -46,6 +48,8 @@ public class CorsConfig implements WebMvcConfigurer {
 ```
 
 ### CORS with Spring Security
+
+When CORS is configured in Spring Security (rather than Spring MVC), it runs within the security filter chain. This ensures CORS headers are set before authentication checks, so preflight requests don't require authentication.
 
 ```java
 @Configuration
@@ -86,6 +90,8 @@ public class SecurityConfig {
 ```
 
 ### Dynamic CORS Configuration
+
+For multi-tenant applications where allowed origins vary by customer, use a dynamic `CorsConfigurationSource`. The implementation below maps URL patterns to configurations and allows adding new patterns at runtime.
 
 ```java
 @Component
@@ -235,19 +241,11 @@ public class CustomCsrfTokenRepository implements CsrfTokenRepository {
         return sessionId != null ? tokenStore.get(sessionId) : null;
     }
 }
-
-// Usage
-@Bean
-public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http
-        .csrf(csrf -> csrf
-            .csrfTokenRepository(new CustomCsrfTokenRepository())
-        );
-    return http.build();
-}
 ```
 
 ### CSRF with SPA Applications
+
+For single-page applications, the Xor-encoded CSRF token pattern provides protection against BREACH attacks. The `SpaCsrfTokenRequestHandler` uses Xor-encoded tokens for header-based requests and raw tokens for parameter-based ones.
 
 ```java
 @Configuration
@@ -279,8 +277,7 @@ class SpaCsrfTokenRequestHandler extends CsrfTokenRequestAttributeHandler {
     }
 
     @Override
-    public String resolveCsrfTokenValue(HttpServletRequest request,
-                                        CsrfToken csrfToken) {
+    public String resolveCsrfTokenValue(HttpServletRequest request, CsrfToken csrfToken) {
         if (request.getHeader(csrfToken.getHeaderName()) == null) {
             return super.resolveCsrfTokenValue(request, csrfToken);
         }
@@ -295,9 +292,7 @@ class CsrfCookieFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
         CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
-        if (csrfToken != null) {
-            csrfToken.getToken();
-        }
+        if (csrfToken != null) { csrfToken.getToken(); }
         filterChain.doFilter(request, response);
     }
 }
@@ -317,14 +312,10 @@ public class CombinedSecurityConfig {
             .csrf(csrf -> csrf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .ignoringRequestMatchers(
-                    request -> "GET".equals(request.getMethod()) ||
-                               isApiClient(request)
-                )
-            )
+                    request -> "GET".equals(request.getMethod()) || isApiClient(request)))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**", "/oauth2/**").permitAll()
-                .anyRequest().authenticated()
-            )
+                .anyRequest().authenticated())
             .oauth2Login(withDefaults())
             .formLogin(withDefaults());
         return http.build();
@@ -351,59 +342,6 @@ public class CombinedSecurityConfig {
 }
 ```
 
-## Testing CORS and CSRF
-
-```java
-@WebMvcTest(controllers = {UserController.class})
-@Import({SecurityConfig.class})
-class CorsCsrfTest {
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Test
-    void shouldAllowCorsPreflight() throws Exception {
-        mockMvc.perform(options("/api/users")
-                .header("Origin", "https://app.example.com")
-                .header("Access-Control-Request-Method", "POST")
-                .header("Access-Control-Request-Headers", "Authorization"))
-            .andExpect(status().isOk())
-            .andExpect(header().exists("Access-Control-Allow-Origin"))
-            .andExpect(header().string("Access-Control-Allow-Methods", containsString("POST")));
-    }
-
-    @Test
-    void shouldRejectCorsFromUnknownOrigin() throws Exception {
-        mockMvc.perform(get("/api/users")
-                .header("Origin", "https://evil.com"))
-            .andExpect(status().isForbidden());
-    }
-
-    @Test
-    void shouldRejectPostWithoutCsrfToken() throws Exception {
-        mockMvc.perform(post("/api/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{}"))
-            .andExpect(status().isForbidden());
-    }
-
-    @Test
-    void shouldAcceptPostWithValidCsrfToken() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/csrf"))
-            .andExpect(status().isOk())
-            .andReturn();
-
-        String csrfToken = result.getResponse().getHeader("X-CSRF-TOKEN");
-
-        mockMvc.perform(post("/api/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("X-CSRF-TOKEN", csrfToken)
-                .sessionAttr("_csrf", csrfToken)
-                .content("{\"name\":\"test\"}"))
-            .andExpect(status().isCreated());
-    }
-}
-```
-
 ## Best Practices
 
 1. **Disable CSRF for stateless APIs** using Bearer token authentication
@@ -412,7 +350,6 @@ class CorsCsrfTest {
 4. **Use allowedOriginPatterns** for dynamic origin matching
 5. **Set appropriate maxAge** to reduce preflight request overhead
 6. **Expose only necessary headers** with exposedHeaders
-7. **Implement CSRF tokens via cookies** for SPA applications using CookieCsrfTokenRepository
 
 ## Common Mistakes
 
@@ -424,30 +361,20 @@ class CorsCsrfTest {
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().authenticated()
-            )
-            .formLogin(withDefaults()); // Using form login without CSRF!
+        http.csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
+            .formLogin(withDefaults());
         return http.build();
     }
 }
-```
 
-```java
 // Correct: Keep CSRF enabled for session-based auth
 @Configuration
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-            )
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().authenticated()
-            )
+        http.csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
+            .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
             .formLogin(withDefaults());
         return http.build();
     }
@@ -461,13 +388,11 @@ public class SecurityConfig {
 @Bean
 public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
-    config.setAllowedOriginPatterns(List.of("*")); // Wildcard
-    config.setAllowCredentials(true); // Error: cannot use both
+    config.setAllowedOriginPatterns(List.of("*"));
+    config.setAllowCredentials(true);
     return new UrlBasedCorsConfigurationSource();
 }
-```
 
-```java
 // Correct: Explicit origins or patterns
 @Bean
 public CorsConfigurationSource corsConfigurationSource() {
@@ -477,37 +402,6 @@ public CorsConfigurationSource corsConfigurationSource() {
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
     return new UrlBasedCorsConfigurationSource();
 }
-```
-
-### Mistake 3: Missing CSRF Token in AJAX Requests
-
-```javascript
-// Wrong: Not including CSRF token
-fetch('/api/users', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-});
-```
-
-```javascript
-// Correct: Include CSRF token
-const csrfToken = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('XSRF-TOKEN='))
-    ?.split('=')[1];
-
-fetch('/api/users', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-        'X-XSRF-TOKEN': csrfToken
-    },
-    body: JSON.stringify(data),
-    credentials: 'include'
-});
 ```
 
 ## Summary

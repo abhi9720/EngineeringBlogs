@@ -22,7 +22,7 @@ API security is not a single feature you add at the end—it must be designed in
 
 ## Principle 1: Authentication at the Gateway
 
-Authentication should happen as early as possible in the request pipeline:
+Authentication should happen as early as possible in the request pipeline. The security filter chain below places API key and JWT filters before the standard authentication filter, ensuring unauthenticated requests are rejected before they reach controller logic. Stateless session management means no `JSESSIONID` cookie is created — each request carries its own authentication:
 
 ```java
 @Configuration
@@ -56,6 +56,8 @@ public class ApiSecurityConfig {
 ## Principle 2: Validate Everything
 
 ### Input Validation at the Boundary
+
+Validate all input at the API boundary — never assume client-side validation is sufficient. Bean Validation annotations (`@NotBlank`, `@Size`, `@Pattern`, `@Email`) provide declarative validation. The password regex below enforces complexity (uppercase, lowercase, digit, special character) with a single pattern:
 
 ```java
 @RestController
@@ -100,6 +102,8 @@ public class CreateUserRequest {
 
 ### Custom Validation
 
+When built-in annotations are insufficient, create custom validators. The `@AllowedValues` constraint below validates that a field takes one of a predefined set of values:
+
 ```java
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -134,6 +138,8 @@ public class AllowedValuesValidator
 ## Principle 3: Rate Limiting
 
 ### Token Bucket Algorithm
+
+Rate limiting protects APIs from abuse and accidental DDoS. The token bucket algorithm below allows bursts up to `maxTokens` while enforcing a sustained rate of `refillRate` tokens per second. Each request consumes one token; if none are available, a 429 Too Many Requests response is returned with retry headers:
 
 ```java
 @Component
@@ -233,6 +239,8 @@ public class TokenBucket {
 
 ### Structured Error Responses
 
+Error responses must never expose internal details. The `@RestControllerAdvice` below catches validation errors (400), access denied (403), and unexpected exceptions (500). Each returns a generic message with a machine-readable code — stack traces are logged server-side only:
+
 ```java
 @RestControllerAdvice
 public class SecureExceptionHandler {
@@ -295,6 +303,8 @@ public class ErrorResponse {
 
 ### Use DTOs, Never Expose Entities
 
+JPA entities often contain sensitive fields (`passwordHash`, `internalId`) and lazy-loaded relationships. Exposing them directly to the client risks data leaks and infinite serialization loops. Always map entities to DTOs containing only the fields the client needs:
+
 ```java
 // INSECURE: Exposing JPA entity directly
 @GetMapping("/users/{id}")
@@ -330,6 +340,8 @@ public class UserResponse {
 
 ## Principle 6: HATEOAS and Secure Links
 
+HATEOAS (Hypermedia as the Engine of Application State) guides API clients through available actions by including links in responses. The critical security aspect is to only include links the current user is authorized to use — hiding the "submit order" link from users who cannot submit:
+
 ```java
 @GetMapping("/orders/{id}")
 public EntityModel<OrderResponse> getOrder(@PathVariable Long id) {
@@ -355,6 +367,8 @@ private Link conditionalLink(boolean condition, Link link) {
 ---
 
 ## Principle 7: Audit Logging
+
+An AOP-based `@Auditable` annotation makes audit logging declarative. The aspect captures the authenticated user, the action being performed, the resource ID, and whether the operation succeeded or failed. This creates a complete audit trail without cluttering business logic:
 
 ```java
 @Aspect
@@ -399,6 +413,8 @@ public @interface Auditable {
 
 ### Mistake 1: Verbose Error Messages
 
+Error messages that include database details, stack traces, or internal paths help attackers understand your infrastructure. The secure approach logs full details server-side and returns generic messages to the client:
+
 ```java
 // WRONG: Exposing too much information
 catch (SQLException e) {
@@ -416,6 +432,8 @@ catch (DataAccessException e) {
 ```
 
 ### Mistake 2: Not Validating Content-Type
+
+Accepting arbitrary content types opens the door to deserialization attacks. XML deserialization, in particular, can trigger external entity expansion (XXE). Enforce JSON with the `consumes` attribute:
 
 ```java
 // WRONG: Accepting any content type

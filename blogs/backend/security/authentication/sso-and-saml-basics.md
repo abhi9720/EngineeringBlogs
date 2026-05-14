@@ -24,20 +24,21 @@ Single Sign-On (SSO) allows users to authenticate once and access multiple appli
 
 SSO introduces a central identity provider (IdP) that mediates authentication across multiple service providers (SPs):
 
-```
-User           Service Provider (SP)     Identity Provider (IdP)
- |                       |                        |
- |-- Access resource --->|                        |
- |                       |-- Redirect to IdP ---->|
- |<--- Login form -------|                        |
- |-- Submit credentials -|----------------------->|
- |                       |                        |-- Authenticate user
- |                       |<-- SAML Assertion -----|
- |<-- Redirect with     -|                        |
- |    SAML Response      |                        |
- |-- Request resource   ->|                       |
- |   (with session)      |-- Validate assertion   |
- |<-- Resource ----------|                        |
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant SP as Service Provider (SP)
+    participant IdP as Identity Provider (IdP)
+
+    U->>SP: Access resource
+    SP->>U: Redirect to IdP
+    U->>IdP: Login form
+    IdP->>IdP: Authenticate user
+    IdP-->>SP: SAML Assertion
+    SP-->>U: Redirect with SAML Response
+    U->>SP: Request resource (with session)
+    SP->>SP: Validate assertion
+    SP-->>U: Resource
 ```
 
 ### Key Components
@@ -53,7 +54,7 @@ User           Service Provider (SP)     Identity Provider (IdP)
 
 ### SAML Assertion Structure
 
-A SAML assertion is an XML document with three main parts:
+A SAML assertion is an XML document with three main parts — the issuer identifies the IdP, the subject identifies the authenticated user, and conditions constrain the assertion's validity window and intended audience. Optional attribute and authentication statements carry user profile data and authentication context:
 
 ```xml
 <saml:Assertion 
@@ -117,7 +118,7 @@ A SAML assertion is an XML document with three main parts:
 
 ### XML Digital Signature
 
-SAML assertions are cryptographically signed to prevent tampering:
+SAML assertions are cryptographically signed to prevent tampering. The signature covers the entire Assertion element using XML Signature syntax. The `CanonicalizationMethod` ensures the signature survives formatting differences, and the `KeyInfo` element embeds the IdP's X509 certificate for verification:
 
 ```xml
 <!-- The signature covers the entire Assertion element -->
@@ -150,6 +151,8 @@ SAML assertions are cryptographically signed to prevent tampering:
 ## SAML Flow: SP-Initiated vs IdP-Initiated
 
 ### SP-Initiated SSO (most common)
+
+In SP-initiated flow, the user first tries to access a protected resource on the SP. The SP generates an `AuthnRequest`, redirects the user to the IdP, and after successful authentication, the IdP POSTs a SAML response back to the SP's Assertion Consumer Service (ACS) URL:
 
 ```java
 @Controller
@@ -184,6 +187,8 @@ public class SamlSpController {
 
 ### SAML Authentication Request (AuthnRequest)
 
+The `AuthnRequest` tells the IdP which SP is requesting authentication, where to send the response (`AssertionConsumerServiceURL`), and what kind of authentication is needed:
+
 ```xml
 <samlp:AuthnRequest 
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -208,7 +213,7 @@ public class SamlSpController {
 
 ### IdP-Initiated SSO
 
-In IdP-initiated flow, the user starts at the IdP portal:
+In IdP-initiated flow, the user starts at the IdP portal and selects an application to launch. The IdP builds a SAML response without a corresponding `AuthnRequest`:
 
 ```java
 @RestController
@@ -238,6 +243,8 @@ public class SamlIdpController {
 ## Implementing SAML with Spring Security
 
 ### Spring Boot SAML Configuration
+
+Spring Security's SAML 2.0 support handles the heavy lifting: metadata generation, assertion validation, signature verification, and user session management:
 
 ```xml
 <dependency>
@@ -308,6 +315,8 @@ public class SamlSecurityConfig {
 
 ### Custom SAML User Mapping
 
+When a SAML assertion is received, the user's attributes (email, name, department) are extracted and used to find or create a local user account. This mapping logic is the SP's responsibility — the IdP only provides the claims:
+
 ```java
 @Component
 public class SamlUserMapper implements Saml2AuthenticatedPrincipalFactory {
@@ -352,7 +361,7 @@ public class SamlUserMapper implements Saml2AuthenticatedPrincipalFactory {
 
 ## Federation Metadata
 
-SAML IdPs and SPs exchange metadata XML to establish trust:
+SAML IdPs and SPs exchange metadata XML to establish trust. The metadata document describes endpoints, supported bindings, and public keys:
 
 ```xml
 <md:EntityDescriptor 
@@ -384,7 +393,7 @@ SAML IdPs and SPs exchange metadata XML to establish trust:
 </md:EntityDescriptor>
 ```
 
-Spring Security automatically generates and serves this metadata:
+Spring Security automatically generates and serves this metadata. The configuration below uses the IdP's metadata URI to auto-configure the relying party:
 
 ```yaml
 # application.yml
@@ -407,6 +416,8 @@ spring:
 
 ### Mistake 1: Not Validating the Signature
 
+SAML assertions must be cryptographically signed. Accepting unsigned assertions allows an attacker to forge fake login responses:
+
 ```java
 // WRONG: Accepting unsigned assertions
 Saml2AuthenticationToken token = decoder.decode(response);
@@ -426,6 +437,8 @@ public RelyingPartyRegistrationRepository registrations() {
 
 ### Mistake 2: Weak Audience Restriction
 
+Without audience restriction, an assertion issued for one SP can be replayed against another SP:
+
 ```xml
 <!-- WRONG: No audience restriction -->
 <saml:Conditions>
@@ -444,6 +457,8 @@ public RelyingPartyRegistrationRepository registrations() {
 
 ### Mistake 3: Not Validating Assertion Validity Window
 
+The `NotBefore` and `NotOnOrAfter` timestamps prevent replay attacks by limiting the assertion's validity period:
+
 ```java
 // WRONG: Not checking NotBefore/NotOnOrAfter
 Assertion assertion = response.getAssertion();
@@ -460,6 +475,8 @@ if (now.isAfter(assertion.getConditions().getNotOnOrAfter())) {
 ```
 
 ### Mistake 4: Accepting Unsolicited Assertions
+
+An attacker could capture a valid SAML response (e.g., via network interception) and replay it later. For SP-initiated flows, verify `InResponseTo` matches a pending `AuthnRequest`:
 
 ```java
 // WRONG: Accepting IdP-initiated SSO without verifying InResponseTo

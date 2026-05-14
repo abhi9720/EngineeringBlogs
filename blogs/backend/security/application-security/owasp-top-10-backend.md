@@ -28,6 +28,8 @@ Access control vulnerabilities occur when users can act outside their intended p
 
 ### In Spring Boot
 
+IDOR vulnerabilities are the most common access control flaw. The vulnerable endpoint below accepts an order ID and returns it without verifying ownership — any authenticated user can read any order. The secure version adds `customerId` to the query, enforcing ownership at the database level:
+
 ```java
 // VULNERABLE: IDOR - User can access any order
 @GetMapping("/orders/{id}")
@@ -47,6 +49,8 @@ public Order getOrder(@PathVariable Long id) {
 ```
 
 ### Prevention
+
+Spring Security's `@EnableMethodSecurity` and request-matching rules provide centralized access control. The configuration below denies all requests by default and explicitly permits only authenticated users and admin-specific paths:
 
 ```java
 @Configuration
@@ -76,6 +80,8 @@ Weak cryptography, hardcoded keys, outdated protocols, and missing encryption fo
 
 ### In Spring Boot
 
+TLS configuration is a common source of cryptographic failures. The insecure configuration below uses TLS 1.0 (deprecated since 2018) and the default cipher suite. The secure version mandates TLS 1.2/1.3 with authenticated encryption ciphers:
+
 ```yaml
 # INSECURE: Weak TLS, no encryption requirements
 server:
@@ -94,6 +100,8 @@ server:
 ```
 
 ### Prevention
+
+AES-256-GCM provides authenticated encryption (confidentiality + integrity). The `EncryptionService` generates a random 12-byte IV for each encryption operation and prepends it to the ciphertext — essential for semantic security (the same plaintext produces different ciphertext each time):
 
 ```java
 @Component
@@ -130,6 +138,8 @@ SQL, NoSQL, OS command, and LDAP injection occur when untrusted data is sent to 
 
 ### SQL Injection in Spring Boot
 
+String concatenation in JPA queries or JDBC statements is the root cause. Spring Data JPA derived queries and `@Query` with named parameters are automatically parameterized — the database driver escapes inputs before they reach the SQL parser:
+
 ```java
 // VULNERABLE: String concatenation creates SQL injection
 @Query("SELECT * FROM users WHERE name = '" + name + "'")
@@ -145,6 +155,8 @@ List<User> findByName(String name);
 ```
 
 ### Command Injection
+
+Shell commands built from user input are extremely dangerous. The vulnerable example below passes `hostname` directly to the shell — an attacker can inject arbitrary commands via `;`, `|`, or `` ` ``:
 
 ```java
 // VULNERABLE: Shell injection
@@ -164,6 +176,8 @@ InetAddress.getByName(hostname);
 Security flaws in the application design that cannot be fixed with configuration alone. Examples include missing rate limiting, trust of external systems, and lack of security in the architecture.
 
 ### Prevention
+
+Security headers provide defense in depth at the HTTP layer. Content Security Policy (CSP) restricts which sources can execute scripts. HTTP Strict Transport Security (HSTS) forces TLS. X-Frame-Options prevents clickjacking:
 
 ```java
 @Configuration
@@ -204,6 +218,8 @@ public class SecureDesignConfig {
 Default credentials, unnecessary features enabled, overly verbose error messages, improper HTTP headers.
 
 ### Common Misconfigurations
+
+Production applications often expose debug endpoints accidentally. H2 console enabled on production exposes database access. `show-sql: true` leaks schema information in logs. Stack traces in error responses reveal internal class names and line numbers:
 
 ```yaml
 # MISCONFIGURED: Debug endpoints exposed, default credentials
@@ -247,6 +263,8 @@ Using libraries with known vulnerabilities. Spring Boot applications typically h
 
 ### Prevention
 
+The OWASP Dependency Check plugin integrates vulnerability scanning into the Maven build lifecycle. Fail the build on CVSS 7+ (High/Critical) to prevent vulnerable components from reaching production:
+
 ```xml
 <!-- Add OWASP Dependency Check plugin -->
 <plugin>
@@ -273,6 +291,8 @@ Using libraries with known vulnerabilities. Spring Boot applications typically h
 Weak password policies, credential stuffing, session fixation, missing MFA, and flawed login mechanisms.
 
 ### Secure Authentication
+
+Session fixation attacks are mitigated by `sessionFixation().migrateSession()` — after login, the old session ID is replaced with a new one, so an attacker cannot force a victim to use a known session ID. Limiting concurrent sessions to one per user prevents credential sharing and limits exposure from stolen tokens:
 
 ```java
 @Configuration
@@ -317,6 +337,8 @@ CI/CD pipeline compromises, unsigned software updates, and insecure deserializat
 
 ### Insecure Deserialization
 
+Java's native deserialization (`ObjectInputStream`) is inherently unsafe — the `readObject()` method can trigger arbitrary code execution by instantiating classes with malicious data. Always prefer safe serialization formats like JSON:
+
 ```java
 // VULNERABLE: Java deserialization of untrusted data
 @PostMapping("/import")
@@ -344,6 +366,8 @@ public void importData(@RequestBody ImportData data) {
 Insufficient logging of security events, missing alerts for suspicious activity, and lack of audit trails.
 
 ### Structured Security Logging
+
+Log security events to a dedicated logger (`SECURITY_AUDIT`) so they can be routed to a separate index or SIEM system. Structured JSON format enables automated analysis. Log authentication attempts, authorization decisions (especially denials), and privilege changes:
 
 ```java
 @Component
@@ -391,6 +415,8 @@ public class SecurityAuditLogger {
 SSRF occurs when a server-side application fetches remote resources based on user input without validation, allowing attackers to access internal networks.
 
 ### Prevention
+
+Defense against SSRF requires multiple checks: validate the URL format, whitelist allowed hostnames, and verify the resolved IP address is not a private or loopback address. The last check prevents attackers from using DNS rebinding to bypass the hostname whitelist:
 
 ```java
 @Service

@@ -26,7 +26,7 @@ Resilience4j is the modern circuit breaker library for Java, providing a lightwe
 
 ### The Circuit Breaker State Machine
 
-A circuit breaker has three states:
+A circuit breaker has three states — CLOSED (normal operation), OPEN (blocking requests), and HALF-OPEN (testing recovery). The transition from CLOSED to OPEN occurs when the failure rate exceeds the configured threshold. After a wait duration, the circuit transitions to HALF-OPEN to probe whether the downstream service has recovered.
 
 ```mermaid
 flowchart LR
@@ -89,6 +89,8 @@ public class CircuitBreakerOnFailureEvent extends CircuitBreakerEvent {
 ## Real-World Backend Use Cases
 
 ### Case 1: Basic Circuit Breaker Implementation
+
+The configuration defines a sliding window of 10 calls — when at least 5 calls have been evaluated and the failure rate exceeds 50%, the circuit opens for 30 seconds. Both programmatic (decorator) and annotation-based approaches are shown; annotations are more concise while the decorator API offers finer control over fallback behavior.
 
 ```java
 // Configure circuit breaker
@@ -171,6 +173,8 @@ public class CircuitBreakerConfiguration {
 
 ### Case 2: Retry with Circuit Breaker
 
+Retry and circuit breaker complement each other — retries handle transient failures (network blips), while the circuit breaker prevents repeated retries against a genuinely dead service. The ordering matters: retry should wrap the circuit breaker so that exhausted retries trigger the circuit. The YAML-driven configuration keeps tuning externalized without recompilation.
+
 ```java
 // Retry configuration
 @Configuration
@@ -224,6 +228,8 @@ resilience4j:
 
 ### Case 3: Bulkhead Pattern for Resource Isolation
 
+The bulkhead pattern limits concurrent calls to each dependency. If payment processing has a capacity of 10 concurrent calls, excess requests wait up to 500ms in a queue before being rejected. This prevents a slow dependency from exhausting the entire application thread pool — failure in one bulkhead compartment stays contained.
+
 ```java
 // Bulkhead configuration
 @Configuration
@@ -271,6 +277,8 @@ public class CombinedService {
 
 ### Case 4: Rate Limiter
 
+The rate limiter controls how many requests are allowed per time window — here 100 requests per second with a 100ms patience period. If the limit is exceeded, the caller can either wait (up to the timeout) or receive an immediate fallback response. Rate limiters are commonly applied at API endpoints exposed to external consumers.
+
 ```java
 // Rate limiter configuration
 @Configuration
@@ -312,6 +320,8 @@ public class ResourceController {
 ```
 
 ### Case 5: Monitoring Circuit Breaker Events
+
+Circuit breakers publish events for every state transition, success, and failure. Listening to these events enables real-time dashboards and automated alerting. Combined with Actuator endpoints, operators can observe which circuits are open, what failure rates look like, and whether retries are being exhausted.
 
 ```java
 // Event handler for circuit breaker
@@ -372,6 +382,8 @@ management:
 
 ### 1. Gradual Rollout with Circuit Breakers
 
+When introducing a new service, start with a lenient threshold (70% failure rate) to avoid false positives during the stabilization period. Once the service behavior is well-understood, tighten to the standard 50% threshold. This staged approach prevents the circuit breaker from masking deployment issues.
+
 ```java
 // Start with higher threshold for new services
 @Bean
@@ -397,6 +409,8 @@ public CircuitBreakerConfig stableConfig() {
 ```
 
 ### 2. Fallback Strategies
+
+Fallbacks should be meaningful — returning stale cached data is often better than an error. For idempotent operations like notifications, queuing the failed request for later retry is a robust strategy. Avoid returning empty or default objects silently, as they can mask real failures from downstream callers.
 
 ```java
 // Cache-based fallback
@@ -453,6 +467,8 @@ public class QueueFallbackService {
 ```
 
 ### 3. Testing Circuit Breakers
+
+Circuit breaker behavior must be verified under controlled conditions. Programmatic tests can simulate failure sequences and assert state transitions. For integration testing, WireMock provides realistic HTTP failure scenarios without spinning up real downstream services.
 
 ```java
 @SpringBootTest
@@ -659,4 +675,4 @@ The circuit breaker pattern is essential for building resilient distributed syst
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

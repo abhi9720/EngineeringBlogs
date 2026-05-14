@@ -23,6 +23,8 @@ APIs evolve over time. Adding fields, changing response structures, or deprecati
 
 ### 1. URL Path Versioning
 
+URL path versioning is the most widely adopted approach because it is explicit, easy to route, and clearly visible to API consumers. Each version lives under a distinct URL path (e.g., `/api/v1/users`, `/api/v2/users`), making it straightforward to maintain multiple versions simultaneously on the same server. The version is part of the URL, so HTTP caches treat different versions as different resources automatically. The downside is that URLs are no longer stable over time — clients must update their URLs when migrating to a new version. This approach also encourages code duplication if not managed carefully with shared service layers.
+
 ```java
 // Include version in URL path
 @RestController
@@ -51,6 +53,8 @@ public class UserControllerV2 {
 
 ### 2. Header Versioning
 
+Header versioning keeps URLs clean by placing the version in a custom HTTP header. This approach treats the API as a single logical endpoint whose behavior changes based on the version header. The main advantage is URL stability — clients never need to change their base URLs. However, header versioning is less discoverable (you need documentation to know which header to send), harder to test with simple tools like curl or browser address bars, and more complex to route in load balancers or API gateways that inspect URL paths. It also complicates caching since the same URL returns different content depending on headers.
+
 ```java
 // Version in custom header
 @RestController
@@ -76,6 +80,8 @@ public class HeaderController {
 
 ### 3. Query Parameter Versioning
 
+Query parameter versioning is the simplest to implement but the least recommended for production APIs. While it makes URLs superficially clean and allows clients to switch versions by changing a query parameter, it pollutes the query string namespace and makes caching ambiguous — the same URL path with different query parameters can return different representations. Query parameters are also easily omitted by clients, causing them to receive the default version unexpectedly. This approach is best suited for transitional phases or internal APIs where simplicity trumps architectural purity.
+
 ```java
 // Version in query parameter
 @GetMapping("/api/users")
@@ -96,6 +102,8 @@ public ResponseEntity<?> getUsers(
 ## Production Strategy
 
 ### Deprecation Policy
+
+A well-defined deprecation policy is essential for managing API versions in production without breaking existing clients. The standard approach is to support each version for a minimum period (e.g., 6-12 months after announcing deprecation), communicate clearly through deprecation headers and documentation, and provide migration guides. The `Deprecation` and `Sunset` HTTP headers give clients programmatic notice that a version is being phased out, while `Link` headers with `rel="alternate"` point to the replacement endpoint.
 
 ```java
 // Version lifecycle management
@@ -129,6 +137,8 @@ public Filter deprecationFilter() {
 
 ### Version Compatibility
 
+The safest approach to versioning is to design new versions that are backward-compatible with older clients. Adding fields to responses never breaks existing clients (unknown fields are typically ignored by JSON parsers). Removing fields, changing data types, or restructuring responses are breaking changes that require a new version. A common pattern is to create a version-specific response DTO that extends the base version's DTO, adding only the new fields. This reduces code duplication while making the version contract explicit.
+
 ```java
 // Add fields without breaking old clients
 public class UserV1 {
@@ -161,6 +171,8 @@ public class UserV3 {
 
 ### Mistake 1: No Versioning Strategy
 
+Deploying an API without a versioning strategy is a common mistake that becomes painful as soon as you need to make breaking changes. Without versioning, you are forced to either never change your API (stagnation) or break existing clients (unreliable). Start versioning from day one — even if you don't expect breaking changes — because retrofitting versioning onto an unversioned API is significantly harder than designing it in from the start.
+
 ```java
 // WRONG: Breaking changes without versioning
 
@@ -171,6 +183,8 @@ public class VersionedController { }
 ```
 
 ### Mistake 2: Too Many Versions
+
+Creating a new API version for every minor change leads to version sprawl — a support burden where you must maintain and test many parallel code paths. Reserve new versions exclusively for breaking changes (removing fields, changing data types, altering behavior). Non-breaking changes like adding fields, adding new endpoints, or extending enum values should be done within the existing version. This keeps the version matrix manageable while allowing the API to evolve.
 
 ```java
 // WRONG: Creating new versions for every change
@@ -197,4 +211,4 @@ public class VersionedController { }
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

@@ -21,7 +21,11 @@ Idempotency ensures that making the same API request multiple times produces the
 
 ## Understanding Idempotency
 
+Idempotency in the HTTP context means that multiple identical requests should have the same effect as a single request. This property is essential for building reliable distributed systems where network failures, timeouts, and retries are inevitable. Without idempotency, retrying a failed request could lead to duplicate orders, double charges, or inconsistent state.
+
 ### Safe vs Unsafe Methods
+
+HTTP methods have inherent idempotency guarantees defined by the specification. Safe methods (GET, HEAD, OPTIONS, TRACE) are inherently idempotent because they only retrieve data without modifying server state. However, for unsafe methods, idempotency depends on how the server implements them. PUT and DELETE are defined as idempotent in the HTTP spec because replacing a resource or deleting it has the same effect regardless of how many times the operation repeats. POST, used for creating resources, is not idempotent by default — each call typically creates a new resource. PATCH can be tricky since applying the same partial update multiple times may produce different results depending on the operation semantics.
 
 ```
 Safe Methods (Idempotent):     Unsafe Methods (Usually Not Idempotent):
@@ -66,6 +70,8 @@ public ResponseEntity<Order> createOrder(
 ---
 
 ## Implementation Patterns
+
+There are several proven patterns for implementing idempotency in APIs. The choice depends on your consistency requirements, performance constraints, and whether you control both client and server. The most common approach is the idempotency key pattern, where clients generate a unique key for each operation and the server uses it to detect and prevent duplicates.
 
 ### 1. Idempotency Keys
 
@@ -134,6 +140,8 @@ HttpRequest request = HttpRequest.newBuilder()
 
 ### 2. Database Constraints
 
+While idempotency keys in application code handle most cases, database-level constraints provide a safety net. A unique constraint on the idempotency key column ensures that even if two requests arrive simultaneously and bypass the application check, only one record is inserted. The trade-off is that you must handle `DataIntegrityViolationException` gracefully and return the existing resource rather than propagating the error to the client.
+
 ```java
 // Use unique constraints for idempotency
 @Entity
@@ -176,6 +184,8 @@ public class OrderIdempotencyService {
 
 ## Production Considerations
 
+In production systems, idempotency keys cannot live forever — they consume storage and can become a source of technical debt. A key expiration strategy balances safety with resource management. Keep keys long enough to cover the maximum expected retry window (usually 24 hours for most APIs, but can be longer for payment systems where retries may span days). Use scheduled cleanup jobs or TTL-based storage (like Redis) to manage expired keys efficiently.
+
 ### Idempotency Key Expiration
 
 ```java
@@ -199,6 +209,8 @@ public void cleanupExpiredKeys() {
 ```
 
 ### Idempotent PUT and PATCH
+
+A common point of confusion in API design is the idempotency difference between PUT and PATCH. PUT replaces the entire resource — sending the same PUT request multiple times yields the same result because the final state is identical. PATCH, on the other hand, applies partial modifications. If your PATCH operation increments a counter or appends to a list, repeated calls produce different states. Design PATCH carefully: use absolute values rather than relative operations when idempotency matters, or use conditional PATCH with version numbers to prevent conflicting updates.
 
 ```java
 // PUT should be idempotent (replace entire resource)
@@ -228,6 +240,8 @@ public User patchUser(@PathVariable Long id, @RequestBody Map<String, Object> up
 
 ### Mistake 1: No Idempotency for Critical Operations
 
+The most costly mistake is skipping idempotency on financial or resource-creating operations. When a client times out waiting for a response, it has no way to know whether the server processed the request or not. Without idempotency, the client's retry creates a duplicate — a double charge or duplicate order. Always require idempotency keys for POST endpoints that create resources or trigger side effects.
+
 ```java
 // WRONG: Payment endpoint without idempotency
 @PostMapping("/payments")
@@ -247,6 +261,8 @@ public ResponseEntity<Payment> createPayment(
 ```
 
 ### Mistake 2: Short Idempotency Key Lifespan
+
+If idempotency keys expire too quickly — say, within minutes — a client that retries after a long timeout or during a network partition will be allowed to create a duplicate. This defeats the purpose of idempotency. The right expiration depends on your clients' retry behavior: Stripe uses 24 hours, while some payment systems keep keys for 7 days to accommodate offline processing and delayed retries.
 
 ```java
 // WRONG: Keys expire too quickly for long-running operations
@@ -273,4 +289,4 @@ public ResponseEntity<Payment> createPayment(
 
 ---
 
-Happy Coding 👨‍💻
+Happy Coding

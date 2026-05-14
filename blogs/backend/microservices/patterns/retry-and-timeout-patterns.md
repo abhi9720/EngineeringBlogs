@@ -20,6 +20,8 @@ Retry and timeout patterns are fundamental for building resilient microservices.
 
 ### Connection and Read Timeouts
 
+Connection timeout governs how long to wait for the TCP handshake to complete. Read (socket) timeout governs how long to wait between data packets after the connection is established. Setting both prevents thread starvation — a misconfigured 60s default can exhaust the connection pool under load.
+
 ```java
 @Configuration
 public class TimeoutConfig {
@@ -65,6 +67,8 @@ public class TimeoutConfig {
 
 ### Timeout with Resilience4j
 
+Resilience4j's TimeLimiter wraps `CompletableFuture` with a timeout. The `cancelRunningFuture: true` flag ensures the underlying thread is interrupted when the timeout fires, releasing resources rather than letting the operation run to completion in vain.
+
 ```java
 @Configuration
 public class TimeLimiterConfig {
@@ -104,6 +108,8 @@ public class TimeLimitedService {
 
 ### Spring Retry
 
+Spring Retry's `@Retryable` annotation retries on specific exceptions with exponential backoff. The first retry waits 1s, the second 2s, and subsequent waits cap at 10s. The `@Recover` method is called when all attempts are exhausted — returning a fallback response rather than propagating the exception.
+
 ```java
 @Service
 public class RetryablePaymentService {
@@ -126,6 +132,8 @@ public class RetryablePaymentService {
 ```
 
 ### Resilience4j Retry
+
+Resilience4j offers more flexible retry configuration than Spring Retry — `IntervalFunction.ofExponentialRandomBackoff` adds jitter to the exponential backoff, preventing the thundering herd problem where all retrying clients hit the recovering service simultaneously.
 
 ```java
 @Configuration
@@ -163,7 +171,7 @@ public class RetryConfig {
 
 ## Retry with Jitter
 
-Jitter prevents the thundering herd problem by randomizing retry intervals.
+Jitter randomizes the retry interval by adding a random offset — a retry that would wait ~1000ms might wait anywhere from 1000ms to 1500ms. This prevents all retrying clients from hitting the recovering service at the same instant, spreading the recovery load over time.
 
 ```java
 @Service
@@ -208,6 +216,8 @@ public class JitterRetryService {
 ```
 
 ## Combining Retry, Timeout, and Circuit Breaker
+
+The three patterns compose in a specific order: circuit breaker wraps the outer call (fail fast if open), retry handles transient failures within the circuit's closed state, and TimeLimiter ensures the entire operation doesn't exceed a maximum duration. The `Decorators` API composes them cleanly into a single decorated supplier.
 
 ```java
 @Service

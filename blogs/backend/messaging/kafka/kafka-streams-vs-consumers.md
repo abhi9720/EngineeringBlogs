@@ -18,7 +18,7 @@ Kafka offers two primary APIs for consuming and processing messages: the Consume
 
 ## Consumer API
 
-The Consumer API gives you full control over message consumption, offset management, and threading.
+The Consumer API gives you full control over message consumption, offset management, and threading. This is the right choice when you need a simple consume-process loop, custom threading models, or integration with existing frameworks. The example below shows a manual offset commit pattern: poll records, process each one, then commit synchronously. This gives at-least-once semantics — if the consumer crashes between processing and commit, the messages are redelivered.
 
 ```java
 Properties props = new Properties();
@@ -47,7 +47,7 @@ try {
 
 ## Kafka Streams API
 
-Kafka Streams builds on the Consumer API and add stream processing capabilities including stateful operations, joins, and windowing.
+Kafka Streams builds on the Consumer API and adds stream processing capabilities including stateful operations, joins, and windowing. The Streams DSL abstracts away the complexity of managing threads, partitions, and state stores. In the example below, an orders stream is enriched by joining with a product catalog table, and the result is written to an enriched topic. The `application.id` serves as the consumer group ID and determines the state store directory.
 
 ```java
 Properties props = new Properties();
@@ -81,7 +81,7 @@ Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
 
 ## Stateful Operations with Kafka Streams
 
-Kafka Streams supports stateful operations through state stores, which are fault-tolerant RocksDB-backed key-value stores.
+Kafka Streams supports stateful operations through state stores, which are fault-tolerant RocksDB-backed key-value stores. State stores are the key differentiator from the Consumer API — they allow operations like windowed aggregations, joins, and sessionization without external databases. The example below aggregates sales by product in 5-minute windows, with the state automatically persisted to RocksDB and backed up to a Kafka changelog topic for fault tolerance.
 
 ```java
 public class WindowedAggregationExample {
@@ -121,7 +121,7 @@ public class WindowedAggregationExample {
 
 ### Consumer API with Idempotent Writes
 
-Achieving exactly-once with the Consumer API requires manual offset management and transactional coordination.
+Achieving exactly-once with the Consumer API requires manual offset management and transactional coordination. You need to create the producer with a unique `transactional.id`, begin a transaction for each poll batch, process records, send results to an output topic, and atomically commit both the output messages and the consumer offsets via `sendOffsetsToTransaction`. This is error-prone and requires careful exception handling.
 
 ```java
 Properties props = new Properties();
@@ -152,7 +152,7 @@ while (true) {
 
 ### Kafka Streams Exactly-Once
 
-Kafka Streams provides exactly-once semantics out of the box with a single configuration.
+Kafka Streams provides exactly-once semantics out of the box with a single configuration. Setting `processing.guarantee=exactly_once_v2` enables end-to-end exactly-once: the library handles transactional fencing, offset management, and state store commits automatically. This is dramatically simpler than the Consumer API approach — no manual transaction management, no separate producer, no offset tracking.
 
 ```java
 props.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE_V2);
@@ -161,6 +161,8 @@ props.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE_
 ## When to Use Each
 
 ### Consumer API is better for
+
+Simple message processing with custom thread management. The `SimpleConsumer` uses a thread pool to process records concurrently, which is more flexible than Kafka Streams' fixed thread model. Use the Consumer API when you need fine-grained control over threading, want to use a different processing framework, or have simple consume-process patterns that don't need state.
 
 ```java
 // Simple message processing with custom thread management
@@ -187,6 +189,8 @@ public class SimpleConsumer {
 ```
 
 ### Kafka Streams is better for
+
+Complex stream processing with joins and aggregations. The `StreamProcessor` joins three streams/tables (orders, customers, products) with just a few lines of DSL code. Doing the same with the Consumer API would require manual state management, join logic, and windowing — all of which Kafka Streams provides out of the box with fault-tolerant state stores.
 
 ```java
 // Complex stream processing with joins and aggregations
@@ -219,6 +223,8 @@ public class StreamProcessor {
 
 ### Mistake: Reimplementing stateful operations with Consumer API
 
+Using a `ConcurrentHashMap` for in-memory aggregation is simple but not fault-tolerant — all state is lost on restart. For production stateful processing, use Kafka Streams' built-in state stores (backed by RocksDB with Kafka changelog topics). They provide exactly-once state semantics, automatic recovery, and no data loss.
+
 ```java
 // Wrong - manual state management is error-prone
 private final Map<String, Aggregate> inMemoryState = new ConcurrentHashMap<>();
@@ -243,6 +249,8 @@ grouped.aggregate(
 ```
 
 ### Mistake: Using Consumer API for stream-stream joins
+
+Stream-stream joins require windowing, state management, and handling out-of-order events. Reimplementing this with the Consumer API requires managing a state store, maintaining window boundaries, and handling late-arriving data. Kafka Streams' join operators handle all of this with configurable windows and grace periods.
 
 ```java
 // Wrong - manual join logic is complex and fragile

@@ -52,6 +52,8 @@ Datadog, New Relic, and Grafana Cloud are the three leading observability platfo
 -Ddd.trace.sample.rate=0.1
 ```
 
+The Datadog agent is a single process that collects metrics, traces, and logs simultaneously from each host. Setting `dd.logs.injection=true` causes the agent to inject trace IDs into log records automatically, so every log line is correlated to its trace without any code changes. The sampling rate of `0.1` means only 10% of requests are traced end-to-end, which keeps storage costs manageable for high-throughput services while still providing statistically significant data.
+
 ```java
 // Custom instrumentation with Datadog
 import datadog.trace.api.Trace;
@@ -73,6 +75,8 @@ public class DatadogInstrumentedService {
 }
 ```
 
+The `@Trace` annotation is Datadog's equivalent of OpenTelemetry's `@WithSpan`—it marks a method for tracing without requiring manual span lifecycle management. The `ANALYTICS` tag makes this span queryable in Datadog's APM Analytics view, which indexes span tags for ad-hoc filtering.
+
 ### Query Language (Datadog)
 
 ```sql
@@ -90,6 +94,8 @@ trace.service:order-service
   -resource:GET /health
   @duration:>500000000
 ```
+
+Datadog uses a bespoke query syntax that is distinct for metrics, logs, and traces. The metric query above retrieves the p99 latency averaged over 60-second buckets, grouped by URI and HTTP method. The log query filters for errors excluding validation exceptions and returns the top 10 URIs by error count.
 
 ### Pricing
 
@@ -138,6 +144,8 @@ common:
     ignore_status_codes: 404,410
 ```
 
+New Relic's configuration file is managed alongside the application code. Setting `record_sql: obfuscated` captures SQL query shapes without exposing actual bind parameters—important for compliance with data privacy regulations while still enabling slow-query detection. The `explain_threshold: 500` tells the agent to run `EXPLAIN` on any query taking longer than 500ms, providing a database execution plan at the time of the slow query.
+
 ```java
 @Service
 public class NewRelicInstrumentedService {
@@ -158,6 +166,8 @@ public class NewRelicInstrumentedService {
     }
 }
 ```
+
+Unlike Datadog's annotation-only approach, the `NewRelic` static API allows inline instrumentation from any class without adding annotations. `noticeError` is particularly useful because it captures both the exception and the current transaction context, enabling New Relic's Errors Inbox to group related errors automatically.
 
 ### Query Language (NRQL)
 
@@ -184,6 +194,8 @@ WHERE service.name = 'order-service'
   AND span.kind = 'client'
 FACET destination.service.name
 ```
+
+NRQL is SQL-like and deliberately designed for ad-hoc exploration. The `FACET` clause is equivalent to SQL's `GROUP BY` but is optimized for high-cardinality fields. The `TIMESERIES` keyword automatically adds a time dimension to the result, producing data suitable for graphing without needing a separate time bucketing expression.
 
 ### Pricing
 
@@ -249,6 +261,8 @@ traces:
           insecure: true
 ```
 
+The Grafana Agent is unique in that a single YAML config manages all three telemetry signals. The Write-Ahead Log (WAL) directory provides crash resilience—if the agent restarts, it replays buffered metrics rather than losing the gap. For traces, the agent acts as an OTLP receiver and forwards to Tempo, making it a drop-in replacement for the OpenTelemetry Collector in Grafana-centric stacks.
+
 ```java
 // Grafana uses OpenTelemetry natively
 // No proprietary SDK needed
@@ -274,6 +288,8 @@ public class GrafanaOtelConfig {
 }
 ```
 
+Because Grafana Cloud uses OpenTelemetry natively, there is no vendor lock-in. The same instrumented application can send data to Grafana, a self-hosted OTLP backend, or any OpenTelemetry-compatible platform by changing the exporter endpoint. This makes Grafana Cloud the most portable option among the three.
+
 ### Query Language (LogQL/PromQL)
 
 ```promql
@@ -291,6 +307,8 @@ rate(http_server_requests_seconds_count{service="order-service"}[5m])
   && { span.http.status_code >= 500 }
   | duration > 500ms
 ```
+
+Grafana Cloud does not invent a single query language—it uses PromQL for metrics, LogQL for logs, and TraceQL for traces. Each is purpose-built for its signal type. PromQL's `rate()` function computes per-second averages over a time window, LogQL's pipe syntax (`| json`, `| line_format`) processes log lines like a Unix pipeline, and TraceQL's structural matching lets you find traces based on resource attributes AND span conditions simultaneously.
 
 ### Pricing
 

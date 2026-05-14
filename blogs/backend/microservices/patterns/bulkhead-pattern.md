@@ -20,7 +20,7 @@ The bulkhead pattern isolates resources within a system so that failure in one c
 
 ### Thread Pool Isolation
 
-Each dependency gets its own thread pool, preventing one slow dependency from consuming all threads.
+Each dependency gets its own thread pool, preventing one slow dependency from consuming all threads. The order service gets the largest pool (10 max, 5 core, 20 queue) reflecting its critical role, while notification service gets a minimal pool (3 max, 2 core, 5 queue). This ensures that a backlog in non-critical notifications doesn't starve order processing threads.
 
 ```java
 @Configuration
@@ -62,7 +62,7 @@ public class BulkheadConfig {
 
 ### Semaphore Isolation
 
-Uses semaphores to limit concurrent access without thread pool overhead.
+Semaphore isolation is lighter than thread pools — it just counts permits without creating new threads. It's ideal for non-blocking I/O operations (like async HTTP calls) where the overhead of thread switching isn't justified. The 500ms max wait means a caller will wait briefly for a permit and then fail fast.
 
 ```java
 @Bean
@@ -77,6 +77,8 @@ public Bulkhead inventoryServiceBulkhead() {
 ```
 
 ## Service Integration
+
+The bulkhead is applied via the `ThreadPoolBulkhead.decorateSupplier` API or the `@Bulkhead` annotation. Combined with `@CircuitBreaker`, the bulkhead rejects excess calls before they reach the circuit breaker — the circuit only sees calls that passed the concurrency limit check.
 
 ```java
 @Service
@@ -128,6 +130,8 @@ public class ResilientOrderService {
 
 ## Spring Boot with Resilience4j Configuration
 
+YAML-based configuration externalizes bulkhead settings without code changes. The `default` config is inherited by all instances unless overridden. Separate tuning for thread-pool bulkhead (blocking I/O) and semaphore bulkhead (async/non-blocking) allows choosing the right isolation strategy per dependency.
+
 ```yaml
 resilience4j:
   bulkhead:
@@ -160,6 +164,8 @@ resilience4j:
 ```
 
 ## Custom Bulkhead with Metrics
+
+Exposing bulkhead metrics (max concurrent calls vs. available permits) as Micrometer gauges enables Prometheus monitoring and Grafana dashboards. A sudden drop in available permits indicates a backing-up dependency, triggering alerts before it reaches the queue limit and starts rejecting requests.
 
 ```java
 @Component
@@ -205,6 +211,8 @@ public class MonitoredBulkhead {
 
 ## Bulkhead with Retry and Circuit Breaker
 
+Stacking resilience patterns creates a comprehensive defense-in-depth strategy. The bulkhead limits concurrency first, the circuit breaker prevents repeated calls to a failing service, retry handles transient failures, and TimeLimiter caps the total execution time. Each pattern addresses a different failure mode.
+
 ```java
 @Service
 public class ResilientService {
@@ -238,6 +246,8 @@ public class ResilientService {
 ```
 
 ## Monitoring Bulkhead Metrics
+
+Regular logging of bulkhead utilization helps operators understand whether limits are appropriately sized. If available permits consistently stay near zero, the limit is too low. If they never drop, the limit may be too high — wasting resources that could be allocated elsewhere.
 
 ```java
 @Component
@@ -300,6 +310,8 @@ public Bulkhead nonCriticalBulkhead() {
 ```
 
 ### Mistake: Using thread pool bulkhead for non-blocking operations
+
+Thread pool bulkheads add unnecessary context switching overhead for reactive/non-blocking code. Semaphore isolation is the correct choice — it limits concurrent calls without spawning new threads, preserving the event loop's efficiency.
 
 ```java
 // Wrong - unnecessary thread switching for async

@@ -97,6 +97,8 @@ public class CpuProfileAnalysis {
 }
 ```
 
+The "bad" version creates a new `Pattern` (or worse, uses `String.toLowerCase` and `contains`) for every product. Each call to `toLowerCase()` allocates a new `String` object, and `contains()` scans character-by-character. The pre-compiled `Pattern` with `CASE_INSENSITIVE` flag compiles the regex once and reuses it, and `matcher().find()` is typically faster than two `toLowerCase()` calls. The flame graph from async-profiler would show `String.toLowerCase` and `Pattern.compile` as wide bars in the bad version, and `Pattern.matcher.find` as a much narrower bar in the good version.
+
 ### Thread State Analysis
 
 ```java
@@ -263,6 +265,8 @@ public class MemoryLeakDetector {
     // userContext.remove();
 }
 ```
+
+Heap analysis begins with understanding the generational hypothesis: most objects die young. A healthy application shows a sawtooth pattern in heap usage — young GCs reclaim memory regularly, and old-gen occupancy stays stable or grows slowly. A steady upward trend in old-gen occupancy after each GC indicates a leak: objects that should be unreachable are retained by references from long-lived classes. The histogram from `jmap -histo:live` is the first diagnostic — look for classes with unexpectedly high instance counts or retained sizes.
 
 ### Object Allocation Analysis
 

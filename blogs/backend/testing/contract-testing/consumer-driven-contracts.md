@@ -22,28 +22,26 @@ Consumer-driven contract (CDC) testing is a pattern where consumer microservices
 
 ## The Problem: Microservice Integration
 
-```
-Consumer (Order Service)     Provider (Payment Service)
-         |                              |
-         |---- API call --------------->|
-         |                              |  Provider changes field names
-         |<--- response (changed) ------|  Consumer breaks!
-         |                              |
-         |    No one knows until        |
-         |    production deployment     |
+```mermaid
+sequenceDiagram
+    participant Consumer as Consumer (Order Service)
+    participant Provider as Provider (Payment Service)
+    Consumer->>Provider: API call
+    Provider-->>Consumer: response (changed field names)
+    Note over Consumer: Consumer breaks!
+    Note over Consumer,Provider: No one knows until production deployment
 ```
 
 CDC solves this by testing the contract in every build:
 
-```
-Consumer                       Provider
-   |                              |
-   |-- Writes contract ---------->|  (consumer expectation)
-   |                              |
-   |                              |-- Verifies contract in CI
-   |                              |  (provider must satisfy it)
-   |                              |
-   |    Both can deploy safely    |
+```mermaid
+sequenceDiagram
+    participant Consumer as Consumer
+    participant Provider as Provider
+    Consumer->>Provider: Writes contract (consumer expectation)
+    Provider->>Provider: Verifies contract in CI
+    Note over Provider: Provider must satisfy contract
+    Note over Consumer,Provider: Both can deploy safely
 ```
 
 ---
@@ -101,6 +99,8 @@ class OrderServiceConsumerPactTest {
     }
 }
 ```
+
+The consumer test above uses Pact's DSL to define exactly what request it sends and what response it expects. The `@Pact` annotated method captures this contract, while the `@Test` method drives the consumer's own code against a mock server that implements the contract. This ensures the consumer's HTTP client can correctly parse the response.
 
 ### Phase 2: Contract Published
 
@@ -181,6 +181,8 @@ class PaymentServiceProviderPactTest {
     }
 }
 ```
+
+The provider verification test starts the real Spring Boot application on a random port, loads all published contracts from the Pact Broker, and replays each consumer's request against the real API. The `@State` method ensures the database contains exactly the data the consumer expects. If the provider's API changes in a way that violates any consumer contract, this test fails.
 
 ---
 
@@ -277,6 +279,8 @@ class MatchingRulesExample {
 }
 ```
 
+Matching rules are what make Pact contracts flexible rather than brittle. Instead of pinning exact values (which would break every time the provider changes a timestamp or ID), you define type-based matchers. The provider can return any string for `transactionId` and any decimal for `price`—as long as the types match, the contract is satisfied.
+
 ### Available Matchers
 
 | Matcher | Description | Example |
@@ -321,6 +325,8 @@ class PaymentProviderTest {
     }
 }
 ```
+
+Provider states are the CDC equivalent of "given" in BDD. They allow a single pact verification to run against multiple data scenarios—happy path, error cases, edge conditions. The provider test can define as many `@State` methods as needed, and Pact matches them to the `given()` clauses in consumer contracts.
 
 ---
 

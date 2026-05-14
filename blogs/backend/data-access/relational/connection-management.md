@@ -24,6 +24,8 @@ Database connections are expensive resources. Creating a new TCP connection to a
 
 ### Connection Creation
 
+The configuration below demonstrates a complete HikariCP setup with connection lifecycle settings. `connectionTimeout` is the maximum time a thread waits for a connection from the pool—if exceeded, a `SQLException` is thrown. `initializationFailTimeout` controls whether the application fails to start if it cannot connect to the database (set to 0 to allow starting without a database, useful for development). `maxLifetime` is the maximum age of a connection in the pool, set to 30 minutes to stay well below common infrastructure timeouts.
+
 ```java
 @Configuration
 public class ConnectionLifecycleConfig {
@@ -52,6 +54,8 @@ public class ConnectionLifecycleConfig {
 ```
 
 ### Connection Lifecycle Phases
+
+Every connection goes through three phases: acquire, use, and return. **Acquire** retrieves a connection from the pool (or creates a new one if the pool is not yet full). **Use** executes the actual database work. **Return** sends the connection back to the pool (it is not actually closed). The monitor below measures each phase, logging a warning when the acquire time exceeds 100ms—an early indicator of pool exhaustion. Micrometer metrics are registered to track active, idle, pending, and total connections in your monitoring system.
 
 ```java
 @Component
@@ -128,6 +132,8 @@ public class ConnectionLifecycleMonitor {
 
 ### Optimal Pool Size Calculation
 
+The conventional wisdom that more connections equals more throughput is wrong for databases. Beyond a certain point, additional connections increase context switching overhead on both the application and database servers without improving throughput. Little's Law provides a theoretical foundation: the optimal number of connections equals the target throughput (requests/second) multiplied by the average response time (seconds). The formula below calculates a starting point and adjusts it with a 20% overhead factor.
+
 ```java
 @Component
 public class PoolSizeCalculator {
@@ -164,6 +170,8 @@ public class PoolSizeCalculator {
 ```
 
 ### Adaptive Pool Sizing
+
+For applications with varying load patterns, a fixed pool size may be too large during off-peak hours and too small during traffic spikes. The adaptive sizer below tracks a rolling window of active connections and adjusts the pool size dynamically. It increases the pool when threads are queuing (indicating contention) and decreases it when idle connections far exceed the average active count (indicating waste).
 
 ```java
 @Component
@@ -225,6 +233,8 @@ public class AdaptivePoolSizer {
 ## Health Checks and Validation
 
 ### Connection Validation
+
+Stale connections—connections that have been severed by the database, firewall, or load balancer—cause mysterious `SQLException` failures. HikariCP provides three lines of defense: `connectionTestQuery` validates a connection when it is created or checked out, `connectionInitSql` runs initialization statements (like setting the session timezone) on new connections, and `leakDetectionThreshold` logs a stack trace if a connection is held longer than the threshold, helping identify connection leaks in the application code.
 
 ```java
 @Configuration
@@ -301,6 +311,8 @@ public class HealthCheckService {
 
 ### Connection Leak Detection
 
+A connection leak occurs when the application acquires a connection from the pool but does not return it (the `close()` is never called). Over time, this exhausts the pool and causes the application to hang. HikariCP's `leakDetectionThreshold` figures out leaks by logging a stack trace showing exactly where the leaked connection was acquired. In development, set this threshold low (e.g., 30 seconds) to catch leaks early. In production, a higher threshold (e.g., 60 seconds) avoids false positives from legitimate long-running queries.
+
 ```java
 @Configuration
 public class LeakDetectionConfig {
@@ -359,6 +371,8 @@ public class LeakDetector {
 9. **Set timeouts on operations**: Prevent thread starvation
 10. **Graceful shutdown**: Properly close pool on application shutdown
 
+A graceful shutdown prevents in-flight queries from being interrupted. The shutdown hook below stops accepting new connections, waits for active connections to complete (with a timeout), and then closes the pool. Without this, abruptly killing the application can leave database transactions in an indeterminate state.
+
 ```java
 // Graceful shutdown
 @Component
@@ -399,6 +413,8 @@ public class GracefulPoolShutdown {
 
 ### Mistake 1: Pool Size Too Large
 
+A pool of 200 connections does not mean 200 queries run in parallel—CPU cores are the true constraint. Beyond about 10-20 connections per CPU core, context switching overhead dominates and throughput actually decreases. Start with a small pool and increase only if metrics show threads awaiting connections.
+
 ```java
 // WRONG: Huge pool size
 config.setMaximumPoolSize(200);  // More connections != faster!
@@ -414,6 +430,8 @@ config.setMaximumPoolSize(200);  // More connections != faster!
 
 ### Mistake 2: No Connection Validation
 
+Without validation, a connection that was severed by a firewall or database restart is returned to the application, causing a seemingly random failure on the first query attempt.
+
 ```java
 // WRONG: No validation
 // Stale connections cause mysterious failures
@@ -424,6 +442,8 @@ config.setValidationTimeout(5000);
 ```
 
 ### Mistake 3: maxLifetime > Database Timeout
+
+If `maxLifetime` is set longer than the database's idle timeout or the firewall's session timeout, connections will be forcefully closed by the infrastructure, causing errors. Always set `maxLifetime` to be shorter than the shortest timeout in your infrastructure stack.
 
 ```java
 // WRONG: Connection lives longer than database timeout

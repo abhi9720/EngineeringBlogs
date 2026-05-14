@@ -34,6 +34,8 @@ An index is divided into shards for distributed storage and parallel processing.
 
 ## Setting Up Spring Data Elasticsearch
 
+The `ElasticsearchRestTemplate` is the central class for interacting with Elasticsearch from Spring Boot. It wraps the low-level REST client with a higher-level API for index management, CRUD operations, search queries, and aggregation. The configuration below connects to a local Elasticsearch instance on port 9200 with sensible timeouts:
+
 ```java
 @Configuration
 @EnableElasticsearchRepositories(basePackages = "com.example.search.repository")
@@ -54,6 +56,8 @@ public class ElasticsearchConfiguration {
 ```
 
 ## Defining Documents
+
+The `@Document` annotation maps a Java class to an Elasticsearch index. Each field's `@Field` annotation specifies its Elasticsearch data type, analyzer, and format. Notice the use of `FieldType.Text` with `analyzer = "english"` for the description — this applies stemming and stop-word removal specific to English. The `suggest` field uses `FieldType.Completion` for autocomplete suggestions, and `attributes` is declared as `FieldType.Nested` to preserve object relationships during indexing:
 
 ```java
 @Document(indexName = "products")
@@ -160,6 +164,8 @@ public class ProductAttribute {
 
 ## Indexing Documents
 
+The `ProductIndexer` handles document-level CRUD against Elasticsearch. Single document indexing uses `IndexQuery` for fine-grained control, while `bulkIndex` processes lists of documents in a single HTTP request for efficiency. The `createIndex()` method shows how to programmatically create the index if it does not exist — useful for automated deployments:
+
 ```java
 @Component
 public class ProductIndexer {
@@ -236,6 +242,8 @@ public class ProductIndexer {
 ```
 
 ## Basic Search Operations
+
+Spring Data Elasticsearch supports both repository-style derived queries and the native `NativeSearchQuery` DSL. Repository methods like `findByName` and `findByPriceBetween` are automatically implemented based on method naming conventions. For complex search logic, `ProductSearchService` uses `NativeSearchQueryBuilder` to construct multi-field queries with boosting, fuzzy matching, filtering, and custom sorting:
 
 ```java
 @Repository
@@ -326,6 +334,8 @@ public class ProductSearchService {
 
 ## Aggregations
 
+Aggregations are Elasticsearch's answer to SQL's `GROUP BY`. They enable real-time analytics on indexed data — counting products per category, computing average prices, and building price-range histograms. The `terms` aggregation creates buckets for each unique value, and `subAggregation` allows nesting (e.g., within each category bucket, compute average price and list sub-brands). The `range` aggregation below segments products into price tiers for faceted navigation:
+
 ```java
 @Service
 public class ProductAggregationService {
@@ -400,6 +410,8 @@ public class ProductAggregationService {
 
 ### Indexing Without Mapping
 
+Dynamic mapping can infer field types from the first document indexed, which may produce unexpected types — a numeric string like `"29.99"` will be mapped as `text` instead of `float`, breaking range queries and aggregations:
+
 ```java
 // Wrong: Dynamic mapping leads to unexpected field types
 PUT /products
@@ -424,6 +436,8 @@ PUT /products
 ```
 
 ### Over-Sharding
+
+Each shard consumes resources for indexing, searching, and cluster coordination. Too many shards causes unnecessary overhead, while too few limits parallelism. The general rule is 20-40 GB of data per shard:
 
 ```java
 // Wrong: Too many shards for small index

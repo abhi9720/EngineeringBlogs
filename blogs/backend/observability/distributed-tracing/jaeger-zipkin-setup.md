@@ -52,6 +52,8 @@ services:
       - tracing
 ```
 
+The all-in-one image bundles agent, collector, query service, and UI into a single process. It stores traces in memory by default, making it suitable for development but not production—data is lost on restart and there is no horizontal scaling. Enabling `COLLECTOR_OTLP_ENABLED` allows OpenTelemetry SDKs to send traces directly to Jaeger using the standard OTLP protocol.
+
 ### Production Deployment (Elasticsearch)
 
 ```yaml
@@ -116,6 +118,8 @@ networks:
     driver: bridge
 ```
 
+In production, Jaeger separates concerns into dedicated components: the collector ingests and processes spans, the query service serves the UI and API, and the agent runs as a sidecar on each host for UDP span forwarding. The collector is horizontally scalable—three replicas here, but can scale to dozens. The `ES_TAGS_AS_FIELDS_ALL` setting stores span tags as indexed Elasticsearch fields, enabling fast tag-based filtering in the UI at the cost of increased storage per span.
+
 ### Client Configuration
 
 ```yaml
@@ -174,6 +178,8 @@ networks:
     driver: bridge
 ```
 
+Zipkin's architecture is simpler than Jaeger's—a single server binary handles ingestion, query, and the UI. The slim image removes unused dependencies (e.g., Cassandra drivers when only Elasticsearch is used), reducing the attack surface and memory footprint. The trade-off is that Zipkin has no native agent component; spans are typically sent directly from the application via HTTP or Kafka.
+
 ### Spring Cloud Sleuth Integration (Legacy)
 
 ```xml
@@ -208,6 +214,8 @@ spring:
       enabled: true
 ```
 
+Spring Cloud Sleuth was the de facto tracing solution for Spring Boot before OpenTelemetry gained traction. It automatically instruments Spring-managed beans (controllers, RestTemplate, Kafka, etc.) and sends traces to Zipkin. The `probability: 1.0` sampler captures every request—acceptable for development but dangerously high for production.
+
 ### Modern OpenTelemetry with Zipkin
 
 ```yaml
@@ -217,6 +225,8 @@ otel:
   traces.exporter: zipkin
   exporter.zipkin.endpoint: http://zipkin:9411/api/v2/spans
 ```
+
+Migrating from Sleuth to OpenTelemetry is straightforward: swap the Sleuth dependencies for the OpenTelemetry Spring Boot starter, change the exporter to `zipkin`, and point to the Zipkin endpoint. OpenTelemetry provides ongoing support and a standard API that works across any backend.
 
 ---
 
@@ -258,6 +268,8 @@ CASSANDRA_CONTACT_POINTS=cassandra:9042
 CASSANDRA_KEYSPACE=zipkin
 ```
 
+Both Jaeger and Zipkin support Elasticsearch and Cassandra, but the choice has operational implications. Elasticsearch excels at tag-based search (the primary tracing workflow) but requires careful index management to handle span volume. Cassandra provides linear write scaling but sacrifices ad-hoc search flexibility. Many production deployments use Kafka as an intermediate buffer to absorb traffic spikes before writing to the storage backend.
+
 ---
 
 ## Sampling Strategies
@@ -284,6 +296,8 @@ sampling:
       param: 10  # Max 10 traces per second
 ```
 
+Jaeger's per-operation sampling is its killer feature. Order creation (POST /api/orders) is sampled at 100% because losing a single order trace could mean missing a critical business failure. Product listings (GET /api/products) are rate-limited to 10 traces/second regardless of traffic volume, ensuring the tracing infrastructure doesn't buckle under high read traffic.
+
 ### Zipkin Sampling
 
 ```yaml
@@ -300,6 +314,8 @@ brave:
   sampler:
     probability: 0.1
 ```
+
+Zipkin's sampling is simpler but less flexible. The probability is applied uniformly to all requests, so high-traffic endpoints and low-traffic health checks are sampled at the same rate. For most systems this is sufficient, but it means you may miss traces on rarely-called critical endpoints.
 
 ---
 

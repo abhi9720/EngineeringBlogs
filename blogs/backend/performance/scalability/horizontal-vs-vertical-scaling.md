@@ -23,6 +23,8 @@ Vertical scaling (scale up) adds resources to a single machine. Horizontal scali
 - **Vertical**: Simpler, but has hard limits and higher per-unit cost
 - **Horizontal**: More complex, but virtually unlimited and cost-effective at scale
 
+The decision between scaling directions depends on where the bottleneck lies. CPU-bound workloads benefit more from vertical scaling (a faster CPU speeds up computation directly), while I/O-bound workloads with many concurrent requests benefit from horizontal scaling (more instances = more TCP connections = more concurrency). The ideal path for most applications: start with a moderately sized instance, optimize resource usage, then scale horizontally when single-instance capacity is exhausted.
+
 ---
 
 ## Vertical Scaling
@@ -74,6 +76,8 @@ public class VerticalLimits {
 // Cost: ~8x more expensive
 // Performance: ~6x improvement (diminishing returns)
 ```
+
+The 8x cost for 6x performance illustrates the law of diminishing returns in vertical scaling. A single large instance hits memory-bandwidth and cache-coherency bottlenecks — doubling the core count rarely doubles throughput because all cores share the same memory bus. Vertical scaling also creates a larger blast radius: an outage or deployment issue affects all users simultaneously, and recovery requires restarting a machine with a potentially multi-minute JVM warmup.
 
 ---
 

@@ -24,20 +24,62 @@ JPA provides four strategies for mapping Java class inheritance hierarchies to d
 
 ### Strategy Comparison
 
+```mermaid
+---
+title: Inheritance Strategy Comparison
+---
+classDiagram
+    class InheritanceStrategy {
+        <<interface>>
+    }
+    class SingleTable {
+        Tables: 1
+        Joins: 0
+        Nullable Columns: Many
+        Polymorphism: Excellent
+        Query Performance: Best
+    }
+    class Joined {
+        Tables: 1 per class
+        Joins: Per query
+        Nullable Columns: None
+        Polymorphism: Excellent
+        Query Performance: Good (with joins)
+    }
+    class TablePerClass {
+        Tables: 1 per concrete
+        Joins: 0
+        Nullable Columns: None
+        Polymorphism: Limited
+        Query Performance: Good
+    }
+    class MappedSuperclass {
+        Tables: 1 per concrete
+        Joins: 0
+        Nullable Columns: None
+        Polymorphism: None
+        Query Performance: Best
+    }
+    InheritanceStrategy <|-- SingleTable
+    InheritanceStrategy <|-- Joined
+    InheritanceStrategy <|-- TablePerClass
+    InheritanceStrategy <|-- MappedSuperclass
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
 ```
-Strategy           | Tables  | Joins  | Nullable Columns | Polymorphism | Query Performance
--------------------|---------|--------|------------------|--------------|-------------------
-SINGLE_TABLE       | 1       | 0      | Many             | Excellent    | Best
-JOINED             | 1 per class | Per query | None          | Excellent    | Good (with joins)
-TABLE_PER_CLASS    | 1 per concrete | 0 | None            | Limited      | Good
-MappedSuperclass   | 1 per concrete | 0 | None            | None         | Best
-```
+
+Each inheritance strategy makes different trade-offs. **SINGLE_TABLE** maps the entire hierarchy to one table with a discriminator column—fastest for queries but wastes space on nullable columns. **JOINED** normalizes data into separate tables with foreign keys—ideal for data integrity but requires joins for polymorphic queries. **TABLE_PER_CLASS** creates independent tables for each concrete class—no joins but cannot support polymorphic queries efficiently. **MappedSuperclass** is the simplest—each entity has its own independent table with no relationship between them, but there is no polymorphism at all.
 
 ---
 
 ## 1. Single Table Strategy
 
 ### Mapping
+
+In the SINGLE_TABLE strategy, all payment types share the `payments` table. The `payment_type` discriminator column stores `CREDIT_CARD`, `BANK_TRANSFER`, or `DIGITAL_WALLET`. Subclass-specific columns (like `card_number`, `bank_name`) are nullable. Queries that mix payment types (e.g., "all payments over $100") need no joins and are extremely fast. The downside: columns that are NOT NULL in subclasses become nullable in the shared table, and the table can become wide with many subclasses.
 
 ```java
 @Entity
@@ -131,6 +173,8 @@ public class DigitalWalletPayment extends Payment {
 
 ### Repository and Queries
 
+SINGLE_TABLE excels at polymorphic queries. Calling `paymentRepository.findAll()` generates a simple `SELECT * FROM payments` with no joins. However, type-specific queries like "find credit card payments with last four digits XXXX" require a separate JPQL query scoped to the subclass. Spring Data JPA handles this correctly when the return type is `CreditCardPayment`.
+
 ```java
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
@@ -206,6 +250,8 @@ public class PaymentService {
 ## 2. Joined Strategy
 
 ### Mapping
+
+JOINED maps each class to its own table. The base `accounts` table stores shared columns, and subclass tables (`savings_accounts`, `checking_accounts`, `investment_accounts`) store subclass-specific columns. A `@PrimaryKeyJoinColumn` links each subclass row to its base row via a shared primary key. This is the most normalized strategy—no nullable columns—but polymorphic queries require `LEFT JOIN` across all subclass tables, which can be expensive with many subclasses.
 
 ```java
 @Entity
@@ -305,6 +351,8 @@ public class InvestmentAccount extends Account {
 
 ### Performance Considerations
 
+The JOINED strategy trades storage normalization for query complexity. A polymorphic query on `Account` generates a `LEFT JOIN` for every subclass table, even though most rows only match one subclass. Type-specific queries (e.g., `findHighInterestAccounts`) are more efficient because they only join the base table with the relevant subclass table. For hierarchies with more than 3-4 subclasses, the join overhead can become significant.
+
 ```java
 @Service
 public class AccountService {
@@ -350,6 +398,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 ## 3. Table Per Class Strategy
 
 ### Mapping
+
+TABLE_PER_CLASS creates a separate, independent table for each concrete subclass. Each table contains columns for both the base class and the subclass. This eliminates the need for joins (excellent performance for type-specific queries) but breaks polymorphic relationships—you cannot have a `@OneToMany` to the base class because there is no shared table for a foreign key to reference. Polymorphic queries require Hibernate to generate `UNION ALL` queries across all subclass tables, which becomes expensive as the number of subclasses grows.
 
 ```java
 @Entity
@@ -450,6 +500,8 @@ public class Truck extends Vehicle {
 ## 4. MappedSuperclass Strategy
 
 ### Mapping
+
+`@MappedSuperclass` is not technically an inheritance strategy—it simply maps the superclass's fields into each subclass's table without any database-level relationship between them. `Invoice` and `Contract` both get their own independent tables containing the fields from `BaseDocument` plus their own fields. There is no discriminator, no join, and no polymorphic query support. This is the right choice when you only want to share common field definitions (like `createdAt`, `updatedAt`, `version`) without modeling an "is-a" relationship.
 
 ```java
 @MappedSuperclass
@@ -571,6 +623,8 @@ public abstract class Payment { ... }
 
 ### Mistake 1: Deep Hierarchy with JOINED Strategy
 
+Each additional level in a JOINED hierarchy adds another `LEFT JOIN` to polymorphic queries. With 4+ levels, the query can involve dozens of joins, severely degrading performance. For deep hierarchies, prefer SINGLE_TABLE.
+
 ```java
 // WRONG: 4+ level JOINED hierarchy
 // Each polymorphic query joins all subclass tables
@@ -582,6 +636,8 @@ public abstract class Payment { ... }
 
 ### Mistake 2: TABLE_PER_CLASS with Polymorphic Queries
 
+Querying the base class with TABLE_PER_CLASS forces Hibernate to generate a `UNION ALL` across all subclass tables. With many subclasses and large tables, this is one of the most expensive query patterns in Hibernate.
+
 ```java
 // WRONG: Polymorphic query with TABLE_PER_CLASS
 // Hibernate generates UNION across all subclass tables
@@ -592,6 +648,8 @@ repo.findByType(SavingsAccount.class);
 ```
 
 ### Mistake 3: Not Accounting for Null Columns
+
+In SINGLE_TABLE, columns from subclasses become nullable in the shared table. If you need `NOT NULL` constraints on subclass-specific columns, use JOINED instead.
 
 ```java
 // WRONG: No nullable=false on shared columns

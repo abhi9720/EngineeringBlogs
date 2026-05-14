@@ -96,6 +96,8 @@ public class PaymentServiceProxy implements PaymentService {
 }
 ```
 
+The `PaymentServiceProxy` controls access to `RealPaymentService` by adding rate limiting, audit logging, and metrics collection — all without modifying the real service. The proxy implements the same interface as the real subject, so callers cannot tell whether they are talking to the proxy or the real object. This is the essence of the proxy pattern: transparent access control.
+
 ### Virtual Proxy
 
 Defers object creation until needed:
@@ -139,6 +141,8 @@ public class LazyReportProxy {
     }
 }
 ```
+
+The virtual proxy delays the creation of `HeavyReportGenerator` until `generate()` is first called. The `HeavyReportGenerator` is prototype-scoped, so the proxy creates it lazily and reuses the instance for subsequent calls. This is useful when the real object is expensive to construct (requires heavy initialization, loads large configuration, or connects to external services).
 
 ## Decorator Pattern
 
@@ -267,6 +271,8 @@ public class Base64DataExporter extends DataExporterDecorator {
 }
 ```
 
+Decorators compose dynamically. You could create a pipeline like `new Base64DataExporter(new EncryptedDataExporter(new CompressedDataExporter(new CsvDataExporter())))`. Each decorator wraps the previous one and adds its behavior before or after delegating to the wrapped object. The `DataExporterDecorator` abstract class makes it easy to create new decorators by providing a default pass-through implementation.
+
 ## Spring AOP Proxies
 
 Spring uses JDK dynamic proxies or CGLIB proxies to implement cross-cutting concerns:
@@ -356,6 +362,8 @@ public @interface CircuitBreaker {
 }
 ```
 
+Spring AOP creates proxies around beans at runtime. When you annotate a method with `@LogExecutionTime`, Spring creates a proxy that intercepts calls to that method, executes the aspect logic (timing, logging), and then proceeds to the real method. The `@Around` advice wraps the method execution, enabling cross-cutting concerns like retry with exponential backoff and circuit breaker patterns without modifying business code.
+
 ## Dynamic Proxy in Java
 
 ```java
@@ -403,6 +411,8 @@ public class DynamicProxyExample {
 }
 ```
 
+Java's `Proxy.newProxyInstance` creates a dynamic proxy at runtime for any interface. The `MetricsInvocationHandler` intercepts every method call, records timing, and logs the duration. Unlike Spring AOP which requires a list of pointcuts and advice, dynamic proxies let you intercept all methods with a single handler — useful for generic concerns like metrics, logging, or access control.
+
 ## Common Mistakes
 
 ### Self-Invocation Bypasses Proxy
@@ -441,6 +451,8 @@ public class UserService {
     }
 }
 ```
+
+Self-invocation (`this.createUser()`) bypasses the AOP proxy because `this` is the raw object, not the proxy. The `@Transactional` annotation is never processed. The fix is to inject a self-reference (`@Autowired private UserService self`) which goes through the proxy. Alternatively, extract the transactional method into a separate service.
 
 ### Decorator State Mutation
 
