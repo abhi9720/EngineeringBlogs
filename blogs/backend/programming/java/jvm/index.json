@@ -1,0 +1,28 @@
+{
+  "name": "Jvm",
+  "path": "/blogs/backend/programming/java/jvm",
+  "blogs": [
+    {
+      "title": "GraalVM Native Images for Java Applications",
+      "description": "Master GraalVM native images: AOT compilation, reflection configuration, resource handling, native-image building, and deploying optimized JVM applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "graalvm",
+        "native-image",
+        "performance"
+      ],
+      "coverImage": "/images/graalvm-native-images.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "jvm"
+      ],
+      "slug": "graalvm-native-images",
+      "path": "/blogs/backend/programming/java/jvm/graalvm-native-images"
+    }
+  ]
+}

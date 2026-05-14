@@ -1,0 +1,27 @@
+{
+  "name": "Fastapi",
+  "path": "/blogs/backend/frameworks/fastapi",
+  "blogs": [
+    {
+      "title": "FastAPI Basics",
+      "description": "Master FastAPI framework: path operations, Pydantic models, dependency injection, async support, WebSocket, and building high-performance Python APIs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "fastapi",
+        "pydantic",
+        "async"
+      ],
+      "coverImage": "/images/fastapi-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "fastapi"
+      ],
+      "slug": "fastapi-basics",
+      "path": "/blogs/backend/frameworks/fastapi/fastapi-basics"
+    }
+  ]
+}

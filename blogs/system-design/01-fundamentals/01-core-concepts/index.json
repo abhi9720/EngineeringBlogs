@@ -14,7 +14,7 @@
         "databases",
         "data-integrity"
       ],
-      "coverImage": "/images/consistency-patterns.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -37,7 +37,7 @@
         "databases",
         "system-design"
       ],
-      "coverImage": "/images/acid-vs-base.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -59,7 +59,7 @@
         "distributed-systems",
         "system-design"
       ],
-      "coverImage": "/images/cap-theorem.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -81,7 +81,7 @@
         "scalability",
         "reliability"
       ],
-      "coverImage": "/images/what-is-system-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -103,7 +103,7 @@
         "scalability",
         "distributed-systems"
       ],
-      "coverImage": "/images/database-sharding.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -125,7 +125,7 @@
         "redis",
         "memory"
       ],
-      "coverImage": "/images/caching-strategies.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -146,7 +146,7 @@
         "infrastructure",
         "networking"
       ],
-      "coverImage": "/images/load-balancing.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -167,7 +167,7 @@
         "performance",
         "architecture"
       ],
-      "coverImage": "/images/scalability-introduction.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

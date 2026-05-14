@@ -1,0 +1,27 @@
+{
+  "name": "Django",
+  "path": "/blogs/backend/frameworks/django",
+  "blogs": [
+    {
+      "title": "Django REST Framework",
+      "description": "Master Django REST Framework: views, serializers, authentication, permissions, viewsets, routers, and building production-ready REST APIs with Django",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "django",
+        "rest-api",
+        "drf"
+      ],
+      "coverImage": "/images/django-rest-framework.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "django"
+      ],
+      "slug": "django-rest-framework",
+      "path": "/blogs/backend/frameworks/django/django-rest-framework"
+    }
+  ]
+}

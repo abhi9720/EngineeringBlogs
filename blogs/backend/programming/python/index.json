@@ -1,0 +1,233 @@
+{
+  "name": "Python",
+  "path": "/blogs/backend/programming/python",
+  "blogs": [
+    {
+      "title": "Python Testing: unittest, pytest, Mocking, and Beyond",
+      "description": "Master Python testing: pytest, unittest, fixtures, mocking, property-based testing, integration testing, and test infrastructure",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "testing",
+        "pytest",
+        "unittest",
+        "mocking",
+        "tdd"
+      ],
+      "coverImage": "/images/python-testing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "testing"
+      ],
+      "slug": "python-testing",
+      "path": "/blogs/backend/programming/python/testing/python-testing"
+    },
+    {
+      "title": "Python for Backend Development",
+      "description": "Comprehensive guide to Python for backend development: language features, async, frameworks, performance, and production patterns",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "backend",
+        "web",
+        "async"
+      ],
+      "coverImage": "/images/python-for-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python"
+      ],
+      "slug": "python-for-backend",
+      "path": "/blogs/backend/programming/python/python-for-backend"
+    },
+    {
+      "title": "Python Performance Optimization",
+      "description": "Practical Python performance optimization: profiling, JIT, C extensions, data structures, async optimization, and production tuning",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "performance",
+        "optimization",
+        "profiling",
+        "cython"
+      ],
+      "coverImage": "/images/python-performance.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "performance"
+      ],
+      "slug": "python-performance",
+      "path": "/blogs/backend/programming/python/performance/python-performance"
+    },
+    {
+      "title": "Python Memory Management and Garbage Collection",
+      "description": "Deep dive into Python memory management: object allocation, reference counting, generational GC, memory profiling, and optimization",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "memory-management",
+        "gc",
+        "profiling",
+        "optimization"
+      ],
+      "coverImage": "/images/python-memory-management.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "memory-management"
+      ],
+      "slug": "python-memory-management",
+      "path": "/blogs/backend/programming/python/memory-management/python-memory-management"
+    },
+    {
+      "title": "Python Interview Questions and Answers",
+      "description": "Curated Python interview questions covering core Python, concurrency, internals, design patterns, and backend development for senior roles",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "interview",
+        "preparation",
+        "senior-engineer"
+      ],
+      "coverImage": "/images/python-interview.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "interview"
+      ],
+      "slug": "python-interview-questions",
+      "path": "/blogs/backend/programming/python/interview/python-interview-questions"
+    },
+    {
+      "title": "Python Internals: CPython, Bytecode, GIL, and Memory Model",
+      "description": "Deep dive into CPython internals: bytecode execution, GIL implementation, memory management, object model, and performance characteristics",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "internals",
+        "cpython",
+        "bytecode",
+        "gil",
+        "memory"
+      ],
+      "coverImage": "/images/python-internals.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "internals"
+      ],
+      "slug": "python-internals",
+      "path": "/blogs/backend/programming/python/internals/python-internals"
+    },
+    {
+      "title": "Python Design Patterns and Idioms",
+      "description": "Essential design patterns in Python: creational, structural, behavioral patterns with Pythonic idioms and production examples",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "design-patterns",
+        "architecture",
+        "idioms"
+      ],
+      "coverImage": "/images/python-design-patterns.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "design-patterns"
+      ],
+      "slug": "python-design-patterns",
+      "path": "/blogs/backend/programming/python/design-patterns/python-design-patterns"
+    },
+    {
+      "title": "Pydantic Validation Deep Dive",
+      "description": "Deep dive into Pydantic: model validation, field types, validators, custom types, model configuration, serialization, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "pydantic",
+        "validation",
+        "data-modeling"
+      ],
+      "coverImage": "/images/pydantic-validation-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "core-python"
+      ],
+      "slug": "pydantic-validation-deep-dive",
+      "path": "/blogs/backend/programming/python/core-python/pydantic-validation-deep-dive"
+    },
+    {
+      "title": "Python Concurrency: Threading, Multiprocessing, and AsyncIO",
+      "description": "Master Python concurrency: threading, multiprocessing, asyncio, GIL implications, and choosing the right concurrency model",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "concurrency",
+        "asyncio",
+        "threading",
+        "multiprocessing",
+        "gil"
+      ],
+      "coverImage": "/images/python-concurrency.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "concurrency"
+      ],
+      "slug": "python-concurrency",
+      "path": "/blogs/backend/programming/python/concurrency/python-concurrency"
+    },
+    {
+      "title": "Async Python with FastAPI",
+      "description": "Master asynchronous programming in Python with FastAPI: async/await, coroutines, event loops, async database drivers, and building high-concurrency APIs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "fastapi",
+        "async",
+        "performance"
+      ],
+      "coverImage": "/images/async-python-with-fastapi.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "asyncio"
+      ],
+      "slug": "async-python-with-fastapi",
+      "path": "/blogs/backend/programming/python/asyncio/async-python-with-fastapi"
+    }
+  ]
+}

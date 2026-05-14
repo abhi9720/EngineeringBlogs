@@ -1,18 +1,44 @@
+---
+title: "Multimodal Models"
+description: "Understand multimodal AI: early/late fusion architectures, CLIP, vision-language models, audio processing, video understanding, and production applications"
+date: "2026-05-14"
+author: "Abhishek Tiwari"
+tags:
+  - multimodal
+  - vision-language
+  - clip
+  - deep-learning
+  - ai-architecture
+coverImage: "/images/multimodal-models.png"
+draft: false
+---
+
 # Multimodal Models
 
 Multimodal models process and generate content across multiple data types: text, images, audio, video, and more.
 
 ## What Are Multimodal Models?
 
+```mermaid
+graph LR
+    Text["Text"] --> MM["Multimodal Model"]
+    Image["Image"] --> MM
+    Audio["Audio"] --> MM
+    Video["Video"] --> MM
+    MM --> Output["Cross-modal output"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class MM blue
+    class Text,Image,Audio,Video pink
+    class Output green
 ```
-Text ──┐
-       ├──→ Multimodal Model ──→ Cross-modal output
-Image ─┤
-       │
-Audio ─┤
-       │
-Video ─┘
-```
+
+Multimodal models fuse information from different modalities to produce cross-modal understanding and generation.
 
 ## Key Architectures
 
@@ -63,6 +89,40 @@ class CrossAttentionFusion(nn.Module):
             value=image_features,
         )
         return cross_output
+```
+
+## Fusion Architecture Comparison
+
+```mermaid
+graph LR
+    subgraph Early["Early Fusion"]
+        direction LR
+        ET["Text"] --> EEmb["Text Embed"]
+        EI["Image"] --> EEmbI["Image Embed"]
+        EEmb --> ECat["Concatenate"]
+        EEmbI --> ECat
+        ECat --> EModel["Joint Model"]
+        EModel --> EOut["Output"]
+    end
+
+    subgraph Late["Late Fusion"]
+        direction LR
+        LT["Text"] --> LTEnc["Text Model"]
+        LI["Image"] --> LIEnc["Image Model"]
+        LTEnc --> LFuse["Fusion Head"]
+        LIEnc --> LFuse
+        LFuse --> LOut["Output"]
+    end
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class Early pink
+    class Late green
+    class EModel,LTEnc,LIEnc,LFuse blue
 ```
 
 ## Vision-Language Models
@@ -241,3 +301,5 @@ def multimodal_inference(image, prompt):
 - CLIP-style contrastive learning for alignment
 - Enable applications: image search, VQA, TTS, video understanding
 - Key challenge: aligning heterogeneous representations
+
+Happy Coding

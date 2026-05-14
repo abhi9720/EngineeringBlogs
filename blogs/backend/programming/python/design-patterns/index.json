@@ -1,0 +1,28 @@
+{
+  "name": "Design Patterns",
+  "path": "/blogs/backend/programming/python/design-patterns",
+  "blogs": [
+    {
+      "title": "Python Design Patterns and Idioms",
+      "description": "Essential design patterns in Python: creational, structural, behavioral patterns with Pythonic idioms and production examples",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "design-patterns",
+        "architecture",
+        "idioms"
+      ],
+      "coverImage": "/images/python-design-patterns.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "design-patterns"
+      ],
+      "slug": "python-design-patterns",
+      "path": "/blogs/backend/programming/python/design-patterns/python-design-patterns"
+    }
+  ]
+}

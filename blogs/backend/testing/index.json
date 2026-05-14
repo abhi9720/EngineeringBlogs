@@ -3,90 +3,6 @@
   "path": "/blogs/backend/testing",
   "blogs": [
     {
-      "title": "Test-Driven Development",
-      "description": "Master the TDD cycle (Red-Green-Refactor), real-world examples in Java, best practices, and common pitfalls",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "tdd",
-        "testing",
-        "methodology",
-        "java"
-      ],
-      "coverImage": "/images/test-driven-development.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "testing",
-        "unit-testing"
-      ],
-      "slug": "test-driven-development",
-      "path": "/blogs/backend/testing/unit-testing/test-driven-development"
-    },
-    {
-      "title": "Parameterized Tests",
-      "description": "Deep dive into JUnit 5 parameterized tests: @ValueSource, @CsvSource, @EnumSource, @MethodSource, and custom argument providers",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "junit",
-        "parameterized-tests",
-        "testing",
-        "java"
-      ],
-      "coverImage": "/images/parameterized-tests.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "testing",
-        "unit-testing"
-      ],
-      "slug": "parameterized-tests",
-      "path": "/blogs/backend/testing/unit-testing/parameterized-tests"
-    },
-    {
-      "title": "Mockito vs EasyMock",
-      "description": "In-depth comparison of Mockito and EasyMock mocking frameworks: API differences, verification, stubbing, and best practices",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "mockito",
-        "easymock",
-        "mocking",
-        "testing"
-      ],
-      "coverImage": "/images/mockito-vs-easymock.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "testing",
-        "unit-testing"
-      ],
-      "slug": "mockito-vs-easymock",
-      "path": "/blogs/backend/testing/unit-testing/mockito-vs-easymock"
-    },
-    {
-      "title": "JUnit 5 Deep Dive",
-      "description": "Comprehensive guide to JUnit 5: architecture, extensions, parameterized tests, assertions, and advanced features",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "junit",
-        "testing",
-        "java",
-        "unit-testing"
-      ],
-      "coverImage": "/images/junit-5-deep-dive.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "testing",
-        "unit-testing"
-      ],
-      "slug": "junit-5-deep-dive",
-      "path": "/blogs/backend/testing/unit-testing/junit-5-deep-dive"
-    },
-    {
       "title": "Software Testing Strategy",
       "description": "A comprehensive overview of software testing strategies: the test pyramid, testing quadrants, and building a balanced test suite",
       "date": "2026-05-11",
@@ -105,69 +21,6 @@
       ],
       "slug": "testing-strategy-overview",
       "path": "/blogs/backend/testing/testing-strategy-overview"
-    },
-    {
-      "title": "Flaky Test Management",
-      "description": "Detecting, diagnosing, and fixing flaky tests: common causes, quarantine strategies, and automated detection",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "flaky-tests",
-        "testing",
-        "quality",
-        "automation"
-      ],
-      "coverImage": "/images/flaky-test-management.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "testing",
-        "test-automation"
-      ],
-      "slug": "flaky-test-management",
-      "path": "/blogs/backend/testing/test-automation/flaky-test-management"
-    },
-    {
-      "title": "Code Coverage Metrics",
-      "description": "Code coverage strategies with JaCoCo: line, branch, and mutation coverage, thresholds, and CI integration",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "code-coverage",
-        "jacoco",
-        "testing",
-        "quality"
-      ],
-      "coverImage": "/images/code-coverage-metrics.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "testing",
-        "test-automation"
-      ],
-      "slug": "code-coverage-metrics",
-      "path": "/blogs/backend/testing/test-automation/code-coverage-metrics"
-    },
-    {
-      "title": "CI Pipeline Testing",
-      "description": "Integrating tests into CI/CD pipelines: test stages, parallel execution, flaky test handling, and quality gates",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "ci-cd",
-        "testing",
-        "devops",
-        "automation"
-      ],
-      "coverImage": "/images/ci-pipeline-testing.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "testing",
-        "test-automation"
-      ],
-      "slug": "ci-pipeline-testing",
-      "path": "/blogs/backend/testing/test-automation/ci-pipeline-testing"
     },
     {
       "title": "Load Testing Strategies",
@@ -296,6 +149,26 @@
       "path": "/blogs/backend/testing/integration-testing/database-testing-strategies"
     },
     {
+      "title": "Flaky Test Management",
+      "description": "Detecting, diagnosing, and fixing flaky tests: common causes, quarantine strategies, and automated detection",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "flaky-tests",
+        "testing",
+        "quality",
+        "automation"
+      ],
+      "coverImage": "/images/flaky-test-management.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing"
+      ],
+      "slug": "flaky-test-management",
+      "path": "/blogs/backend/testing/flaky-test-management"
+    },
+    {
       "title": "Pact Framework Basics",
       "description": "Getting started with Pact for contract testing: setup, DSL usage, verification, and integration with Spring Boot",
       "date": "2026-05-11",
@@ -336,6 +209,26 @@
       ],
       "slug": "consumer-driven-contracts",
       "path": "/blogs/backend/testing/contract-testing/consumer-driven-contracts"
+    },
+    {
+      "title": "Code Coverage Metrics",
+      "description": "Code coverage strategies with JaCoCo: line, branch, and mutation coverage, thresholds, and CI integration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "code-coverage",
+        "jacoco",
+        "testing",
+        "quality"
+      ],
+      "coverImage": "/images/code-coverage-metrics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing"
+      ],
+      "slug": "code-coverage-metrics",
+      "path": "/blogs/backend/testing/code-coverage-metrics"
     }
   ]
 }

@@ -3,109 +3,693 @@
   "path": "/blogs/backend/frameworks",
   "blogs": [
     {
-      "title": "Pydantic Validation Deep Dive",
-      "description": "Deep dive into Pydantic: model validation, field types, validators, custom types, model configuration, serialization, and performance optimization",
+      "title": "Spring Security Testing",
+      "description": "Master security testing in Spring Boot applications: @WithMockUser, @WithUserDetails, security test annotations, and testing OAuth2 and method security",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "python",
-        "pydantic",
-        "validation",
-        "data-modeling"
+        "spring-boot",
+        "spring-security",
+        "testing",
+        "security-testing"
       ],
-      "coverImage": "/images/pydantic-validation-deep-dive.png",
+      "coverImage": "/images/spring-security-testing.png",
       "draft": false,
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "python"
+        "spring-boot",
+        "security"
       ],
-      "slug": "pydantic-validation-deep-dive",
-      "path": "/blogs/backend/frameworks/python/pydantic-validation-deep-dive"
+      "slug": "spring-security-testing",
+      "path": "/blogs/backend/frameworks/spring-boot/security/spring-security-testing"
     },
     {
-      "title": "Flask vs FastAPI: A Comprehensive Comparison",
-      "description": "Compare Flask and FastAPI Python frameworks: performance, type safety, async support, ecosystem, and choosing the right framework for your project",
+      "title": "OAuth2 with Spring Security",
+      "description": "Implement OAuth2 authentication and authorization with Spring Security: authorization server, resource server, client registration, and JWT token handling",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "python",
-        "flask",
-        "fastapi",
+        "spring-boot",
+        "oauth2",
+        "spring-security",
+        "authentication"
+      ],
+      "coverImage": "/images/oauth2-with-spring-security.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "security"
+      ],
+      "slug": "oauth2-with-spring-security",
+      "path": "/blogs/backend/frameworks/spring-boot/security/oauth2-with-spring-security"
+    },
+    {
+      "title": "Method-Level Security with Spring Security",
+      "description": "Master method-level security annotations: @PreAuthorize, @PostAuthorize, @Secured, @RolesAllowed, custom permission evaluators, and expression-based access control",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-security",
+        "method-security",
+        "authorization"
+      ],
+      "coverImage": "/images/method-level-security.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "security"
+      ],
+      "slug": "method-level-security",
+      "path": "/blogs/backend/frameworks/spring-boot/security/method-level-security"
+    },
+    {
+      "title": "CSRF and CORS Configuration in Spring Security",
+      "description": "Master CSRF protection and CORS configuration in Spring Security: when to use CSRF, CORS policies, preflight requests, and securing cross-origin requests",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-security",
+        "csrf",
+        "cors"
+      ],
+      "coverImage": "/images/csrf-cors-config.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "security"
+      ],
+      "slug": "csrf-cors-config",
+      "path": "/blogs/backend/frameworks/spring-boot/security/csrf-cors-config"
+    },
+    {
+      "title": "Spring WebFlux Basics",
+      "description": "Learn Spring WebFlux: reactive controllers, functional endpoints, WebClient, reactive security, and building non-blocking REST APIs with Project Reactor",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "webflux",
+        "reactive",
+        "spring-web"
+      ],
+      "coverImage": "/images/spring-webflux-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "reactive"
+      ],
+      "slug": "spring-webflux-basics",
+      "path": "/blogs/backend/frameworks/spring-boot/reactive/spring-webflux-basics"
+    },
+    {
+      "title": "Reactive vs Imperative: When to Use Reactive Programming",
+      "description": "Compare reactive and imperative programming in Spring: performance characteristics, use cases, trade-offs, and decision framework for choosing between WebFlux and WebMVC",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "reactive",
+        "webflux",
+        "architecture"
+      ],
+      "coverImage": "/images/reactive-vs-imperative.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "reactive"
+      ],
+      "slug": "reactive-vs-imperative",
+      "path": "/blogs/backend/frameworks/spring-boot/reactive/reactive-vs-imperative"
+    },
+    {
+      "title": "Reactive Streams in Practice",
+      "description": "Master Reactive Streams and backpressure in Spring: Project Reactor operators, error handling, backpressure strategies, and building resilient reactive pipelines",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "reactive",
+        "reactive-streams",
+        "backpressure"
+      ],
+      "coverImage": "/images/reactive-streams-in-practice.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "reactive"
+      ],
+      "slug": "reactive-streams-in-practice",
+      "path": "/blogs/backend/frameworks/spring-boot/reactive/reactive-streams-in-practice"
+    },
+    {
+      "title": "R2DBC with Spring Data Reactive",
+      "description": "Master reactive database access with R2DBC and Spring Data: ReactiveCrudRepository, R2DBC configuration, queries, transactions, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "r2dbc",
+        "reactive",
+        "spring-data"
+      ],
+      "coverImage": "/images/r2dbc-spring-data.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "reactive"
+      ],
+      "slug": "r2dbc-spring-data",
+      "path": "/blogs/backend/frameworks/spring-boot/reactive/r2dbc-spring-data"
+    },
+    {
+      "title": "JWT Authentication",
+      "description": "Deep dive into JWT authentication internals, real-world use cases, trade-offs, and production considerations for Spring Boot applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "security",
+        "jwt",
+        "authentication"
+      ],
+      "coverImage": "/images/jwt-authentication.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot"
+      ],
+      "slug": "jwt-authentication",
+      "path": "/blogs/backend/frameworks/spring-boot/jwt-authentication"
+    },
+    {
+      "title": "Caching with Redis",
+      "description": "Master Redis caching in Spring Boot applications, from basic annotations to advanced patterns for high-performance systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "redis",
+        "caching",
         "performance"
       ],
-      "coverImage": "/images/flask-vs-fastapi.png",
+      "coverImage": "/images/caching-with-redis.png",
       "draft": false,
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "python"
+        "spring-boot"
       ],
-      "slug": "flask-vs-fastapi",
-      "path": "/blogs/backend/frameworks/python/flask-vs-fastapi"
+      "slug": "caching-with-redis",
+      "path": "/blogs/backend/frameworks/spring-boot/caching-with-redis"
     },
     {
-      "title": "FastAPI Basics",
-      "description": "Master FastAPI framework: path operations, Pydantic models, dependency injection, async support, WebSocket, and building high-performance Python APIs",
+      "title": "Spring Boot Testing with Sliced Annotations",
+      "description": "Master Spring Boot testing with @WebMvcTest, @DataJpaTest, @JsonTest, and other slice annotations for focused, fast unit and integration tests",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "python",
-        "fastapi",
-        "pydantic",
-        "async"
+        "spring-boot",
+        "testing",
+        "spring-mvc",
+        "spring-data-jpa"
       ],
-      "coverImage": "/images/fastapi-basics.png",
+      "coverImage": "/images/spring-boot-testing.png",
       "draft": false,
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "python"
+        "spring-boot",
+        "boot"
       ],
-      "slug": "fastapi-basics",
-      "path": "/blogs/backend/frameworks/python/fastapi-basics"
+      "slug": "spring-boot-testing",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/spring-boot-testing"
     },
     {
-      "title": "Django REST Framework",
-      "description": "Master Django REST Framework: views, serializers, authentication, permissions, viewsets, routers, and building production-ready REST APIs with Django",
+      "title": "Spring Boot Actuator",
+      "description": "Master Spring Boot Actuator: production-ready endpoints, health indicators, metrics, custom endpoints, and securing actuator endpoints",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "python",
-        "django",
+        "spring-boot",
+        "actuator",
+        "monitoring",
+        "observability"
+      ],
+      "coverImage": "/images/spring-actuator.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "boot"
+      ],
+      "slug": "spring-actuator",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/spring-actuator"
+    },
+    {
+      "title": "Creating Custom Spring Boot Starters",
+      "description": "Learn how to create custom Spring Boot starters: auto-configuration, starter modules, configuration metadata, and best practices for reusable components",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "starters",
+        "auto-configuration",
+        "spring-core"
+      ],
+      "coverImage": "/images/custom-starters.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "boot"
+      ],
+      "slug": "custom-starters",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/custom-starters"
+    },
+    {
+      "title": "Spring Boot Auto-Configuration Deep Dive",
+      "description": "Understand Spring Boot auto-configuration internals: @ConditionalOn*, spring.factories, custom auto-configuration, and how Spring Boot configures beans automatically",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "auto-configuration",
+        "spring-core",
+        "spring-boot-internals"
+      ],
+      "coverImage": "/images/auto-configuration-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "boot"
+      ],
+      "slug": "auto-configuration-deep-dive",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/auto-configuration-deep-dive"
+    },
+    {
+      "title": "Spring Batch Introduction",
+      "description": "Master Spring Batch fundamentals: JobRepository, JobLauncher, steps, readers, writers, and building robust batch processing applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-batch",
+        "batch-processing",
+        "etl"
+      ],
+      "coverImage": "/images/spring-batch-introduction.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "spring-batch-introduction",
+      "path": "/blogs/backend/frameworks/spring-boot/batch/spring-batch-introduction"
+    },
+    {
+      "title": "Scheduling with Quartz in Spring Boot",
+      "description": "Master Quartz scheduler integration with Spring Boot: job scheduling, triggers, persistence, clustering, cron expressions, and dynamic scheduling",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "quartz",
+        "scheduling",
+        "batch"
+      ],
+      "coverImage": "/images/scheduling-with-quartz.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "scheduling-with-quartz",
+      "path": "/blogs/backend/frameworks/spring-boot/batch/scheduling-with-quartz"
+    },
+    {
+      "title": "Item Readers, Writers, and Processors in Spring Batch",
+      "description": "Comprehensive guide to Spring Batch item processing: built-in readers/writers, custom implementations, composite processors, and multi-file processing",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-batch",
+        "item-reader",
+        "item-writer"
+      ],
+      "coverImage": "/images/item-readers-writers-processors.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "item-readers-writers-processors",
+      "path": "/blogs/backend/frameworks/spring-boot/batch/item-readers-writers-processors"
+    },
+    {
+      "title": "Chunk-Oriented Processing in Spring Batch",
+      "description": "Deep dive into chunk-oriented processing: commit intervals, skip/retry within chunks, chunk listeners, multi-threaded steps, and partitioning",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-batch",
+        "chunk-processing",
+        "batch-processing"
+      ],
+      "coverImage": "/images/chunk-oriented-processing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "chunk-oriented-processing",
+      "path": "/blogs/backend/frameworks/spring-boot/batch/chunk-oriented-processing"
+    },
+    {
+      "title": "WebClient vs RestTemplate Comparison",
+      "description": "Deep comparison of WebClient and RestTemplate for HTTP communication in Spring Boot: performance, API design, and migration strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "webclient",
+        "resttemplate",
+        "http-client",
+        "reactive"
+      ],
+      "coverImage": "/images/webclient-vs-resttemplate.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "webclient-vs-resttemplate",
+      "path": "/blogs/backend/frameworks/spring/webclient-vs-resttemplate"
+    },
+    {
+      "title": "Transactions and Propagation",
+      "description": "Deep dive into Spring transaction management, propagation levels, isolation, and real-world patterns for reliable data consistency",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "transactions",
+        "database",
+        "jpa"
+      ],
+      "coverImage": "/images/transactions-and-propagation.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "transactions-and-propagation",
+      "path": "/blogs/backend/frameworks/spring/transactions-and-propagation"
+    },
+    {
+      "title": "Spring Security Filters",
+      "description": "Deep dive into Spring Security filter chain, custom filters, and how authentication flows through the pipeline",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-security",
+        "filters",
+        "authentication"
+      ],
+      "coverImage": "/images/spring-security-filters.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-security-filters",
+      "path": "/blogs/backend/frameworks/spring/spring-security-filters"
+    },
+    {
+      "title": "Spring IoC and Dependency Injection Deep Dive",
+      "description": "Master the Spring IoC container and dependency injection patterns: constructor injection, setter injection, field injection, and advanced DI techniques",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "ioc",
+        "dependency-injection",
+        "spring-core"
+      ],
+      "coverImage": "/images/spring-ioc-di-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-ioc-di-deep-dive",
+      "path": "/blogs/backend/frameworks/spring/spring-ioc-di-deep-dive"
+    },
+    {
+      "title": "Spring Data JPA Basics",
+      "description": "Master Spring Data JPA from repositories to custom queries, understanding how Hibernate integrates with Spring",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "jpa",
+        "hibernate",
+        "database"
+      ],
+      "coverImage": "/images/spring-data-jpa-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-data-jpa-basics",
+      "path": "/blogs/backend/frameworks/spring/spring-data-jpa-basics"
+    },
+    {
+      "title": "Spring Conditional Configuration",
+      "description": "Master Spring's @Conditional annotations: @ConditionalOnClass, @ConditionalOnProperty, @ConditionalOnBean, and creating custom conditions for intelligent bean registration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "conditional-config",
+        "auto-configuration",
+        "spring-core"
+      ],
+      "coverImage": "/images/spring-conditional-config.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-conditional-config",
+      "path": "/blogs/backend/frameworks/spring/spring-conditional-config"
+    },
+    {
+      "title": "Spring Bean Lifecycle",
+      "description": "Deep dive into the Spring bean lifecycle: instantiation, property setting, initialization, destruction, and customizing with BeanPostProcessors",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "bean-lifecycle",
+        "spring-core",
+        "ioc"
+      ],
+      "coverImage": "/images/spring-bean-lifecycle.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-bean-lifecycle",
+      "path": "/blogs/backend/frameworks/spring/spring-bean-lifecycle"
+    },
+    {
+      "title": "REST API Best Practices",
+      "description": "Design production-ready REST APIs with proper error handling, versioning, documentation, and security practices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
         "rest-api",
-        "drf"
+        "best-practices",
+        "web-services"
       ],
-      "coverImage": "/images/django-rest-framework.png",
+      "coverImage": "/images/rest-api-best-practices.png",
       "draft": false,
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "python"
+        "spring"
       ],
-      "slug": "django-rest-framework",
-      "path": "/blogs/backend/frameworks/python/django-rest-framework"
+      "slug": "rest-api-best-practices",
+      "path": "/blogs/backend/frameworks/spring/rest-api-best-practices"
     },
     {
-      "title": "Async Python with FastAPI",
-      "description": "Master asynchronous programming in Python with FastAPI: async/await, coroutines, event loops, async database drivers, and building high-concurrency APIs",
+      "title": "Spring Profiles and Environment Abstraction",
+      "description": "Master Spring profiles and the environment abstraction: profile-specific configuration, property sources, conditional beans, and environment post-processing",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "python",
-        "fastapi",
-        "async",
-        "performance"
+        "spring-boot",
+        "profiles",
+        "environment",
+        "configuration"
       ],
-      "coverImage": "/images/async-python-with-fastapi.png",
+      "coverImage": "/images/profiles-and-environment.png",
       "draft": false,
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "python"
+        "spring"
       ],
-      "slug": "async-python-with-fastapi",
-      "path": "/blogs/backend/frameworks/python/async-python-with-fastapi"
+      "slug": "profiles-and-environment",
+      "path": "/blogs/backend/frameworks/spring/profiles-and-environment"
+    },
+    {
+      "title": "Feign Client Deep Dive",
+      "description": "Master Feign configuration, interceptors, error handling, and advanced patterns for declarative HTTP clients in Spring Cloud",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "feign",
+        "spring-cloud",
+        "http-client"
+      ],
+      "coverImage": "/images/feign-client-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "feign-client-deep-dive",
+      "path": "/blogs/backend/frameworks/spring/feign-client-deep-dive"
+    },
+    {
+      "title": "Exception Handling",
+      "description": "Master exception handling in Spring Boot with global error handling, custom exceptions, and production-ready patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "exception-handling",
+        "error-handling",
+        "spring-mvc"
+      ],
+      "coverImage": "/images/exception-handling.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "exception-handling",
+      "path": "/blogs/backend/frameworks/spring/exception-handling"
+    },
+    {
+      "title": "Consuming REST APIs in Spring Boot",
+      "description": "Master RestTemplate, WebClient, and Feign for consuming REST APIs in Spring Boot applications with production patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "rest-api",
+        "webclient",
+        "feign",
+        "resttemplate"
+      ],
+      "coverImage": "/images/consuming-rest-apis.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "consuming-rest-apis",
+      "path": "/blogs/backend/frameworks/spring/consuming-rest-apis"
+    },
+    {
+      "title": "Configuration Properties in Spring Boot",
+      "description": "Master type-safe configuration with @ConfigurationProperties, property binding, validation, and advanced configuration techniques in Spring Boot",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "configuration",
+        "properties",
+        "externalized-config"
+      ],
+      "coverImage": "/images/configuration-properties.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "configuration-properties",
+      "path": "/blogs/backend/frameworks/spring/configuration-properties"
+    },
+    {
+      "title": "Quarkus vs Spring Boot: A Comprehensive Comparison",
+      "description": "Compare Quarkus and Spring Boot frameworks: startup time, memory usage, developer experience, extensions ecosystem, and choosing the right Java framework",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "quarkus",
+        "spring-boot",
+        "comparison"
+      ],
+      "coverImage": "/images/quarkus-vs-spring-boot.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks"
+      ],
+      "slug": "quarkus-vs-spring-boot",
+      "path": "/blogs/backend/frameworks/quarkus-vs-spring-boot"
     },
     {
       "title": "Node.js Event Loop Deep Dive",
@@ -122,11 +706,10 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "frameworks",
-        "nodejs"
+        "frameworks"
       ],
       "slug": "nodejs-event-loop-deep-dive",
-      "path": "/blogs/backend/frameworks/nodejs/nodejs-event-loop-deep-dive"
+      "path": "/blogs/backend/frameworks/nodejs-event-loop-deep-dive"
     },
     {
       "title": "NestJS Architecture",
@@ -144,52 +727,10 @@
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "nodejs"
+        "nestjs"
       ],
       "slug": "nestjs-architecture",
-      "path": "/blogs/backend/frameworks/nodejs/nestjs-architecture"
-    },
-    {
-      "title": "Fastify vs Express: A Comprehensive Comparison",
-      "description": "Compare Fastify and Express.js frameworks: performance, developer experience, plugin systems, serialization, and choosing the right framework for your project",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "nodejs",
-        "express",
-        "fastify",
-        "performance"
-      ],
-      "coverImage": "/images/fastify-vs-express.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "frameworks",
-        "nodejs"
-      ],
-      "slug": "fastify-vs-express",
-      "path": "/blogs/backend/frameworks/nodejs/fastify-vs-express"
-    },
-    {
-      "title": "Express.js Basics",
-      "description": "Master Express.js framework: routing, middleware, error handling, request/response objects, and building production-ready REST APIs with Node.js",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "nodejs",
-        "express",
-        "rest-api",
-        "javascript"
-      ],
-      "coverImage": "/images/express-js-basics.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "frameworks",
-        "nodejs"
-      ],
-      "slug": "express-js-basics",
-      "path": "/blogs/backend/frameworks/nodejs/express-js-basics"
+      "path": "/blogs/backend/frameworks/nestjs/nestjs-architecture"
     },
     {
       "title": "Dependency Injection in NestJS",
@@ -207,31 +748,10 @@
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "nodejs"
+        "nestjs"
       ],
       "slug": "dependency-injection-in-nestjs",
-      "path": "/blogs/backend/frameworks/nodejs/dependency-injection-in-nestjs"
-    },
-    {
-      "title": "Quarkus vs Spring Boot: A Comprehensive Comparison",
-      "description": "Compare Quarkus and Spring Boot frameworks: startup time, memory usage, developer experience, extensions ecosystem, and choosing the right Java framework",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "java",
-        "quarkus",
-        "spring-boot",
-        "comparison"
-      ],
-      "coverImage": "/images/quarkus-vs-spring-boot.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "frameworks",
-        "jvm-ecosystem"
-      ],
-      "slug": "quarkus-vs-spring-boot",
-      "path": "/blogs/backend/frameworks/jvm-ecosystem/quarkus-vs-spring-boot"
+      "path": "/blogs/backend/frameworks/nestjs/dependency-injection-in-nestjs"
     },
     {
       "title": "Micronaut: Compile-Time DI Framework",
@@ -248,95 +768,10 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "frameworks",
-        "jvm-ecosystem"
+        "frameworks"
       ],
       "slug": "micronaut-basics",
-      "path": "/blogs/backend/frameworks/jvm-ecosystem/micronaut-basics"
-    },
-    {
-      "title": "Kotlin for Backend Development",
-      "description": "Master Kotlin for backend development: coroutines, Ktor, Spring Boot with Kotlin, null safety, data classes, and building modern JVM services",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "kotlin",
-        "jvm",
-        "coroutines",
-        "ktor"
-      ],
-      "coverImage": "/images/kotlin-for-backend.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "frameworks",
-        "jvm-ecosystem"
-      ],
-      "slug": "kotlin-for-backend",
-      "path": "/blogs/backend/frameworks/jvm-ecosystem/kotlin-for-backend"
-    },
-    {
-      "title": "GraalVM Native Images for Java Applications",
-      "description": "Master GraalVM native images: AOT compilation, reflection configuration, resource handling, native-image building, and deploying optimized JVM applications",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "java",
-        "graalvm",
-        "native-image",
-        "performance"
-      ],
-      "coverImage": "/images/graalvm-native-images.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "frameworks",
-        "jvm-ecosystem"
-      ],
-      "slug": "graalvm-native-images",
-      "path": "/blogs/backend/frameworks/jvm-ecosystem/graalvm-native-images"
-    },
-    {
-      "title": "HTTP Request Routing in Go",
-      "description": "Deep dive into HTTP request routing in Go: standard library patterns, path parameters, middleware chaining, custom routers, and performance optimization",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "go",
-        "http",
-        "routing",
-        "net-http"
-      ],
-      "coverImage": "/images/go-http-request-routing.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "frameworks",
-        "go"
-      ],
-      "slug": "go-http-request-routing",
-      "path": "/blogs/backend/frameworks/go/go-http-request-routing"
-    },
-    {
-      "title": "Go Concurrency Patterns",
-      "description": "Master Go concurrency: goroutines, channels, select, sync primitives, worker pools, pipeline patterns, and building concurrent applications",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "go",
-        "concurrency",
-        "goroutines",
-        "channels"
-      ],
-      "coverImage": "/images/go-concurrency-patterns.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "frameworks",
-        "go"
-      ],
-      "slug": "go-concurrency-patterns",
-      "path": "/blogs/backend/frameworks/go/go-concurrency-patterns"
+      "path": "/blogs/backend/frameworks/micronaut-basics"
     },
     {
       "title": "Gin Framework Basics",
@@ -354,10 +789,92 @@
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "go"
+        "gin"
       ],
       "slug": "gin-framework-basics",
-      "path": "/blogs/backend/frameworks/go/gin-framework-basics"
+      "path": "/blogs/backend/frameworks/gin/gin-framework-basics"
+    },
+    {
+      "title": "Flask vs FastAPI: A Comprehensive Comparison",
+      "description": "Compare Flask and FastAPI Python frameworks: performance, type safety, async support, ecosystem, and choosing the right framework for your project",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "flask",
+        "fastapi",
+        "performance"
+      ],
+      "coverImage": "/images/flask-vs-fastapi.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks"
+      ],
+      "slug": "flask-vs-fastapi",
+      "path": "/blogs/backend/frameworks/flask-vs-fastapi"
+    },
+    {
+      "title": "Fastify vs Express: A Comprehensive Comparison",
+      "description": "Compare Fastify and Express.js frameworks: performance, developer experience, plugin systems, serialization, and choosing the right framework for your project",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "express",
+        "fastify",
+        "performance"
+      ],
+      "coverImage": "/images/fastify-vs-express.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks"
+      ],
+      "slug": "fastify-vs-express",
+      "path": "/blogs/backend/frameworks/fastify-vs-express"
+    },
+    {
+      "title": "FastAPI Basics",
+      "description": "Master FastAPI framework: path operations, Pydantic models, dependency injection, async support, WebSocket, and building high-performance Python APIs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "fastapi",
+        "pydantic",
+        "async"
+      ],
+      "coverImage": "/images/fastapi-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "fastapi"
+      ],
+      "slug": "fastapi-basics",
+      "path": "/blogs/backend/frameworks/fastapi/fastapi-basics"
+    },
+    {
+      "title": "Express.js Basics",
+      "description": "Master Express.js framework: routing, middleware, error handling, request/response objects, and building production-ready REST APIs with Node.js",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "express",
+        "rest-api",
+        "javascript"
+      ],
+      "coverImage": "/images/express-js-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "expressjs"
+      ],
+      "slug": "express-js-basics",
+      "path": "/blogs/backend/frameworks/expressjs/express-js-basics"
     },
     {
       "title": "Echo vs Gin vs Fiber: Go Web Framework Comparison",
@@ -374,11 +891,31 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "frameworks",
-        "go"
+        "frameworks"
       ],
       "slug": "echo-vs-gin-vs-fiber",
-      "path": "/blogs/backend/frameworks/go/echo-vs-gin-vs-fiber"
+      "path": "/blogs/backend/frameworks/echo-vs-gin-vs-fiber"
+    },
+    {
+      "title": "Django REST Framework",
+      "description": "Master Django REST Framework: views, serializers, authentication, permissions, viewsets, routers, and building production-ready REST APIs with Django",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "django",
+        "rest-api",
+        "drf"
+      ],
+      "coverImage": "/images/django-rest-framework.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "django"
+      ],
+      "slug": "django-rest-framework",
+      "path": "/blogs/backend/frameworks/django/django-rest-framework"
     }
   ]
 }

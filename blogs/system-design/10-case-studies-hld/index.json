@@ -14,7 +14,7 @@
         "scalability",
         "case-study"
       ],
-      "coverImage": "/images/url-shortener.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -37,7 +37,7 @@
         "recommendations",
         "case-study"
       ],
-      "coverImage": "/images/netflix-streaming.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -60,7 +60,7 @@
         "transcoding",
         "case-study"
       ],
-      "coverImage": "/images/youtube-system-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -84,7 +84,7 @@
         "caching",
         "fanout"
       ],
-      "coverImage": "/images/design-twitter-system.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -107,7 +107,7 @@
         "ranking",
         "case-study"
       ],
-      "coverImage": "/images/instagram-feed.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -129,7 +129,7 @@
         "real-time",
         "case-study"
       ],
-      "coverImage": "/images/whatsapp-architecture.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

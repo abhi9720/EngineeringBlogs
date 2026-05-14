@@ -16,7 +16,7 @@
         "aws-kms",
         "certificate-management"
       ],
-      "coverImage": "/images/encryption-tls.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -40,7 +40,7 @@
         "spring-security",
         "pkce"
       ],
-      "coverImage": "/images/oauth2-jwt.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

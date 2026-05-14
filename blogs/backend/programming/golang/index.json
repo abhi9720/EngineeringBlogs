@@ -1,0 +1,253 @@
+{
+  "name": "Golang",
+  "path": "/blogs/backend/programming/golang",
+  "blogs": [
+    {
+      "title": "Go Testing: Unit Tests, Benchmarks, Fuzzing, and Beyond",
+      "description": "Master Go testing: testing package, table-driven tests, benchmarks, fuzzing, integration testing, and test infrastructure",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "testing",
+        "benchmarks",
+        "fuzzing",
+        "tdd"
+      ],
+      "coverImage": "/images/go-testing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "testing"
+      ],
+      "slug": "go-testing",
+      "path": "/blogs/backend/programming/golang/testing/go-testing"
+    },
+    {
+      "title": "Go Runtime: Scheduler, GC, and Internals",
+      "description": "Deep dive into Go runtime: GMP scheduler, garbage collector, memory allocator, network poller, and runtime internals",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "runtime",
+        "scheduler",
+        "gc",
+        "internals"
+      ],
+      "coverImage": "/images/go-runtime.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "runtime"
+      ],
+      "slug": "go-runtime-internals",
+      "path": "/blogs/backend/programming/golang/runtime/go-runtime-internals"
+    },
+    {
+      "title": "Go Performance Optimization and Profiling",
+      "description": "Practical Go performance optimization: profiling, benchmarking, memory optimization, concurrency tuning, and production monitoring",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "performance",
+        "profiling",
+        "benchmarking",
+        "optimization"
+      ],
+      "coverImage": "/images/go-performance.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "performance"
+      ],
+      "slug": "go-performance",
+      "path": "/blogs/backend/programming/golang/performance/go-performance"
+    },
+    {
+      "title": "Go Memory Management: Stack, Heap, Escape Analysis",
+      "description": "Deep dive into Go memory management: stack vs heap allocation, escape analysis, garbage collection, memory profiling, and optimization",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "memory-management",
+        "gc",
+        "escape-analysis",
+        "profiling"
+      ],
+      "coverImage": "/images/go-memory-management.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "memory-management"
+      ],
+      "slug": "go-memory-management",
+      "path": "/blogs/backend/programming/golang/memory-management/go-memory-management"
+    },
+    {
+      "title": "Go Interview Questions and Answers",
+      "description": "Curated Go interview questions covering goroutines, channels, interfaces, memory model, concurrency patterns, and backend development for senior roles",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "interview",
+        "preparation",
+        "senior-engineer"
+      ],
+      "coverImage": "/images/go-interview.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "interview"
+      ],
+      "slug": "go-interview-questions",
+      "path": "/blogs/backend/programming/golang/interview/go-interview-questions"
+    },
+    {
+      "title": "Go Goroutines: Anatomy and Internals",
+      "description": "Deep dive into goroutines: scheduler, stack management, lifecycle, GMP model, and building high-concurrency applications",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "goroutines",
+        "concurrency",
+        "scheduler",
+        "gmp"
+      ],
+      "coverImage": "/images/go-goroutines.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "goroutines"
+      ],
+      "slug": "go-goroutines-deep-dive",
+      "path": "/blogs/backend/programming/golang/goroutines/go-goroutines-deep-dive"
+    },
+    {
+      "title": "Go for Backend Development",
+      "description": "Comprehensive guide to Go for backend development: language features, concurrency model, standard library, performance, and production patterns",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "golang",
+        "backend",
+        "concurrency"
+      ],
+      "coverImage": "/images/golang-for-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang"
+      ],
+      "slug": "golang-for-backend",
+      "path": "/blogs/backend/programming/golang/golang-for-backend"
+    },
+    {
+      "title": "Go Design Patterns and Idioms",
+      "description": "Essential design patterns in Go: creational, structural, behavioral patterns adapted to Go's idioms and concurrency model",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "design-patterns",
+        "architecture",
+        "idioms",
+        "concurrency"
+      ],
+      "coverImage": "/images/go-design-patterns.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "design-patterns"
+      ],
+      "slug": "go-design-patterns",
+      "path": "/blogs/backend/programming/golang/design-patterns/go-design-patterns"
+    },
+    {
+      "title": "HTTP Request Routing in Go",
+      "description": "Deep dive into HTTP request routing in Go: standard library patterns, path parameters, middleware chaining, custom routers, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "http",
+        "routing",
+        "net-http"
+      ],
+      "coverImage": "/images/go-http-request-routing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "core-go"
+      ],
+      "slug": "go-http-request-routing",
+      "path": "/blogs/backend/programming/golang/core-go/go-http-request-routing"
+    },
+    {
+      "title": "Go Concurrency Patterns",
+      "description": "Master Go concurrency: goroutines, channels, select, sync primitives, worker pools, pipeline patterns, and building concurrent applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "concurrency",
+        "goroutines",
+        "channels"
+      ],
+      "coverImage": "/images/go-concurrency-patterns.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "concurrency"
+      ],
+      "slug": "go-concurrency-patterns",
+      "path": "/blogs/backend/programming/golang/concurrency/go-concurrency-patterns"
+    },
+    {
+      "title": "Go Channels: Patterns and Internals",
+      "description": "Deep dive into Go channels: internal implementation, buffered vs unbuffered, select, pipeline patterns, and production best practices",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "channels",
+        "concurrency",
+        "communication"
+      ],
+      "coverImage": "/images/go-channels.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "channels"
+      ],
+      "slug": "go-channels-deep-dive",
+      "path": "/blogs/backend/programming/golang/channels/go-channels-deep-dive"
+    }
+  ]
+}

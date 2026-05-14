@@ -1,17 +1,45 @@
+---
+title: "Reinforcement Learning Basics"
+description: "Understand reinforcement learning: RL framework, Q-learning, DQN, policy gradients, actor-critic, PPO, exploration vs exploitation, and real-world applications"
+date: "2026-05-14"
+author: "Abhishek Tiwari"
+tags:
+  - reinforcement-learning
+  - rl
+  - q-learning
+  - dqn
+  - ppo
+  - deep-learning
+coverImage: "/images/reinforcement-learning-basics.png"
+draft: false
+---
+
 # Reinforcement Learning Basics
 
 Reinforcement Learning (RL) is a paradigm where agents learn by interacting with an environment, receiving rewards or penalties for their actions.
 
 ## The RL Framework
 
+```mermaid
+graph LR
+    Agent["Agent"] -->|"Action (a)"| Env["Environment"]
+    Env -->|"State (s)<br/>Reward (r)"| Agent
+    Env --> State["State (s)<br/>what the agent observes"]
+    Env --> Action["Action (a)<br/>what the agent does"]
+    Env --> Reward["Reward (r)<br/>feedback from environment"]
+    Agent --> Policy["Policy (π)<br/>strategy for choosing actions"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class Agent,Env blue
+    class State,Action,Reward,Policy green
 ```
-Agent ←→ Environment
-         │
-         ├── State (s) - what the agent observes
-         ├── Action (a) - what the agent does
-         ├── Reward (r) - feedback from environment
-         └── Policy (π) - strategy for choosing actions
-```
+
+The agent observes the environment state, selects an action according to its policy, and receives a reward. The environment transitions to a new state. This loop repeats until the episode ends.
 
 ## Key Concepts
 
@@ -43,7 +71,7 @@ Q_π(s,a) = E_π[G_t | S_t = s, A_t = a]
 
 ### 3. The Bellman Equations
 
-```
+```python
 V_π(s) = Σ_a π(a|s) * Σ_{s'} P(s'|s,a) * [R(s,a,s') + γV_π(s')]
 
 Q_π(s,a) = Σ_{s'} P(s'|s,a) * [R(s,a,s') + γ * Σ_{a'} π(a'|s') * Q_π(s',a')]
@@ -171,6 +199,33 @@ class ActorCritic:
         total_loss.backward()
 ```
 
+## RL Algorithm Decision Flow
+
+```mermaid
+graph TD
+    Start["RL Problem"] --> Discrete{"Action Space"}
+    Discrete -->|"Discrete"| StateSpace{"State Space Size"}
+    Discrete -->|"Continuous"| PG["Policy Gradient<br/>or Actor-Critic"]
+    StateSpace -->|"Small"| QL["Q-Learning or SARSA"]
+    StateSpace -->|"Large"| DQN["DQN with experience replay"]
+    QL --> Stable{"Need stable<br/>training?"}
+    DQN --> Stable
+    PG --> Stable
+    Stable -->|"Yes"| AC["Actor-Critic or PPO"]
+    Stable -->|"No"| Simple["Simple method works"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class Start blue
+    class Discrete,StateSpace,Stable yellow
+    class QL,DQN,PG,AC green
+    class Simple pink
+```
+
 ## Exploration vs Exploitation
 
 ```python
@@ -259,3 +314,5 @@ if policy_entropy < min_entropy:
 - Q-Learning for discrete, DQN for large state spaces
 - Policy gradient for continuous actions
 - Balance exploration with exploitation
+
+Happy Coding

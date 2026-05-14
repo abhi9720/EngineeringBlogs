@@ -1,0 +1,28 @@
+{
+  "name": "Concurrency",
+  "path": "/blogs/backend/programming/java/concurrency",
+  "blogs": [
+    {
+      "title": "Java Concurrency and Multithreading",
+      "description": "Master Java concurrency: threads, synchronization, locks, executors, ForkJoinPool, completable future, and concurrent data structures",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "concurrency",
+        "multithreading",
+        "threads"
+      ],
+      "coverImage": "/images/java-concurrency.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "concurrency"
+      ],
+      "slug": "java-concurrency",
+      "path": "/blogs/backend/programming/java/concurrency/java-concurrency"
+    }
+  ]
+}

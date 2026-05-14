@@ -25,29 +25,6 @@
       "path": "/blogs/backend/performance/optimization/lazy-loading-vs-eager-loading"
     },
     {
-      "title": "Garbage Collection Tuning",
-      "description": "Tune JVM garbage collection: G1, ZGC, Shenandoah collectors, GC logs analysis, and latency optimization",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "performance",
-        "optimization",
-        "gc",
-        "g1",
-        "zgc",
-        "jvm"
-      ],
-      "coverImage": "/images/garbage-collection-tuning.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "performance",
-        "optimization"
-      ],
-      "slug": "garbage-collection-tuning",
-      "path": "/blogs/backend/performance/optimization/garbage-collection-tuning"
-    },
-    {
       "title": "Database Query Optimization",
       "description": "Optimize database queries: indexing strategies, query plans, N+1 detection, and SQL performance tuning",
       "date": "2026-05-11",

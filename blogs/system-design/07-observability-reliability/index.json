@@ -16,7 +16,7 @@
         "opentelemetry",
         "spring-cloud-sleuth"
       ],
-      "coverImage": "/images/distributed-tracing.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -40,7 +40,7 @@
         "logstash",
         "kibana"
       ],
-      "coverImage": "/images/elk-stack.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -64,7 +64,7 @@
         "metrics",
         "alerting"
       ],
-      "coverImage": "/images/prometheus-grafana.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

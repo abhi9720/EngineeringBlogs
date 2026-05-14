@@ -15,7 +15,7 @@
         "synchronization",
         "low-level-design"
       ],
-      "coverImage": "/images/concurrency-patterns.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

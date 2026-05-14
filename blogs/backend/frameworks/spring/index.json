@@ -1,0 +1,281 @@
+{
+  "name": "Spring",
+  "path": "/blogs/backend/frameworks/spring",
+  "blogs": [
+    {
+      "title": "WebClient vs RestTemplate Comparison",
+      "description": "Deep comparison of WebClient and RestTemplate for HTTP communication in Spring Boot: performance, API design, and migration strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "webclient",
+        "resttemplate",
+        "http-client",
+        "reactive"
+      ],
+      "coverImage": "/images/webclient-vs-resttemplate.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "webclient-vs-resttemplate",
+      "path": "/blogs/backend/frameworks/spring/webclient-vs-resttemplate"
+    },
+    {
+      "title": "Transactions and Propagation",
+      "description": "Deep dive into Spring transaction management, propagation levels, isolation, and real-world patterns for reliable data consistency",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "transactions",
+        "database",
+        "jpa"
+      ],
+      "coverImage": "/images/transactions-and-propagation.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "transactions-and-propagation",
+      "path": "/blogs/backend/frameworks/spring/transactions-and-propagation"
+    },
+    {
+      "title": "Spring Security Filters",
+      "description": "Deep dive into Spring Security filter chain, custom filters, and how authentication flows through the pipeline",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-security",
+        "filters",
+        "authentication"
+      ],
+      "coverImage": "/images/spring-security-filters.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-security-filters",
+      "path": "/blogs/backend/frameworks/spring/spring-security-filters"
+    },
+    {
+      "title": "Spring IoC and Dependency Injection Deep Dive",
+      "description": "Master the Spring IoC container and dependency injection patterns: constructor injection, setter injection, field injection, and advanced DI techniques",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "ioc",
+        "dependency-injection",
+        "spring-core"
+      ],
+      "coverImage": "/images/spring-ioc-di-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-ioc-di-deep-dive",
+      "path": "/blogs/backend/frameworks/spring/spring-ioc-di-deep-dive"
+    },
+    {
+      "title": "Spring Data JPA Basics",
+      "description": "Master Spring Data JPA from repositories to custom queries, understanding how Hibernate integrates with Spring",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "jpa",
+        "hibernate",
+        "database"
+      ],
+      "coverImage": "/images/spring-data-jpa-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-data-jpa-basics",
+      "path": "/blogs/backend/frameworks/spring/spring-data-jpa-basics"
+    },
+    {
+      "title": "Spring Conditional Configuration",
+      "description": "Master Spring's @Conditional annotations: @ConditionalOnClass, @ConditionalOnProperty, @ConditionalOnBean, and creating custom conditions for intelligent bean registration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "conditional-config",
+        "auto-configuration",
+        "spring-core"
+      ],
+      "coverImage": "/images/spring-conditional-config.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-conditional-config",
+      "path": "/blogs/backend/frameworks/spring/spring-conditional-config"
+    },
+    {
+      "title": "Spring Bean Lifecycle",
+      "description": "Deep dive into the Spring bean lifecycle: instantiation, property setting, initialization, destruction, and customizing with BeanPostProcessors",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "bean-lifecycle",
+        "spring-core",
+        "ioc"
+      ],
+      "coverImage": "/images/spring-bean-lifecycle.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-bean-lifecycle",
+      "path": "/blogs/backend/frameworks/spring/spring-bean-lifecycle"
+    },
+    {
+      "title": "REST API Best Practices",
+      "description": "Design production-ready REST APIs with proper error handling, versioning, documentation, and security practices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "rest-api",
+        "best-practices",
+        "web-services"
+      ],
+      "coverImage": "/images/rest-api-best-practices.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "rest-api-best-practices",
+      "path": "/blogs/backend/frameworks/spring/rest-api-best-practices"
+    },
+    {
+      "title": "Spring Profiles and Environment Abstraction",
+      "description": "Master Spring profiles and the environment abstraction: profile-specific configuration, property sources, conditional beans, and environment post-processing",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "profiles",
+        "environment",
+        "configuration"
+      ],
+      "coverImage": "/images/profiles-and-environment.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "profiles-and-environment",
+      "path": "/blogs/backend/frameworks/spring/profiles-and-environment"
+    },
+    {
+      "title": "Feign Client Deep Dive",
+      "description": "Master Feign configuration, interceptors, error handling, and advanced patterns for declarative HTTP clients in Spring Cloud",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "feign",
+        "spring-cloud",
+        "http-client"
+      ],
+      "coverImage": "/images/feign-client-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "feign-client-deep-dive",
+      "path": "/blogs/backend/frameworks/spring/feign-client-deep-dive"
+    },
+    {
+      "title": "Exception Handling",
+      "description": "Master exception handling in Spring Boot with global error handling, custom exceptions, and production-ready patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "exception-handling",
+        "error-handling",
+        "spring-mvc"
+      ],
+      "coverImage": "/images/exception-handling.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "exception-handling",
+      "path": "/blogs/backend/frameworks/spring/exception-handling"
+    },
+    {
+      "title": "Consuming REST APIs in Spring Boot",
+      "description": "Master RestTemplate, WebClient, and Feign for consuming REST APIs in Spring Boot applications with production patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "rest-api",
+        "webclient",
+        "feign",
+        "resttemplate"
+      ],
+      "coverImage": "/images/consuming-rest-apis.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "consuming-rest-apis",
+      "path": "/blogs/backend/frameworks/spring/consuming-rest-apis"
+    },
+    {
+      "title": "Configuration Properties in Spring Boot",
+      "description": "Master type-safe configuration with @ConfigurationProperties, property binding, validation, and advanced configuration techniques in Spring Boot",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "configuration",
+        "properties",
+        "externalized-config"
+      ],
+      "coverImage": "/images/configuration-properties.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "configuration-properties",
+      "path": "/blogs/backend/frameworks/spring/configuration-properties"
+    }
+  ]
+}

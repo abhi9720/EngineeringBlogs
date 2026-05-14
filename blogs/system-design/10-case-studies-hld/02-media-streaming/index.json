@@ -15,7 +15,7 @@
         "recommendations",
         "case-study"
       ],
-      "coverImage": "/images/netflix-streaming.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -38,7 +38,7 @@
         "transcoding",
         "case-study"
       ],
-      "coverImage": "/images/youtube-system-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

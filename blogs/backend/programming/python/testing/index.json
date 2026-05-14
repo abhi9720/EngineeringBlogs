@@ -1,0 +1,30 @@
+{
+  "name": "Testing",
+  "path": "/blogs/backend/programming/python/testing",
+  "blogs": [
+    {
+      "title": "Python Testing: unittest, pytest, Mocking, and Beyond",
+      "description": "Master Python testing: pytest, unittest, fixtures, mocking, property-based testing, integration testing, and test infrastructure",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "testing",
+        "pytest",
+        "unittest",
+        "mocking",
+        "tdd"
+      ],
+      "coverImage": "/images/python-testing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "testing"
+      ],
+      "slug": "python-testing",
+      "path": "/blogs/backend/programming/python/testing/python-testing"
+    }
+  ]
+}

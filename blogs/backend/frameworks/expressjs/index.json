@@ -1,0 +1,27 @@
+{
+  "name": "Expressjs",
+  "path": "/blogs/backend/frameworks/expressjs",
+  "blogs": [
+    {
+      "title": "Express.js Basics",
+      "description": "Master Express.js framework: routing, middleware, error handling, request/response objects, and building production-ready REST APIs with Node.js",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "express",
+        "rest-api",
+        "javascript"
+      ],
+      "coverImage": "/images/express-js-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "expressjs"
+      ],
+      "slug": "express-js-basics",
+      "path": "/blogs/backend/frameworks/expressjs/express-js-basics"
+    }
+  ]
+}

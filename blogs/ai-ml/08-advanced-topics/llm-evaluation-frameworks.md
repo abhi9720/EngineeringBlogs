@@ -1,3 +1,18 @@
+---
+title: "LLM Evaluation Frameworks"
+description: "Master LLM evaluation: benchmarks, LLM-as-judge, custom evaluation suites, continuous evaluation, and production monitoring for AI systems"
+date: "2026-05-14"
+author: "Abhishek Tiwari"
+tags:
+  - llm
+  - evaluation
+  - benchmarks
+  - testing
+  - ai-quality
+coverImage: "/images/llm-evaluation-frameworks.png"
+draft: false
+---
+
 # LLM Evaluation Frameworks
 
 Evaluating LLMs is challenging due to their open-ended capabilities. This guide covers frameworks, metrics, and best practices.
@@ -11,22 +26,35 @@ Evaluating LLMs is challenging due to their open-ended capabilities. This guide 
 
 ## Evaluation Dimensions
 
-```
-LLM Evaluation
-├── Capability
-│   ├── Knowledge & Factual Accuracy
-│   ├── Reasoning (logical, math, common sense)
-│   ├── Language Understanding
-│   ├── Generation Quality
-│   └── Task Completion
-├── Safety & Alignment
-│   ├── Harmlessness
-│   ├── Helpfulness
-│   └── Honesty (truthfulness)
-└── Practical
-    ├── Latency
-    ├── Cost
-    └── Robustness
+```mermaid
+graph TD
+    Eval["LLM Evaluation"]
+    Eval --> Capability["Capability"]
+    Capability --> Knowledge["Knowledge & Factual Accuracy"]
+    Capability --> Reasoning["Reasoning<br/>(logical, math, common sense)"]
+    Capability --> Language["Language Understanding"]
+    Capability --> GenQuality["Generation Quality"]
+    Capability --> Task["Task Completion"]
+    Eval --> Safety["Safety & Alignment"]
+    Safety --> Harmless["Harmlessness"]
+    Safety --> Helpful["Helpfulness"]
+    Safety --> Honest["Honesty (truthfulness)"]
+    Eval --> Practical["Practical"]
+    Practical --> Latency["Latency"]
+    Practical --> Cost["Cost"]
+    Practical --> Robustness["Robustness"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class Eval blue
+    class Capability,Safety,Practical green
+    class Knowledge,Reasoning,Language,GenQuality,Task pink
+    class Harmless,Helpful,Honest,Harmless,Helpful,Honest pink
+    class Latency,Cost,Robustness pink
 ```
 
 ## Benchmarks by Category
@@ -312,3 +340,5 @@ class ContinuousEvaluator:
 - LLM-as-judge enables flexible evaluation
 - Build custom tests for domain-specific needs
 - Continuous evaluation catches regressions in production
+
+Happy Coding

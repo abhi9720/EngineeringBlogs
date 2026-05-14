@@ -1,0 +1,94 @@
+{
+  "name": "Boot",
+  "path": "/blogs/backend/frameworks/spring-boot/boot",
+  "blogs": [
+    {
+      "title": "Spring Boot Testing with Sliced Annotations",
+      "description": "Master Spring Boot testing with @WebMvcTest, @DataJpaTest, @JsonTest, and other slice annotations for focused, fast unit and integration tests",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "testing",
+        "spring-mvc",
+        "spring-data-jpa"
+      ],
+      "coverImage": "/images/spring-boot-testing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "boot"
+      ],
+      "slug": "spring-boot-testing",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/spring-boot-testing"
+    },
+    {
+      "title": "Spring Boot Actuator",
+      "description": "Master Spring Boot Actuator: production-ready endpoints, health indicators, metrics, custom endpoints, and securing actuator endpoints",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "actuator",
+        "monitoring",
+        "observability"
+      ],
+      "coverImage": "/images/spring-actuator.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "boot"
+      ],
+      "slug": "spring-actuator",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/spring-actuator"
+    },
+    {
+      "title": "Creating Custom Spring Boot Starters",
+      "description": "Learn how to create custom Spring Boot starters: auto-configuration, starter modules, configuration metadata, and best practices for reusable components",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "starters",
+        "auto-configuration",
+        "spring-core"
+      ],
+      "coverImage": "/images/custom-starters.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "boot"
+      ],
+      "slug": "custom-starters",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/custom-starters"
+    },
+    {
+      "title": "Spring Boot Auto-Configuration Deep Dive",
+      "description": "Understand Spring Boot auto-configuration internals: @ConditionalOn*, spring.factories, custom auto-configuration, and how Spring Boot configures beans automatically",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "auto-configuration",
+        "spring-core",
+        "spring-boot-internals"
+      ],
+      "coverImage": "/images/auto-configuration-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "boot"
+      ],
+      "slug": "auto-configuration-deep-dive",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/auto-configuration-deep-dive"
+    }
+  ]
+}

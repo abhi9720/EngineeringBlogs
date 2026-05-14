@@ -15,7 +15,7 @@
         "redis-cluster",
         "sharding"
       ],
-      "coverImage": "/images/distributed-caching-redis-cluster.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -39,7 +39,7 @@
         "ulid",
         "database"
       ],
-      "coverImage": "/images/distributed-id-generation.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -63,7 +63,7 @@
         "zookeeper",
         "concurrency"
       ],
-      "coverImage": "/images/distributed-locks.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -86,7 +86,7 @@
         "paxos",
         "algorithms"
       ],
-      "coverImage": "/images/raft-paxos-algorithms.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

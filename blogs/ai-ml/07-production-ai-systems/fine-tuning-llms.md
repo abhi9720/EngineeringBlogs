@@ -1,3 +1,19 @@
+---
+title: "Fine-Tuning Large Language Models"
+description: "Master LLM fine-tuning: full fine-tuning, LoRA, QLoRA, adapter methods, data preparation, training pipelines, evaluation, and production deployment"
+date: "2026-05-14"
+author: "Abhishek Tiwari"
+tags:
+  - llm
+  - fine-tuning
+  - lora
+  - qlora
+  - transformers
+  - deep-learning
+coverImage: "/images/fine-tuning-llms.png"
+draft: false
+---
+
 # Fine-Tuning Large Language Models
 
 Fine-tuning adapts pre-trained LLMs to specific tasks or domains. This guide covers when to fine-tune, common methods, and practical implementation.
@@ -34,11 +50,26 @@ training_args = TrainingArguments(
 
 ### 2. LoRA (Low-Rank Adaptation)
 
-Trains only small adapter matrices:
+Trains only small adapter matrices. Instead of updating the full weight matrix W (d x d), LoRA learns two low-rank matrices B and A such that the update is W + BA where B (d x r) and A (r x d), with rank r much smaller than d. This reduces trainable parameters by orders of magnitude.
 
-```
-Original: W (d × d)
-LoRA:     W + BA where B (d × r), A (r × d), r << d
+```mermaid
+graph LR
+    Input["Input"] --> W["Original Weights W<br/>(d x d)"]
+    Input --> A["LoRA A<br/>(r x d)"]
+    A --> B["LoRA B<br/>(d x r)"]
+    W --> Sum["+"]
+    B --> Sum
+    Sum --> Output["Output"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class W green
+    class A,B pink
+    class Sum yellow
 ```
 
 ```python
@@ -60,7 +91,7 @@ model.print_trainable_parameters()
 
 ### 3. QLoRA (Quantized LoRA)
 
-Combines quantization with LoRA for memory efficiency:
+Combines quantization with LoRA for memory efficiency. The base model is loaded in 4-bit precision, cutting memory by 4x, while the LoRA adapters remain in full precision for training.
 
 ```python
 from transformers import BitsAndBytesConfig
@@ -80,25 +111,7 @@ model = prepare_model_for_kbit_training(model)
 
 ### 4. Adapter Methods
 
-Add small trainable modules to frozen layers:
-
-```
-┌─────────────┐
-│   Frozen    │
-│   LLM       │
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐
-│  Adapter    │
-│  (small)    │
-└──────┬──────┘
-       │
-       ▼
-┌─────────────┐
-│   Output    │
-└─────────────┘
-```
+Add small trainable modules to frozen layers. The adapter sits between the frozen LLM layers, learning task-specific transformations while preserving the base model's general knowledge.
 
 ## Preparing Training Data
 
@@ -243,19 +256,30 @@ output = model.generate(
 | QLoRA (7B) | ~6GB | 2-4 hours | $ |
 | Prompt Eng | 0 | Minutes | Free |
 
-## When to Use Each Method
+## Decision Flow
 
-```
-Start with prompt engineering
-        │
-        ▼ (need more accuracy)
-Add few-shot examples  
-        │
-        ▼ (still not enough)
-Try LoRA / QLoRA first
-        │
-        ▼ (unique architecture needed)
-Consider full fine-tuning
+```mermaid
+graph TD
+    Start["Need better model performance?"] --> Prompt["Start with prompt engineering"]
+    Prompt --> Enough{"Need more accuracy?"}
+    Enough -->|No| Done["Done"]
+    Enough -->|Yes| FewShot["Add few-shot examples"]
+    FewShot --> StillEnough{"Still not enough?"}
+    StillEnough -->|No| Done
+    StillEnough -->|Yes| LoRA["Try LoRA / QLoRA first"]
+    LoRA --> Unique{"Need unique<br/>architecture?"}
+    Unique -->|No| Done
+    Unique -->|Yes| Full["Consider full fine-tuning"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class Start,Prompt,FewShot,LoRA,Full blue
+    class Enough,StillEnough,Unique yellow
+    class Done green
 ```
 
 ## Summary
@@ -265,3 +289,5 @@ Consider full fine-tuning
 - Quality data matters more than quantity
 - Always evaluate for overfitting and alignment
 - Start simple, increase complexity as needed
+
+Happy Coding

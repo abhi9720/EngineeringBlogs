@@ -15,7 +15,7 @@
         "transaction",
         "system-design"
       ],
-      "coverImage": "/images/atm-machine-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -38,7 +38,7 @@
         "conflict-detection",
         "system-design"
       ],
-      "coverImage": "/images/meeting-scheduler-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -61,7 +61,7 @@
         "oop",
         "object-oriented-design"
       ],
-      "coverImage": "/images/tic-tac-toe-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -84,7 +84,7 @@
         "scheduling-algorithms",
         "system-design"
       ],
-      "coverImage": "/images/elevator-system-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -107,7 +107,7 @@
         "system-design",
         "object-oriented-design"
       ],
-      "coverImage": "/images/parking-lot-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -130,7 +130,7 @@
         "synchronization",
         "low-level-design"
       ],
-      "coverImage": "/images/concurrency-patterns.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -154,7 +154,7 @@
         "behavioral",
         "low-level-design"
       ],
-      "coverImage": "/images/gof-design-patterns.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -176,7 +176,7 @@
         "modeling",
         "low-level-design"
       ],
-      "coverImage": "/images/uml-diagrams.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -198,7 +198,7 @@
         "low-level-design",
         "design-patterns"
       ],
-      "coverImage": "/images/oop-solid-principles.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

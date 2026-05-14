@@ -1,0 +1,464 @@
+{
+  "name": "Data Engineering",
+  "path": "/blogs/backend/data-engineering",
+  "blogs": [
+    {
+      "title": "JDBC Internals",
+      "description": "Deep dive into JDBC internals: Statement vs PreparedStatement, connection lifecycle, batch processing, result set handling, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "jdbc",
+        "database",
+        "java",
+        "performance"
+      ],
+      "coverImage": "/images/backend/data-access/relational/jdbc-internals.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "relational"
+      ],
+      "slug": "jdbc-internals",
+      "path": "/blogs/backend/data-engineering/relational/jdbc-internals"
+    },
+    {
+      "title": "Transaction Isolation Levels",
+      "description": "Deep dive into database isolation levels: read phenomena, dirty reads, non-repeatable reads, phantom reads, serialization anomalies, and Spring configuration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "isolation-levels",
+        "transactions",
+        "database",
+        "concurrency"
+      ],
+      "coverImage": "/images/backend/data-access/relational/isolation-levels.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "relational"
+      ],
+      "slug": "isolation-levels",
+      "path": "/blogs/backend/data-engineering/relational/isolation-levels"
+    },
+    {
+      "title": "Connection Management",
+      "description": "Deep dive into database connection lifecycle, connection pooling internals, HikariCP configuration, health checks, leak detection, and production tuning",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "connection-pool",
+        "hikaricp",
+        "database",
+        "performance"
+      ],
+      "coverImage": "/images/backend/data-access/relational/connection-management.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "relational"
+      ],
+      "slug": "connection-management",
+      "path": "/blogs/backend/data-engineering/relational/connection-management"
+    },
+    {
+      "title": "ACID Transactions",
+      "description": "Master ACID properties in database transactions: atomicity, consistency, isolation, durability, transaction management in Spring, and rollback strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "acid",
+        "transactions",
+        "database",
+        "spring-transactions"
+      ],
+      "coverImage": "/images/backend/data-access/relational/acid-transactions.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "relational"
+      ],
+      "slug": "acid-transactions",
+      "path": "/blogs/backend/data-engineering/relational/acid-transactions"
+    },
+    {
+      "title": "Native Queries vs JPQL",
+      "description": "Compare native SQL queries vs JPQL in JPA: when to use each, performance considerations, result mapping, and best practices for complex queries",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "jpql",
+        "native-queries",
+        "jpa",
+        "hibernate"
+      ],
+      "coverImage": "/images/backend/data-access/orm/native-queries-vs-jpql.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "orm"
+      ],
+      "slug": "native-queries-vs-jpql",
+      "path": "/blogs/backend/data-engineering/orm/native-queries-vs-jpql"
+    },
+    {
+      "title": "JPA/Hibernate Deep Dive",
+      "description": "Deep dive into JPA/Hibernate architecture: entity lifecycle, persistence context, session management, first-level cache, and performance tuning",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "jpa",
+        "hibernate",
+        "orm",
+        "persistence"
+      ],
+      "coverImage": "/images/backend/data-access/orm/jpa-hibernate-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "orm"
+      ],
+      "slug": "jpa-hibernate-deep-dive",
+      "path": "/blogs/backend/data-engineering/orm/jpa-hibernate-deep-dive"
+    },
+    {
+      "title": "Inheritance Mapping Strategies in JPA",
+      "description": "Master JPA inheritance mapping: SINGLE_TABLE, JOINED, TABLE_PER_CLASS, MappedSuperclass, discriminator columns, and polymorphic queries",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "jpa",
+        "inheritance",
+        "hibernate",
+        "orm"
+      ],
+      "coverImage": "/images/backend/data-access/orm/inheritance-mapping.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "orm"
+      ],
+      "slug": "inheritance-mapping",
+      "path": "/blogs/backend/data-engineering/orm/inheritance-mapping"
+    },
+    {
+      "title": "Entity Lifecycle",
+      "description": "Master JPA entity lifecycle: entity states, lifecycle callbacks, event listeners, auditing, and best practices for entity state management",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "jpa",
+        "entity-lifecycle",
+        "hibernate",
+        "callbacks"
+      ],
+      "coverImage": "/images/backend/data-access/orm/entity-lifecycle.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "orm"
+      ],
+      "slug": "entity-lifecycle",
+      "path": "/blogs/backend/data-engineering/orm/entity-lifecycle"
+    },
+    {
+      "title": "Caching Strategies in Hibernate",
+      "description": "Master Hibernate caching: first-level cache, second-level cache, query cache, cache regions, Ehcache/Redis configuration, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "hibernate",
+        "caching",
+        "performance",
+        "jpa"
+      ],
+      "coverImage": "/images/backend/data-access/orm/caching-strategies-hibernate.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "orm"
+      ],
+      "slug": "caching-strategies-hibernate",
+      "path": "/blogs/backend/data-engineering/orm/caching-strategies-hibernate"
+    },
+    {
+      "title": "Redis as a Database",
+      "description": "Using Redis beyond caching: data structures, persistence, Redis Streams for messaging, RedisJSON, RediSearch, and production deployment patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "redis",
+        "database",
+        "nosql",
+        "caching"
+      ],
+      "coverImage": "/images/backend/data-access/nosql/redis-as-database.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "nosql"
+      ],
+      "slug": "redis-as-database",
+      "path": "/blogs/backend/data-engineering/nosql/redis-as-database"
+    },
+    {
+      "title": "Polyglot Persistence",
+      "description": "Implement polyglot persistence architecture: multi-database strategies, service-specific data stores, transaction coordination, and data synchronization patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "polyglot-persistence",
+        "multi-database",
+        "architecture",
+        "distributed-systems"
+      ],
+      "coverImage": "/images/backend/data-access/nosql/polyglot-persistence.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "nosql"
+      ],
+      "slug": "polyglot-persistence",
+      "path": "/blogs/backend/data-engineering/nosql/polyglot-persistence"
+    },
+    {
+      "title": "MongoDB with Spring Data",
+      "description": "Master Spring Data MongoDB: documents, repositories, aggregations, indexing, transactions, and production best practices for MongoDB in Java",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "mongodb",
+        "spring-data",
+        "nosql",
+        "database"
+      ],
+      "coverImage": "/images/backend/data-access/nosql/mongodb-with-spring-data.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "nosql"
+      ],
+      "slug": "mongodb-with-spring-data",
+      "path": "/blogs/backend/data-engineering/nosql/mongodb-with-spring-data"
+    },
+    {
+      "title": "Cassandra in Backend",
+      "description": "Master Apache Cassandra for backend applications: data modeling, CQL, partitioning, consistency levels, Spring Data Cassandra, and production patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "cassandra",
+        "nosql",
+        "distributed-database",
+        "spring-data"
+      ],
+      "coverImage": "/images/backend/data-access/nosql/cassandra-in-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "nosql"
+      ],
+      "slug": "cassandra-in-backend",
+      "path": "/blogs/backend/data-engineering/nosql/cassandra-in-backend"
+    },
+    {
+      "title": "N+1 Problem",
+      "description": "Understand and solve the N+1 query problem in Hibernate: fetch joins, entity graphs, and batch fetching solutions",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "hibernate",
+        "n-plus-1",
+        "jpa",
+        "performance"
+      ],
+      "coverImage": "/images/n-plus-one-problem.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering"
+      ],
+      "slug": "n-plus-one-problem",
+      "path": "/blogs/backend/data-engineering/n-plus-one-problem"
+    },
+    {
+      "title": "JDBC vs JPA",
+      "description": "Compare JDBC and JPA for database access in Java: understand when to use each approach, their trade-offs, and real-world patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "jdbc",
+        "jpa",
+        "hibernate",
+        "database"
+      ],
+      "coverImage": "/images/jdbc-vs-jpa.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering"
+      ],
+      "slug": "jdbc-vs-jpa",
+      "path": "/blogs/backend/data-engineering/jdbc-vs-jpa"
+    },
+    {
+      "title": "Hibernate Lazy vs Eager Loading",
+      "description": "Understand Hibernate fetch strategies: LazyInitializationException causes, when to use eager loading, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "hibernate",
+        "lazy-loading",
+        "jpa",
+        "performance"
+      ],
+      "coverImage": "/images/hibernate-lazy-vs-eager-loading.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering"
+      ],
+      "slug": "hibernate-lazy-vs-eager-loading",
+      "path": "/blogs/backend/data-engineering/hibernate-lazy-vs-eager-loading"
+    },
+    {
+      "title": "Unit of Work Pattern",
+      "description": "Implement Unit of Work pattern in Java: transaction management, change tracking, write-behind caching, and integration with JPA/Hibernate",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "unit-of-work",
+        "design-patterns",
+        "transactions",
+        "jpa"
+      ],
+      "coverImage": "/images/backend/data-access/data-patterns/unit-of-work.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "data-patterns"
+      ],
+      "slug": "unit-of-work",
+      "path": "/blogs/backend/data-engineering/data-patterns/unit-of-work"
+    },
+    {
+      "title": "Repository Pattern",
+      "description": "Deep dive into the Repository pattern: abstraction layers, generic vs domain-specific repositories, Spring Data JPA, and implementation strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "repository-pattern",
+        "design-patterns",
+        "jpa",
+        "architecture"
+      ],
+      "coverImage": "/images/backend/data-access/data-patterns/repository-pattern.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "data-patterns"
+      ],
+      "slug": "repository-pattern",
+      "path": "/blogs/backend/data-engineering/data-patterns/repository-pattern"
+    },
+    {
+      "title": "Database Migrations",
+      "description": "Master database migrations with Flyway and Liquibase: version control for schemas, migration strategies, rollback patterns, and production deployment",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "database-migrations",
+        "flyway",
+        "liquibase",
+        "devops"
+      ],
+      "coverImage": "/images/backend/data-access/data-patterns/database-migrations.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "data-patterns"
+      ],
+      "slug": "database-migrations",
+      "path": "/blogs/backend/data-engineering/data-patterns/database-migrations"
+    },
+    {
+      "title": "Data Versioning Strategies",
+      "description": "Implement data versioning strategies: schema versioning, backward compatibility, data migration patterns, and managing evolving data models",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "data-versioning",
+        "schema-evolution",
+        "backward-compatibility",
+        "database"
+      ],
+      "coverImage": "/images/backend/data-access/data-patterns/data-versioning-strategies.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "data-patterns"
+      ],
+      "slug": "data-versioning-strategies",
+      "path": "/blogs/backend/data-engineering/data-patterns/data-versioning-strategies"
+    },
+    {
+      "title": "CQRS and Event Sourcing",
+      "description": "Implement CQRS and Event Sourcing patterns: command/query separation, event stores, aggregate replay, Axon Framework, and production patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "cqrs",
+        "event-sourcing",
+        "axon-framework",
+        "architecture"
+      ],
+      "coverImage": "/images/backend/data-access/data-patterns/cqrs-and-event-sourcing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering",
+        "data-patterns"
+      ],
+      "slug": "cqrs-and-event-sourcing",
+      "path": "/blogs/backend/data-engineering/data-patterns/cqrs-and-event-sourcing"
+    },
+    {
+      "title": "Connection Pooling with HikariCP",
+      "description": "Configure HikariCP for optimal database connection management: pool sizing, health checks, and performance tuning",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "hikaricp",
+        "connection-pool",
+        "database",
+        "performance"
+      ],
+      "coverImage": "/images/connection-pooling-hikaricp.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "data-engineering"
+      ],
+      "slug": "connection-pooling-hikaricp",
+      "path": "/blogs/backend/data-engineering/connection-pooling-hikaricp"
+    }
+  ]
+}

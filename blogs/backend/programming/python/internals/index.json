@@ -1,0 +1,30 @@
+{
+  "name": "Internals",
+  "path": "/blogs/backend/programming/python/internals",
+  "blogs": [
+    {
+      "title": "Python Internals: CPython, Bytecode, GIL, and Memory Model",
+      "description": "Deep dive into CPython internals: bytecode execution, GIL implementation, memory management, object model, and performance characteristics",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "internals",
+        "cpython",
+        "bytecode",
+        "gil",
+        "memory"
+      ],
+      "coverImage": "/images/python-internals.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "internals"
+      ],
+      "slug": "python-internals",
+      "path": "/blogs/backend/programming/python/internals/python-internals"
+    }
+  ]
+}

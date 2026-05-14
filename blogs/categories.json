@@ -97,20 +97,13 @@
       "name": "Backend",
       "slug": "backend",
       "path": "backend",
-      "blogCount": 247,
+      "blogCount": 270,
       "children": [
-        {
-          "name": "Api Clients Integrations",
-          "slug": "api-clients-integrations",
-          "path": "backend/api-clients-integrations",
-          "blogCount": 5,
-          "children": []
-        },
         {
           "name": "Api Design",
           "slug": "api-design",
           "path": "backend/api-design",
-          "blogCount": 24,
+          "blogCount": 25,
           "children": [
             {
               "name": "Api Security",
@@ -153,20 +146,13 @@
           "name": "Architecture Patterns",
           "slug": "architecture-patterns",
           "path": "backend/architecture-patterns",
-          "blogCount": 14,
+          "blogCount": 9,
           "children": [
             {
               "name": "Clean Hexagonal",
               "slug": "clean-hexagonal",
               "path": "backend/architecture-patterns/clean-hexagonal",
               "blogCount": 4,
-              "children": []
-            },
-            {
-              "name": "Design Patterns",
-              "slug": "design-patterns",
-              "path": "backend/architecture-patterns/design-patterns",
-              "blogCount": 5,
               "children": []
             },
             {
@@ -208,13 +194,6 @@
           ]
         },
         {
-          "name": "Build Tools Devops",
-          "slug": "build-tools-devops",
-          "path": "backend/build-tools-devops",
-          "blogCount": 5,
-          "children": []
-        },
-        {
           "name": "Caching",
           "slug": "caching",
           "path": "backend/caching",
@@ -244,36 +223,43 @@
           ]
         },
         {
-          "name": "Data Access",
-          "slug": "data-access",
-          "path": "backend/data-access",
+          "name": "Cloud Devops",
+          "slug": "cloud-devops",
+          "path": "backend/cloud-devops",
+          "blogCount": 6,
+          "children": []
+        },
+        {
+          "name": "Data Engineering",
+          "slug": "data-engineering",
+          "path": "backend/data-engineering",
           "blogCount": 22,
           "children": [
             {
               "name": "Data Patterns",
               "slug": "data-patterns",
-              "path": "backend/data-access/data-patterns",
+              "path": "backend/data-engineering/data-patterns",
               "blogCount": 5,
               "children": []
             },
             {
               "name": "Nosql",
               "slug": "nosql",
-              "path": "backend/data-access/nosql",
+              "path": "backend/data-engineering/nosql",
               "blogCount": 4,
               "children": []
             },
             {
               "name": "Orm",
               "slug": "orm",
-              "path": "backend/data-access/orm",
+              "path": "backend/data-engineering/orm",
               "blogCount": 5,
               "children": []
             },
             {
               "name": "Relational",
               "slug": "relational",
-              "path": "backend/data-access/relational",
+              "path": "backend/data-engineering/relational",
               "blogCount": 4,
               "children": []
             }
@@ -283,35 +269,85 @@
           "name": "Frameworks",
           "slug": "frameworks",
           "path": "backend/frameworks",
-          "blogCount": 18,
+          "blogCount": 43,
           "children": [
             {
-              "name": "Go",
-              "slug": "go",
-              "path": "backend/frameworks/go",
-              "blogCount": 4,
+              "name": "Django",
+              "slug": "django",
+              "path": "backend/frameworks/django",
+              "blogCount": 1,
               "children": []
             },
             {
-              "name": "Jvm Ecosystem",
-              "slug": "jvm-ecosystem",
-              "path": "backend/frameworks/jvm-ecosystem",
-              "blogCount": 4,
+              "name": "Expressjs",
+              "slug": "expressjs",
+              "path": "backend/frameworks/expressjs",
+              "blogCount": 1,
               "children": []
             },
             {
-              "name": "Nodejs",
-              "slug": "nodejs",
-              "path": "backend/frameworks/nodejs",
-              "blogCount": 5,
+              "name": "Fastapi",
+              "slug": "fastapi",
+              "path": "backend/frameworks/fastapi",
+              "blogCount": 1,
               "children": []
             },
             {
-              "name": "Python",
-              "slug": "python",
-              "path": "backend/frameworks/python",
-              "blogCount": 5,
+              "name": "Gin",
+              "slug": "gin",
+              "path": "backend/frameworks/gin",
+              "blogCount": 1,
               "children": []
+            },
+            {
+              "name": "Nestjs",
+              "slug": "nestjs",
+              "path": "backend/frameworks/nestjs",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "Spring",
+              "slug": "spring",
+              "path": "backend/frameworks/spring",
+              "blogCount": 13,
+              "children": []
+            },
+            {
+              "name": "Spring Boot",
+              "slug": "spring-boot",
+              "path": "backend/frameworks/spring-boot",
+              "blogCount": 18,
+              "children": [
+                {
+                  "name": "Batch",
+                  "slug": "batch",
+                  "path": "backend/frameworks/spring-boot/batch",
+                  "blogCount": 4,
+                  "children": []
+                },
+                {
+                  "name": "Boot",
+                  "slug": "boot",
+                  "path": "backend/frameworks/spring-boot/boot",
+                  "blogCount": 4,
+                  "children": []
+                },
+                {
+                  "name": "Reactive",
+                  "slug": "reactive",
+                  "path": "backend/frameworks/spring-boot/reactive",
+                  "blogCount": 4,
+                  "children": []
+                },
+                {
+                  "name": "Security",
+                  "slug": "security",
+                  "path": "backend/frameworks/spring-boot/security",
+                  "blogCount": 4,
+                  "children": []
+                }
+              ]
             }
           ]
         },
@@ -348,7 +384,7 @@
           "name": "Microservices",
           "slug": "microservices",
           "path": "backend/microservices",
-          "blogCount": 23,
+          "blogCount": 24,
           "children": [
             {
               "name": "Communication",
@@ -420,20 +456,13 @@
           "name": "Performance",
           "slug": "performance",
           "path": "backend/performance",
-          "blogCount": 13,
+          "blogCount": 9,
           "children": [
             {
               "name": "Optimization",
               "slug": "optimization",
               "path": "backend/performance/optimization",
-              "blogCount": 5,
-              "children": []
-            },
-            {
-              "name": "Profiling",
-              "slug": "profiling",
-              "path": "backend/performance/profiling",
-              "blogCount": 3,
+              "blogCount": 4,
               "children": []
             },
             {
@@ -442,6 +471,241 @@
               "path": "backend/performance/scalability",
               "blogCount": 4,
               "children": []
+            }
+          ]
+        },
+        {
+          "name": "Programming",
+          "slug": "programming",
+          "path": "backend/programming",
+          "blogCount": 42,
+          "children": [
+            {
+              "name": "Golang",
+              "slug": "golang",
+              "path": "backend/programming/golang",
+              "blogCount": 11,
+              "children": [
+                {
+                  "name": "Channels",
+                  "slug": "channels",
+                  "path": "backend/programming/golang/channels",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Concurrency",
+                  "slug": "concurrency",
+                  "path": "backend/programming/golang/concurrency",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Core Go",
+                  "slug": "core-go",
+                  "path": "backend/programming/golang/core-go",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Design Patterns",
+                  "slug": "design-patterns",
+                  "path": "backend/programming/golang/design-patterns",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Goroutines",
+                  "slug": "goroutines",
+                  "path": "backend/programming/golang/goroutines",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Interview",
+                  "slug": "interview",
+                  "path": "backend/programming/golang/interview",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Memory Management",
+                  "slug": "memory-management",
+                  "path": "backend/programming/golang/memory-management",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Performance",
+                  "slug": "performance",
+                  "path": "backend/programming/golang/performance",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Runtime",
+                  "slug": "runtime",
+                  "path": "backend/programming/golang/runtime",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Testing",
+                  "slug": "testing",
+                  "path": "backend/programming/golang/testing",
+                  "blogCount": 1,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "name": "Java",
+              "slug": "java",
+              "path": "backend/programming/java",
+              "blogCount": 21,
+              "children": [
+                {
+                  "name": "Collections",
+                  "slug": "collections",
+                  "path": "backend/programming/java/collections",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Concurrency",
+                  "slug": "concurrency",
+                  "path": "backend/programming/java/concurrency",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Core Java",
+                  "slug": "core-java",
+                  "path": "backend/programming/java/core-java",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Design Patterns",
+                  "slug": "design-patterns",
+                  "path": "backend/programming/java/design-patterns",
+                  "blogCount": 5,
+                  "children": []
+                },
+                {
+                  "name": "Interview",
+                  "slug": "interview",
+                  "path": "backend/programming/java/interview",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Jvm",
+                  "slug": "jvm",
+                  "path": "backend/programming/java/jvm",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Memory Management",
+                  "slug": "memory-management",
+                  "path": "backend/programming/java/memory-management",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Performance",
+                  "slug": "performance",
+                  "path": "backend/programming/java/performance",
+                  "blogCount": 4,
+                  "children": []
+                },
+                {
+                  "name": "Reactive",
+                  "slug": "reactive",
+                  "path": "backend/programming/java/reactive",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Testing",
+                  "slug": "testing",
+                  "path": "backend/programming/java/testing",
+                  "blogCount": 4,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "name": "Python",
+              "slug": "python",
+              "path": "backend/programming/python",
+              "blogCount": 10,
+              "children": [
+                {
+                  "name": "Asyncio",
+                  "slug": "asyncio",
+                  "path": "backend/programming/python/asyncio",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Concurrency",
+                  "slug": "concurrency",
+                  "path": "backend/programming/python/concurrency",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Core Python",
+                  "slug": "core-python",
+                  "path": "backend/programming/python/core-python",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Design Patterns",
+                  "slug": "design-patterns",
+                  "path": "backend/programming/python/design-patterns",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Internals",
+                  "slug": "internals",
+                  "path": "backend/programming/python/internals",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Interview",
+                  "slug": "interview",
+                  "path": "backend/programming/python/interview",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Memory Management",
+                  "slug": "memory-management",
+                  "path": "backend/programming/python/memory-management",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Performance",
+                  "slug": "performance",
+                  "path": "backend/programming/python/performance",
+                  "blogCount": 1,
+                  "children": []
+                },
+                {
+                  "name": "Testing",
+                  "slug": "testing",
+                  "path": "backend/programming/python/testing",
+                  "blogCount": 1,
+                  "children": []
+                }
+              ]
             }
           ]
         },
@@ -497,53 +761,10 @@
           ]
         },
         {
-          "name": "Spring Boot",
-          "slug": "spring-boot",
-          "path": "backend/spring-boot",
-          "blogCount": 28,
-          "children": [
-            {
-              "name": "Batch",
-              "slug": "batch",
-              "path": "backend/spring-boot/batch",
-              "blogCount": 4,
-              "children": []
-            },
-            {
-              "name": "Boot",
-              "slug": "boot",
-              "path": "backend/spring-boot/boot",
-              "blogCount": 4,
-              "children": []
-            },
-            {
-              "name": "Core",
-              "slug": "core",
-              "path": "backend/spring-boot/core",
-              "blogCount": 5,
-              "children": []
-            },
-            {
-              "name": "Reactive",
-              "slug": "reactive",
-              "path": "backend/spring-boot/reactive",
-              "blogCount": 4,
-              "children": []
-            },
-            {
-              "name": "Security",
-              "slug": "security",
-              "path": "backend/spring-boot/security",
-              "blogCount": 4,
-              "children": []
-            }
-          ]
-        },
-        {
           "name": "Testing",
           "slug": "testing",
           "path": "backend/testing",
-          "blogCount": 16,
+          "blogCount": 11,
           "children": [
             {
               "name": "Contract Testing",
@@ -564,20 +785,6 @@
               "slug": "performance-testing",
               "path": "backend/testing/performance-testing",
               "blogCount": 3,
-              "children": []
-            },
-            {
-              "name": "Test Automation",
-              "slug": "test-automation",
-              "path": "backend/testing/test-automation",
-              "blogCount": 3,
-              "children": []
-            },
-            {
-              "name": "Unit Testing",
-              "slug": "unit-testing",
-              "path": "backend/testing/unit-testing",
-              "blogCount": 4,
               "children": []
             }
           ]

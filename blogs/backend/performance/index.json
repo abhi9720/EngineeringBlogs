@@ -89,71 +89,6 @@
       "path": "/blogs/backend/performance/scalability/auto-scaling-strategies"
     },
     {
-      "title": "Thread Dump Analysis",
-      "description": "Analyze Java thread dumps: deadlock detection, thread states, CPU spikes, and performance issue diagnosis",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "performance",
-        "profiling",
-        "thread-dump",
-        "java"
-      ],
-      "coverImage": "/images/thread-dump-analysis.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "performance",
-        "profiling"
-      ],
-      "slug": "thread-dump-analysis",
-      "path": "/blogs/backend/performance/profiling/thread-dump-analysis"
-    },
-    {
-      "title": "Java Profiling with JFR and Async Profiler",
-      "description": "Profile Java applications using JDK Flight Recorder and async-profiler for CPU, memory, and latency analysis",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "performance",
-        "profiling",
-        "jfr",
-        "async-profiler",
-        "java"
-      ],
-      "coverImage": "/images/java-profiling-jfr-async-profiler.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "performance",
-        "profiling"
-      ],
-      "slug": "java-profiling-jfr-async-profiler",
-      "path": "/blogs/backend/performance/profiling/java-profiling-jfr-async-profiler"
-    },
-    {
-      "title": "CPU and Memory Profiling",
-      "description": "Techniques for CPU and memory profiling: heap analysis, GC logging, leak detection, and performance bottlenecks",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "performance",
-        "profiling",
-        "cpu",
-        "memory",
-        "heap-analysis"
-      ],
-      "coverImage": "/images/cpu-memory-profiling.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "performance",
-        "profiling"
-      ],
-      "slug": "cpu-memory-profiling",
-      "path": "/blogs/backend/performance/profiling/cpu-memory-profiling"
-    },
-    {
       "title": "Lazy Loading vs Eager Loading",
       "description": "Compare lazy and eager loading strategies in JPA: fetch types, N+1 problem solutions, and performance trade-offs",
       "date": "2026-05-11",
@@ -174,29 +109,6 @@
       ],
       "slug": "lazy-loading-vs-eager-loading",
       "path": "/blogs/backend/performance/optimization/lazy-loading-vs-eager-loading"
-    },
-    {
-      "title": "Garbage Collection Tuning",
-      "description": "Tune JVM garbage collection: G1, ZGC, Shenandoah collectors, GC logs analysis, and latency optimization",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "performance",
-        "optimization",
-        "gc",
-        "g1",
-        "zgc",
-        "jvm"
-      ],
-      "coverImage": "/images/garbage-collection-tuning.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "performance",
-        "optimization"
-      ],
-      "slug": "garbage-collection-tuning",
-      "path": "/blogs/backend/performance/optimization/garbage-collection-tuning"
     },
     {
       "title": "Database Query Optimization",

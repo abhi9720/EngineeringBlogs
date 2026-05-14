@@ -14,7 +14,7 @@
         "system-design",
         "event-driven"
       ],
-      "coverImage": "/images/apache-kafka.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -36,7 +36,7 @@
         "system-design",
         "messaging"
       ],
-      "coverImage": "/images/message-queues.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -58,7 +58,7 @@
         "event-driven",
         "patterns"
       ],
-      "coverImage": "/images/pub-sub-model.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

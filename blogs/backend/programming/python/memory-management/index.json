@@ -1,0 +1,29 @@
+{
+  "name": "Memory Management",
+  "path": "/blogs/backend/programming/python/memory-management",
+  "blogs": [
+    {
+      "title": "Python Memory Management and Garbage Collection",
+      "description": "Deep dive into Python memory management: object allocation, reference counting, generational GC, memory profiling, and optimization",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "memory-management",
+        "gc",
+        "profiling",
+        "optimization"
+      ],
+      "coverImage": "/images/python-memory-management.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "memory-management"
+      ],
+      "slug": "python-memory-management",
+      "path": "/blogs/backend/programming/python/memory-management/python-memory-management"
+    }
+  ]
+}

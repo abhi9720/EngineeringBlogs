@@ -16,7 +16,7 @@
         "spring-security",
         "pkce"
       ],
-      "coverImage": "/images/oauth2-jwt.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

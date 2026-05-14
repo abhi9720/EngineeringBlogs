@@ -1,0 +1,29 @@
+{
+  "name": "Memory Management",
+  "path": "/blogs/backend/programming/golang/memory-management",
+  "blogs": [
+    {
+      "title": "Go Memory Management: Stack, Heap, Escape Analysis",
+      "description": "Deep dive into Go memory management: stack vs heap allocation, escape analysis, garbage collection, memory profiling, and optimization",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "memory-management",
+        "gc",
+        "escape-analysis",
+        "profiling"
+      ],
+      "coverImage": "/images/go-memory-management.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "memory-management"
+      ],
+      "slug": "go-memory-management",
+      "path": "/blogs/backend/programming/golang/memory-management/go-memory-management"
+    }
+  ]
+}

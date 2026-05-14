@@ -14,7 +14,7 @@
         "system-design",
         "ddd"
       ],
-      "coverImage": "/images/monolith-vs-microservices.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -36,7 +36,7 @@
         "patterns",
         "data"
       ],
-      "coverImage": "/images/event-sourcing.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -58,7 +58,7 @@
         "architecture",
         "event-sourcing"
       ],
-      "coverImage": "/images/cqrs.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -80,7 +80,7 @@
         "resilience4j",
         "patterns"
       ],
-      "coverImage": "/images/bulkhead-retry.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -102,7 +102,7 @@
         "system-design",
         "patterns"
       ],
-      "coverImage": "/images/saga-pattern.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -124,7 +124,7 @@
         "fault-tolerance",
         "patterns"
       ],
-      "coverImage": "/images/circuit-breaker.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -146,7 +146,7 @@
         "scalability",
         "patterns"
       ],
-      "coverImage": "/images/rate-limiting.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

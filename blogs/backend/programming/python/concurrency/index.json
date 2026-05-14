@@ -1,0 +1,30 @@
+{
+  "name": "Concurrency",
+  "path": "/blogs/backend/programming/python/concurrency",
+  "blogs": [
+    {
+      "title": "Python Concurrency: Threading, Multiprocessing, and AsyncIO",
+      "description": "Master Python concurrency: threading, multiprocessing, asyncio, GIL implications, and choosing the right concurrency model",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "concurrency",
+        "asyncio",
+        "threading",
+        "multiprocessing",
+        "gil"
+      ],
+      "coverImage": "/images/python-concurrency.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "concurrency"
+      ],
+      "slug": "python-concurrency",
+      "path": "/blogs/backend/programming/python/concurrency/python-concurrency"
+    }
+  ]
+}

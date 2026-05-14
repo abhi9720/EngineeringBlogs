@@ -1,0 +1,29 @@
+{
+  "name": "Performance",
+  "path": "/blogs/backend/programming/golang/performance",
+  "blogs": [
+    {
+      "title": "Go Performance Optimization and Profiling",
+      "description": "Practical Go performance optimization: profiling, benchmarking, memory optimization, concurrency tuning, and production monitoring",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "performance",
+        "profiling",
+        "benchmarking",
+        "optimization"
+      ],
+      "coverImage": "/images/go-performance.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "performance"
+      ],
+      "slug": "go-performance",
+      "path": "/blogs/backend/programming/golang/performance/go-performance"
+    }
+  ]
+}

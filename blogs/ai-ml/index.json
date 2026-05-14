@@ -1,10 +1,21 @@
 {
-  "name": "AI ML",
+  "name": "Ai Ml",
   "path": "/blogs/ai-ml",
   "blogs": [
     {
-      "tags": [],
-      "coverImage": "",
+      "title": "Reinforcement Learning Basics",
+      "description": "Understand reinforcement learning: RL framework, Q-learning, DQN, policy gradients, actor-critic, PPO, exploration vs exploitation, and real-world applications",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "reinforcement-learning",
+        "rl",
+        "q-learning",
+        "dqn",
+        "ppo",
+        "deep-learning"
+      ],
+      "coverImage": "/images/reinforcement-learning-basics.png",
       "draft": false,
       "category": "ai-ml",
       "hierarchy": [
@@ -14,8 +25,18 @@
       "path": "/blogs/ai-ml/08-advanced-topics/reinforcement-learning-basics"
     },
     {
-      "tags": [],
-      "coverImage": "",
+      "title": "Multimodal Models",
+      "description": "Understand multimodal AI: early/late fusion architectures, CLIP, vision-language models, audio processing, video understanding, and production applications",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "multimodal",
+        "vision-language",
+        "clip",
+        "deep-learning",
+        "ai-architecture"
+      ],
+      "coverImage": "/images/multimodal-models.png",
       "draft": false,
       "category": "ai-ml",
       "hierarchy": [
@@ -25,8 +46,18 @@
       "path": "/blogs/ai-ml/08-advanced-topics/multimodal-models"
     },
     {
-      "tags": [],
-      "coverImage": "",
+      "title": "LLM Evaluation Frameworks",
+      "description": "Master LLM evaluation: benchmarks, LLM-as-judge, custom evaluation suites, continuous evaluation, and production monitoring for AI systems",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "llm",
+        "evaluation",
+        "benchmarks",
+        "testing",
+        "ai-quality"
+      ],
+      "coverImage": "/images/llm-evaluation-frameworks.png",
       "draft": false,
       "category": "ai-ml",
       "hierarchy": [
@@ -36,8 +67,18 @@
       "path": "/blogs/ai-ml/08-advanced-topics/llm-evaluation-frameworks"
     },
     {
-      "tags": [],
-      "coverImage": "",
+      "title": "The Future of AI Systems",
+      "description": "Explore emerging AI trends: agentic systems, multimodal integration, specialized models, infrastructure evolution, and predictions for 2025-2030",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "ai",
+        "future-tech",
+        "agents",
+        "multimodal",
+        "trends"
+      ],
+      "coverImage": "/images/future-of-ai-systems.png",
       "draft": false,
       "category": "ai-ml",
       "hierarchy": [
@@ -47,8 +88,17 @@
       "path": "/blogs/ai-ml/08-advanced-topics/future-of-ai-systems"
     },
     {
-      "tags": [],
-      "coverImage": "",
+      "title": "Diffusion Models Explained",
+      "description": "Understand diffusion models: forward/reverse process, U-Net architecture, classifier-free guidance, latent diffusion, sampling strategies, and training",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "diffusion-models",
+        "generative-ai",
+        "stable-diffusion",
+        "deep-learning"
+      ],
+      "coverImage": "/images/diffusion-models.png",
       "draft": false,
       "category": "ai-ml",
       "hierarchy": [
@@ -120,8 +170,18 @@
       "path": "/blogs/ai-ml/07-production-ai-systems/mlops-introduction"
     },
     {
-      "tags": [],
-      "coverImage": "",
+      "title": "Guardrails and Safety in AI Systems",
+      "description": "Build safe AI systems: input/output guardrails, jailbreak prevention, safety pipelines, monitoring, and production safety patterns",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "ai-safety",
+        "guardrails",
+        "security",
+        "llm",
+        "production"
+      ],
+      "coverImage": "/images/guardrails-safety.png",
       "draft": false,
       "category": "ai-ml",
       "hierarchy": [
@@ -131,8 +191,19 @@
       "path": "/blogs/ai-ml/07-production-ai-systems/guardrails-safety"
     },
     {
-      "tags": [],
-      "coverImage": "",
+      "title": "Fine-Tuning Large Language Models",
+      "description": "Master LLM fine-tuning: full fine-tuning, LoRA, QLoRA, adapter methods, data preparation, training pipelines, evaluation, and production deployment",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "llm",
+        "fine-tuning",
+        "lora",
+        "qlora",
+        "transformers",
+        "deep-learning"
+      ],
+      "coverImage": "/images/fine-tuning-llms.png",
       "draft": false,
       "category": "ai-ml",
       "hierarchy": [
@@ -1487,489 +1558,6 @@
       "hierarchy": [],
       "slug": "00-roadmap",
       "path": "/blogs/ai-ml/00-roadmap"
-    },
-    {
-      "title": "Function Calling",
-      "description": "Mastering function calling with large language models",
-      "date": "2026-05-11",
-      "author": "<Author Name>",
-      "tags": [
-        "AI",
-        "Function Calling",
-        "LLM",
-        "API"
-      ],
-      "coverImage": "/images/function-calling.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "tools"
-      ],
-      "slug": "91-function-calling",
-      "path": "/blogs/ai-ml/tools/91-function-calling"
-    },
-    {
-      "title": "Tool Calling",
-      "description": "Implementing tool calling in AI applications for enhanced functionality",
-      "date": "2026-05-11",
-      "author": "<Author Name>",
-      "tags": [
-        "AI",
-        "Tool Calling",
-        "LLM",
-        "API Integration"
-      ],
-      "coverImage": "/images/tool-calling.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "tools"
-      ],
-      "slug": "90-tool-calling",
-      "path": "/blogs/ai-ml/tools/90-tool-calling"
-    },
-    {
-      "title": "RAG Optimization",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "RAG",
-        "Optimization",
-        "AI",
-        "Retrieval",
-        "Advanced"
-      ],
-      "coverImage": "/images/rag-optimization.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "rag"
-      ],
-      "slug": "90.rag-optimization",
-      "path": "/blogs/ai-ml/rag/90.rag-optimization"
-    },
-    {
-      "title": "Embeddings Explained",
-      "description": "Comprehensive guide to text and vector embeddings in AI",
-      "date": "2026-05-11",
-      "author": "<Author Name>",
-      "tags": [
-        "AI",
-        "Embeddings",
-        "Natural Language Processing",
-        "Machine Learning"
-      ],
-      "coverImage": "/images/embeddings-explained.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "rag"
-      ],
-      "slug": "89-embeddings-explained",
-      "path": "/blogs/ai-ml/rag/89-embeddings-explained"
-    },
-    {
-      "title": "Vector Databases",
-      "description": "Guide to vector databases for AI and machine learning applications",
-      "date": "2026-05-11",
-      "author": "<Author Name>",
-      "tags": [
-        "AI",
-        "Vector Database",
-        "Machine Learning",
-        "Data Storage"
-      ],
-      "coverImage": "/images/vector-databases.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "rag"
-      ],
-      "slug": "88-vector-databases",
-      "path": "/blogs/ai-ml/rag/88-vector-databases"
-    },
-    {
-      "title": "RAG Fundamentals",
-      "description": "Master Retrieval-Augmented Generation fundamentals for grounding AI responses with your data",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "RAG",
-        "Retrieval",
-        "AI",
-        "Knowledge Base",
-        "Ground Truth"
-      ],
-      "coverImage": "/images/rag-fundamentals.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "rag"
-      ],
-      "slug": "87a.rag-fundamentals",
-      "path": "/blogs/ai-ml/rag/87a.rag-fundamentals"
-    },
-    {
-      "title": "RAG Architecture Fundamentals",
-      "description": "Master Retrieval-Augmented Generation (RAG) architecture for building AI systems that leverage your own data",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "RAG",
-        "Retrieval",
-        "AI",
-        "Knowledge Base"
-      ],
-      "coverImage": "/images/rag-architecture.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "rag"
-      ],
-      "slug": "87-rag-architecture",
-      "path": "/blogs/ai-ml/rag/87-rag-architecture"
-    },
-    {
-      "title": "AI Agents Introduction",
-      "description": "Introduction to AI agents and their role in modern AI systems",
-      "date": "2026-05-11",
-      "author": "<Author Name>",
-      "tags": [
-        "AI",
-        "AI Agents",
-        "Autonomous Systems",
-        "Machine Learning"
-      ],
-      "coverImage": "/images/ai-agents-introduction.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "genai"
-      ],
-      "slug": "86-ai-agents-introduction",
-      "path": "/blogs/ai-ml/genai/86-ai-agents-introduction"
-    },
-    {
-      "title": "Building LLM Applications",
-      "description": "Build production-ready applications with large language models, from architecture to deployment and monitoring",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "Generative AI",
-        "LLM",
-        "Application Development",
-        "Production AI"
-      ],
-      "coverImage": "/images/building-llm-apps.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "genai"
-      ],
-      "slug": "85-building-llm-apps",
-      "path": "/blogs/ai-ml/genai/85-building-llm-apps"
-    },
-    {
-      "title": "Prompt Engineering Fundamentals",
-      "description": "Master the art of crafting effective prompts for AI language models with clear instructions, examples, and best practices",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "Generative AI",
-        "Prompt Engineering",
-        "LLM",
-        "AI"
-      ],
-      "coverImage": "/images/prompt-engineering.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "genai"
-      ],
-      "slug": "84-prompt-engineering",
-      "path": "/blogs/ai-ml/genai/84-prompt-engineering"
-    },
-    {
-      "title": "Introduction to LLMs",
-      "description": "Understand large language models, how they work, and their capabilities",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "LLM",
-        "Generative AI",
-        "GPT",
-        "Language Models",
-        "AI Fundamentals"
-      ],
-      "coverImage": "/images/intro-to-llms.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "genai"
-      ],
-      "slug": "83.intro-to-llms",
-      "path": "/blogs/ai-ml/genai/83.intro-to-llms"
-    },
-    {
-      "title": "What is Machine Learning?",
-      "description": "A comprehensive introduction to machine learning, its types, and real-world applications for beginners",
-      "date": "2026-05-11",
-      "author": "Abhishek Twiar",
-      "tags": [
-        "Machine Learning",
-        "AI",
-        "Fundamentals",
-        "Getting Started"
-      ],
-      "coverImage": "/images/what-is-machine-learning.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "fundamentals"
-      ],
-      "slug": "120.what-is-machine-learning",
-      "path": "/blogs/ai-ml/fundamentals/120.what-is-machine-learning"
-    },
-    {
-      "title": "Supervised Learning Fundamentals",
-      "description": "Master supervised learning algorithms including linear regression, logistic regression, and decision trees",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "Machine Learning",
-        "Supervised Learning",
-        "Regression",
-        "Classification"
-      ],
-      "coverImage": "/images/supervised-learning.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "fundamentals"
-      ],
-      "slug": "119.supervised-learning",
-      "path": "/blogs/ai-ml/fundamentals/119.supervised-learning"
-    },
-    {
-      "title": "Unsupervised Learning Fundamentals",
-      "description": "Learn clustering, dimensionality reduction, and finding patterns without labeled data",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "Machine Learning",
-        "Unsupervised Learning",
-        "Clustering",
-        "K-Means"
-      ],
-      "coverImage": "/images/unsupervised-learning.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "fundamentals"
-      ],
-      "slug": "118.unsupervised-learning",
-      "path": "/blogs/ai-ml/fundamentals/118.unsupervised-learning"
-    },
-    {
-      "title": "Neural Networks Introduction",
-      "description": "Understand the fundamentals of neural networks, backpropagation, and building your first ANN",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "Machine Learning",
-        "Neural Networks",
-        "Deep Learning",
-        "AI Fundamentals"
-      ],
-      "coverImage": "/images/neural-networks-intro.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "fundamentals"
-      ],
-      "slug": "117.neural-networks-intro",
-      "path": "/blogs/ai-ml/fundamentals/117.neural-networks-intro"
-    },
-    {
-      "title": "Fine-Tuning LLMs",
-      "description": "Master fine-tuning GPT and other LLMs with custom data for specialized tasks and improved performance",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "LLM Fine-Tuning",
-        "GPT",
-        "Custom Models",
-        "Expert AI"
-      ],
-      "coverImage": "/images/fine-tuning-llms.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "expert"
-      ],
-      "slug": "113.fine-tuning-llms",
-      "path": "/blogs/ai-ml/expert/113.fine-tuning-llms"
-    },
-    {
-      "title": "LLM Guardrails and Safety",
-      "description": "Implement guardrails for AI safety, content filtering, and responsible AI systems",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "AI Safety",
-        "Guardrails",
-        "Content Filter",
-        "Expert AI"
-      ],
-      "coverImage": "/images/guardrails-safety.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "expert"
-      ],
-      "slug": "112.guardrails-safety",
-      "path": "/blogs/ai-ml/expert/112.guardrails-safety"
-    },
-    {
-      "title": "MLOps for AI/ML in Production",
-      "description": "Learn MLOps practices for deploying, monitoring, and maintaining AI/ML models in production",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "MLOps",
-        "ML Engineering",
-        "Production AI",
-        "AI Operations"
-      ],
-      "coverImage": "/images/mlops-production.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "expert"
-      ],
-      "slug": "111.mlops-production",
-      "path": "/blogs/ai-ml/expert/111.mlops-production"
-    },
-    {
-      "title": "Convolutional Neural Networks (CNNs)",
-      "description": "Master CNNs for image recognition, convolutional layers, pooling, and transfer learning",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "Deep Learning",
-        "CNN",
-        "Computer Vision",
-        "Image Classification"
-      ],
-      "coverImage": "/images/convolutional-networks.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "deep-learning"
-      ],
-      "slug": "116.convolutional-networks",
-      "path": "/blogs/ai-ml/deep-learning/116.convolutional-networks"
-    },
-    {
-      "title": "Recurrent Neural Networks (RNNs)",
-      "description": "Master RNNs, LSTMs, and GRUs for sequence data, text processing, and time series",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "Deep Learning",
-        "RNN",
-        "LSTM",
-        "Sequence Models"
-      ],
-      "coverImage": "/images/recurrent-networks.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "deep-learning"
-      ],
-      "slug": "115.recurrent-networks",
-      "path": "/blogs/ai-ml/deep-learning/115.recurrent-networks"
-    },
-    {
-      "title": "Transformer Architecture Deep Dive",
-      "description": "Master the transformer architecture, attention mechanism, and build transformer models from scratch",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "Deep Learning",
-        "Transformers",
-        "Attention",
-        "BERT",
-        "GPT"
-      ],
-      "coverImage": "/images/transformers-architecture.png",
-      "draft": false,
-      "category": "ai-ml",
-      "hierarchy": [
-        "deep-learning"
-      ],
-      "slug": "114.transformers-architecture",
-      "path": "/blogs/ai-ml/deep-learning/114.transformers-architecture"
-    },
-    {
-      "title": "Neural Networks Introduction",
-      "description": "Understand fundamentals of neural networks and building your first ANN",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "Machine Learning",
-        "Neural Networks",
-        "Deep Learning"
-      ],
-      "coverImage": "/images/neural-networks-intro.png",
-      "draft": false,
-      "category": "ai-ml",
-      "difficulty": "intermediate",
-      "hierarchy": [
-        "deep-learning"
-      ],
-      "slug": "117-neural-networks-intro",
-      "path": "/blogs/ai-ml/deep-learning/117.neural-networks-intro"
-    },
-    {
-      "title": "Tool Calling",
-      "description": "Implementing tool calling in AI applications for enhanced functionality",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "AI",
-        "Tool Calling",
-        "LLM"
-      ],
-      "coverImage": "/images/tool-calling.png",
-      "draft": false,
-      "category": "ai-ml",
-      "difficulty": "advanced",
-      "hierarchy": [
-        "tools"
-      ],
-      "slug": "92-tool-calling",
-      "path": "/blogs/ai-ml/tools/92-tool-calling"
-    },
-    {
-      "title": "Vector Databases",
-      "description": "Guide to vector databases for AI and machine learning applications",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "AI",
-        "Vector Database",
-        "RAG"
-      ],
-      "coverImage": "/images/vector-databases.png",
-      "draft": false,
-      "category": "ai-ml",
-      "difficulty": "advanced",
-      "hierarchy": [
-        "rag"
-      ],
-      "slug": "88-vector-databases",
-      "path": "/blogs/ai-ml/rag/88.vector-databases"
     }
   ]
 }

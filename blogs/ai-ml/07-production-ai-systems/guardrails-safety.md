@@ -1,3 +1,18 @@
+---
+title: "Guardrails and Safety in AI Systems"
+description: "Build safe AI systems: input/output guardrails, jailbreak prevention, safety pipelines, monitoring, and production safety patterns"
+date: "2026-05-14"
+author: "Abhishek Tiwari"
+tags:
+  - ai-safety
+  - guardrails
+  - security
+  - llm
+  - production
+coverImage: "/images/guardrails-safety.png"
+draft: false
+---
+
 # Guardrails and Safety in AI Systems
 
 Building AI systems that are safe, responsible, and reliable is critical. This post covers the essential guardrails every production AI system needs.
@@ -65,11 +80,26 @@ class BehavioralGuardrail:
         return True
 ```
 
-## Implementing Safety Layers
+## Safety Pipeline Architecture
 
-```
-User Input → Input Validation → Content Filter → LLM Processing 
-    → Output Filter → Response Validator → User Response
+```mermaid
+graph LR
+    User["User Input"] --> InputVal["Input Validation"]
+    InputVal --> ContentFilter["Content Filter"]
+    ContentFilter --> LLM["LLM Processing"]
+    LLM --> OutputFilter["Output Filter"]
+    OutputFilter --> RespVal["Response Validator"]
+    RespVal --> Response["User Response"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class InputVal,ContentFilter,OutputFilter,RespVal blue
+    class User,Response green
+    class LLM pink
 ```
 
 ### Multi-Layer Approach
@@ -181,3 +211,5 @@ def test_guardrails():
 ## Summary
 
 Guardrails are essential for production AI systems. Implement multiple layers of protection, monitor continuously, and always fail safely when uncertain.
+
+Happy Coding

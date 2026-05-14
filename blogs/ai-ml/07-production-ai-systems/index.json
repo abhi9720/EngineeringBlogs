@@ -65,8 +65,18 @@
       "path": "/blogs/ai-ml/07-production-ai-systems/mlops-introduction"
     },
     {
-      "tags": [],
-      "coverImage": "",
+      "title": "Guardrails and Safety in AI Systems",
+      "description": "Build safe AI systems: input/output guardrails, jailbreak prevention, safety pipelines, monitoring, and production safety patterns",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "ai-safety",
+        "guardrails",
+        "security",
+        "llm",
+        "production"
+      ],
+      "coverImage": "/images/guardrails-safety.png",
       "draft": false,
       "category": "ai-ml",
       "hierarchy": [
@@ -76,8 +86,19 @@
       "path": "/blogs/ai-ml/07-production-ai-systems/guardrails-safety"
     },
     {
-      "tags": [],
-      "coverImage": "",
+      "title": "Fine-Tuning Large Language Models",
+      "description": "Master LLM fine-tuning: full fine-tuning, LoRA, QLoRA, adapter methods, data preparation, training pipelines, evaluation, and production deployment",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "llm",
+        "fine-tuning",
+        "lora",
+        "qlora",
+        "transformers",
+        "deep-learning"
+      ],
+      "coverImage": "/images/fine-tuning-llms.png",
       "draft": false,
       "category": "ai-ml",
       "hierarchy": [

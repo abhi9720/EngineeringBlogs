@@ -14,7 +14,7 @@
         "high-availability",
         "consistency"
       ],
-      "coverImage": "/images/replication-strategies.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

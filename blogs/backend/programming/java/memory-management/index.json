@@ -1,0 +1,29 @@
+{
+  "name": "Memory Management",
+  "path": "/blogs/backend/programming/java/memory-management",
+  "blogs": [
+    {
+      "title": "Java Memory Management and JVM Memory Model",
+      "description": "Deep dive into JVM memory: heap, stack, metaspace, object layout, garbage collection algorithms, and memory leak detection",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "memory-management",
+        "jvm",
+        "performance",
+        "gc"
+      ],
+      "coverImage": "/images/java-memory-management.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "memory-management"
+      ],
+      "slug": "java-memory-management",
+      "path": "/blogs/backend/programming/java/memory-management/java-memory-management"
+    }
+  ]
+}

@@ -14,7 +14,7 @@
         "patterns",
         "data"
       ],
-      "coverImage": "/images/event-sourcing.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -36,7 +36,7 @@
         "architecture",
         "event-sourcing"
       ],
-      "coverImage": "/images/cqrs.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

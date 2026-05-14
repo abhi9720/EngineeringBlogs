@@ -14,7 +14,7 @@
         "high-availability",
         "consistency"
       ],
-      "coverImage": "/images/replication-strategies.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -36,7 +36,7 @@
         "storage",
         "cloud"
       ],
-      "coverImage": "/images/blob-vs-block-storage.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -58,7 +58,7 @@
         "storage",
         "enterprise"
       ],
-      "coverImage": "/images/file-storage-systems.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -80,7 +80,7 @@
         "system-design",
         "storage"
       ],
-      "coverImage": "/images/object-storage-s3.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -102,7 +102,7 @@
         "system-design",
         "database"
       ],
-      "coverImage": "/images/document-stores.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -124,7 +124,7 @@
         "system-design",
         "storage"
       ],
-      "coverImage": "/images/key-value-stores.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -146,7 +146,7 @@
         "system-design",
         "storage"
       ],
-      "coverImage": "/images/sql-vs-nosql.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

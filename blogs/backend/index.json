@@ -3,90 +3,6 @@
   "path": "/blogs/backend",
   "blogs": [
     {
-      "title": "Test-Driven Development",
-      "description": "Master the TDD cycle (Red-Green-Refactor), real-world examples in Java, best practices, and common pitfalls",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "tdd",
-        "testing",
-        "methodology",
-        "java"
-      ],
-      "coverImage": "/images/test-driven-development.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "testing",
-        "unit-testing"
-      ],
-      "slug": "test-driven-development",
-      "path": "/blogs/backend/testing/unit-testing/test-driven-development"
-    },
-    {
-      "title": "Parameterized Tests",
-      "description": "Deep dive into JUnit 5 parameterized tests: @ValueSource, @CsvSource, @EnumSource, @MethodSource, and custom argument providers",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "junit",
-        "parameterized-tests",
-        "testing",
-        "java"
-      ],
-      "coverImage": "/images/parameterized-tests.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "testing",
-        "unit-testing"
-      ],
-      "slug": "parameterized-tests",
-      "path": "/blogs/backend/testing/unit-testing/parameterized-tests"
-    },
-    {
-      "title": "Mockito vs EasyMock",
-      "description": "In-depth comparison of Mockito and EasyMock mocking frameworks: API differences, verification, stubbing, and best practices",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "mockito",
-        "easymock",
-        "mocking",
-        "testing"
-      ],
-      "coverImage": "/images/mockito-vs-easymock.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "testing",
-        "unit-testing"
-      ],
-      "slug": "mockito-vs-easymock",
-      "path": "/blogs/backend/testing/unit-testing/mockito-vs-easymock"
-    },
-    {
-      "title": "JUnit 5 Deep Dive",
-      "description": "Comprehensive guide to JUnit 5: architecture, extensions, parameterized tests, assertions, and advanced features",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "junit",
-        "testing",
-        "java",
-        "unit-testing"
-      ],
-      "coverImage": "/images/junit-5-deep-dive.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "testing",
-        "unit-testing"
-      ],
-      "slug": "junit-5-deep-dive",
-      "path": "/blogs/backend/testing/unit-testing/junit-5-deep-dive"
-    },
-    {
       "title": "Software Testing Strategy",
       "description": "A comprehensive overview of software testing strategies: the test pyramid, testing quadrants, and building a balanced test suite",
       "date": "2026-05-11",
@@ -105,69 +21,6 @@
       ],
       "slug": "testing-strategy-overview",
       "path": "/blogs/backend/testing/testing-strategy-overview"
-    },
-    {
-      "title": "Flaky Test Management",
-      "description": "Detecting, diagnosing, and fixing flaky tests: common causes, quarantine strategies, and automated detection",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "flaky-tests",
-        "testing",
-        "quality",
-        "automation"
-      ],
-      "coverImage": "/images/flaky-test-management.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "testing",
-        "test-automation"
-      ],
-      "slug": "flaky-test-management",
-      "path": "/blogs/backend/testing/test-automation/flaky-test-management"
-    },
-    {
-      "title": "Code Coverage Metrics",
-      "description": "Code coverage strategies with JaCoCo: line, branch, and mutation coverage, thresholds, and CI integration",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "code-coverage",
-        "jacoco",
-        "testing",
-        "quality"
-      ],
-      "coverImage": "/images/code-coverage-metrics.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "testing",
-        "test-automation"
-      ],
-      "slug": "code-coverage-metrics",
-      "path": "/blogs/backend/testing/test-automation/code-coverage-metrics"
-    },
-    {
-      "title": "CI Pipeline Testing",
-      "description": "Integrating tests into CI/CD pipelines: test stages, parallel execution, flaky test handling, and quality gates",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "ci-cd",
-        "testing",
-        "devops",
-        "automation"
-      ],
-      "coverImage": "/images/ci-pipeline-testing.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "testing",
-        "test-automation"
-      ],
-      "slug": "ci-pipeline-testing",
-      "path": "/blogs/backend/testing/test-automation/ci-pipeline-testing"
     },
     {
       "title": "Load Testing Strategies",
@@ -296,6 +149,26 @@
       "path": "/blogs/backend/testing/integration-testing/database-testing-strategies"
     },
     {
+      "title": "Flaky Test Management",
+      "description": "Detecting, diagnosing, and fixing flaky tests: common causes, quarantine strategies, and automated detection",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "flaky-tests",
+        "testing",
+        "quality",
+        "automation"
+      ],
+      "coverImage": "/images/flaky-test-management.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing"
+      ],
+      "slug": "flaky-test-management",
+      "path": "/blogs/backend/testing/flaky-test-management"
+    },
+    {
       "title": "Pact Framework Basics",
       "description": "Getting started with Pact for contract testing: setup, DSL usage, verification, and integration with Spring Boot",
       "date": "2026-05-11",
@@ -338,585 +211,24 @@
       "path": "/blogs/backend/testing/contract-testing/consumer-driven-contracts"
     },
     {
-      "title": "Transactions and Propagation",
-      "description": "Deep dive into Spring transaction management, propagation levels, isolation, and real-world patterns for reliable data consistency",
+      "title": "Code Coverage Metrics",
+      "description": "Code coverage strategies with JaCoCo: line, branch, and mutation coverage, thresholds, and CI integration",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "spring-boot",
-        "transactions",
-        "database",
-        "jpa"
-      ],
-      "coverImage": "/images/transactions-and-propagation.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot"
-      ],
-      "slug": "transactions-and-propagation",
-      "path": "/blogs/backend/spring-boot/transactions-and-propagation"
-    },
-    {
-      "title": "Spring Security Filters",
-      "description": "Deep dive into Spring Security filter chain, custom filters, and how authentication flows through the pipeline",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "spring-security",
-        "filters",
-        "authentication"
-      ],
-      "coverImage": "/images/spring-security-filters.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot"
-      ],
-      "slug": "spring-security-filters",
-      "path": "/blogs/backend/spring-boot/spring-security-filters"
-    },
-    {
-      "title": "Spring Data JPA Basics",
-      "description": "Master Spring Data JPA from repositories to custom queries, understanding how Hibernate integrates with Spring",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "jpa",
-        "hibernate",
-        "database"
-      ],
-      "coverImage": "/images/spring-data-jpa-basics.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot"
-      ],
-      "slug": "spring-data-jpa-basics",
-      "path": "/blogs/backend/spring-boot/spring-data-jpa-basics"
-    },
-    {
-      "title": "Spring Security Testing",
-      "description": "Master security testing in Spring Boot applications: @WithMockUser, @WithUserDetails, security test annotations, and testing OAuth2 and method security",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "spring-security",
+        "code-coverage",
+        "jacoco",
         "testing",
-        "security-testing"
+        "quality"
       ],
-      "coverImage": "/images/spring-security-testing.png",
+      "coverImage": "/images/code-coverage-metrics.png",
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "spring-boot",
-        "security"
+        "testing"
       ],
-      "slug": "spring-security-testing",
-      "path": "/blogs/backend/spring-boot/security/spring-security-testing"
-    },
-    {
-      "title": "OAuth2 with Spring Security",
-      "description": "Implement OAuth2 authentication and authorization with Spring Security: authorization server, resource server, client registration, and JWT token handling",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "oauth2",
-        "spring-security",
-        "authentication"
-      ],
-      "coverImage": "/images/oauth2-with-spring-security.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "security"
-      ],
-      "slug": "oauth2-with-spring-security",
-      "path": "/blogs/backend/spring-boot/security/oauth2-with-spring-security"
-    },
-    {
-      "title": "Method-Level Security with Spring Security",
-      "description": "Master method-level security annotations: @PreAuthorize, @PostAuthorize, @Secured, @RolesAllowed, custom permission evaluators, and expression-based access control",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "spring-security",
-        "method-security",
-        "authorization"
-      ],
-      "coverImage": "/images/method-level-security.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "security"
-      ],
-      "slug": "method-level-security",
-      "path": "/blogs/backend/spring-boot/security/method-level-security"
-    },
-    {
-      "title": "CSRF and CORS Configuration in Spring Security",
-      "description": "Master CSRF protection and CORS configuration in Spring Security: when to use CSRF, CORS policies, preflight requests, and securing cross-origin requests",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "spring-security",
-        "csrf",
-        "cors"
-      ],
-      "coverImage": "/images/csrf-cors-config.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "security"
-      ],
-      "slug": "csrf-cors-config",
-      "path": "/blogs/backend/spring-boot/security/csrf-cors-config"
-    },
-    {
-      "title": "REST API Best Practices",
-      "description": "Design production-ready REST APIs with proper error handling, versioning, documentation, and security practices",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "rest-api",
-        "best-practices",
-        "web-services"
-      ],
-      "coverImage": "/images/rest-api-best-practices.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot"
-      ],
-      "slug": "rest-api-best-practices",
-      "path": "/blogs/backend/spring-boot/rest-api-best-practices"
-    },
-    {
-      "title": "Spring WebFlux Basics",
-      "description": "Learn Spring WebFlux: reactive controllers, functional endpoints, WebClient, reactive security, and building non-blocking REST APIs with Project Reactor",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "webflux",
-        "reactive",
-        "spring-web"
-      ],
-      "coverImage": "/images/spring-webflux-basics.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "reactive"
-      ],
-      "slug": "spring-webflux-basics",
-      "path": "/blogs/backend/spring-boot/reactive/spring-webflux-basics"
-    },
-    {
-      "title": "Reactive vs Imperative: When to Use Reactive Programming",
-      "description": "Compare reactive and imperative programming in Spring: performance characteristics, use cases, trade-offs, and decision framework for choosing between WebFlux and WebMVC",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "reactive",
-        "webflux",
-        "architecture"
-      ],
-      "coverImage": "/images/reactive-vs-imperative.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "reactive"
-      ],
-      "slug": "reactive-vs-imperative",
-      "path": "/blogs/backend/spring-boot/reactive/reactive-vs-imperative"
-    },
-    {
-      "title": "Reactive Streams in Practice",
-      "description": "Master Reactive Streams and backpressure in Spring: Project Reactor operators, error handling, backpressure strategies, and building resilient reactive pipelines",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "reactive",
-        "reactive-streams",
-        "backpressure"
-      ],
-      "coverImage": "/images/reactive-streams-in-practice.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "reactive"
-      ],
-      "slug": "reactive-streams-in-practice",
-      "path": "/blogs/backend/spring-boot/reactive/reactive-streams-in-practice"
-    },
-    {
-      "title": "R2DBC with Spring Data Reactive",
-      "description": "Master reactive database access with R2DBC and Spring Data: ReactiveCrudRepository, R2DBC configuration, queries, transactions, and performance optimization",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "r2dbc",
-        "reactive",
-        "spring-data"
-      ],
-      "coverImage": "/images/r2dbc-spring-data.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "reactive"
-      ],
-      "slug": "r2dbc-spring-data",
-      "path": "/blogs/backend/spring-boot/reactive/r2dbc-spring-data"
-    },
-    {
-      "title": "JWT Authentication",
-      "description": "Deep dive into JWT authentication internals, real-world use cases, trade-offs, and production considerations for Spring Boot applications",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "security",
-        "jwt",
-        "authentication"
-      ],
-      "coverImage": "/images/jwt-authentication.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot"
-      ],
-      "slug": "jwt-authentication",
-      "path": "/blogs/backend/spring-boot/jwt-authentication"
-    },
-    {
-      "title": "Exception Handling",
-      "description": "Master exception handling in Spring Boot with global error handling, custom exceptions, and production-ready patterns",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "exception-handling",
-        "error-handling",
-        "spring-mvc"
-      ],
-      "coverImage": "/images/exception-handling.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot"
-      ],
-      "slug": "exception-handling",
-      "path": "/blogs/backend/spring-boot/exception-handling"
-    },
-    {
-      "title": "Spring IoC and Dependency Injection Deep Dive",
-      "description": "Master the Spring IoC container and dependency injection patterns: constructor injection, setter injection, field injection, and advanced DI techniques",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "ioc",
-        "dependency-injection",
-        "spring-core"
-      ],
-      "coverImage": "/images/spring-ioc-di-deep-dive.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "core"
-      ],
-      "slug": "spring-ioc-di-deep-dive",
-      "path": "/blogs/backend/spring-boot/core/spring-ioc-di-deep-dive"
-    },
-    {
-      "title": "Spring Conditional Configuration",
-      "description": "Master Spring's @Conditional annotations: @ConditionalOnClass, @ConditionalOnProperty, @ConditionalOnBean, and creating custom conditions for intelligent bean registration",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "conditional-config",
-        "auto-configuration",
-        "spring-core"
-      ],
-      "coverImage": "/images/spring-conditional-config.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "core"
-      ],
-      "slug": "spring-conditional-config",
-      "path": "/blogs/backend/spring-boot/core/spring-conditional-config"
-    },
-    {
-      "title": "Spring Bean Lifecycle",
-      "description": "Deep dive into the Spring bean lifecycle: instantiation, property setting, initialization, destruction, and customizing with BeanPostProcessors",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "bean-lifecycle",
-        "spring-core",
-        "ioc"
-      ],
-      "coverImage": "/images/spring-bean-lifecycle.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "core"
-      ],
-      "slug": "spring-bean-lifecycle",
-      "path": "/blogs/backend/spring-boot/core/spring-bean-lifecycle"
-    },
-    {
-      "title": "Spring Profiles and Environment Abstraction",
-      "description": "Master Spring profiles and the environment abstraction: profile-specific configuration, property sources, conditional beans, and environment post-processing",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "profiles",
-        "environment",
-        "configuration"
-      ],
-      "coverImage": "/images/profiles-and-environment.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "core"
-      ],
-      "slug": "profiles-and-environment",
-      "path": "/blogs/backend/spring-boot/core/profiles-and-environment"
-    },
-    {
-      "title": "Configuration Properties in Spring Boot",
-      "description": "Master type-safe configuration with @ConfigurationProperties, property binding, validation, and advanced configuration techniques in Spring Boot",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "configuration",
-        "properties",
-        "externalized-config"
-      ],
-      "coverImage": "/images/configuration-properties.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "core"
-      ],
-      "slug": "configuration-properties",
-      "path": "/blogs/backend/spring-boot/core/configuration-properties"
-    },
-    {
-      "title": "Caching with Redis",
-      "description": "Master Redis caching in Spring Boot applications, from basic annotations to advanced patterns for high-performance systems",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "redis",
-        "caching",
-        "performance"
-      ],
-      "coverImage": "/images/caching-with-redis.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot"
-      ],
-      "slug": "caching-with-redis",
-      "path": "/blogs/backend/spring-boot/caching-with-redis"
-    },
-    {
-      "title": "Spring Boot Testing with Sliced Annotations",
-      "description": "Master Spring Boot testing with @WebMvcTest, @DataJpaTest, @JsonTest, and other slice annotations for focused, fast unit and integration tests",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "testing",
-        "spring-mvc",
-        "spring-data-jpa"
-      ],
-      "coverImage": "/images/spring-boot-testing.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "boot"
-      ],
-      "slug": "spring-boot-testing",
-      "path": "/blogs/backend/spring-boot/boot/spring-boot-testing"
-    },
-    {
-      "title": "Spring Boot Actuator",
-      "description": "Master Spring Boot Actuator: production-ready endpoints, health indicators, metrics, custom endpoints, and securing actuator endpoints",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "actuator",
-        "monitoring",
-        "observability"
-      ],
-      "coverImage": "/images/spring-actuator.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "boot"
-      ],
-      "slug": "spring-actuator",
-      "path": "/blogs/backend/spring-boot/boot/spring-actuator"
-    },
-    {
-      "title": "Creating Custom Spring Boot Starters",
-      "description": "Learn how to create custom Spring Boot starters: auto-configuration, starter modules, configuration metadata, and best practices for reusable components",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "starters",
-        "auto-configuration",
-        "spring-core"
-      ],
-      "coverImage": "/images/custom-starters.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "boot"
-      ],
-      "slug": "custom-starters",
-      "path": "/blogs/backend/spring-boot/boot/custom-starters"
-    },
-    {
-      "title": "Spring Boot Auto-Configuration Deep Dive",
-      "description": "Understand Spring Boot auto-configuration internals: @ConditionalOn*, spring.factories, custom auto-configuration, and how Spring Boot configures beans automatically",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "auto-configuration",
-        "spring-core",
-        "spring-boot-internals"
-      ],
-      "coverImage": "/images/auto-configuration-deep-dive.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "boot"
-      ],
-      "slug": "auto-configuration-deep-dive",
-      "path": "/blogs/backend/spring-boot/boot/auto-configuration-deep-dive"
-    },
-    {
-      "title": "Spring Batch Introduction",
-      "description": "Master Spring Batch fundamentals: JobRepository, JobLauncher, steps, readers, writers, and building robust batch processing applications",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "spring-batch",
-        "batch-processing",
-        "etl"
-      ],
-      "coverImage": "/images/spring-batch-introduction.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "batch"
-      ],
-      "slug": "spring-batch-introduction",
-      "path": "/blogs/backend/spring-boot/batch/spring-batch-introduction"
-    },
-    {
-      "title": "Scheduling with Quartz in Spring Boot",
-      "description": "Master Quartz scheduler integration with Spring Boot: job scheduling, triggers, persistence, clustering, cron expressions, and dynamic scheduling",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "quartz",
-        "scheduling",
-        "batch"
-      ],
-      "coverImage": "/images/scheduling-with-quartz.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "batch"
-      ],
-      "slug": "scheduling-with-quartz",
-      "path": "/blogs/backend/spring-boot/batch/scheduling-with-quartz"
-    },
-    {
-      "title": "Item Readers, Writers, and Processors in Spring Batch",
-      "description": "Comprehensive guide to Spring Batch item processing: built-in readers/writers, custom implementations, composite processors, and multi-file processing",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "spring-batch",
-        "item-reader",
-        "item-writer"
-      ],
-      "coverImage": "/images/item-readers-writers-processors.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "batch"
-      ],
-      "slug": "item-readers-writers-processors",
-      "path": "/blogs/backend/spring-boot/batch/item-readers-writers-processors"
-    },
-    {
-      "title": "Chunk-Oriented Processing in Spring Batch",
-      "description": "Deep dive into chunk-oriented processing: commit intervals, skip/retry within chunks, chunk listeners, multi-threaded steps, and partitioning",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "spring-batch",
-        "chunk-processing",
-        "batch-processing"
-      ],
-      "coverImage": "/images/chunk-oriented-processing.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "spring-boot",
-        "batch"
-      ],
-      "slug": "chunk-oriented-processing",
-      "path": "/blogs/backend/spring-boot/batch/chunk-oriented-processing"
+      "slug": "code-coverage-metrics",
+      "path": "/blogs/backend/testing/code-coverage-metrics"
     },
     {
       "title": "Backend Security Landscape",
@@ -1401,6 +713,947 @@
       "path": "/blogs/backend/search/alternative-search/meilisearch-getting-started"
     },
     {
+      "title": "Python Testing: unittest, pytest, Mocking, and Beyond",
+      "description": "Master Python testing: pytest, unittest, fixtures, mocking, property-based testing, integration testing, and test infrastructure",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "testing",
+        "pytest",
+        "unittest",
+        "mocking",
+        "tdd"
+      ],
+      "coverImage": "/images/python-testing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "testing"
+      ],
+      "slug": "python-testing",
+      "path": "/blogs/backend/programming/python/testing/python-testing"
+    },
+    {
+      "title": "Python for Backend Development",
+      "description": "Comprehensive guide to Python for backend development: language features, async, frameworks, performance, and production patterns",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "backend",
+        "web",
+        "async"
+      ],
+      "coverImage": "/images/python-for-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python"
+      ],
+      "slug": "python-for-backend",
+      "path": "/blogs/backend/programming/python/python-for-backend"
+    },
+    {
+      "title": "Python Performance Optimization",
+      "description": "Practical Python performance optimization: profiling, JIT, C extensions, data structures, async optimization, and production tuning",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "performance",
+        "optimization",
+        "profiling",
+        "cython"
+      ],
+      "coverImage": "/images/python-performance.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "performance"
+      ],
+      "slug": "python-performance",
+      "path": "/blogs/backend/programming/python/performance/python-performance"
+    },
+    {
+      "title": "Python Memory Management and Garbage Collection",
+      "description": "Deep dive into Python memory management: object allocation, reference counting, generational GC, memory profiling, and optimization",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "memory-management",
+        "gc",
+        "profiling",
+        "optimization"
+      ],
+      "coverImage": "/images/python-memory-management.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "memory-management"
+      ],
+      "slug": "python-memory-management",
+      "path": "/blogs/backend/programming/python/memory-management/python-memory-management"
+    },
+    {
+      "title": "Python Interview Questions and Answers",
+      "description": "Curated Python interview questions covering core Python, concurrency, internals, design patterns, and backend development for senior roles",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "interview",
+        "preparation",
+        "senior-engineer"
+      ],
+      "coverImage": "/images/python-interview.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "interview"
+      ],
+      "slug": "python-interview-questions",
+      "path": "/blogs/backend/programming/python/interview/python-interview-questions"
+    },
+    {
+      "title": "Python Internals: CPython, Bytecode, GIL, and Memory Model",
+      "description": "Deep dive into CPython internals: bytecode execution, GIL implementation, memory management, object model, and performance characteristics",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "internals",
+        "cpython",
+        "bytecode",
+        "gil",
+        "memory"
+      ],
+      "coverImage": "/images/python-internals.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "internals"
+      ],
+      "slug": "python-internals",
+      "path": "/blogs/backend/programming/python/internals/python-internals"
+    },
+    {
+      "title": "Python Design Patterns and Idioms",
+      "description": "Essential design patterns in Python: creational, structural, behavioral patterns with Pythonic idioms and production examples",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "design-patterns",
+        "architecture",
+        "idioms"
+      ],
+      "coverImage": "/images/python-design-patterns.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "design-patterns"
+      ],
+      "slug": "python-design-patterns",
+      "path": "/blogs/backend/programming/python/design-patterns/python-design-patterns"
+    },
+    {
+      "title": "Pydantic Validation Deep Dive",
+      "description": "Deep dive into Pydantic: model validation, field types, validators, custom types, model configuration, serialization, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "pydantic",
+        "validation",
+        "data-modeling"
+      ],
+      "coverImage": "/images/pydantic-validation-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "core-python"
+      ],
+      "slug": "pydantic-validation-deep-dive",
+      "path": "/blogs/backend/programming/python/core-python/pydantic-validation-deep-dive"
+    },
+    {
+      "title": "Python Concurrency: Threading, Multiprocessing, and AsyncIO",
+      "description": "Master Python concurrency: threading, multiprocessing, asyncio, GIL implications, and choosing the right concurrency model",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "concurrency",
+        "asyncio",
+        "threading",
+        "multiprocessing",
+        "gil"
+      ],
+      "coverImage": "/images/python-concurrency.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "concurrency"
+      ],
+      "slug": "python-concurrency",
+      "path": "/blogs/backend/programming/python/concurrency/python-concurrency"
+    },
+    {
+      "title": "Async Python with FastAPI",
+      "description": "Master asynchronous programming in Python with FastAPI: async/await, coroutines, event loops, async database drivers, and building high-concurrency APIs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "fastapi",
+        "async",
+        "performance"
+      ],
+      "coverImage": "/images/async-python-with-fastapi.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "asyncio"
+      ],
+      "slug": "async-python-with-fastapi",
+      "path": "/blogs/backend/programming/python/asyncio/async-python-with-fastapi"
+    },
+    {
+      "title": "Test-Driven Development",
+      "description": "Master the TDD cycle (Red-Green-Refactor), real-world examples in Java, best practices, and common pitfalls",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "tdd",
+        "testing",
+        "methodology",
+        "java"
+      ],
+      "coverImage": "/images/test-driven-development.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "testing"
+      ],
+      "slug": "test-driven-development",
+      "path": "/blogs/backend/programming/java/testing/test-driven-development"
+    },
+    {
+      "title": "Parameterized Tests",
+      "description": "Deep dive into JUnit 5 parameterized tests: @ValueSource, @CsvSource, @EnumSource, @MethodSource, and custom argument providers",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "junit",
+        "parameterized-tests",
+        "testing",
+        "java"
+      ],
+      "coverImage": "/images/parameterized-tests.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "testing"
+      ],
+      "slug": "parameterized-tests",
+      "path": "/blogs/backend/programming/java/testing/parameterized-tests"
+    },
+    {
+      "title": "Mockito vs EasyMock",
+      "description": "In-depth comparison of Mockito and EasyMock mocking frameworks: API differences, verification, stubbing, and best practices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "mockito",
+        "easymock",
+        "mocking",
+        "testing"
+      ],
+      "coverImage": "/images/mockito-vs-easymock.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "testing"
+      ],
+      "slug": "mockito-vs-easymock",
+      "path": "/blogs/backend/programming/java/testing/mockito-vs-easymock"
+    },
+    {
+      "title": "JUnit 5 Deep Dive",
+      "description": "Comprehensive guide to JUnit 5: architecture, extensions, parameterized tests, assertions, and advanced features",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "junit",
+        "testing",
+        "java",
+        "unit-testing"
+      ],
+      "coverImage": "/images/junit-5-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "testing"
+      ],
+      "slug": "junit-5-deep-dive",
+      "path": "/blogs/backend/programming/java/testing/junit-5-deep-dive"
+    },
+    {
+      "title": "Reactive Programming in Java",
+      "description": "Master reactive programming: Reactive Streams, Project Reactor, Mono, Flux, backpressure, and building reactive systems",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "reactive",
+        "reactor",
+        "webflux",
+        "asynchronous"
+      ],
+      "coverImage": "/images/java-reactive-programming.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "reactive"
+      ],
+      "slug": "java-reactive-programming",
+      "path": "/blogs/backend/programming/java/reactive/java-reactive-programming"
+    },
+    {
+      "title": "Thread Dump Analysis",
+      "description": "Analyze Java thread dumps: deadlock detection, thread states, CPU spikes, and performance issue diagnosis",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "performance",
+        "profiling",
+        "thread-dump",
+        "java"
+      ],
+      "coverImage": "/images/thread-dump-analysis.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "performance"
+      ],
+      "slug": "thread-dump-analysis",
+      "path": "/blogs/backend/programming/java/performance/thread-dump-analysis"
+    },
+    {
+      "title": "Java Profiling with JFR and Async Profiler",
+      "description": "Profile Java applications using JDK Flight Recorder and async-profiler for CPU, memory, and latency analysis",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "performance",
+        "profiling",
+        "jfr",
+        "async-profiler",
+        "java"
+      ],
+      "coverImage": "/images/java-profiling-jfr-async-profiler.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "performance"
+      ],
+      "slug": "java-profiling-jfr-async-profiler",
+      "path": "/blogs/backend/programming/java/performance/java-profiling-jfr-async-profiler"
+    },
+    {
+      "title": "Garbage Collection Tuning",
+      "description": "Tune JVM garbage collection: G1, ZGC, Shenandoah collectors, GC logs analysis, and latency optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "performance",
+        "optimization",
+        "gc",
+        "g1",
+        "zgc",
+        "jvm"
+      ],
+      "coverImage": "/images/garbage-collection-tuning.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "performance"
+      ],
+      "slug": "garbage-collection-tuning",
+      "path": "/blogs/backend/programming/java/performance/garbage-collection-tuning"
+    },
+    {
+      "title": "CPU and Memory Profiling",
+      "description": "Techniques for CPU and memory profiling: heap analysis, GC logging, leak detection, and performance bottlenecks",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "performance",
+        "profiling",
+        "cpu",
+        "memory",
+        "heap-analysis"
+      ],
+      "coverImage": "/images/cpu-memory-profiling.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "performance"
+      ],
+      "slug": "cpu-memory-profiling",
+      "path": "/blogs/backend/programming/java/performance/cpu-memory-profiling"
+    },
+    {
+      "title": "Java Memory Management and JVM Memory Model",
+      "description": "Deep dive into JVM memory: heap, stack, metaspace, object layout, garbage collection algorithms, and memory leak detection",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "memory-management",
+        "jvm",
+        "performance",
+        "gc"
+      ],
+      "coverImage": "/images/java-memory-management.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "memory-management"
+      ],
+      "slug": "java-memory-management",
+      "path": "/blogs/backend/programming/java/memory-management/java-memory-management"
+    },
+    {
+      "title": "GraalVM Native Images for Java Applications",
+      "description": "Master GraalVM native images: AOT compilation, reflection configuration, resource handling, native-image building, and deploying optimized JVM applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "graalvm",
+        "native-image",
+        "performance"
+      ],
+      "coverImage": "/images/graalvm-native-images.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "jvm"
+      ],
+      "slug": "graalvm-native-images",
+      "path": "/blogs/backend/programming/java/jvm/graalvm-native-images"
+    },
+    {
+      "title": "Java for Backend Development",
+      "description": "Comprehensive guide to Java for backend development: language features, ecosystem, concurrency, performance, and production patterns",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "backend",
+        "jvm",
+        "enterprise"
+      ],
+      "coverImage": "/images/java-for-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java"
+      ],
+      "slug": "java-for-backend",
+      "path": "/blogs/backend/programming/java/java-for-backend"
+    },
+    {
+      "title": "Java Interview Questions and Answers",
+      "description": "Curated Java interview questions covering core Java, concurrency, collections, JVM, memory management, and design patterns for senior engineering roles",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "interview",
+        "preparation",
+        "senior-engineer"
+      ],
+      "coverImage": "/images/java-interview.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "interview"
+      ],
+      "slug": "java-interview-questions",
+      "path": "/blogs/backend/programming/java/interview/java-interview-questions"
+    },
+    {
+      "title": "Strategy Pattern for Backend",
+      "description": "Implementing the Strategy pattern in backend applications: algorithm selection, dependency injection, and testability",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "strategy-pattern",
+        "design-patterns",
+        "spring-boot",
+        "oop"
+      ],
+      "coverImage": "/images/strategy-pattern-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "design-patterns"
+      ],
+      "slug": "strategy-pattern-backend",
+      "path": "/blogs/backend/programming/java/design-patterns/strategy-pattern-backend"
+    },
+    {
+      "title": "Proxy and Decorator Patterns",
+      "description": "Understanding Proxy and Decorator patterns: AOP proxies, Spring aspects, and transparent behavior wrapping",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "proxy-pattern",
+        "decorator-pattern",
+        "aop",
+        "spring-aspects"
+      ],
+      "coverImage": "/images/proxy-decorator-patterns.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "design-patterns"
+      ],
+      "slug": "proxy-decorator-patterns",
+      "path": "/blogs/backend/programming/java/design-patterns/proxy-decorator-patterns"
+    },
+    {
+      "title": "Observer Pattern in Event Systems",
+      "description": "Applying Observer pattern for event-driven systems: Spring events, message brokers, and reactive streams",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "observer-pattern",
+        "event-driven",
+        "spring-events",
+        "design-patterns"
+      ],
+      "coverImage": "/images/observer-pattern-event-systems.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "design-patterns"
+      ],
+      "slug": "observer-pattern-event-systems",
+      "path": "/blogs/backend/programming/java/design-patterns/observer-pattern-event-systems"
+    },
+    {
+      "title": "Factory Pattern with DI",
+      "description": "Combining Factory pattern with dependency injection for flexible object creation in Spring Boot applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "factory-pattern",
+        "dependency-injection",
+        "spring-boot",
+        "design-patterns"
+      ],
+      "coverImage": "/images/factory-pattern-di.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "design-patterns"
+      ],
+      "slug": "factory-pattern-di",
+      "path": "/blogs/backend/programming/java/design-patterns/factory-pattern-di"
+    },
+    {
+      "title": "Builder Pattern and Immutability",
+      "description": "Using Builder pattern for immutable objects: Lombok, generated builders, and thread-safe object construction",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "builder-pattern",
+        "immutability",
+        "lombok",
+        "design-patterns"
+      ],
+      "coverImage": "/images/builder-pattern-immutability.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "design-patterns"
+      ],
+      "slug": "builder-pattern-immutability",
+      "path": "/blogs/backend/programming/java/design-patterns/builder-pattern-immutability"
+    },
+    {
+      "title": "Kotlin for Backend Development",
+      "description": "Master Kotlin for backend development: coroutines, Ktor, Spring Boot with Kotlin, null safety, data classes, and building modern JVM services",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "kotlin",
+        "jvm",
+        "coroutines",
+        "ktor"
+      ],
+      "coverImage": "/images/kotlin-for-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "core-java"
+      ],
+      "slug": "kotlin-for-backend",
+      "path": "/blogs/backend/programming/java/core-java/kotlin-for-backend"
+    },
+    {
+      "title": "Java Concurrency and Multithreading",
+      "description": "Master Java concurrency: threads, synchronization, locks, executors, ForkJoinPool, completable future, and concurrent data structures",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "concurrency",
+        "multithreading",
+        "threads"
+      ],
+      "coverImage": "/images/java-concurrency.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "concurrency"
+      ],
+      "slug": "java-concurrency",
+      "path": "/blogs/backend/programming/java/concurrency/java-concurrency"
+    },
+    {
+      "title": "Java Collections Framework Deep Dive",
+      "description": "Master Java Collections: List, Set, Map, Queue implementations, performance characteristics, concurrency considerations, and choosing the right collection",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "collections",
+        "data-structures",
+        "performance"
+      ],
+      "coverImage": "/images/java-collections-framework.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "java",
+        "collections"
+      ],
+      "slug": "java-collections-framework",
+      "path": "/blogs/backend/programming/java/collections/java-collections-framework"
+    },
+    {
+      "title": "Go Testing: Unit Tests, Benchmarks, Fuzzing, and Beyond",
+      "description": "Master Go testing: testing package, table-driven tests, benchmarks, fuzzing, integration testing, and test infrastructure",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "testing",
+        "benchmarks",
+        "fuzzing",
+        "tdd"
+      ],
+      "coverImage": "/images/go-testing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "testing"
+      ],
+      "slug": "go-testing",
+      "path": "/blogs/backend/programming/golang/testing/go-testing"
+    },
+    {
+      "title": "Go Runtime: Scheduler, GC, and Internals",
+      "description": "Deep dive into Go runtime: GMP scheduler, garbage collector, memory allocator, network poller, and runtime internals",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "runtime",
+        "scheduler",
+        "gc",
+        "internals"
+      ],
+      "coverImage": "/images/go-runtime.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "runtime"
+      ],
+      "slug": "go-runtime-internals",
+      "path": "/blogs/backend/programming/golang/runtime/go-runtime-internals"
+    },
+    {
+      "title": "Go Performance Optimization and Profiling",
+      "description": "Practical Go performance optimization: profiling, benchmarking, memory optimization, concurrency tuning, and production monitoring",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "performance",
+        "profiling",
+        "benchmarking",
+        "optimization"
+      ],
+      "coverImage": "/images/go-performance.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "performance"
+      ],
+      "slug": "go-performance",
+      "path": "/blogs/backend/programming/golang/performance/go-performance"
+    },
+    {
+      "title": "Go Memory Management: Stack, Heap, Escape Analysis",
+      "description": "Deep dive into Go memory management: stack vs heap allocation, escape analysis, garbage collection, memory profiling, and optimization",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "memory-management",
+        "gc",
+        "escape-analysis",
+        "profiling"
+      ],
+      "coverImage": "/images/go-memory-management.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "memory-management"
+      ],
+      "slug": "go-memory-management",
+      "path": "/blogs/backend/programming/golang/memory-management/go-memory-management"
+    },
+    {
+      "title": "Go Interview Questions and Answers",
+      "description": "Curated Go interview questions covering goroutines, channels, interfaces, memory model, concurrency patterns, and backend development for senior roles",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "interview",
+        "preparation",
+        "senior-engineer"
+      ],
+      "coverImage": "/images/go-interview.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "interview"
+      ],
+      "slug": "go-interview-questions",
+      "path": "/blogs/backend/programming/golang/interview/go-interview-questions"
+    },
+    {
+      "title": "Go Goroutines: Anatomy and Internals",
+      "description": "Deep dive into goroutines: scheduler, stack management, lifecycle, GMP model, and building high-concurrency applications",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "goroutines",
+        "concurrency",
+        "scheduler",
+        "gmp"
+      ],
+      "coverImage": "/images/go-goroutines.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "goroutines"
+      ],
+      "slug": "go-goroutines-deep-dive",
+      "path": "/blogs/backend/programming/golang/goroutines/go-goroutines-deep-dive"
+    },
+    {
+      "title": "Go for Backend Development",
+      "description": "Comprehensive guide to Go for backend development: language features, concurrency model, standard library, performance, and production patterns",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "golang",
+        "backend",
+        "concurrency"
+      ],
+      "coverImage": "/images/golang-for-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang"
+      ],
+      "slug": "golang-for-backend",
+      "path": "/blogs/backend/programming/golang/golang-for-backend"
+    },
+    {
+      "title": "Go Design Patterns and Idioms",
+      "description": "Essential design patterns in Go: creational, structural, behavioral patterns adapted to Go's idioms and concurrency model",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "design-patterns",
+        "architecture",
+        "idioms",
+        "concurrency"
+      ],
+      "coverImage": "/images/go-design-patterns.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "design-patterns"
+      ],
+      "slug": "go-design-patterns",
+      "path": "/blogs/backend/programming/golang/design-patterns/go-design-patterns"
+    },
+    {
+      "title": "HTTP Request Routing in Go",
+      "description": "Deep dive into HTTP request routing in Go: standard library patterns, path parameters, middleware chaining, custom routers, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "http",
+        "routing",
+        "net-http"
+      ],
+      "coverImage": "/images/go-http-request-routing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "core-go"
+      ],
+      "slug": "go-http-request-routing",
+      "path": "/blogs/backend/programming/golang/core-go/go-http-request-routing"
+    },
+    {
+      "title": "Go Concurrency Patterns",
+      "description": "Master Go concurrency: goroutines, channels, select, sync primitives, worker pools, pipeline patterns, and building concurrent applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "concurrency",
+        "goroutines",
+        "channels"
+      ],
+      "coverImage": "/images/go-concurrency-patterns.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "concurrency"
+      ],
+      "slug": "go-concurrency-patterns",
+      "path": "/blogs/backend/programming/golang/concurrency/go-concurrency-patterns"
+    },
+    {
+      "title": "Go Channels: Patterns and Internals",
+      "description": "Deep dive into Go channels: internal implementation, buffered vs unbuffered, select, pipeline patterns, and production best practices",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "channels",
+        "concurrency",
+        "communication"
+      ],
+      "coverImage": "/images/go-channels.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "golang",
+        "channels"
+      ],
+      "slug": "go-channels-deep-dive",
+      "path": "/blogs/backend/programming/golang/channels/go-channels-deep-dive"
+    },
+    {
       "title": "Load Balancing Algorithms",
       "description": "Explore load balancing algorithms: round-robin, least connections, consistent hashing, and weighted distribution",
       "date": "2026-05-11",
@@ -1487,71 +1740,6 @@
       "path": "/blogs/backend/performance/scalability/auto-scaling-strategies"
     },
     {
-      "title": "Thread Dump Analysis",
-      "description": "Analyze Java thread dumps: deadlock detection, thread states, CPU spikes, and performance issue diagnosis",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "performance",
-        "profiling",
-        "thread-dump",
-        "java"
-      ],
-      "coverImage": "/images/thread-dump-analysis.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "performance",
-        "profiling"
-      ],
-      "slug": "thread-dump-analysis",
-      "path": "/blogs/backend/performance/profiling/thread-dump-analysis"
-    },
-    {
-      "title": "Java Profiling with JFR and Async Profiler",
-      "description": "Profile Java applications using JDK Flight Recorder and async-profiler for CPU, memory, and latency analysis",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "performance",
-        "profiling",
-        "jfr",
-        "async-profiler",
-        "java"
-      ],
-      "coverImage": "/images/java-profiling-jfr-async-profiler.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "performance",
-        "profiling"
-      ],
-      "slug": "java-profiling-jfr-async-profiler",
-      "path": "/blogs/backend/performance/profiling/java-profiling-jfr-async-profiler"
-    },
-    {
-      "title": "CPU and Memory Profiling",
-      "description": "Techniques for CPU and memory profiling: heap analysis, GC logging, leak detection, and performance bottlenecks",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "performance",
-        "profiling",
-        "cpu",
-        "memory",
-        "heap-analysis"
-      ],
-      "coverImage": "/images/cpu-memory-profiling.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "performance",
-        "profiling"
-      ],
-      "slug": "cpu-memory-profiling",
-      "path": "/blogs/backend/performance/profiling/cpu-memory-profiling"
-    },
-    {
       "title": "Lazy Loading vs Eager Loading",
       "description": "Compare lazy and eager loading strategies in JPA: fetch types, N+1 problem solutions, and performance trade-offs",
       "date": "2026-05-11",
@@ -1572,29 +1760,6 @@
       ],
       "slug": "lazy-loading-vs-eager-loading",
       "path": "/blogs/backend/performance/optimization/lazy-loading-vs-eager-loading"
-    },
-    {
-      "title": "Garbage Collection Tuning",
-      "description": "Tune JVM garbage collection: G1, ZGC, Shenandoah collectors, GC logs analysis, and latency optimization",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "performance",
-        "optimization",
-        "gc",
-        "g1",
-        "zgc",
-        "jvm"
-      ],
-      "coverImage": "/images/garbage-collection-tuning.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "performance",
-        "optimization"
-      ],
-      "slug": "garbage-collection-tuning",
-      "path": "/blogs/backend/performance/optimization/garbage-collection-tuning"
     },
     {
       "title": "Database Query Optimization",
@@ -2101,6 +2266,27 @@
       ],
       "slug": "service-discovery-eureka",
       "path": "/blogs/backend/microservices/service-discovery-eureka"
+    },
+    {
+      "title": "Retry and Circuit Breaker for HTTP Clients",
+      "description": "Implement Resilience4j retry, circuit breaker, rate limiter, and bulkhead patterns for resilient HTTP clients in Spring Boot",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "resilience4j",
+        "circuit-breaker",
+        "retry",
+        "fault-tolerance"
+      ],
+      "coverImage": "/images/retry-and-circuit-breaker-for-clients.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices"
+      ],
+      "slug": "retry-and-circuit-breaker-for-clients",
+      "path": "/blogs/backend/microservices/retry-and-circuit-breaker-for-clients"
     },
     {
       "title": "Strangler Fig Pattern for Legacy Migration",
@@ -2870,109 +3056,693 @@
       "path": "/blogs/backend/messaging/event-driven-architecture"
     },
     {
-      "title": "Pydantic Validation Deep Dive",
-      "description": "Deep dive into Pydantic: model validation, field types, validators, custom types, model configuration, serialization, and performance optimization",
+      "title": "Spring Security Testing",
+      "description": "Master security testing in Spring Boot applications: @WithMockUser, @WithUserDetails, security test annotations, and testing OAuth2 and method security",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "python",
-        "pydantic",
-        "validation",
-        "data-modeling"
+        "spring-boot",
+        "spring-security",
+        "testing",
+        "security-testing"
       ],
-      "coverImage": "/images/pydantic-validation-deep-dive.png",
+      "coverImage": "/images/spring-security-testing.png",
       "draft": false,
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "python"
+        "spring-boot",
+        "security"
       ],
-      "slug": "pydantic-validation-deep-dive",
-      "path": "/blogs/backend/frameworks/python/pydantic-validation-deep-dive"
+      "slug": "spring-security-testing",
+      "path": "/blogs/backend/frameworks/spring-boot/security/spring-security-testing"
     },
     {
-      "title": "Flask vs FastAPI: A Comprehensive Comparison",
-      "description": "Compare Flask and FastAPI Python frameworks: performance, type safety, async support, ecosystem, and choosing the right framework for your project",
+      "title": "OAuth2 with Spring Security",
+      "description": "Implement OAuth2 authentication and authorization with Spring Security: authorization server, resource server, client registration, and JWT token handling",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "python",
-        "flask",
-        "fastapi",
+        "spring-boot",
+        "oauth2",
+        "spring-security",
+        "authentication"
+      ],
+      "coverImage": "/images/oauth2-with-spring-security.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "security"
+      ],
+      "slug": "oauth2-with-spring-security",
+      "path": "/blogs/backend/frameworks/spring-boot/security/oauth2-with-spring-security"
+    },
+    {
+      "title": "Method-Level Security with Spring Security",
+      "description": "Master method-level security annotations: @PreAuthorize, @PostAuthorize, @Secured, @RolesAllowed, custom permission evaluators, and expression-based access control",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-security",
+        "method-security",
+        "authorization"
+      ],
+      "coverImage": "/images/method-level-security.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "security"
+      ],
+      "slug": "method-level-security",
+      "path": "/blogs/backend/frameworks/spring-boot/security/method-level-security"
+    },
+    {
+      "title": "CSRF and CORS Configuration in Spring Security",
+      "description": "Master CSRF protection and CORS configuration in Spring Security: when to use CSRF, CORS policies, preflight requests, and securing cross-origin requests",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-security",
+        "csrf",
+        "cors"
+      ],
+      "coverImage": "/images/csrf-cors-config.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "security"
+      ],
+      "slug": "csrf-cors-config",
+      "path": "/blogs/backend/frameworks/spring-boot/security/csrf-cors-config"
+    },
+    {
+      "title": "Spring WebFlux Basics",
+      "description": "Learn Spring WebFlux: reactive controllers, functional endpoints, WebClient, reactive security, and building non-blocking REST APIs with Project Reactor",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "webflux",
+        "reactive",
+        "spring-web"
+      ],
+      "coverImage": "/images/spring-webflux-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "reactive"
+      ],
+      "slug": "spring-webflux-basics",
+      "path": "/blogs/backend/frameworks/spring-boot/reactive/spring-webflux-basics"
+    },
+    {
+      "title": "Reactive vs Imperative: When to Use Reactive Programming",
+      "description": "Compare reactive and imperative programming in Spring: performance characteristics, use cases, trade-offs, and decision framework for choosing between WebFlux and WebMVC",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "reactive",
+        "webflux",
+        "architecture"
+      ],
+      "coverImage": "/images/reactive-vs-imperative.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "reactive"
+      ],
+      "slug": "reactive-vs-imperative",
+      "path": "/blogs/backend/frameworks/spring-boot/reactive/reactive-vs-imperative"
+    },
+    {
+      "title": "Reactive Streams in Practice",
+      "description": "Master Reactive Streams and backpressure in Spring: Project Reactor operators, error handling, backpressure strategies, and building resilient reactive pipelines",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "reactive",
+        "reactive-streams",
+        "backpressure"
+      ],
+      "coverImage": "/images/reactive-streams-in-practice.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "reactive"
+      ],
+      "slug": "reactive-streams-in-practice",
+      "path": "/blogs/backend/frameworks/spring-boot/reactive/reactive-streams-in-practice"
+    },
+    {
+      "title": "R2DBC with Spring Data Reactive",
+      "description": "Master reactive database access with R2DBC and Spring Data: ReactiveCrudRepository, R2DBC configuration, queries, transactions, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "r2dbc",
+        "reactive",
+        "spring-data"
+      ],
+      "coverImage": "/images/r2dbc-spring-data.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "reactive"
+      ],
+      "slug": "r2dbc-spring-data",
+      "path": "/blogs/backend/frameworks/spring-boot/reactive/r2dbc-spring-data"
+    },
+    {
+      "title": "JWT Authentication",
+      "description": "Deep dive into JWT authentication internals, real-world use cases, trade-offs, and production considerations for Spring Boot applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "security",
+        "jwt",
+        "authentication"
+      ],
+      "coverImage": "/images/jwt-authentication.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot"
+      ],
+      "slug": "jwt-authentication",
+      "path": "/blogs/backend/frameworks/spring-boot/jwt-authentication"
+    },
+    {
+      "title": "Caching with Redis",
+      "description": "Master Redis caching in Spring Boot applications, from basic annotations to advanced patterns for high-performance systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "redis",
+        "caching",
         "performance"
       ],
-      "coverImage": "/images/flask-vs-fastapi.png",
+      "coverImage": "/images/caching-with-redis.png",
       "draft": false,
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "python"
+        "spring-boot"
       ],
-      "slug": "flask-vs-fastapi",
-      "path": "/blogs/backend/frameworks/python/flask-vs-fastapi"
+      "slug": "caching-with-redis",
+      "path": "/blogs/backend/frameworks/spring-boot/caching-with-redis"
     },
     {
-      "title": "FastAPI Basics",
-      "description": "Master FastAPI framework: path operations, Pydantic models, dependency injection, async support, WebSocket, and building high-performance Python APIs",
+      "title": "Spring Boot Testing with Sliced Annotations",
+      "description": "Master Spring Boot testing with @WebMvcTest, @DataJpaTest, @JsonTest, and other slice annotations for focused, fast unit and integration tests",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "python",
-        "fastapi",
-        "pydantic",
-        "async"
+        "spring-boot",
+        "testing",
+        "spring-mvc",
+        "spring-data-jpa"
       ],
-      "coverImage": "/images/fastapi-basics.png",
+      "coverImage": "/images/spring-boot-testing.png",
       "draft": false,
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "python"
+        "spring-boot",
+        "boot"
       ],
-      "slug": "fastapi-basics",
-      "path": "/blogs/backend/frameworks/python/fastapi-basics"
+      "slug": "spring-boot-testing",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/spring-boot-testing"
     },
     {
-      "title": "Django REST Framework",
-      "description": "Master Django REST Framework: views, serializers, authentication, permissions, viewsets, routers, and building production-ready REST APIs with Django",
+      "title": "Spring Boot Actuator",
+      "description": "Master Spring Boot Actuator: production-ready endpoints, health indicators, metrics, custom endpoints, and securing actuator endpoints",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "python",
-        "django",
+        "spring-boot",
+        "actuator",
+        "monitoring",
+        "observability"
+      ],
+      "coverImage": "/images/spring-actuator.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "boot"
+      ],
+      "slug": "spring-actuator",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/spring-actuator"
+    },
+    {
+      "title": "Creating Custom Spring Boot Starters",
+      "description": "Learn how to create custom Spring Boot starters: auto-configuration, starter modules, configuration metadata, and best practices for reusable components",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "starters",
+        "auto-configuration",
+        "spring-core"
+      ],
+      "coverImage": "/images/custom-starters.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "boot"
+      ],
+      "slug": "custom-starters",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/custom-starters"
+    },
+    {
+      "title": "Spring Boot Auto-Configuration Deep Dive",
+      "description": "Understand Spring Boot auto-configuration internals: @ConditionalOn*, spring.factories, custom auto-configuration, and how Spring Boot configures beans automatically",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "auto-configuration",
+        "spring-core",
+        "spring-boot-internals"
+      ],
+      "coverImage": "/images/auto-configuration-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "boot"
+      ],
+      "slug": "auto-configuration-deep-dive",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/auto-configuration-deep-dive"
+    },
+    {
+      "title": "Spring Batch Introduction",
+      "description": "Master Spring Batch fundamentals: JobRepository, JobLauncher, steps, readers, writers, and building robust batch processing applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-batch",
+        "batch-processing",
+        "etl"
+      ],
+      "coverImage": "/images/spring-batch-introduction.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "spring-batch-introduction",
+      "path": "/blogs/backend/frameworks/spring-boot/batch/spring-batch-introduction"
+    },
+    {
+      "title": "Scheduling with Quartz in Spring Boot",
+      "description": "Master Quartz scheduler integration with Spring Boot: job scheduling, triggers, persistence, clustering, cron expressions, and dynamic scheduling",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "quartz",
+        "scheduling",
+        "batch"
+      ],
+      "coverImage": "/images/scheduling-with-quartz.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "scheduling-with-quartz",
+      "path": "/blogs/backend/frameworks/spring-boot/batch/scheduling-with-quartz"
+    },
+    {
+      "title": "Item Readers, Writers, and Processors in Spring Batch",
+      "description": "Comprehensive guide to Spring Batch item processing: built-in readers/writers, custom implementations, composite processors, and multi-file processing",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-batch",
+        "item-reader",
+        "item-writer"
+      ],
+      "coverImage": "/images/item-readers-writers-processors.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "item-readers-writers-processors",
+      "path": "/blogs/backend/frameworks/spring-boot/batch/item-readers-writers-processors"
+    },
+    {
+      "title": "Chunk-Oriented Processing in Spring Batch",
+      "description": "Deep dive into chunk-oriented processing: commit intervals, skip/retry within chunks, chunk listeners, multi-threaded steps, and partitioning",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-batch",
+        "chunk-processing",
+        "batch-processing"
+      ],
+      "coverImage": "/images/chunk-oriented-processing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "chunk-oriented-processing",
+      "path": "/blogs/backend/frameworks/spring-boot/batch/chunk-oriented-processing"
+    },
+    {
+      "title": "WebClient vs RestTemplate Comparison",
+      "description": "Deep comparison of WebClient and RestTemplate for HTTP communication in Spring Boot: performance, API design, and migration strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "webclient",
+        "resttemplate",
+        "http-client",
+        "reactive"
+      ],
+      "coverImage": "/images/webclient-vs-resttemplate.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "webclient-vs-resttemplate",
+      "path": "/blogs/backend/frameworks/spring/webclient-vs-resttemplate"
+    },
+    {
+      "title": "Transactions and Propagation",
+      "description": "Deep dive into Spring transaction management, propagation levels, isolation, and real-world patterns for reliable data consistency",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "transactions",
+        "database",
+        "jpa"
+      ],
+      "coverImage": "/images/transactions-and-propagation.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "transactions-and-propagation",
+      "path": "/blogs/backend/frameworks/spring/transactions-and-propagation"
+    },
+    {
+      "title": "Spring Security Filters",
+      "description": "Deep dive into Spring Security filter chain, custom filters, and how authentication flows through the pipeline",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-security",
+        "filters",
+        "authentication"
+      ],
+      "coverImage": "/images/spring-security-filters.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-security-filters",
+      "path": "/blogs/backend/frameworks/spring/spring-security-filters"
+    },
+    {
+      "title": "Spring IoC and Dependency Injection Deep Dive",
+      "description": "Master the Spring IoC container and dependency injection patterns: constructor injection, setter injection, field injection, and advanced DI techniques",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "ioc",
+        "dependency-injection",
+        "spring-core"
+      ],
+      "coverImage": "/images/spring-ioc-di-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-ioc-di-deep-dive",
+      "path": "/blogs/backend/frameworks/spring/spring-ioc-di-deep-dive"
+    },
+    {
+      "title": "Spring Data JPA Basics",
+      "description": "Master Spring Data JPA from repositories to custom queries, understanding how Hibernate integrates with Spring",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "jpa",
+        "hibernate",
+        "database"
+      ],
+      "coverImage": "/images/spring-data-jpa-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-data-jpa-basics",
+      "path": "/blogs/backend/frameworks/spring/spring-data-jpa-basics"
+    },
+    {
+      "title": "Spring Conditional Configuration",
+      "description": "Master Spring's @Conditional annotations: @ConditionalOnClass, @ConditionalOnProperty, @ConditionalOnBean, and creating custom conditions for intelligent bean registration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "conditional-config",
+        "auto-configuration",
+        "spring-core"
+      ],
+      "coverImage": "/images/spring-conditional-config.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-conditional-config",
+      "path": "/blogs/backend/frameworks/spring/spring-conditional-config"
+    },
+    {
+      "title": "Spring Bean Lifecycle",
+      "description": "Deep dive into the Spring bean lifecycle: instantiation, property setting, initialization, destruction, and customizing with BeanPostProcessors",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "bean-lifecycle",
+        "spring-core",
+        "ioc"
+      ],
+      "coverImage": "/images/spring-bean-lifecycle.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "spring-bean-lifecycle",
+      "path": "/blogs/backend/frameworks/spring/spring-bean-lifecycle"
+    },
+    {
+      "title": "REST API Best Practices",
+      "description": "Design production-ready REST APIs with proper error handling, versioning, documentation, and security practices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
         "rest-api",
-        "drf"
+        "best-practices",
+        "web-services"
       ],
-      "coverImage": "/images/django-rest-framework.png",
+      "coverImage": "/images/rest-api-best-practices.png",
       "draft": false,
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "python"
+        "spring"
       ],
-      "slug": "django-rest-framework",
-      "path": "/blogs/backend/frameworks/python/django-rest-framework"
+      "slug": "rest-api-best-practices",
+      "path": "/blogs/backend/frameworks/spring/rest-api-best-practices"
     },
     {
-      "title": "Async Python with FastAPI",
-      "description": "Master asynchronous programming in Python with FastAPI: async/await, coroutines, event loops, async database drivers, and building high-concurrency APIs",
+      "title": "Spring Profiles and Environment Abstraction",
+      "description": "Master Spring profiles and the environment abstraction: profile-specific configuration, property sources, conditional beans, and environment post-processing",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "python",
-        "fastapi",
-        "async",
-        "performance"
+        "spring-boot",
+        "profiles",
+        "environment",
+        "configuration"
       ],
-      "coverImage": "/images/async-python-with-fastapi.png",
+      "coverImage": "/images/profiles-and-environment.png",
       "draft": false,
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "python"
+        "spring"
       ],
-      "slug": "async-python-with-fastapi",
-      "path": "/blogs/backend/frameworks/python/async-python-with-fastapi"
+      "slug": "profiles-and-environment",
+      "path": "/blogs/backend/frameworks/spring/profiles-and-environment"
+    },
+    {
+      "title": "Feign Client Deep Dive",
+      "description": "Master Feign configuration, interceptors, error handling, and advanced patterns for declarative HTTP clients in Spring Cloud",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "feign",
+        "spring-cloud",
+        "http-client"
+      ],
+      "coverImage": "/images/feign-client-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "feign-client-deep-dive",
+      "path": "/blogs/backend/frameworks/spring/feign-client-deep-dive"
+    },
+    {
+      "title": "Exception Handling",
+      "description": "Master exception handling in Spring Boot with global error handling, custom exceptions, and production-ready patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "exception-handling",
+        "error-handling",
+        "spring-mvc"
+      ],
+      "coverImage": "/images/exception-handling.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "exception-handling",
+      "path": "/blogs/backend/frameworks/spring/exception-handling"
+    },
+    {
+      "title": "Consuming REST APIs in Spring Boot",
+      "description": "Master RestTemplate, WebClient, and Feign for consuming REST APIs in Spring Boot applications with production patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "rest-api",
+        "webclient",
+        "feign",
+        "resttemplate"
+      ],
+      "coverImage": "/images/consuming-rest-apis.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "consuming-rest-apis",
+      "path": "/blogs/backend/frameworks/spring/consuming-rest-apis"
+    },
+    {
+      "title": "Configuration Properties in Spring Boot",
+      "description": "Master type-safe configuration with @ConfigurationProperties, property binding, validation, and advanced configuration techniques in Spring Boot",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "configuration",
+        "properties",
+        "externalized-config"
+      ],
+      "coverImage": "/images/configuration-properties.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring"
+      ],
+      "slug": "configuration-properties",
+      "path": "/blogs/backend/frameworks/spring/configuration-properties"
+    },
+    {
+      "title": "Quarkus vs Spring Boot: A Comprehensive Comparison",
+      "description": "Compare Quarkus and Spring Boot frameworks: startup time, memory usage, developer experience, extensions ecosystem, and choosing the right Java framework",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "quarkus",
+        "spring-boot",
+        "comparison"
+      ],
+      "coverImage": "/images/quarkus-vs-spring-boot.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks"
+      ],
+      "slug": "quarkus-vs-spring-boot",
+      "path": "/blogs/backend/frameworks/quarkus-vs-spring-boot"
     },
     {
       "title": "Node.js Event Loop Deep Dive",
@@ -2989,11 +3759,10 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "frameworks",
-        "nodejs"
+        "frameworks"
       ],
       "slug": "nodejs-event-loop-deep-dive",
-      "path": "/blogs/backend/frameworks/nodejs/nodejs-event-loop-deep-dive"
+      "path": "/blogs/backend/frameworks/nodejs-event-loop-deep-dive"
     },
     {
       "title": "NestJS Architecture",
@@ -3011,52 +3780,10 @@
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "nodejs"
+        "nestjs"
       ],
       "slug": "nestjs-architecture",
-      "path": "/blogs/backend/frameworks/nodejs/nestjs-architecture"
-    },
-    {
-      "title": "Fastify vs Express: A Comprehensive Comparison",
-      "description": "Compare Fastify and Express.js frameworks: performance, developer experience, plugin systems, serialization, and choosing the right framework for your project",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "nodejs",
-        "express",
-        "fastify",
-        "performance"
-      ],
-      "coverImage": "/images/fastify-vs-express.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "frameworks",
-        "nodejs"
-      ],
-      "slug": "fastify-vs-express",
-      "path": "/blogs/backend/frameworks/nodejs/fastify-vs-express"
-    },
-    {
-      "title": "Express.js Basics",
-      "description": "Master Express.js framework: routing, middleware, error handling, request/response objects, and building production-ready REST APIs with Node.js",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "nodejs",
-        "express",
-        "rest-api",
-        "javascript"
-      ],
-      "coverImage": "/images/express-js-basics.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "frameworks",
-        "nodejs"
-      ],
-      "slug": "express-js-basics",
-      "path": "/blogs/backend/frameworks/nodejs/express-js-basics"
+      "path": "/blogs/backend/frameworks/nestjs/nestjs-architecture"
     },
     {
       "title": "Dependency Injection in NestJS",
@@ -3074,31 +3801,10 @@
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "nodejs"
+        "nestjs"
       ],
       "slug": "dependency-injection-in-nestjs",
-      "path": "/blogs/backend/frameworks/nodejs/dependency-injection-in-nestjs"
-    },
-    {
-      "title": "Quarkus vs Spring Boot: A Comprehensive Comparison",
-      "description": "Compare Quarkus and Spring Boot frameworks: startup time, memory usage, developer experience, extensions ecosystem, and choosing the right Java framework",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "java",
-        "quarkus",
-        "spring-boot",
-        "comparison"
-      ],
-      "coverImage": "/images/quarkus-vs-spring-boot.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "frameworks",
-        "jvm-ecosystem"
-      ],
-      "slug": "quarkus-vs-spring-boot",
-      "path": "/blogs/backend/frameworks/jvm-ecosystem/quarkus-vs-spring-boot"
+      "path": "/blogs/backend/frameworks/nestjs/dependency-injection-in-nestjs"
     },
     {
       "title": "Micronaut: Compile-Time DI Framework",
@@ -3115,95 +3821,10 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "frameworks",
-        "jvm-ecosystem"
+        "frameworks"
       ],
       "slug": "micronaut-basics",
-      "path": "/blogs/backend/frameworks/jvm-ecosystem/micronaut-basics"
-    },
-    {
-      "title": "Kotlin for Backend Development",
-      "description": "Master Kotlin for backend development: coroutines, Ktor, Spring Boot with Kotlin, null safety, data classes, and building modern JVM services",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "kotlin",
-        "jvm",
-        "coroutines",
-        "ktor"
-      ],
-      "coverImage": "/images/kotlin-for-backend.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "frameworks",
-        "jvm-ecosystem"
-      ],
-      "slug": "kotlin-for-backend",
-      "path": "/blogs/backend/frameworks/jvm-ecosystem/kotlin-for-backend"
-    },
-    {
-      "title": "GraalVM Native Images for Java Applications",
-      "description": "Master GraalVM native images: AOT compilation, reflection configuration, resource handling, native-image building, and deploying optimized JVM applications",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "java",
-        "graalvm",
-        "native-image",
-        "performance"
-      ],
-      "coverImage": "/images/graalvm-native-images.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "frameworks",
-        "jvm-ecosystem"
-      ],
-      "slug": "graalvm-native-images",
-      "path": "/blogs/backend/frameworks/jvm-ecosystem/graalvm-native-images"
-    },
-    {
-      "title": "HTTP Request Routing in Go",
-      "description": "Deep dive into HTTP request routing in Go: standard library patterns, path parameters, middleware chaining, custom routers, and performance optimization",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "go",
-        "http",
-        "routing",
-        "net-http"
-      ],
-      "coverImage": "/images/go-http-request-routing.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "frameworks",
-        "go"
-      ],
-      "slug": "go-http-request-routing",
-      "path": "/blogs/backend/frameworks/go/go-http-request-routing"
-    },
-    {
-      "title": "Go Concurrency Patterns",
-      "description": "Master Go concurrency: goroutines, channels, select, sync primitives, worker pools, pipeline patterns, and building concurrent applications",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "go",
-        "concurrency",
-        "goroutines",
-        "channels"
-      ],
-      "coverImage": "/images/go-concurrency-patterns.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "frameworks",
-        "go"
-      ],
-      "slug": "go-concurrency-patterns",
-      "path": "/blogs/backend/frameworks/go/go-concurrency-patterns"
+      "path": "/blogs/backend/frameworks/micronaut-basics"
     },
     {
       "title": "Gin Framework Basics",
@@ -3221,10 +3842,92 @@
       "category": "backend",
       "hierarchy": [
         "frameworks",
-        "go"
+        "gin"
       ],
       "slug": "gin-framework-basics",
-      "path": "/blogs/backend/frameworks/go/gin-framework-basics"
+      "path": "/blogs/backend/frameworks/gin/gin-framework-basics"
+    },
+    {
+      "title": "Flask vs FastAPI: A Comprehensive Comparison",
+      "description": "Compare Flask and FastAPI Python frameworks: performance, type safety, async support, ecosystem, and choosing the right framework for your project",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "flask",
+        "fastapi",
+        "performance"
+      ],
+      "coverImage": "/images/flask-vs-fastapi.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks"
+      ],
+      "slug": "flask-vs-fastapi",
+      "path": "/blogs/backend/frameworks/flask-vs-fastapi"
+    },
+    {
+      "title": "Fastify vs Express: A Comprehensive Comparison",
+      "description": "Compare Fastify and Express.js frameworks: performance, developer experience, plugin systems, serialization, and choosing the right framework for your project",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "express",
+        "fastify",
+        "performance"
+      ],
+      "coverImage": "/images/fastify-vs-express.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks"
+      ],
+      "slug": "fastify-vs-express",
+      "path": "/blogs/backend/frameworks/fastify-vs-express"
+    },
+    {
+      "title": "FastAPI Basics",
+      "description": "Master FastAPI framework: path operations, Pydantic models, dependency injection, async support, WebSocket, and building high-performance Python APIs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "fastapi",
+        "pydantic",
+        "async"
+      ],
+      "coverImage": "/images/fastapi-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "fastapi"
+      ],
+      "slug": "fastapi-basics",
+      "path": "/blogs/backend/frameworks/fastapi/fastapi-basics"
+    },
+    {
+      "title": "Express.js Basics",
+      "description": "Master Express.js framework: routing, middleware, error handling, request/response objects, and building production-ready REST APIs with Node.js",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "express",
+        "rest-api",
+        "javascript"
+      ],
+      "coverImage": "/images/express-js-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "expressjs"
+      ],
+      "slug": "express-js-basics",
+      "path": "/blogs/backend/frameworks/expressjs/express-js-basics"
     },
     {
       "title": "Echo vs Gin vs Fiber: Go Web Framework Comparison",
@@ -3241,11 +3944,31 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "frameworks",
-        "go"
+        "frameworks"
       ],
       "slug": "echo-vs-gin-vs-fiber",
-      "path": "/blogs/backend/frameworks/go/echo-vs-gin-vs-fiber"
+      "path": "/blogs/backend/frameworks/echo-vs-gin-vs-fiber"
+    },
+    {
+      "title": "Django REST Framework",
+      "description": "Master Django REST Framework: views, serializers, authentication, permissions, viewsets, routers, and building production-ready REST APIs with Django",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "django",
+        "rest-api",
+        "drf"
+      ],
+      "coverImage": "/images/django-rest-framework.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "django"
+      ],
+      "slug": "django-rest-framework",
+      "path": "/blogs/backend/frameworks/django/django-rest-framework"
     },
     {
       "title": "JDBC Internals",
@@ -3262,11 +3985,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "relational"
       ],
       "slug": "jdbc-internals",
-      "path": "/blogs/backend/data-access/relational/jdbc-internals"
+      "path": "/blogs/backend/data-engineering/relational/jdbc-internals"
     },
     {
       "title": "Transaction Isolation Levels",
@@ -3283,11 +4006,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "relational"
       ],
       "slug": "isolation-levels",
-      "path": "/blogs/backend/data-access/relational/isolation-levels"
+      "path": "/blogs/backend/data-engineering/relational/isolation-levels"
     },
     {
       "title": "Connection Management",
@@ -3304,11 +4027,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "relational"
       ],
       "slug": "connection-management",
-      "path": "/blogs/backend/data-access/relational/connection-management"
+      "path": "/blogs/backend/data-engineering/relational/connection-management"
     },
     {
       "title": "ACID Transactions",
@@ -3325,11 +4048,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "relational"
       ],
       "slug": "acid-transactions",
-      "path": "/blogs/backend/data-access/relational/acid-transactions"
+      "path": "/blogs/backend/data-engineering/relational/acid-transactions"
     },
     {
       "title": "Native Queries vs JPQL",
@@ -3346,11 +4069,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "orm"
       ],
       "slug": "native-queries-vs-jpql",
-      "path": "/blogs/backend/data-access/orm/native-queries-vs-jpql"
+      "path": "/blogs/backend/data-engineering/orm/native-queries-vs-jpql"
     },
     {
       "title": "JPA/Hibernate Deep Dive",
@@ -3367,11 +4090,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "orm"
       ],
       "slug": "jpa-hibernate-deep-dive",
-      "path": "/blogs/backend/data-access/orm/jpa-hibernate-deep-dive"
+      "path": "/blogs/backend/data-engineering/orm/jpa-hibernate-deep-dive"
     },
     {
       "title": "Inheritance Mapping Strategies in JPA",
@@ -3388,11 +4111,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "orm"
       ],
       "slug": "inheritance-mapping",
-      "path": "/blogs/backend/data-access/orm/inheritance-mapping"
+      "path": "/blogs/backend/data-engineering/orm/inheritance-mapping"
     },
     {
       "title": "Entity Lifecycle",
@@ -3409,11 +4132,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "orm"
       ],
       "slug": "entity-lifecycle",
-      "path": "/blogs/backend/data-access/orm/entity-lifecycle"
+      "path": "/blogs/backend/data-engineering/orm/entity-lifecycle"
     },
     {
       "title": "Caching Strategies in Hibernate",
@@ -3430,11 +4153,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "orm"
       ],
       "slug": "caching-strategies-hibernate",
-      "path": "/blogs/backend/data-access/orm/caching-strategies-hibernate"
+      "path": "/blogs/backend/data-engineering/orm/caching-strategies-hibernate"
     },
     {
       "title": "Redis as a Database",
@@ -3451,11 +4174,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "nosql"
       ],
       "slug": "redis-as-database",
-      "path": "/blogs/backend/data-access/nosql/redis-as-database"
+      "path": "/blogs/backend/data-engineering/nosql/redis-as-database"
     },
     {
       "title": "Polyglot Persistence",
@@ -3472,11 +4195,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "nosql"
       ],
       "slug": "polyglot-persistence",
-      "path": "/blogs/backend/data-access/nosql/polyglot-persistence"
+      "path": "/blogs/backend/data-engineering/nosql/polyglot-persistence"
     },
     {
       "title": "MongoDB with Spring Data",
@@ -3493,11 +4216,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "nosql"
       ],
       "slug": "mongodb-with-spring-data",
-      "path": "/blogs/backend/data-access/nosql/mongodb-with-spring-data"
+      "path": "/blogs/backend/data-engineering/nosql/mongodb-with-spring-data"
     },
     {
       "title": "Cassandra in Backend",
@@ -3514,11 +4237,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "nosql"
       ],
       "slug": "cassandra-in-backend",
-      "path": "/blogs/backend/data-access/nosql/cassandra-in-backend"
+      "path": "/blogs/backend/data-engineering/nosql/cassandra-in-backend"
     },
     {
       "title": "N+1 Problem",
@@ -3535,10 +4258,10 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access"
+        "data-engineering"
       ],
       "slug": "n-plus-one-problem",
-      "path": "/blogs/backend/data-access/n-plus-one-problem"
+      "path": "/blogs/backend/data-engineering/n-plus-one-problem"
     },
     {
       "title": "JDBC vs JPA",
@@ -3555,10 +4278,10 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access"
+        "data-engineering"
       ],
       "slug": "jdbc-vs-jpa",
-      "path": "/blogs/backend/data-access/jdbc-vs-jpa"
+      "path": "/blogs/backend/data-engineering/jdbc-vs-jpa"
     },
     {
       "title": "Hibernate Lazy vs Eager Loading",
@@ -3575,10 +4298,10 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access"
+        "data-engineering"
       ],
       "slug": "hibernate-lazy-vs-eager-loading",
-      "path": "/blogs/backend/data-access/hibernate-lazy-vs-eager-loading"
+      "path": "/blogs/backend/data-engineering/hibernate-lazy-vs-eager-loading"
     },
     {
       "title": "Unit of Work Pattern",
@@ -3595,11 +4318,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "data-patterns"
       ],
       "slug": "unit-of-work",
-      "path": "/blogs/backend/data-access/data-patterns/unit-of-work"
+      "path": "/blogs/backend/data-engineering/data-patterns/unit-of-work"
     },
     {
       "title": "Repository Pattern",
@@ -3616,11 +4339,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "data-patterns"
       ],
       "slug": "repository-pattern",
-      "path": "/blogs/backend/data-access/data-patterns/repository-pattern"
+      "path": "/blogs/backend/data-engineering/data-patterns/repository-pattern"
     },
     {
       "title": "Database Migrations",
@@ -3637,11 +4360,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "data-patterns"
       ],
       "slug": "database-migrations",
-      "path": "/blogs/backend/data-access/data-patterns/database-migrations"
+      "path": "/blogs/backend/data-engineering/data-patterns/database-migrations"
     },
     {
       "title": "Data Versioning Strategies",
@@ -3658,11 +4381,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "data-patterns"
       ],
       "slug": "data-versioning-strategies",
-      "path": "/blogs/backend/data-access/data-patterns/data-versioning-strategies"
+      "path": "/blogs/backend/data-engineering/data-patterns/data-versioning-strategies"
     },
     {
       "title": "CQRS and Event Sourcing",
@@ -3679,11 +4402,11 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access",
+        "data-engineering",
         "data-patterns"
       ],
       "slug": "cqrs-and-event-sourcing",
-      "path": "/blogs/backend/data-access/data-patterns/cqrs-and-event-sourcing"
+      "path": "/blogs/backend/data-engineering/data-patterns/cqrs-and-event-sourcing"
     },
     {
       "title": "Connection Pooling with HikariCP",
@@ -3700,10 +4423,134 @@
       "draft": false,
       "category": "backend",
       "hierarchy": [
-        "data-access"
+        "data-engineering"
       ],
       "slug": "connection-pooling-hikaricp",
-      "path": "/blogs/backend/data-access/connection-pooling-hikaricp"
+      "path": "/blogs/backend/data-engineering/connection-pooling-hikaricp"
+    },
+    {
+      "title": "Multi-Module Project Structure",
+      "description": "Design and organize multi-module Maven and Gradle projects for microservices: module boundaries, dependency management, and build optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "maven",
+        "gradle",
+        "multi-module",
+        "project-structure",
+        "architecture"
+      ],
+      "coverImage": "/images/multi-module-project-structure.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "cloud-devops"
+      ],
+      "slug": "multi-module-project-structure",
+      "path": "/blogs/backend/cloud-devops/multi-module-project-structure"
+    },
+    {
+      "title": "Maven vs Gradle Comparison",
+      "description": "In-depth comparison of Maven and Gradle for Java backend projects: build performance, dependency management, plugin ecosystem, and migration guide",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "maven",
+        "gradle",
+        "build-tools",
+        "java",
+        "devops"
+      ],
+      "coverImage": "/images/maven-vs-gradle.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "cloud-devops"
+      ],
+      "slug": "maven-vs-gradle",
+      "path": "/blogs/backend/cloud-devops/maven-vs-gradle"
+    },
+    {
+      "title": "Docker Multi-Stage Builds for Backend",
+      "description": "Optimize Docker images for backend applications using multi-stage builds, layer caching, and jlink for minimal JRE images",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "docker",
+        "multi-stage",
+        "spring-boot",
+        "image-optimization",
+        "devops"
+      ],
+      "coverImage": "/images/docker-multi-stage-builds-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "cloud-devops"
+      ],
+      "slug": "docker-multi-stage-builds-backend",
+      "path": "/blogs/backend/cloud-devops/docker-multi-stage-builds-backend"
+    },
+    {
+      "title": "Containerizing Backend Applications",
+      "description": "Dockerize Spring Boot applications for production: Dockerfiles, docker-compose, image optimization, and container best practices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "docker",
+        "spring-boot",
+        "containerization",
+        "devops"
+      ],
+      "coverImage": "/images/containerizing-backend-apps.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "cloud-devops"
+      ],
+      "slug": "containerizing-backend-apps",
+      "path": "/blogs/backend/cloud-devops/containerizing-backend-apps"
+    },
+    {
+      "title": "CI Pipeline Testing",
+      "description": "Integrating tests into CI/CD pipelines: test stages, parallel execution, flaky test handling, and quality gates",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "ci-cd",
+        "testing",
+        "devops",
+        "automation"
+      ],
+      "coverImage": "/images/ci-pipeline-testing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "cloud-devops"
+      ],
+      "slug": "ci-pipeline-testing",
+      "path": "/blogs/backend/cloud-devops/ci-pipeline-testing"
+    },
+    {
+      "title": "CI/CD Pipeline for Backend Applications",
+      "description": "Design comprehensive CI/CD pipelines for backend applications: build, test, security scan, containerize, and deploy to Kubernetes",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "ci-cd",
+        "github-actions",
+        "jenkins",
+        "devops",
+        "deployment"
+      ],
+      "coverImage": "/images/ci-cd-pipeline-for-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "cloud-devops"
+      ],
+      "slug": "ci-cd-pipeline-for-backend",
+      "path": "/blogs/backend/cloud-devops/ci-cd-pipeline-for-backend"
     },
     {
       "title": "Redis Pub/Sub",
@@ -3936,110 +4783,6 @@
       ],
       "slug": "caching-strategies-overview",
       "path": "/blogs/backend/caching/caching-strategies-overview"
-    },
-    {
-      "title": "Multi-Module Project Structure",
-      "description": "Design and organize multi-module Maven and Gradle projects for microservices: module boundaries, dependency management, and build optimization",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "maven",
-        "gradle",
-        "multi-module",
-        "project-structure",
-        "architecture"
-      ],
-      "coverImage": "/images/multi-module-project-structure.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "build-tools-devops"
-      ],
-      "slug": "multi-module-project-structure",
-      "path": "/blogs/backend/build-tools-devops/multi-module-project-structure"
-    },
-    {
-      "title": "Maven vs Gradle Comparison",
-      "description": "In-depth comparison of Maven and Gradle for Java backend projects: build performance, dependency management, plugin ecosystem, and migration guide",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "maven",
-        "gradle",
-        "build-tools",
-        "java",
-        "devops"
-      ],
-      "coverImage": "/images/maven-vs-gradle.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "build-tools-devops"
-      ],
-      "slug": "maven-vs-gradle",
-      "path": "/blogs/backend/build-tools-devops/maven-vs-gradle"
-    },
-    {
-      "title": "Docker Multi-Stage Builds for Backend",
-      "description": "Optimize Docker images for backend applications using multi-stage builds, layer caching, and jlink for minimal JRE images",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "docker",
-        "multi-stage",
-        "spring-boot",
-        "image-optimization",
-        "devops"
-      ],
-      "coverImage": "/images/docker-multi-stage-builds-backend.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "build-tools-devops"
-      ],
-      "slug": "docker-multi-stage-builds-backend",
-      "path": "/blogs/backend/build-tools-devops/docker-multi-stage-builds-backend"
-    },
-    {
-      "title": "Containerizing Backend Applications",
-      "description": "Dockerize Spring Boot applications for production: Dockerfiles, docker-compose, image optimization, and container best practices",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "docker",
-        "spring-boot",
-        "containerization",
-        "devops"
-      ],
-      "coverImage": "/images/containerizing-backend-apps.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "build-tools-devops"
-      ],
-      "slug": "containerizing-backend-apps",
-      "path": "/blogs/backend/build-tools-devops/containerizing-backend-apps"
-    },
-    {
-      "title": "CI/CD Pipeline for Backend Applications",
-      "description": "Design comprehensive CI/CD pipelines for backend applications: build, test, security scan, containerize, and deploy to Kubernetes",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "ci-cd",
-        "github-actions",
-        "jenkins",
-        "devops",
-        "deployment"
-      ],
-      "coverImage": "/images/ci-cd-pipeline-for-backend.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "build-tools-devops"
-      ],
-      "slug": "ci-cd-pipeline-for-backend",
-      "path": "/blogs/backend/build-tools-devops/ci-cd-pipeline-for-backend"
     },
     {
       "title": "Temporal Workflow Basics",
@@ -4356,111 +5099,6 @@
       ],
       "slug": "cqrs-event-sourcing",
       "path": "/blogs/backend/architecture-patterns/distributed-patterns/cqrs-event-sourcing"
-    },
-    {
-      "title": "Strategy Pattern for Backend",
-      "description": "Implementing the Strategy pattern in backend applications: algorithm selection, dependency injection, and testability",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "strategy-pattern",
-        "design-patterns",
-        "spring-boot",
-        "oop"
-      ],
-      "coverImage": "/images/strategy-pattern-backend.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "architecture-patterns",
-        "design-patterns"
-      ],
-      "slug": "strategy-pattern-backend",
-      "path": "/blogs/backend/architecture-patterns/design-patterns/strategy-pattern-backend"
-    },
-    {
-      "title": "Proxy and Decorator Patterns",
-      "description": "Understanding Proxy and Decorator patterns: AOP proxies, Spring aspects, and transparent behavior wrapping",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "proxy-pattern",
-        "decorator-pattern",
-        "aop",
-        "spring-aspects"
-      ],
-      "coverImage": "/images/proxy-decorator-patterns.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "architecture-patterns",
-        "design-patterns"
-      ],
-      "slug": "proxy-decorator-patterns",
-      "path": "/blogs/backend/architecture-patterns/design-patterns/proxy-decorator-patterns"
-    },
-    {
-      "title": "Observer Pattern in Event Systems",
-      "description": "Applying Observer pattern for event-driven systems: Spring events, message brokers, and reactive streams",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "observer-pattern",
-        "event-driven",
-        "spring-events",
-        "design-patterns"
-      ],
-      "coverImage": "/images/observer-pattern-event-systems.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "architecture-patterns",
-        "design-patterns"
-      ],
-      "slug": "observer-pattern-event-systems",
-      "path": "/blogs/backend/architecture-patterns/design-patterns/observer-pattern-event-systems"
-    },
-    {
-      "title": "Factory Pattern with DI",
-      "description": "Combining Factory pattern with dependency injection for flexible object creation in Spring Boot applications",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "factory-pattern",
-        "dependency-injection",
-        "spring-boot",
-        "design-patterns"
-      ],
-      "coverImage": "/images/factory-pattern-di.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "architecture-patterns",
-        "design-patterns"
-      ],
-      "slug": "factory-pattern-di",
-      "path": "/blogs/backend/architecture-patterns/design-patterns/factory-pattern-di"
-    },
-    {
-      "title": "Builder Pattern and Immutability",
-      "description": "Using Builder pattern for immutable objects: Lombok, generated builders, and thread-safe object construction",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "builder-pattern",
-        "immutability",
-        "lombok",
-        "design-patterns"
-      ],
-      "coverImage": "/images/builder-pattern-immutability.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "architecture-patterns",
-        "design-patterns"
-      ],
-      "slug": "builder-pattern-immutability",
-      "path": "/blogs/backend/architecture-patterns/design-patterns/builder-pattern-immutability"
     },
     {
       "title": "Layered vs Hexagonal vs Clean Architecture",
@@ -4874,6 +5512,26 @@
       "path": "/blogs/backend/api-design/grpc/grpc-introduction"
     },
     {
+      "title": "GraphQL Client Best Practices",
+      "description": "Build robust GraphQL clients in Spring Boot with WebClient, Apollo, and advanced patterns for query optimization and error handling",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "graphql",
+        "webclient",
+        "api-design"
+      ],
+      "coverImage": "/images/graphql-client-best-practices.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design"
+      ],
+      "slug": "graphql-client-best-practices",
+      "path": "/blogs/backend/api-design/graphql-client-best-practices"
+    },
+    {
       "title": "GraphQL Subscriptions",
       "description": "Implement real-time GraphQL subscriptions: WebSocket transport, subscription resolvers, event-driven patterns, and production scaling",
       "date": "2026-05-11",
@@ -5061,109 +5719,6 @@
       ],
       "slug": "api-authentication-methods",
       "path": "/blogs/backend/api-design/api-security/api-authentication-methods"
-    },
-    {
-      "title": "WebClient vs RestTemplate Comparison",
-      "description": "Deep comparison of WebClient and RestTemplate for HTTP communication in Spring Boot: performance, API design, and migration strategies",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "webclient",
-        "resttemplate",
-        "http-client",
-        "reactive"
-      ],
-      "coverImage": "/images/webclient-vs-resttemplate.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "api-clients-integrations"
-      ],
-      "slug": "webclient-vs-resttemplate",
-      "path": "/blogs/backend/api-clients-integrations/webclient-vs-resttemplate"
-    },
-    {
-      "title": "Retry and Circuit Breaker for HTTP Clients",
-      "description": "Implement Resilience4j retry, circuit breaker, rate limiter, and bulkhead patterns for resilient HTTP clients in Spring Boot",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "resilience4j",
-        "circuit-breaker",
-        "retry",
-        "fault-tolerance"
-      ],
-      "coverImage": "/images/retry-and-circuit-breaker-for-clients.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "api-clients-integrations"
-      ],
-      "slug": "retry-and-circuit-breaker-for-clients",
-      "path": "/blogs/backend/api-clients-integrations/retry-and-circuit-breaker-for-clients"
-    },
-    {
-      "title": "GraphQL Client Best Practices",
-      "description": "Build robust GraphQL clients in Spring Boot with WebClient, Apollo, and advanced patterns for query optimization and error handling",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "graphql",
-        "webclient",
-        "api-design"
-      ],
-      "coverImage": "/images/graphql-client-best-practices.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "api-clients-integrations"
-      ],
-      "slug": "graphql-client-best-practices",
-      "path": "/blogs/backend/api-clients-integrations/graphql-client-best-practices"
-    },
-    {
-      "title": "Feign Client Deep Dive",
-      "description": "Master Feign configuration, interceptors, error handling, and advanced patterns for declarative HTTP clients in Spring Cloud",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "feign",
-        "spring-cloud",
-        "http-client"
-      ],
-      "coverImage": "/images/feign-client-deep-dive.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "api-clients-integrations"
-      ],
-      "slug": "feign-client-deep-dive",
-      "path": "/blogs/backend/api-clients-integrations/feign-client-deep-dive"
-    },
-    {
-      "title": "Consuming REST APIs in Spring Boot",
-      "description": "Master RestTemplate, WebClient, and Feign for consuming REST APIs in Spring Boot applications with production patterns",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "spring-boot",
-        "rest-api",
-        "webclient",
-        "feign",
-        "resttemplate"
-      ],
-      "coverImage": "/images/consuming-rest-apis.png",
-      "draft": false,
-      "category": "backend",
-      "hierarchy": [
-        "api-clients-integrations"
-      ],
-      "slug": "consuming-rest-apis",
-      "path": "/blogs/backend/api-clients-integrations/consuming-rest-apis"
     }
   ]
 }

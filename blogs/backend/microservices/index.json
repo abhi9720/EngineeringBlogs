@@ -107,6 +107,27 @@
       "path": "/blogs/backend/microservices/service-discovery-eureka"
     },
     {
+      "title": "Retry and Circuit Breaker for HTTP Clients",
+      "description": "Implement Resilience4j retry, circuit breaker, rate limiter, and bulkhead patterns for resilient HTTP clients in Spring Boot",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "resilience4j",
+        "circuit-breaker",
+        "retry",
+        "fault-tolerance"
+      ],
+      "coverImage": "/images/retry-and-circuit-breaker-for-clients.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices"
+      ],
+      "slug": "retry-and-circuit-breaker-for-clients",
+      "path": "/blogs/backend/microservices/retry-and-circuit-breaker-for-clients"
+    },
+    {
       "title": "Strangler Fig Pattern for Legacy Migration",
       "description": "Implement the Strangler Fig pattern for incremental migration from monolithic to microservices architecture: routing strategies, feature flags, gradual decomposition, and Spring Boot examples",
       "date": "2026-05-11",

@@ -16,7 +16,7 @@
         "little-law",
         "percentiles"
       ],
-      "coverImage": "/images/latency-vs-throughput.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

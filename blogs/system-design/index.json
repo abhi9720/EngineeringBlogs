@@ -14,7 +14,7 @@
         "architecture",
         "distributed-systems"
       ],
-      "coverImage": "/images/system-design-interview-framework.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -36,7 +36,7 @@
         "scalability",
         "case-study"
       ],
-      "coverImage": "/images/url-shortener.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -59,7 +59,7 @@
         "recommendations",
         "case-study"
       ],
-      "coverImage": "/images/netflix-streaming.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -82,7 +82,7 @@
         "transcoding",
         "case-study"
       ],
-      "coverImage": "/images/youtube-system-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -106,7 +106,7 @@
         "caching",
         "fanout"
       ],
-      "coverImage": "/images/design-twitter-system.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -129,7 +129,7 @@
         "ranking",
         "case-study"
       ],
-      "coverImage": "/images/instagram-feed.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -151,7 +151,7 @@
         "real-time",
         "case-study"
       ],
-      "coverImage": "/images/whatsapp-architecture.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -175,7 +175,7 @@
         "aws-kms",
         "certificate-management"
       ],
-      "coverImage": "/images/encryption-tls.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -199,7 +199,7 @@
         "spring-security",
         "pkce"
       ],
-      "coverImage": "/images/oauth2-jwt.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -223,7 +223,7 @@
         "little-law",
         "percentiles"
       ],
-      "coverImage": "/images/latency-vs-throughput.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -247,7 +247,7 @@
         "opentelemetry",
         "spring-cloud-sleuth"
       ],
-      "coverImage": "/images/distributed-tracing.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -271,7 +271,7 @@
         "logstash",
         "kibana"
       ],
-      "coverImage": "/images/elk-stack.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -295,7 +295,7 @@
         "metrics",
         "alerting"
       ],
-      "coverImage": "/images/prometheus-grafana.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -318,7 +318,7 @@
         "redis-cluster",
         "sharding"
       ],
-      "coverImage": "/images/distributed-caching-redis-cluster.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -342,7 +342,7 @@
         "ulid",
         "database"
       ],
-      "coverImage": "/images/distributed-id-generation.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -366,7 +366,7 @@
         "zookeeper",
         "concurrency"
       ],
-      "coverImage": "/images/distributed-locks.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -389,7 +389,7 @@
         "paxos",
         "algorithms"
       ],
-      "coverImage": "/images/raft-paxos-algorithms.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -411,7 +411,7 @@
         "system-design",
         "ddd"
       ],
-      "coverImage": "/images/monolith-vs-microservices.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -433,7 +433,7 @@
         "patterns",
         "data"
       ],
-      "coverImage": "/images/event-sourcing.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -455,7 +455,7 @@
         "architecture",
         "event-sourcing"
       ],
-      "coverImage": "/images/cqrs.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -477,7 +477,7 @@
         "resilience4j",
         "patterns"
       ],
-      "coverImage": "/images/bulkhead-retry.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -499,7 +499,7 @@
         "system-design",
         "patterns"
       ],
-      "coverImage": "/images/saga-pattern.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -521,7 +521,7 @@
         "fault-tolerance",
         "patterns"
       ],
-      "coverImage": "/images/circuit-breaker.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -543,7 +543,7 @@
         "scalability",
         "patterns"
       ],
-      "coverImage": "/images/rate-limiting.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -565,7 +565,7 @@
         "system-design",
         "communication"
       ],
-      "coverImage": "/images/websockets.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -587,7 +587,7 @@
         "system-design",
         "event-driven"
       ],
-      "coverImage": "/images/apache-kafka.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -609,7 +609,7 @@
         "system-design",
         "messaging"
       ],
-      "coverImage": "/images/message-queues.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -631,7 +631,7 @@
         "event-driven",
         "patterns"
       ],
-      "coverImage": "/images/pub-sub-model.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -653,7 +653,7 @@
         "system-design",
         "web-services"
       ],
-      "coverImage": "/images/restful-api-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -675,7 +675,7 @@
         "high-availability",
         "consistency"
       ],
-      "coverImage": "/images/replication-strategies.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -697,7 +697,7 @@
         "storage",
         "cloud"
       ],
-      "coverImage": "/images/blob-vs-block-storage.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -719,7 +719,7 @@
         "storage",
         "enterprise"
       ],
-      "coverImage": "/images/file-storage-systems.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -741,7 +741,7 @@
         "system-design",
         "storage"
       ],
-      "coverImage": "/images/object-storage-s3.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -763,7 +763,7 @@
         "system-design",
         "database"
       ],
-      "coverImage": "/images/document-stores.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -785,7 +785,7 @@
         "system-design",
         "storage"
       ],
-      "coverImage": "/images/key-value-stores.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -807,7 +807,7 @@
         "system-design",
         "storage"
       ],
-      "coverImage": "/images/sql-vs-nosql.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -830,7 +830,7 @@
         "transaction",
         "system-design"
       ],
-      "coverImage": "/images/atm-machine-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -853,7 +853,7 @@
         "conflict-detection",
         "system-design"
       ],
-      "coverImage": "/images/meeting-scheduler-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -876,7 +876,7 @@
         "oop",
         "object-oriented-design"
       ],
-      "coverImage": "/images/tic-tac-toe-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -899,7 +899,7 @@
         "scheduling-algorithms",
         "system-design"
       ],
-      "coverImage": "/images/elevator-system-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -922,7 +922,7 @@
         "system-design",
         "object-oriented-design"
       ],
-      "coverImage": "/images/parking-lot-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -945,7 +945,7 @@
         "synchronization",
         "low-level-design"
       ],
-      "coverImage": "/images/concurrency-patterns.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -969,7 +969,7 @@
         "behavioral",
         "low-level-design"
       ],
-      "coverImage": "/images/gof-design-patterns.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -991,7 +991,7 @@
         "modeling",
         "low-level-design"
       ],
-      "coverImage": "/images/uml-diagrams.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -1013,7 +1013,7 @@
         "low-level-design",
         "design-patterns"
       ],
-      "coverImage": "/images/oop-solid-principles.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -1035,7 +1035,7 @@
         "scalability",
         "performance"
       ],
-      "coverImage": "/images/back-of-envelope-calculations.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -1058,7 +1058,7 @@
         "system-design",
         "protocols"
       ],
-      "coverImage": "/images/rest-vs-grpc-vs-graphql.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -1081,7 +1081,7 @@
         "system-design",
         "transport-layer"
       ],
-      "coverImage": "/images/tcp-vs-udp.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -1104,7 +1104,7 @@
         "system-design",
         "protocols"
       ],
-      "coverImage": "/images/dns-http-deep-dive.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -1126,7 +1126,7 @@
         "databases",
         "data-integrity"
       ],
-      "coverImage": "/images/consistency-patterns.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -1149,7 +1149,7 @@
         "databases",
         "system-design"
       ],
-      "coverImage": "/images/acid-vs-base.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -1171,7 +1171,7 @@
         "distributed-systems",
         "system-design"
       ],
-      "coverImage": "/images/cap-theorem.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -1193,7 +1193,7 @@
         "scalability",
         "reliability"
       ],
-      "coverImage": "/images/what-is-system-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -1215,7 +1215,7 @@
         "scalability",
         "distributed-systems"
       ],
-      "coverImage": "/images/database-sharding.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -1237,7 +1237,7 @@
         "redis",
         "memory"
       ],
-      "coverImage": "/images/caching-strategies.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -1258,7 +1258,7 @@
         "infrastructure",
         "networking"
       ],
-      "coverImage": "/images/load-balancing.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -1279,7 +1279,7 @@
         "performance",
         "architecture"
       ],
-      "coverImage": "/images/scalability-introduction.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

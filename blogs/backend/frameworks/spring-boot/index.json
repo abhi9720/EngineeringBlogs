@@ -1,0 +1,400 @@
+{
+  "name": "Spring Boot",
+  "path": "/blogs/backend/frameworks/spring-boot",
+  "blogs": [
+    {
+      "title": "Spring Security Testing",
+      "description": "Master security testing in Spring Boot applications: @WithMockUser, @WithUserDetails, security test annotations, and testing OAuth2 and method security",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-security",
+        "testing",
+        "security-testing"
+      ],
+      "coverImage": "/images/spring-security-testing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "security"
+      ],
+      "slug": "spring-security-testing",
+      "path": "/blogs/backend/frameworks/spring-boot/security/spring-security-testing"
+    },
+    {
+      "title": "OAuth2 with Spring Security",
+      "description": "Implement OAuth2 authentication and authorization with Spring Security: authorization server, resource server, client registration, and JWT token handling",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "oauth2",
+        "spring-security",
+        "authentication"
+      ],
+      "coverImage": "/images/oauth2-with-spring-security.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "security"
+      ],
+      "slug": "oauth2-with-spring-security",
+      "path": "/blogs/backend/frameworks/spring-boot/security/oauth2-with-spring-security"
+    },
+    {
+      "title": "Method-Level Security with Spring Security",
+      "description": "Master method-level security annotations: @PreAuthorize, @PostAuthorize, @Secured, @RolesAllowed, custom permission evaluators, and expression-based access control",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-security",
+        "method-security",
+        "authorization"
+      ],
+      "coverImage": "/images/method-level-security.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "security"
+      ],
+      "slug": "method-level-security",
+      "path": "/blogs/backend/frameworks/spring-boot/security/method-level-security"
+    },
+    {
+      "title": "CSRF and CORS Configuration in Spring Security",
+      "description": "Master CSRF protection and CORS configuration in Spring Security: when to use CSRF, CORS policies, preflight requests, and securing cross-origin requests",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-security",
+        "csrf",
+        "cors"
+      ],
+      "coverImage": "/images/csrf-cors-config.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "security"
+      ],
+      "slug": "csrf-cors-config",
+      "path": "/blogs/backend/frameworks/spring-boot/security/csrf-cors-config"
+    },
+    {
+      "title": "Spring WebFlux Basics",
+      "description": "Learn Spring WebFlux: reactive controllers, functional endpoints, WebClient, reactive security, and building non-blocking REST APIs with Project Reactor",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "webflux",
+        "reactive",
+        "spring-web"
+      ],
+      "coverImage": "/images/spring-webflux-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "reactive"
+      ],
+      "slug": "spring-webflux-basics",
+      "path": "/blogs/backend/frameworks/spring-boot/reactive/spring-webflux-basics"
+    },
+    {
+      "title": "Reactive vs Imperative: When to Use Reactive Programming",
+      "description": "Compare reactive and imperative programming in Spring: performance characteristics, use cases, trade-offs, and decision framework for choosing between WebFlux and WebMVC",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "reactive",
+        "webflux",
+        "architecture"
+      ],
+      "coverImage": "/images/reactive-vs-imperative.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "reactive"
+      ],
+      "slug": "reactive-vs-imperative",
+      "path": "/blogs/backend/frameworks/spring-boot/reactive/reactive-vs-imperative"
+    },
+    {
+      "title": "Reactive Streams in Practice",
+      "description": "Master Reactive Streams and backpressure in Spring: Project Reactor operators, error handling, backpressure strategies, and building resilient reactive pipelines",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "reactive",
+        "reactive-streams",
+        "backpressure"
+      ],
+      "coverImage": "/images/reactive-streams-in-practice.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "reactive"
+      ],
+      "slug": "reactive-streams-in-practice",
+      "path": "/blogs/backend/frameworks/spring-boot/reactive/reactive-streams-in-practice"
+    },
+    {
+      "title": "R2DBC with Spring Data Reactive",
+      "description": "Master reactive database access with R2DBC and Spring Data: ReactiveCrudRepository, R2DBC configuration, queries, transactions, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "r2dbc",
+        "reactive",
+        "spring-data"
+      ],
+      "coverImage": "/images/r2dbc-spring-data.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "reactive"
+      ],
+      "slug": "r2dbc-spring-data",
+      "path": "/blogs/backend/frameworks/spring-boot/reactive/r2dbc-spring-data"
+    },
+    {
+      "title": "JWT Authentication",
+      "description": "Deep dive into JWT authentication internals, real-world use cases, trade-offs, and production considerations for Spring Boot applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "security",
+        "jwt",
+        "authentication"
+      ],
+      "coverImage": "/images/jwt-authentication.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot"
+      ],
+      "slug": "jwt-authentication",
+      "path": "/blogs/backend/frameworks/spring-boot/jwt-authentication"
+    },
+    {
+      "title": "Caching with Redis",
+      "description": "Master Redis caching in Spring Boot applications, from basic annotations to advanced patterns for high-performance systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "redis",
+        "caching",
+        "performance"
+      ],
+      "coverImage": "/images/caching-with-redis.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot"
+      ],
+      "slug": "caching-with-redis",
+      "path": "/blogs/backend/frameworks/spring-boot/caching-with-redis"
+    },
+    {
+      "title": "Spring Boot Testing with Sliced Annotations",
+      "description": "Master Spring Boot testing with @WebMvcTest, @DataJpaTest, @JsonTest, and other slice annotations for focused, fast unit and integration tests",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "testing",
+        "spring-mvc",
+        "spring-data-jpa"
+      ],
+      "coverImage": "/images/spring-boot-testing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "boot"
+      ],
+      "slug": "spring-boot-testing",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/spring-boot-testing"
+    },
+    {
+      "title": "Spring Boot Actuator",
+      "description": "Master Spring Boot Actuator: production-ready endpoints, health indicators, metrics, custom endpoints, and securing actuator endpoints",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "actuator",
+        "monitoring",
+        "observability"
+      ],
+      "coverImage": "/images/spring-actuator.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "boot"
+      ],
+      "slug": "spring-actuator",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/spring-actuator"
+    },
+    {
+      "title": "Creating Custom Spring Boot Starters",
+      "description": "Learn how to create custom Spring Boot starters: auto-configuration, starter modules, configuration metadata, and best practices for reusable components",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "starters",
+        "auto-configuration",
+        "spring-core"
+      ],
+      "coverImage": "/images/custom-starters.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "boot"
+      ],
+      "slug": "custom-starters",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/custom-starters"
+    },
+    {
+      "title": "Spring Boot Auto-Configuration Deep Dive",
+      "description": "Understand Spring Boot auto-configuration internals: @ConditionalOn*, spring.factories, custom auto-configuration, and how Spring Boot configures beans automatically",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "auto-configuration",
+        "spring-core",
+        "spring-boot-internals"
+      ],
+      "coverImage": "/images/auto-configuration-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "boot"
+      ],
+      "slug": "auto-configuration-deep-dive",
+      "path": "/blogs/backend/frameworks/spring-boot/boot/auto-configuration-deep-dive"
+    },
+    {
+      "title": "Spring Batch Introduction",
+      "description": "Master Spring Batch fundamentals: JobRepository, JobLauncher, steps, readers, writers, and building robust batch processing applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-batch",
+        "batch-processing",
+        "etl"
+      ],
+      "coverImage": "/images/spring-batch-introduction.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "spring-batch-introduction",
+      "path": "/blogs/backend/frameworks/spring-boot/batch/spring-batch-introduction"
+    },
+    {
+      "title": "Scheduling with Quartz in Spring Boot",
+      "description": "Master Quartz scheduler integration with Spring Boot: job scheduling, triggers, persistence, clustering, cron expressions, and dynamic scheduling",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "quartz",
+        "scheduling",
+        "batch"
+      ],
+      "coverImage": "/images/scheduling-with-quartz.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "scheduling-with-quartz",
+      "path": "/blogs/backend/frameworks/spring-boot/batch/scheduling-with-quartz"
+    },
+    {
+      "title": "Item Readers, Writers, and Processors in Spring Batch",
+      "description": "Comprehensive guide to Spring Batch item processing: built-in readers/writers, custom implementations, composite processors, and multi-file processing",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-batch",
+        "item-reader",
+        "item-writer"
+      ],
+      "coverImage": "/images/item-readers-writers-processors.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "item-readers-writers-processors",
+      "path": "/blogs/backend/frameworks/spring-boot/batch/item-readers-writers-processors"
+    },
+    {
+      "title": "Chunk-Oriented Processing in Spring Batch",
+      "description": "Deep dive into chunk-oriented processing: commit intervals, skip/retry within chunks, chunk listeners, multi-threaded steps, and partitioning",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-batch",
+        "chunk-processing",
+        "batch-processing"
+      ],
+      "coverImage": "/images/chunk-oriented-processing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "chunk-oriented-processing",
+      "path": "/blogs/backend/frameworks/spring-boot/batch/chunk-oriented-processing"
+    }
+  ]
+}

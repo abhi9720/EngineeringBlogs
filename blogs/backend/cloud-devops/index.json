@@ -1,0 +1,130 @@
+{
+  "name": "Cloud Devops",
+  "path": "/blogs/backend/cloud-devops",
+  "blogs": [
+    {
+      "title": "Multi-Module Project Structure",
+      "description": "Design and organize multi-module Maven and Gradle projects for microservices: module boundaries, dependency management, and build optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "maven",
+        "gradle",
+        "multi-module",
+        "project-structure",
+        "architecture"
+      ],
+      "coverImage": "/images/multi-module-project-structure.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "cloud-devops"
+      ],
+      "slug": "multi-module-project-structure",
+      "path": "/blogs/backend/cloud-devops/multi-module-project-structure"
+    },
+    {
+      "title": "Maven vs Gradle Comparison",
+      "description": "In-depth comparison of Maven and Gradle for Java backend projects: build performance, dependency management, plugin ecosystem, and migration guide",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "maven",
+        "gradle",
+        "build-tools",
+        "java",
+        "devops"
+      ],
+      "coverImage": "/images/maven-vs-gradle.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "cloud-devops"
+      ],
+      "slug": "maven-vs-gradle",
+      "path": "/blogs/backend/cloud-devops/maven-vs-gradle"
+    },
+    {
+      "title": "Docker Multi-Stage Builds for Backend",
+      "description": "Optimize Docker images for backend applications using multi-stage builds, layer caching, and jlink for minimal JRE images",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "docker",
+        "multi-stage",
+        "spring-boot",
+        "image-optimization",
+        "devops"
+      ],
+      "coverImage": "/images/docker-multi-stage-builds-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "cloud-devops"
+      ],
+      "slug": "docker-multi-stage-builds-backend",
+      "path": "/blogs/backend/cloud-devops/docker-multi-stage-builds-backend"
+    },
+    {
+      "title": "Containerizing Backend Applications",
+      "description": "Dockerize Spring Boot applications for production: Dockerfiles, docker-compose, image optimization, and container best practices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "docker",
+        "spring-boot",
+        "containerization",
+        "devops"
+      ],
+      "coverImage": "/images/containerizing-backend-apps.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "cloud-devops"
+      ],
+      "slug": "containerizing-backend-apps",
+      "path": "/blogs/backend/cloud-devops/containerizing-backend-apps"
+    },
+    {
+      "title": "CI Pipeline Testing",
+      "description": "Integrating tests into CI/CD pipelines: test stages, parallel execution, flaky test handling, and quality gates",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "ci-cd",
+        "testing",
+        "devops",
+        "automation"
+      ],
+      "coverImage": "/images/ci-pipeline-testing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "cloud-devops"
+      ],
+      "slug": "ci-pipeline-testing",
+      "path": "/blogs/backend/cloud-devops/ci-pipeline-testing"
+    },
+    {
+      "title": "CI/CD Pipeline for Backend Applications",
+      "description": "Design comprehensive CI/CD pipelines for backend applications: build, test, security scan, containerize, and deploy to Kubernetes",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "ci-cd",
+        "github-actions",
+        "jenkins",
+        "devops",
+        "deployment"
+      ],
+      "coverImage": "/images/ci-cd-pipeline-for-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "cloud-devops"
+      ],
+      "slug": "ci-cd-pipeline-for-backend",
+      "path": "/blogs/backend/cloud-devops/ci-cd-pipeline-for-backend"
+    }
+  ]
+}

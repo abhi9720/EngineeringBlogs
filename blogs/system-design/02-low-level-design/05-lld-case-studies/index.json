@@ -15,7 +15,7 @@
         "transaction",
         "system-design"
       ],
-      "coverImage": "/images/atm-machine-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -38,7 +38,7 @@
         "conflict-detection",
         "system-design"
       ],
-      "coverImage": "/images/meeting-scheduler-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -61,7 +61,7 @@
         "oop",
         "object-oriented-design"
       ],
-      "coverImage": "/images/tic-tac-toe-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -84,7 +84,7 @@
         "scheduling-algorithms",
         "system-design"
       ],
-      "coverImage": "/images/elevator-system-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -107,7 +107,7 @@
         "system-design",
         "object-oriented-design"
       ],
-      "coverImage": "/images/parking-lot-design.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

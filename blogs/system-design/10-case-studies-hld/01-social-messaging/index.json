@@ -16,7 +16,7 @@
         "caching",
         "fanout"
       ],
-      "coverImage": "/images/design-twitter-system.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -39,7 +39,7 @@
         "ranking",
         "case-study"
       ],
-      "coverImage": "/images/instagram-feed.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
@@ -61,7 +61,7 @@
         "real-time",
         "case-study"
       ],
-      "coverImage": "/images/whatsapp-architecture.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

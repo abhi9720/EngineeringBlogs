@@ -16,7 +16,7 @@
         "metrics",
         "alerting"
       ],
-      "coverImage": "/images/prometheus-grafana.png",
+      "coverImage": "",
       "draft": false,
       "category": "system-design",
       "hierarchy": [

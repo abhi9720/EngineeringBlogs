@@ -310,6 +310,26 @@
       "path": "/blogs/backend/api-design/grpc/grpc-introduction"
     },
     {
+      "title": "GraphQL Client Best Practices",
+      "description": "Build robust GraphQL clients in Spring Boot with WebClient, Apollo, and advanced patterns for query optimization and error handling",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "graphql",
+        "webclient",
+        "api-design"
+      ],
+      "coverImage": "/images/graphql-client-best-practices.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design"
+      ],
+      "slug": "graphql-client-best-practices",
+      "path": "/blogs/backend/api-design/graphql-client-best-practices"
+    },
+    {
       "title": "GraphQL Subscriptions",
       "description": "Implement real-time GraphQL subscriptions: WebSocket transport, subscription resolvers, event-driven patterns, and production scaling",
       "date": "2026-05-11",

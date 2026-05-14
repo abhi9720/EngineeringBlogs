@@ -1,0 +1,28 @@
+{
+  "name": "Interview",
+  "path": "/blogs/backend/programming/python/interview",
+  "blogs": [
+    {
+      "title": "Python Interview Questions and Answers",
+      "description": "Curated Python interview questions covering core Python, concurrency, internals, design patterns, and backend development for senior roles",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "interview",
+        "preparation",
+        "senior-engineer"
+      ],
+      "coverImage": "/images/python-interview.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "programming",
+        "python",
+        "interview"
+      ],
+      "slug": "python-interview-questions",
+      "path": "/blogs/backend/programming/python/interview/python-interview-questions"
+    }
+  ]
+}

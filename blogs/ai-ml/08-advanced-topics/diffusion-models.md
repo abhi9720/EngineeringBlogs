@@ -1,17 +1,48 @@
+---
+title: "Diffusion Models Explained"
+description: "Understand diffusion models: forward/reverse process, U-Net architecture, classifier-free guidance, latent diffusion, sampling strategies, and training"
+date: "2026-05-14"
+author: "Abhishek Tiwari"
+tags:
+  - diffusion-models
+  - generative-ai
+  - stable-diffusion
+  - deep-learning
+coverImage: "/images/diffusion-models.png"
+draft: false
+---
+
 # Diffusion Models Explained
 
 Diffusion models generate data by learning to reverse a gradual noising process. They're the foundation of modern image generators like Stable Diffusion and DALL-E 3.
 
 ## The Core Idea
 
-```
-Forward Process (Add Noise)    Reverse Process (Remove Noise)
-                               
-Noisy → More Noisy → ... → Pure Noise    Pure Noise → Less Noise → ... → Data
-   ─────────────────────────────────▶       ◀────────────────────────────────
+```mermaid
+graph LR
+    subgraph Forward["Forward Process (Add Noise)"]
+        direction LR
+        X0["x₀<br/>Data"] --> Xt["xₜ<br/>Noisy"] --> XT["xₜ<br/>Pure Noise"]
+    end
+    subgraph Reverse["Reverse Process (Remove Noise)"]
+        direction LR
+        RT["xₜ<br/>Pure Noise"] --> R1["xₜ₋₁<br/>Less Noise"] --> R0["x₀<br/>Data"]
+    end
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class X0,XT,R0,RT green
+    class Xt,R1 blue
 ```
 
+The forward process gradually adds Gaussian noise to data over T timesteps until the signal is destroyed. The reverse process learns to denoise step by step, starting from pure noise and recovering the original data distribution.
+
 ### Forward Process (q)
+
 ```python
 def forward_process(x_0, t):
     """Add noise to image at timestep t"""
@@ -24,6 +55,7 @@ def forward_process(x_0, t):
 ```
 
 ### Reverse Process (p)
+
 ```python
 def reverse_step(x_t, t, model):
     """Remove one step of noise"""
@@ -39,27 +71,32 @@ def reverse_step(x_t, t, model):
 
 ## Architecture Overview
 
+```mermaid
+graph TD
+    Input["Input<br/>(noisy image + timestep)"]
+    Input --> DB1["Down Block<br/>+ Residual"]
+    DB1 --> DB2["Down Block<br/>+ Residual"]
+    DB2 --> MB["Mid Block"]
+    MB --> UB1["Up Block<br/>+ Residual"]
+    UB1 --> UB2["Up Block<br/>+ Residual"]
+    UB2 --> Output["Output<br/>Predicted noise"]
+
+    DB1 --> Attn1["Self-Attention"]
+    DB2 --> Attn2["Cross-Attention"]
+    UB1 --> Attn3["Skip-Attention"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class Input,Output green
+    class DB1,DB2,MB,UB1,UB2 blue
+    class Attn1,Attn2,Attn3 pink
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    U-Net with Attention                     │
-├─────────────────────────────────────────────────────────────┤
-│  Input (noisy image + timestep embedding)                   │
-│       │                                                     │
-│       ▼                                                     │
-│  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐    │
-│  │Down Block│──▶│Down Block│──▶│Mid Block │──▶│Up Block │──▶│
-│  │+Residual│   │+Residual│   │          │   │+Residual│    │
-│  └────┬────┘   └────┬────┘   └────┬────┘   └────┬────┘    │
-│       │             │             │             │          │
-│       ▼             ▼             ▼             ▼          │
-│  ┌─────────┐   ┌─────────┐                ┌─────────┐       │
-│  │Attention│   │Attention│                │Attention│       │
-│  │ (self)  │   │ (cross) │                │ (skip)  │       │
-│  └─────────┘   └─────────┘                └─────────┘       │
-│                                                             │
-│  Output: Predicted noise                                    │
-└─────────────────────────────────────────────────────────────┘
-```
+
+The U-Net architecture with attention blocks is the backbone of most diffusion models. It processes the noisy input through a downsampling path, a bottleneck, and an upsampling path with skip connections. Attention layers enable conditioning on text prompts and other modalities.
 
 ## Conditioning with Classifier-Free Guidance
 
@@ -112,10 +149,25 @@ class StableDiffusionPipeline:
 
 ### 1. Latent Diffusion
 
-Running diffusion in compressed latent space:
-```
-Image (512×512×3) → Encoder → Latents (64×64×4) → Diffusion → Decoder → Image
-                         8× compression
+Running diffusion in compressed latent space reduces computation by 8x while maintaining quality:
+
+```mermaid
+graph LR
+    Image["Image<br/>(512x512x3)"] --> Encoder["Encoder"]
+    Encoder --> Latents["Latents<br/>(64x64x4)"]
+    Latents --> Diffusion["Diffusion Process"]
+    Diffusion --> Decoder["Decoder"]
+    Decoder --> Result["Generated Image<br/>(512x512x3)"]
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#fff
+    linkStyle default stroke:#278ea5
+
+    class Image,Result green
+    class Encoder,Decoder pink
+    class Latents, Diffusion blue
 ```
 
 ### 2. Noise Schedules
@@ -223,3 +275,5 @@ def controlnet_conditioning(pose_image, model):
 - Latent diffusion reduces computation
 - Classifier-free guidance enables text conditioning
 - Key tradeoff: quality vs speed (sampling steps)
+
+Happy Coding
