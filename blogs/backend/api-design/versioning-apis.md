@@ -194,3 +194,7 @@ public class VersionedController { }
 
 - [API Versioning Best Practices](https://restfulapi.net/versioning/)
 - [RFC 5829 - Link Relation Types for Simple Version Navigation](https://tools.ietf.org/html/rfc5829)
+
+---
+
+Happy Coding 👨‍💻

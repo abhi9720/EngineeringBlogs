@@ -1,0 +1,90 @@
+{
+  "name": "Distributed Patterns",
+  "path": "/blogs/backend/architecture-patterns/distributed-patterns",
+  "blogs": [
+    {
+      "title": "Two-Phase Commit vs Saga",
+      "description": "Compare two-phase commit (2PC) and saga patterns for distributed transactions: consistency models, trade-offs, and use cases",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "two-phase-commit",
+        "saga",
+        "distributed-transactions",
+        "consistency"
+      ],
+      "coverImage": "/images/two-phase-commit-vs-saga.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "architecture-patterns",
+        "distributed-patterns"
+      ],
+      "slug": "two-phase-commit-vs-saga",
+      "path": "/blogs/backend/architecture-patterns/distributed-patterns/two-phase-commit-vs-saga"
+    },
+    {
+      "title": "Saga Pattern: Orchestration",
+      "description": "Implement orchestration-based saga pattern for distributed transactions with compensation and coordination",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "saga-pattern",
+        "orchestration",
+        "distributed-transactions",
+        "microservices"
+      ],
+      "coverImage": "/images/saga-pattern-orchestration.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "architecture-patterns",
+        "distributed-patterns"
+      ],
+      "slug": "saga-pattern-orchestration",
+      "path": "/blogs/backend/architecture-patterns/distributed-patterns/saga-pattern-orchestration"
+    },
+    {
+      "title": "Distributed Locks and Leader Election",
+      "description": "Implement distributed locking and leader election patterns: Redis locks, ZooKeeper, database-based coordination",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "distributed-locks",
+        "leader-election",
+        "redis",
+        "zookeeper"
+      ],
+      "coverImage": "/images/distributed-locks-and-leader-election.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "architecture-patterns",
+        "distributed-patterns"
+      ],
+      "slug": "distributed-locks-and-leader-election",
+      "path": "/blogs/backend/architecture-patterns/distributed-patterns/distributed-locks-and-leader-election"
+    },
+    {
+      "title": "CQRS and Event Sourcing",
+      "description": "Deep dive into CQRS pattern with event sourcing: command models, query models, event stores, and practical implementation",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "cqrs",
+        "event-sourcing",
+        "microservices",
+        "axon"
+      ],
+      "coverImage": "/images/cqrs-event-sourcing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "architecture-patterns",
+        "distributed-patterns"
+      ],
+      "slug": "cqrs-event-sourcing",
+      "path": "/blogs/backend/architecture-patterns/distributed-patterns/cqrs-event-sourcing"
+    }
+  ]
+}

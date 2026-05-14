@@ -106,25 +106,26 @@ public class AccountService {
 
 ### 3. CQRS (Command Query Responsibility Segregation)
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                         CQRS Pattern                                 │
-│                                                                      │
-│   Commands (Write)              Queries (Read)                       │
-│        │                             │                              │
-│        ▼                             ▼                              │
-│   ┌─────────────┐              ┌─────────────┐                      │
-│   │    Command   │              │   Query     │                     │
-│   │   Handler    │              │   Handler   │                     │
-│   └──────┬──────┘              └──────┬──────┘                      │
-│          │                            │                             │
-│          ▼                            ▼                             │
-│   ┌─────────────┐              ┌─────────────┐                     │
-│   │    Write     │  ────────▶  │    Read     │                     │
-│   │    Model     │  Sync events│    Model    │                     │
-│   │   (Postgres) │              │   (Elastic) │                     │
-│   └─────────────┘              └─────────────┘                     │
-└─────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+
+    Commands[Commands<br/>Write] --> CmdHandler[Command<br/>Handler]
+    Queries[Queries<br/>Read] --> QueryHandler[Query<br/>Handler]
+
+    CmdHandler --> WriteModel[(Write Model<br/>Postgres)]
+    QueryHandler --> ReadModel[(Read Model<br/>Elastic)]
+
+    WriteModel -.->|Sync events| ReadModel
+
+    linkStyle default stroke:#278ea5
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+
+    class WriteModel,ReadModel green
+    class CmdHandler,QueryHandler blue
+    class Commands,Queries pink
 ```
 
 ```java
@@ -401,3 +402,7 @@ public class OutboxProcessor {
 - [CQRS Pattern](https://martinfowler.com/bliki/CQRS.html)
 - [Saga Pattern](https://microservices.io/patterns/data/saga.html)
 - [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html)
+
+---
+
+Happy Coding 👨‍💻

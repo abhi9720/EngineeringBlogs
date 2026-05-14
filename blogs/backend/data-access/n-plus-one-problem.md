@@ -112,3 +112,7 @@ List<Order> findAllWithCustomer();
 
 - [Hibernate ORM - Fetching Strategies](https://docs.jboss.org/hibernate/orm/current/userguide/html_single/chapters/fetching/Fetching.html)
 - [Baeldung - N+1 Problem](https://www.baeldung.com/hibernate-n-plus-1)
+
+---
+
+Happy Coding 👨‍💻

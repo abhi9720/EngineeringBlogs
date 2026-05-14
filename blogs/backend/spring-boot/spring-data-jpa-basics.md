@@ -1044,3 +1044,7 @@ The key to using Spring Data JPA successfully is understanding when to rely on i
 - [Spring Data JPA - Query Methods](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods)
 - [Hibernate ORM Documentation](https://hibernate.org/orm/documentation/)
 - [Baeldung - Spring Data JPA Guide](https://www.baeldung.com/the-persistence-layer-with-spring-data-jpa)
+
+---
+
+Happy Coding 👨‍💻

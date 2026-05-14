@@ -21,28 +21,24 @@ RabbitMQ is a feature-rich message broker implementing AMQP (Advanced Message Qu
 
 ## Architecture
 
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│                            RabbitMQ                                   │
-│                                                                       │
-│   ┌─────────┐      ┌─────────────┐      ┌──────────┐                │
-│   │ Exchange│─────▶│   Queue     │─────▶│ Consumer │                │
-│   │ (type)  │      │ (buffer)    │      │ (process)│                │
-│   └─────────┘      └─────────────┘      └──────────┘                │
-│       │                                                      │      │
-│       │ Binding (routing key)                               │      │
-│       ▼                                                      ▼      │
-│   ┌─────────┐                                                 │      │
-│   │ Producer│────────────────────────────────────────────────┘      │
-│   │ (send)  │                                                  │      │
-│   └─────────┘                                                  │      │
-│                                                                  ▼
-│   ┌─────────┐                                                  │      │
-│   │  Dead   │◀─────────────────────────────────────────────────┘      │
-│   │ Letter  │                                                       │
-│   │  Queue  │                                                       │
-│   └─────────┘                                                       │
-└──────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+
+    Producer[Producer] --> Exchange[Exchange]
+    Exchange --> Queue[(Queue)]
+    Queue --> Consumer[Consumer]
+
+    Exchange -.->|Binding| Producer
+    Queue --> DLQ[(Dead Letter<br/>Queue)]
+
+    linkStyle default stroke:#278ea5
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+
+    class Queue,DLQ green
+    class Exchange,Producer,Consumer blue
 ```
 
 ---
@@ -259,3 +255,7 @@ public void process(Task task, Channel channel,
 - [RabbitMQ Documentation](https://www.rabbitmq.com/documentation.html)
 - [Spring AMQP Reference](https://docs.spring.io/spring-amqp/reference/)
 - [RabbitMQ in Action](https://www.manning.com/books/rabbitmq-in-action)
+
+---
+
+Happy Coding 👨‍💻

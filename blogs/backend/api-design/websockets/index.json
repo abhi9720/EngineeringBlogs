@@ -1,0 +1,69 @@
+{
+  "name": "WebSockets",
+  "path": "/blogs/backend/api-design/websockets",
+  "blogs": [
+    {
+      "title": "WebSocket vs Server-Sent Events",
+      "description": "Compare WebSocket and Server-Sent Events: protocol differences, use cases, implementation patterns, and choosing the right real-time technology",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "websockets",
+        "server-sent-events",
+        "sse",
+        "real-time"
+      ],
+      "coverImage": "/images/backend/api-design/websockets/websocket-vs-sse.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "websockets"
+      ],
+      "slug": "websocket-vs-sse",
+      "path": "/blogs/backend/api-design/websockets/websocket-vs-sse"
+    },
+    {
+      "title": "WebSocket Basics",
+      "description": "Master WebSocket protocol: handshake, frame types, Java WebSocket API, Spring WebSocket support, and real-world implementation patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "websockets",
+        "real-time",
+        "spring-websocket",
+        "protocol"
+      ],
+      "coverImage": "/images/backend/api-design/websockets/websocket-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "websockets"
+      ],
+      "slug": "websocket-basics",
+      "path": "/blogs/backend/api-design/websockets/websocket-basics"
+    },
+    {
+      "title": "Scaling WebSockets",
+      "description": "Techniques for scaling WebSocket connections: sticky sessions, pub/sub backplane, Redis pub/sub, horizontal scaling, and connection management",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "websockets",
+        "scaling",
+        "redis",
+        "sticky-sessions"
+      ],
+      "coverImage": "/images/backend/api-design/websockets/scaling-websockets.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "websockets"
+      ],
+      "slug": "scaling-websockets",
+      "path": "/blogs/backend/api-design/websockets/scaling-websockets"
+    }
+  ]
+}

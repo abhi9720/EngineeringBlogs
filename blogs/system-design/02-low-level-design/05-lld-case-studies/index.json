@@ -1,0 +1,121 @@
+{
+  "name": "05 Lld Case Studies",
+  "path": "/blogs/system-design/02-low-level-design/05-lld-case-studies",
+  "blogs": [
+    {
+      "title": "ATM Machine - LLD",
+      "description": "Low-level design of an ATM system covering card authentication, account management, transactions, withdrawal/deposit, balance inquiry, and security",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "lld",
+        "atm",
+        "java",
+        "banking",
+        "transaction",
+        "system-design"
+      ],
+      "coverImage": "/images/atm-machine-design.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "05-lld-case-studies"
+      ],
+      "slug": "65. atm-machine-design",
+      "path": "/blogs/system-design/02-low-level-design/05-lld-case-studies/65. atm-machine-design"
+    },
+    {
+      "title": "Meeting Scheduler - LLD",
+      "description": "Low-level design of a meeting scheduler system covering calendar management, conflict detection, room booking, and invite management with Java",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "lld",
+        "meeting-scheduler",
+        "java",
+        "calendar",
+        "conflict-detection",
+        "system-design"
+      ],
+      "coverImage": "/images/meeting-scheduler-design.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "05-lld-case-studies"
+      ],
+      "slug": "64. meeting-scheduler-design",
+      "path": "/blogs/system-design/02-low-level-design/05-lld-case-studies/64. meeting-scheduler-design"
+    },
+    {
+      "title": "Tic-Tac-Toe Game - LLD",
+      "description": "Low-level design of a Tic-Tac-Toe game with OOP covering board management, players, game state, move validation, and win detection",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "lld",
+        "tic-tac-toe",
+        "java",
+        "game-design",
+        "oop",
+        "object-oriented-design"
+      ],
+      "coverImage": "/images/tic-tac-toe-design.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "05-lld-case-studies"
+      ],
+      "slug": "63. tic-tac-toe-design",
+      "path": "/blogs/system-design/02-low-level-design/05-lld-case-studies/63. tic-tac-toe-design"
+    },
+    {
+      "title": "Elevator System - LLD",
+      "description": "Low-level design of an elevator system with multiple elevators, request handling, and scheduling algorithms including FCFS, SCAN, and LOOK",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "lld",
+        "elevator-system",
+        "oop",
+        "java",
+        "scheduling-algorithms",
+        "system-design"
+      ],
+      "coverImage": "/images/elevator-system-design.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "05-lld-case-studies"
+      ],
+      "slug": "62. elevator-system-design",
+      "path": "/blogs/system-design/02-low-level-design/05-lld-case-studies/62. elevator-system-design"
+    },
+    {
+      "title": "Parking Lot System - LLD",
+      "description": "Low-level design of a parking lot system with OOP principles covering vehicle types, parking spots, levels, payment processing, and entry/exit management",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "lld",
+        "parking-lot",
+        "oop",
+        "java",
+        "system-design",
+        "object-oriented-design"
+      ],
+      "coverImage": "/images/parking-lot-design.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "05-lld-case-studies"
+      ],
+      "slug": "61. parking-lot-design",
+      "path": "/blogs/system-design/02-low-level-design/05-lld-case-studies/61. parking-lot-design"
+    }
+  ]
+}

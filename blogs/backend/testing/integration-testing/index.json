@@ -1,0 +1,69 @@
+{
+  "name": "Integration Testing",
+  "path": "/blogs/backend/testing/integration-testing",
+  "blogs": [
+    {
+      "title": "Testcontainers Guide",
+      "description": "Comprehensive guide to Testcontainers for integration testing: database testing, service containers, and Spring Boot integration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "testcontainers",
+        "integration-testing",
+        "docker",
+        "spring-boot"
+      ],
+      "coverImage": "/images/testcontainers-guide.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing",
+        "integration-testing"
+      ],
+      "slug": "testcontainers-guide",
+      "path": "/blogs/backend/testing/integration-testing/testcontainers-guide"
+    },
+    {
+      "title": "Spring Boot Test Slice Annotations",
+      "description": "Comprehensive guide to Spring Boot test slice annotations: @WebMvcTest, @DataJpaTest, @JsonTest, @RestClientTest, and custom slices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "testing",
+        "slice-tests",
+        "integration-testing"
+      ],
+      "coverImage": "/images/spring-boot-test-slice-annotations.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing",
+        "integration-testing"
+      ],
+      "slug": "spring-boot-test-slice-annotations",
+      "path": "/blogs/backend/testing/integration-testing/spring-boot-test-slice-annotations"
+    },
+    {
+      "title": "Database Testing Strategies",
+      "description": "Database testing strategies with Testcontainers and H2: migration testing, fixture management, and transaction rollback patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "database-testing",
+        "testcontainers",
+        "h2",
+        "integration-testing"
+      ],
+      "coverImage": "/images/database-testing-strategies.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing",
+        "integration-testing"
+      ],
+      "slug": "database-testing-strategies",
+      "path": "/blogs/backend/testing/integration-testing/database-testing-strategies"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "name": "02 Networking Basics",
+  "path": "/blogs/system-design/01-fundamentals/02-networking-basics",
+  "blogs": [
+    {
+      "title": "REST vs gRPC vs GraphQL",
+      "description": "A comprehensive comparison of REST, gRPC, and GraphQL API paradigms covering architecture, performance, tooling, and when to use each approach in modern system design",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rest",
+        "grpc",
+        "graphql",
+        "api",
+        "system-design",
+        "protocols"
+      ],
+      "coverImage": "/images/rest-vs-grpc-vs-graphql.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "01-fundamentals",
+        "02-networking-basics"
+      ],
+      "slug": "63. rest-vs-grpc-vs-graphql",
+      "path": "/blogs/system-design/01-fundamentals/02-networking-basics/63. rest-vs-grpc-vs-graphql"
+    },
+    {
+      "title": "TCP vs UDP",
+      "description": "A comprehensive comparison of TCP and UDP protocols covering the three-way handshake, flow control, congestion control, connectionless communication, and use cases for each",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "tcp",
+        "udp",
+        "networking",
+        "protocols",
+        "system-design",
+        "transport-layer"
+      ],
+      "coverImage": "/images/tcp-vs-udp.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "01-fundamentals",
+        "02-networking-basics"
+      ],
+      "slug": "62. tcp-vs-udp",
+      "path": "/blogs/system-design/01-fundamentals/02-networking-basics/62. tcp-vs-udp"
+    },
+    {
+      "title": "DNS & HTTP Fundamentals",
+      "description": "A deep dive into DNS resolution, record types, HTTP protocol evolution, caching strategies, and CDN fundamentals for system design interviews and real-world architecture",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "dns",
+        "http",
+        "networking",
+        "cdn",
+        "system-design",
+        "protocols"
+      ],
+      "coverImage": "/images/dns-http-deep-dive.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "01-fundamentals",
+        "02-networking-basics"
+      ],
+      "slug": "61. dns-http-deep-dive",
+      "path": "/blogs/system-design/01-fundamentals/02-networking-basics/61. dns-http-deep-dive"
+    }
+  ]
+}

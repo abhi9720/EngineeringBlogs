@@ -4,7 +4,7 @@
       "name": "Ai Ml",
       "slug": "ai-ml",
       "path": "ai-ml",
-      "blogCount": 28,
+      "blogCount": 73,
       "children": [
         {
           "name": "01 Foundations",
@@ -31,7 +31,64 @@
           "name": "04 Llm Applications",
           "slug": "04-llm-applications",
           "path": "ai-ml/04-llm-applications",
-          "blogCount": 6,
+          "blogCount": 7,
+          "children": []
+        },
+        {
+          "name": "05 Rag And Retrieval Systems",
+          "slug": "05-rag-and-retrieval-systems",
+          "path": "ai-ml/05-rag-and-retrieval-systems",
+          "blogCount": 9,
+          "children": []
+        },
+        {
+          "name": "06 Ai Agents Systems",
+          "slug": "06-ai-agents-systems",
+          "path": "ai-ml/06-ai-agents-systems",
+          "blogCount": 22,
+          "children": [
+            {
+              "name": "Agent Evaluation",
+              "slug": "agent-evaluation",
+              "path": "ai-ml/06-ai-agents-systems/agent-evaluation",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Frameworks",
+              "slug": "frameworks",
+              "path": "ai-ml/06-ai-agents-systems/frameworks",
+              "blogCount": 5,
+              "children": []
+            },
+            {
+              "name": "Multi Agent Systems",
+              "slug": "multi-agent-systems",
+              "path": "ai-ml/06-ai-agents-systems/multi-agent-systems",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Tools Memory",
+              "slug": "tools-memory",
+              "path": "ai-ml/06-ai-agents-systems/tools-memory",
+              "blogCount": 4,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "07 Production Ai Systems",
+          "slug": "07-production-ai-systems",
+          "path": "ai-ml/07-production-ai-systems",
+          "blogCount": 8,
+          "children": []
+        },
+        {
+          "name": "08 Advanced Topics",
+          "slug": "08-advanced-topics",
+          "path": "ai-ml/08-advanced-topics",
+          "blogCount": 5,
           "children": []
         }
       ]
@@ -40,42 +97,490 @@
       "name": "Backend",
       "slug": "backend",
       "path": "backend",
-      "blogCount": 25,
+      "blogCount": 247,
       "children": [
+        {
+          "name": "Api Clients Integrations",
+          "slug": "api-clients-integrations",
+          "path": "backend/api-clients-integrations",
+          "blogCount": 5,
+          "children": []
+        },
         {
           "name": "Api Design",
           "slug": "api-design",
           "path": "backend/api-design",
-          "blogCount": 4,
+          "blogCount": 24,
+          "children": [
+            {
+              "name": "Api Security",
+              "slug": "api-security",
+              "path": "backend/api-design/api-security",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Graphql",
+              "slug": "graphql",
+              "path": "backend/api-design/graphql",
+              "blogCount": 5,
+              "children": []
+            },
+            {
+              "name": "Grpc",
+              "slug": "grpc",
+              "path": "backend/api-design/grpc",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Rest",
+              "slug": "rest",
+              "path": "backend/api-design/rest",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Websockets",
+              "slug": "websockets",
+              "path": "backend/api-design/websockets",
+              "blogCount": 3,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "Architecture Patterns",
+          "slug": "architecture-patterns",
+          "path": "backend/architecture-patterns",
+          "blogCount": 14,
+          "children": [
+            {
+              "name": "Clean Hexagonal",
+              "slug": "clean-hexagonal",
+              "path": "backend/architecture-patterns/clean-hexagonal",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Design Patterns",
+              "slug": "design-patterns",
+              "path": "backend/architecture-patterns/design-patterns",
+              "blogCount": 5,
+              "children": []
+            },
+            {
+              "name": "Distributed Patterns",
+              "slug": "distributed-patterns",
+              "path": "backend/architecture-patterns/distributed-patterns",
+              "blogCount": 4,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "Background Jobs",
+          "slug": "background-jobs",
+          "path": "backend/background-jobs",
+          "blogCount": 11,
+          "children": [
+            {
+              "name": "Message Driven",
+              "slug": "message-driven",
+              "path": "backend/background-jobs/message-driven",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "Scheduling",
+              "slug": "scheduling",
+              "path": "backend/background-jobs/scheduling",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Workflow Orchestration",
+              "slug": "workflow-orchestration",
+              "path": "backend/background-jobs/workflow-orchestration",
+              "blogCount": 3,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "Build Tools Devops",
+          "slug": "build-tools-devops",
+          "path": "backend/build-tools-devops",
+          "blogCount": 5,
           "children": []
+        },
+        {
+          "name": "Caching",
+          "slug": "caching",
+          "path": "backend/caching",
+          "blogCount": 11,
+          "children": [
+            {
+              "name": "Cdn Caching",
+              "slug": "cdn-caching",
+              "path": "backend/caching/cdn-caching",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "Distributed Caching",
+              "slug": "distributed-caching",
+              "path": "backend/caching/distributed-caching",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Redis",
+              "slug": "redis",
+              "path": "backend/caching/redis",
+              "blogCount": 4,
+              "children": []
+            }
+          ]
         },
         {
           "name": "Data Access",
           "slug": "data-access",
           "path": "backend/data-access",
-          "blogCount": 4,
-          "children": []
+          "blogCount": 22,
+          "children": [
+            {
+              "name": "Data Patterns",
+              "slug": "data-patterns",
+              "path": "backend/data-access/data-patterns",
+              "blogCount": 5,
+              "children": []
+            },
+            {
+              "name": "Nosql",
+              "slug": "nosql",
+              "path": "backend/data-access/nosql",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Orm",
+              "slug": "orm",
+              "path": "backend/data-access/orm",
+              "blogCount": 5,
+              "children": []
+            },
+            {
+              "name": "Relational",
+              "slug": "relational",
+              "path": "backend/data-access/relational",
+              "blogCount": 4,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "Frameworks",
+          "slug": "frameworks",
+          "path": "backend/frameworks",
+          "blogCount": 18,
+          "children": [
+            {
+              "name": "Go",
+              "slug": "go",
+              "path": "backend/frameworks/go",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Jvm Ecosystem",
+              "slug": "jvm-ecosystem",
+              "path": "backend/frameworks/jvm-ecosystem",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Nodejs",
+              "slug": "nodejs",
+              "path": "backend/frameworks/nodejs",
+              "blogCount": 5,
+              "children": []
+            },
+            {
+              "name": "Python",
+              "slug": "python",
+              "path": "backend/frameworks/python",
+              "blogCount": 5,
+              "children": []
+            }
+          ]
         },
         {
           "name": "Messaging",
           "slug": "messaging",
           "path": "backend/messaging",
-          "blogCount": 4,
-          "children": []
+          "blogCount": 19,
+          "children": [
+            {
+              "name": "Event Patterns",
+              "slug": "event-patterns",
+              "path": "backend/messaging/event-patterns",
+              "blogCount": 5,
+              "children": []
+            },
+            {
+              "name": "Kafka",
+              "slug": "kafka",
+              "path": "backend/messaging/kafka",
+              "blogCount": 6,
+              "children": []
+            },
+            {
+              "name": "Rabbitmq",
+              "slug": "rabbitmq",
+              "path": "backend/messaging/rabbitmq",
+              "blogCount": 4,
+              "children": []
+            }
+          ]
         },
         {
           "name": "Microservices",
           "slug": "microservices",
           "path": "backend/microservices",
-          "blogCount": 6,
-          "children": []
+          "blogCount": 23,
+          "children": [
+            {
+              "name": "Communication",
+              "slug": "communication",
+              "path": "backend/microservices/communication",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Deployment",
+              "slug": "deployment",
+              "path": "backend/microservices/deployment",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Patterns",
+              "slug": "patterns",
+              "path": "backend/microservices/patterns",
+              "blogCount": 5,
+              "children": []
+            },
+            {
+              "name": "Testing",
+              "slug": "testing",
+              "path": "backend/microservices/testing",
+              "blogCount": 4,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "Observability",
+          "slug": "observability",
+          "path": "backend/observability",
+          "blogCount": 15,
+          "children": [
+            {
+              "name": "Apm",
+              "slug": "apm",
+              "path": "backend/observability/apm",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "Distributed Tracing",
+              "slug": "distributed-tracing",
+              "path": "backend/observability/distributed-tracing",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "Logging",
+              "slug": "logging",
+              "path": "backend/observability/logging",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Monitoring",
+              "slug": "monitoring",
+              "path": "backend/observability/monitoring",
+              "blogCount": 4,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "Performance",
+          "slug": "performance",
+          "path": "backend/performance",
+          "blogCount": 13,
+          "children": [
+            {
+              "name": "Optimization",
+              "slug": "optimization",
+              "path": "backend/performance/optimization",
+              "blogCount": 5,
+              "children": []
+            },
+            {
+              "name": "Profiling",
+              "slug": "profiling",
+              "path": "backend/performance/profiling",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "Scalability",
+              "slug": "scalability",
+              "path": "backend/performance/scalability",
+              "blogCount": 4,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "Search",
+          "slug": "search",
+          "path": "backend/search",
+          "blogCount": 9,
+          "children": [
+            {
+              "name": "Alternative Search",
+              "slug": "alternative-search",
+              "path": "backend/search/alternative-search",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "Elasticsearch",
+              "slug": "elasticsearch",
+              "path": "backend/search/elasticsearch",
+              "blogCount": 5,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "Security",
+          "slug": "security",
+          "path": "backend/security",
+          "blogCount": 14,
+          "children": [
+            {
+              "name": "Application Security",
+              "slug": "application-security",
+              "path": "backend/security/application-security",
+              "blogCount": 5,
+              "children": []
+            },
+            {
+              "name": "Authentication",
+              "slug": "authentication",
+              "path": "backend/security/authentication",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Authorization",
+              "slug": "authorization",
+              "path": "backend/security/authorization",
+              "blogCount": 4,
+              "children": []
+            }
+          ]
         },
         {
           "name": "Spring Boot",
           "slug": "spring-boot",
           "path": "backend/spring-boot",
-          "blogCount": 7,
-          "children": []
+          "blogCount": 28,
+          "children": [
+            {
+              "name": "Batch",
+              "slug": "batch",
+              "path": "backend/spring-boot/batch",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Boot",
+              "slug": "boot",
+              "path": "backend/spring-boot/boot",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Core",
+              "slug": "core",
+              "path": "backend/spring-boot/core",
+              "blogCount": 5,
+              "children": []
+            },
+            {
+              "name": "Reactive",
+              "slug": "reactive",
+              "path": "backend/spring-boot/reactive",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "Security",
+              "slug": "security",
+              "path": "backend/spring-boot/security",
+              "blogCount": 4,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "Testing",
+          "slug": "testing",
+          "path": "backend/testing",
+          "blogCount": 16,
+          "children": [
+            {
+              "name": "Contract Testing",
+              "slug": "contract-testing",
+              "path": "backend/testing/contract-testing",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "Integration Testing",
+              "slug": "integration-testing",
+              "path": "backend/testing/integration-testing",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "Performance Testing",
+              "slug": "performance-testing",
+              "path": "backend/testing/performance-testing",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "Test Automation",
+              "slug": "test-automation",
+              "path": "backend/testing/test-automation",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "Unit Testing",
+              "slug": "unit-testing",
+              "path": "backend/testing/unit-testing",
+              "blogCount": 4,
+              "children": []
+            }
+          ]
         }
       ]
     },
@@ -414,35 +919,291 @@
       "name": "System Design",
       "slug": "system-design",
       "path": "system-design",
-      "blogCount": 16,
+      "blogCount": 57,
       "children": [
         {
-          "name": "Basics",
-          "slug": "basics",
-          "path": "system-design/basics",
-          "blogCount": 4,
-          "children": []
+          "name": "01 Fundamentals",
+          "slug": "01-fundamentals",
+          "path": "system-design/01-fundamentals",
+          "blogCount": 12,
+          "children": [
+            {
+              "name": "01 Core Concepts",
+              "slug": "01-core-concepts",
+              "path": "system-design/01-fundamentals/01-core-concepts",
+              "blogCount": 8,
+              "children": []
+            },
+            {
+              "name": "02 Networking Basics",
+              "slug": "02-networking-basics",
+              "path": "system-design/01-fundamentals/02-networking-basics",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "03 Estimation Planning",
+              "slug": "03-estimation-planning",
+              "path": "system-design/01-fundamentals/03-estimation-planning",
+              "blogCount": 1,
+              "children": []
+            }
+          ]
         },
         {
-          "name": "Case Studies",
-          "slug": "case-studies",
-          "path": "system-design/case-studies",
+          "name": "02 Low Level Design",
+          "slug": "02-low-level-design",
+          "path": "system-design/02-low-level-design",
+          "blogCount": 9,
+          "children": [
+            {
+              "name": "01 Oop Principles",
+              "slug": "01-oop-principles",
+              "path": "system-design/02-low-level-design/01-oop-principles",
+              "blogCount": 1,
+              "children": []
+            },
+            {
+              "name": "02 Uml Modeling",
+              "slug": "02-uml-modeling",
+              "path": "system-design/02-low-level-design/02-uml-modeling",
+              "blogCount": 1,
+              "children": []
+            },
+            {
+              "name": "03 Gof Design Patterns",
+              "slug": "03-gof-design-patterns",
+              "path": "system-design/02-low-level-design/03-gof-design-patterns",
+              "blogCount": 1,
+              "children": []
+            },
+            {
+              "name": "04 Concurrency Patterns",
+              "slug": "04-concurrency-patterns",
+              "path": "system-design/02-low-level-design/04-concurrency-patterns",
+              "blogCount": 1,
+              "children": []
+            },
+            {
+              "name": "05 Lld Case Studies",
+              "slug": "05-lld-case-studies",
+              "path": "system-design/02-low-level-design/05-lld-case-studies",
+              "blogCount": 5,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "03 Storage Databases",
+          "slug": "03-storage-databases",
+          "path": "system-design/03-storage-databases",
+          "blogCount": 7,
+          "children": [
+            {
+              "name": "01 Database Types",
+              "slug": "01-database-types",
+              "path": "system-design/03-storage-databases/01-database-types",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "02 Storage Systems",
+              "slug": "02-storage-systems",
+              "path": "system-design/03-storage-databases/02-storage-systems",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "03 Database Patterns",
+              "slug": "03-database-patterns",
+              "path": "system-design/03-storage-databases/03-database-patterns",
+              "blogCount": 1,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "04 Communication Messaging",
+          "slug": "04-communication-messaging",
+          "path": "system-design/04-communication-messaging",
           "blogCount": 5,
-          "children": []
+          "children": [
+            {
+              "name": "01 Api Design",
+              "slug": "01-api-design",
+              "path": "system-design/04-communication-messaging/01-api-design",
+              "blogCount": 1,
+              "children": []
+            },
+            {
+              "name": "02 Messaging Systems",
+              "slug": "02-messaging-systems",
+              "path": "system-design/04-communication-messaging/02-messaging-systems",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "03 Real Time Communication",
+              "slug": "03-real-time-communication",
+              "path": "system-design/04-communication-messaging/03-real-time-communication",
+              "blogCount": 1,
+              "children": []
+            }
+          ]
         },
         {
-          "name": "Patterns",
-          "slug": "patterns",
-          "path": "system-design/patterns",
+          "name": "05 Architecture Patterns",
+          "slug": "05-architecture-patterns",
+          "path": "system-design/05-architecture-patterns",
+          "blogCount": 7,
+          "children": [
+            {
+              "name": "01 Resilience Patterns",
+              "slug": "01-resilience-patterns",
+              "path": "system-design/05-architecture-patterns/01-resilience-patterns",
+              "blogCount": 4,
+              "children": []
+            },
+            {
+              "name": "02 Data Patterns",
+              "slug": "02-data-patterns",
+              "path": "system-design/05-architecture-patterns/02-data-patterns",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "03 Architecture Styles",
+              "slug": "03-architecture-styles",
+              "path": "system-design/05-architecture-patterns/03-architecture-styles",
+              "blogCount": 1,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "06 Distributed Systems",
+          "slug": "06-distributed-systems",
+          "path": "system-design/06-distributed-systems",
           "blogCount": 4,
-          "children": []
+          "children": [
+            {
+              "name": "01 Consensus Coordination",
+              "slug": "01-consensus-coordination",
+              "path": "system-design/06-distributed-systems/01-consensus-coordination",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "02 Distributed Data",
+              "slug": "02-distributed-data",
+              "path": "system-design/06-distributed-systems/02-distributed-data",
+              "blogCount": 2,
+              "children": []
+            }
+          ]
         },
         {
-          "name": "Storage",
-          "slug": "storage",
-          "path": "system-design/storage",
+          "name": "07 Observability Reliability",
+          "slug": "07-observability-reliability",
+          "path": "system-design/07-observability-reliability",
           "blogCount": 3,
-          "children": []
+          "children": [
+            {
+              "name": "01 Monitoring Alerting",
+              "slug": "01-monitoring-alerting",
+              "path": "system-design/07-observability-reliability/01-monitoring-alerting",
+              "blogCount": 1,
+              "children": []
+            },
+            {
+              "name": "02 Logging Tracing",
+              "slug": "02-logging-tracing",
+              "path": "system-design/07-observability-reliability/02-logging-tracing",
+              "blogCount": 2,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "08 Performance Engineering",
+          "slug": "08-performance-engineering",
+          "path": "system-design/08-performance-engineering",
+          "blogCount": 1,
+          "children": [
+            {
+              "name": "01 Performance Fundamentals",
+              "slug": "01-performance-fundamentals",
+              "path": "system-design/08-performance-engineering/01-performance-fundamentals",
+              "blogCount": 1,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "09 Security Compliance",
+          "slug": "09-security-compliance",
+          "path": "system-design/09-security-compliance",
+          "blogCount": 2,
+          "children": [
+            {
+              "name": "01 Authentication Authorization",
+              "slug": "01-authentication-authorization",
+              "path": "system-design/09-security-compliance/01-authentication-authorization",
+              "blogCount": 1,
+              "children": []
+            },
+            {
+              "name": "02 Data Network Security",
+              "slug": "02-data-network-security",
+              "path": "system-design/09-security-compliance/02-data-network-security",
+              "blogCount": 1,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "10 Case Studies Hld",
+          "slug": "10-case-studies-hld",
+          "path": "system-design/10-case-studies-hld",
+          "blogCount": 6,
+          "children": [
+            {
+              "name": "01 Social Messaging",
+              "slug": "01-social-messaging",
+              "path": "system-design/10-case-studies-hld/01-social-messaging",
+              "blogCount": 3,
+              "children": []
+            },
+            {
+              "name": "02 Media Streaming",
+              "slug": "02-media-streaming",
+              "path": "system-design/10-case-studies-hld/02-media-streaming",
+              "blogCount": 2,
+              "children": []
+            },
+            {
+              "name": "03 Ecommerce Utility",
+              "slug": "03-ecommerce-utility",
+              "path": "system-design/10-case-studies-hld/03-ecommerce-utility",
+              "blogCount": 1,
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "11 Advanced Topics",
+          "slug": "11-advanced-topics",
+          "path": "system-design/11-advanced-topics",
+          "blogCount": 1,
+          "children": [
+            {
+              "name": "04 Interview Preparation",
+              "slug": "04-interview-preparation",
+              "path": "system-design/11-advanced-topics/04-interview-preparation",
+              "blogCount": 1,
+              "children": []
+            }
+          ]
         }
       ]
     }

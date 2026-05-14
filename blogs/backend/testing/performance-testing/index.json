@@ -1,0 +1,69 @@
+{
+  "name": "Performance Testing",
+  "path": "/blogs/backend/testing/performance-testing",
+  "blogs": [
+    {
+      "title": "Load Testing Strategies",
+      "description": "Comprehensive guide to load, stress, soak, spike, and endurance testing: strategies, metrics, and analysis",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "load-testing",
+        "stress-testing",
+        "performance",
+        "testing"
+      ],
+      "coverImage": "/images/load-testing-strategies.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing",
+        "performance-testing"
+      ],
+      "slug": "load-testing-strategies",
+      "path": "/blogs/backend/testing/performance-testing/load-testing-strategies"
+    },
+    {
+      "title": "JMeter Basics",
+      "description": "Getting started with Apache JMeter: test plans, thread groups, samplers, assertions, listeners, and backend integration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "jmeter",
+        "performance-testing",
+        "load-testing",
+        "testing"
+      ],
+      "coverImage": "/images/jmeter-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing",
+        "performance-testing"
+      ],
+      "slug": "jmeter-basics",
+      "path": "/blogs/backend/testing/performance-testing/jmeter-basics"
+    },
+    {
+      "title": "Gatling vs JMeter",
+      "description": "In-depth comparison of Gatling and JMeter for performance testing: architecture, DSL, reporting, and when to choose each",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "gatling",
+        "jmeter",
+        "performance-testing",
+        "comparison"
+      ],
+      "coverImage": "/images/gatling-vs-jmeter.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing",
+        "performance-testing"
+      ],
+      "slug": "gatling-vs-jmeter",
+      "path": "/blogs/backend/testing/performance-testing/gatling-vs-jmeter"
+    }
+  ]
+}

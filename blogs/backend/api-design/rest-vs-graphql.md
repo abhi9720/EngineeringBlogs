@@ -267,3 +267,7 @@ Choose based on your specific needs, not trends.
 - [GraphQL](https://graphql.org/)
 - [REST API Design Best Practices](https://restfulapi.net/)
 - [Apollo GraphQL](https://www.apollographql.com/)
+
+---
+
+Happy Coding 👨‍💻

@@ -3,6 +3,90 @@
   "path": "/blogs/backend/microservices",
   "blogs": [
     {
+      "title": "Microservices Testing Strategies",
+      "description": "Comprehensive testing strategies for microservices: testing pyramid, unit tests, integration tests, contract tests, end-to-end tests, test containers, and Spring Boot testing",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "testing",
+        "microservices",
+        "integration-testing",
+        "spring-boot"
+      ],
+      "coverImage": "/images/microservices-testing-strategies.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "testing"
+      ],
+      "slug": "microservices-testing-strategies",
+      "path": "/blogs/backend/microservices/testing/microservices-testing-strategies"
+    },
+    {
+      "title": "Integration Testing with Spring Cloud",
+      "description": "Integration testing strategies for Spring Cloud microservices: Testcontainers for databases, Embedded Kafka, Spring Cloud Contract, @SpringBootTest slicing, and CI pipeline testing",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "integration-testing",
+        "spring-cloud",
+        "testcontainers",
+        "spring-boot"
+      ],
+      "coverImage": "/images/integration-testing-spring-cloud.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "testing"
+      ],
+      "slug": "integration-testing-spring-cloud",
+      "path": "/blogs/backend/microservices/testing/integration-testing-spring-cloud"
+    },
+    {
+      "title": "Contract Testing with Pact",
+      "description": "Implement consumer-driven contract testing with Pact for microservices: Pact JVM, consumer tests, provider tests, pact verification, CI/CD integration, and Spring Boot examples",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "pact",
+        "contract-testing",
+        "microservices",
+        "testing"
+      ],
+      "coverImage": "/images/contract-testing-pact.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "testing"
+      ],
+      "slug": "contract-testing-pact",
+      "path": "/blogs/backend/microservices/testing/contract-testing-pact"
+    },
+    {
+      "title": "Chaos Engineering Basics for Microservices",
+      "description": "Implement chaos engineering for microservices: Chaos Monkey, LitmusChaos, fault injection, resilience testing, steady-state hypothesis, and Spring Boot integration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "chaos-engineering",
+        "resilience",
+        "testing",
+        "microservices"
+      ],
+      "coverImage": "/images/chaos-engineering-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "testing"
+      ],
+      "slug": "chaos-engineering-basics",
+      "path": "/blogs/backend/microservices/testing/chaos-engineering-basics"
+    },
+    {
       "title": "Service Discovery with Eureka",
       "description": "Master service discovery in microservices using Netflix Eureka: client-side discovery, registration, health checks, and production patterns",
       "date": "2026-05-11",
@@ -21,6 +105,111 @@
       ],
       "slug": "service-discovery-eureka",
       "path": "/blogs/backend/microservices/service-discovery-eureka"
+    },
+    {
+      "title": "Strangler Fig Pattern for Legacy Migration",
+      "description": "Implement the Strangler Fig pattern for incremental migration from monolithic to microservices architecture: routing strategies, feature flags, gradual decomposition, and Spring Boot examples",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "strangler-fig",
+        "migration",
+        "microservices",
+        "legacy"
+      ],
+      "coverImage": "/images/strangler-fig-pattern.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "patterns"
+      ],
+      "slug": "strangler-fig-pattern",
+      "path": "/blogs/backend/microservices/patterns/strangler-fig-pattern"
+    },
+    {
+      "title": "Sidecar Pattern",
+      "description": "Implement the sidecar pattern in microservices: deploying auxiliary components alongside main services, service mesh sidecars, Spring Boot examples, and Istio integration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "sidecar",
+        "service-mesh",
+        "istio",
+        "microservices"
+      ],
+      "coverImage": "/images/sidecar-pattern.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "patterns"
+      ],
+      "slug": "sidecar-pattern",
+      "path": "/blogs/backend/microservices/patterns/sidecar-pattern"
+    },
+    {
+      "title": "Retry and Timeout Patterns",
+      "description": "Implement retry and timeout patterns in microservices: exponential backoff, jitter, circuit breaker integration, Resilience4j retry, Spring Retry, and timeout configuration strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "retry",
+        "timeout",
+        "resilience4j",
+        "microservices"
+      ],
+      "coverImage": "/images/retry-and-timeout-patterns.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "patterns"
+      ],
+      "slug": "retry-and-timeout-patterns",
+      "path": "/blogs/backend/microservices/patterns/retry-and-timeout-patterns"
+    },
+    {
+      "title": "Bulkhead Pattern",
+      "description": "Implement the bulkhead pattern for fault isolation in microservices: thread pool isolation, semaphore isolation, Resilience4j bulkhead, Spring Boot configuration, and monitoring",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "bulkhead",
+        "resilience4j",
+        "fault-tolerance",
+        "microservices"
+      ],
+      "coverImage": "/images/bulkhead-pattern.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "patterns"
+      ],
+      "slug": "bulkhead-pattern",
+      "path": "/blogs/backend/microservices/patterns/bulkhead-pattern"
+    },
+    {
+      "title": "Backends for Frontends (BFF) Pattern",
+      "description": "Implement the Backends for Frontends pattern: separate API gateways for each client type, mobile BFF, web BFF, GraphQL BFF, and Spring Cloud Gateway configuration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "bff",
+        "api-gateway",
+        "microservices",
+        "frontend"
+      ],
+      "coverImage": "/images/backends-for-frontends.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "patterns"
+      ],
+      "slug": "backends-for-frontends",
+      "path": "/blogs/backend/microservices/patterns/backends-for-frontends"
     },
     {
       "title": "Microservices Introduction",
@@ -81,6 +270,174 @@
       ],
       "slug": "distributed-tracing",
       "path": "/blogs/backend/microservices/distributed-tracing"
+    },
+    {
+      "title": "Service Mesh with Istio",
+      "description": "Implement Istio service mesh for microservices: traffic management, mTLS security, observability with Kiali and Jaeger, canary deployments, and fault injection",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "istio",
+        "service-mesh",
+        "kubernetes",
+        "microservices"
+      ],
+      "coverImage": "/images/service-mesh-istio.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "deployment"
+      ],
+      "slug": "service-mesh-istio",
+      "path": "/blogs/backend/microservices/deployment/service-mesh-istio"
+    },
+    {
+      "title": "Containerization Strategies for Microservices",
+      "description": "Docker best practices for microservices: multi-stage builds, layer optimization, JVM tuning, health checks, Docker Compose, and Kubernetes deployment strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "docker",
+        "containerization",
+        "spring-boot",
+        "kubernetes"
+      ],
+      "coverImage": "/images/containerization-strategies.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "deployment"
+      ],
+      "slug": "containerization-strategies",
+      "path": "/blogs/backend/microservices/deployment/containerization-strategies"
+    },
+    {
+      "title": "Canary Deployments",
+      "description": "Implement canary deployments for microservices: gradual traffic shifting, metrics-based rollback, Kubernetes ingress, Istio weighted routing, and feature flag integration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "canary",
+        "deployment",
+        "kubernetes",
+        "traffic-shifting"
+      ],
+      "coverImage": "/images/canary-deployments.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "deployment"
+      ],
+      "slug": "canary-deployments",
+      "path": "/blogs/backend/microservices/deployment/canary-deployments"
+    },
+    {
+      "title": "Blue-Green Deployment",
+      "description": "Implement blue-green deployments for microservices: Kubernetes strategies, Istio traffic switching, zero-downtime deployments, database migrations, and rollback procedures",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "blue-green",
+        "deployment",
+        "kubernetes",
+        "zero-downtime"
+      ],
+      "coverImage": "/images/blue-green-deployment.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "deployment"
+      ],
+      "slug": "blue-green-deployment",
+      "path": "/blogs/backend/microservices/deployment/blue-green-deployment"
+    },
+    {
+      "title": "Synchronous vs Asynchronous Communication in Microservices",
+      "description": "Compare synchronous and asynchronous communication patterns in microservices: REST, gRPC, messaging queues, event-driven, trade-offs, and decision framework",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "communication",
+        "synchronous",
+        "asynchronous",
+        "microservices"
+      ],
+      "coverImage": "/images/sync-vs-async-comm.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "communication"
+      ],
+      "slug": "sync-vs-async-comm",
+      "path": "/blogs/backend/microservices/communication/sync-vs-async-comm"
+    },
+    {
+      "title": "RestTemplate vs WebClient",
+      "description": "Compare RestTemplate and WebClient for microservice communication: synchronous vs reactive, performance, configuration, error handling, and migration guide from RestTemplate to WebClient",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "resttemplate",
+        "webclient",
+        "spring-webflux",
+        "microservices"
+      ],
+      "coverImage": "/images/rest-template-vs-webclient.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "communication"
+      ],
+      "slug": "rest-template-vs-webclient",
+      "path": "/blogs/backend/microservices/communication/rest-template-vs-webclient"
+    },
+    {
+      "title": "gRPC in Microservices",
+      "description": "Implement gRPC for inter-service communication in microservices: protocol buffers, streaming, gRPC vs REST, Spring Boot integration, error handling, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "grpc",
+        "protobuf",
+        "microservices",
+        "inter-service-communication"
+      ],
+      "coverImage": "/images/grpc-in-microservices.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "communication"
+      ],
+      "slug": "grpc-in-microservices",
+      "path": "/blogs/backend/microservices/communication/grpc-in-microservices"
+    },
+    {
+      "title": "Feign Clients Deep Dive",
+      "description": "Master Feign clients for microservice communication: declarative REST clients, Spring Cloud OpenFeign configuration, custom decoders, error handling, load balancing, and resilience patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "feign",
+        "spring-cloud",
+        "rest-client",
+        "microservices"
+      ],
+      "coverImage": "/images/feign-clients-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "communication"
+      ],
+      "slug": "feign-clients-deep-dive",
+      "path": "/blogs/backend/microservices/communication/feign-clients-deep-dive"
     },
     {
       "title": "Circuit Breaker with Resilience4j",

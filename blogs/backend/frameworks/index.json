@@ -1,0 +1,384 @@
+{
+  "name": "Frameworks",
+  "path": "/blogs/backend/frameworks",
+  "blogs": [
+    {
+      "title": "Pydantic Validation Deep Dive",
+      "description": "Deep dive into Pydantic: model validation, field types, validators, custom types, model configuration, serialization, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "pydantic",
+        "validation",
+        "data-modeling"
+      ],
+      "coverImage": "/images/pydantic-validation-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "python"
+      ],
+      "slug": "pydantic-validation-deep-dive",
+      "path": "/blogs/backend/frameworks/python/pydantic-validation-deep-dive"
+    },
+    {
+      "title": "Flask vs FastAPI: A Comprehensive Comparison",
+      "description": "Compare Flask and FastAPI Python frameworks: performance, type safety, async support, ecosystem, and choosing the right framework for your project",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "flask",
+        "fastapi",
+        "performance"
+      ],
+      "coverImage": "/images/flask-vs-fastapi.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "python"
+      ],
+      "slug": "flask-vs-fastapi",
+      "path": "/blogs/backend/frameworks/python/flask-vs-fastapi"
+    },
+    {
+      "title": "FastAPI Basics",
+      "description": "Master FastAPI framework: path operations, Pydantic models, dependency injection, async support, WebSocket, and building high-performance Python APIs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "fastapi",
+        "pydantic",
+        "async"
+      ],
+      "coverImage": "/images/fastapi-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "python"
+      ],
+      "slug": "fastapi-basics",
+      "path": "/blogs/backend/frameworks/python/fastapi-basics"
+    },
+    {
+      "title": "Django REST Framework",
+      "description": "Master Django REST Framework: views, serializers, authentication, permissions, viewsets, routers, and building production-ready REST APIs with Django",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "django",
+        "rest-api",
+        "drf"
+      ],
+      "coverImage": "/images/django-rest-framework.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "python"
+      ],
+      "slug": "django-rest-framework",
+      "path": "/blogs/backend/frameworks/python/django-rest-framework"
+    },
+    {
+      "title": "Async Python with FastAPI",
+      "description": "Master asynchronous programming in Python with FastAPI: async/await, coroutines, event loops, async database drivers, and building high-concurrency APIs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "python",
+        "fastapi",
+        "async",
+        "performance"
+      ],
+      "coverImage": "/images/async-python-with-fastapi.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "python"
+      ],
+      "slug": "async-python-with-fastapi",
+      "path": "/blogs/backend/frameworks/python/async-python-with-fastapi"
+    },
+    {
+      "title": "Node.js Event Loop Deep Dive",
+      "description": "Deep dive into the Node.js event loop: phases, timers, microtasks, nextTick, libuv, and understanding asynchronous execution order",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "event-loop",
+        "libuv",
+        "asynchronous"
+      ],
+      "coverImage": "/images/nodejs-event-loop-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "nodejs"
+      ],
+      "slug": "nodejs-event-loop-deep-dive",
+      "path": "/blogs/backend/frameworks/nodejs/nodejs-event-loop-deep-dive"
+    },
+    {
+      "title": "NestJS Architecture",
+      "description": "Master NestJS framework architecture: modules, decorators, providers, guards, interceptors, pipes, and building scalable server-side applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "nestjs",
+        "typescript",
+        "architecture"
+      ],
+      "coverImage": "/images/nestjs-architecture.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "nodejs"
+      ],
+      "slug": "nestjs-architecture",
+      "path": "/blogs/backend/frameworks/nodejs/nestjs-architecture"
+    },
+    {
+      "title": "Fastify vs Express: A Comprehensive Comparison",
+      "description": "Compare Fastify and Express.js frameworks: performance, developer experience, plugin systems, serialization, and choosing the right framework for your project",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "express",
+        "fastify",
+        "performance"
+      ],
+      "coverImage": "/images/fastify-vs-express.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "nodejs"
+      ],
+      "slug": "fastify-vs-express",
+      "path": "/blogs/backend/frameworks/nodejs/fastify-vs-express"
+    },
+    {
+      "title": "Express.js Basics",
+      "description": "Master Express.js framework: routing, middleware, error handling, request/response objects, and building production-ready REST APIs with Node.js",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "express",
+        "rest-api",
+        "javascript"
+      ],
+      "coverImage": "/images/express-js-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "nodejs"
+      ],
+      "slug": "express-js-basics",
+      "path": "/blogs/backend/frameworks/nodejs/express-js-basics"
+    },
+    {
+      "title": "Dependency Injection in NestJS",
+      "description": "Deep dive into NestJS dependency injection system: providers, custom providers, injection scopes, circular dependencies, and advanced DI patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "nestjs",
+        "dependency-injection",
+        "typescript"
+      ],
+      "coverImage": "/images/dependency-injection-in-nestjs.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "nodejs"
+      ],
+      "slug": "dependency-injection-in-nestjs",
+      "path": "/blogs/backend/frameworks/nodejs/dependency-injection-in-nestjs"
+    },
+    {
+      "title": "Quarkus vs Spring Boot: A Comprehensive Comparison",
+      "description": "Compare Quarkus and Spring Boot frameworks: startup time, memory usage, developer experience, extensions ecosystem, and choosing the right Java framework",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "quarkus",
+        "spring-boot",
+        "comparison"
+      ],
+      "coverImage": "/images/quarkus-vs-spring-boot.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "jvm-ecosystem"
+      ],
+      "slug": "quarkus-vs-spring-boot",
+      "path": "/blogs/backend/frameworks/jvm-ecosystem/quarkus-vs-spring-boot"
+    },
+    {
+      "title": "Micronaut: Compile-Time DI Framework",
+      "description": "Master Micronaut framework: compile-time dependency injection, AOT optimization, reactive support, cloud-native features, and building efficient JVM microservices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "micronaut",
+        "dependency-injection",
+        "microservices"
+      ],
+      "coverImage": "/images/micronaut-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "jvm-ecosystem"
+      ],
+      "slug": "micronaut-basics",
+      "path": "/blogs/backend/frameworks/jvm-ecosystem/micronaut-basics"
+    },
+    {
+      "title": "Kotlin for Backend Development",
+      "description": "Master Kotlin for backend development: coroutines, Ktor, Spring Boot with Kotlin, null safety, data classes, and building modern JVM services",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "kotlin",
+        "jvm",
+        "coroutines",
+        "ktor"
+      ],
+      "coverImage": "/images/kotlin-for-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "jvm-ecosystem"
+      ],
+      "slug": "kotlin-for-backend",
+      "path": "/blogs/backend/frameworks/jvm-ecosystem/kotlin-for-backend"
+    },
+    {
+      "title": "GraalVM Native Images for Java Applications",
+      "description": "Master GraalVM native images: AOT compilation, reflection configuration, resource handling, native-image building, and deploying optimized JVM applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "graalvm",
+        "native-image",
+        "performance"
+      ],
+      "coverImage": "/images/graalvm-native-images.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "jvm-ecosystem"
+      ],
+      "slug": "graalvm-native-images",
+      "path": "/blogs/backend/frameworks/jvm-ecosystem/graalvm-native-images"
+    },
+    {
+      "title": "HTTP Request Routing in Go",
+      "description": "Deep dive into HTTP request routing in Go: standard library patterns, path parameters, middleware chaining, custom routers, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "http",
+        "routing",
+        "net-http"
+      ],
+      "coverImage": "/images/go-http-request-routing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "go"
+      ],
+      "slug": "go-http-request-routing",
+      "path": "/blogs/backend/frameworks/go/go-http-request-routing"
+    },
+    {
+      "title": "Go Concurrency Patterns",
+      "description": "Master Go concurrency: goroutines, channels, select, sync primitives, worker pools, pipeline patterns, and building concurrent applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "concurrency",
+        "goroutines",
+        "channels"
+      ],
+      "coverImage": "/images/go-concurrency-patterns.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "go"
+      ],
+      "slug": "go-concurrency-patterns",
+      "path": "/blogs/backend/frameworks/go/go-concurrency-patterns"
+    },
+    {
+      "title": "Gin Framework Basics",
+      "description": "Master the Gin web framework for Go: routing, middleware, request binding, validation, error handling, and building high-performance REST APIs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "gin",
+        "rest-api",
+        "web-framework"
+      ],
+      "coverImage": "/images/gin-framework-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "go"
+      ],
+      "slug": "gin-framework-basics",
+      "path": "/blogs/backend/frameworks/go/gin-framework-basics"
+    },
+    {
+      "title": "Echo vs Gin vs Fiber: Go Web Framework Comparison",
+      "description": "Compare Echo, Gin, and Fiber Go web frameworks: performance, features, middleware, routing, and choosing the right framework for your project",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "gin",
+        "echo",
+        "fiber"
+      ],
+      "coverImage": "/images/echo-vs-gin-vs-fiber.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "go"
+      ],
+      "slug": "echo-vs-gin-vs-fiber",
+      "path": "/blogs/backend/frameworks/go/echo-vs-gin-vs-fiber"
+    }
+  ]
+}

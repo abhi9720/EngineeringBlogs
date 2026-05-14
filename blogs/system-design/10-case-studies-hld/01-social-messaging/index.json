@@ -1,0 +1,75 @@
+{
+  "name": "01 Social Messaging",
+  "path": "/blogs/system-design/10-case-studies-hld/01-social-messaging",
+  "blogs": [
+    {
+      "title": "Design Twitter (X) - System Design",
+      "description": "A comprehensive case study on designing a Twitter-scale social media platform covering tweet creation, timeline generation, search, trends, and caching strategies",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "case-study",
+        "twitter",
+        "social-media",
+        "timeline",
+        "caching",
+        "fanout"
+      ],
+      "coverImage": "/images/design-twitter-system.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "10-case-studies-hld",
+        "01-social-messaging"
+      ],
+      "slug": "87. design-twitter-system",
+      "path": "/blogs/system-design/10-case-studies-hld/01-social-messaging/87. design-twitter-system"
+    },
+    {
+      "title": "Instagram Feed System Design",
+      "description": "A comprehensive guide to designing Instagram's feed system, covering content ranking, fan-out mechanisms, caching strategies, and real-time updates for social feeds",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "instagram",
+        "feed",
+        "social",
+        "ranking",
+        "case-study"
+      ],
+      "coverImage": "/images/instagram-feed.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "10-case-studies-hld",
+        "01-social-messaging"
+      ],
+      "slug": "47. instagram-feed",
+      "path": "/blogs/system-design/10-case-studies-hld/01-social-messaging/47. instagram-feed"
+    },
+    {
+      "title": "WhatsApp Architecture",
+      "description": "A comprehensive guide to WhatsApp's system architecture, covering real-time messaging, E2E encryption, media handling, and scaling to billions of users",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "whatsapp",
+        "messaging",
+        "real-time",
+        "case-study"
+      ],
+      "coverImage": "/images/whatsapp-architecture.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "10-case-studies-hld",
+        "01-social-messaging"
+      ],
+      "slug": "46. whatsapp-architecture",
+      "path": "/blogs/system-design/10-case-studies-hld/01-social-messaging/46. whatsapp-architecture"
+    }
+  ]
+}

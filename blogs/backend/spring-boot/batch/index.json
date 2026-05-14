@@ -1,0 +1,90 @@
+{
+  "name": "Spring Boot Batch",
+  "path": "/blogs/backend/spring-boot/batch",
+  "blogs": [
+    {
+      "title": "Spring Batch Introduction",
+      "description": "Master Spring Batch fundamentals: JobRepository, JobLauncher, steps, readers, writers, and building robust batch processing applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-batch",
+        "batch-processing",
+        "etl"
+      ],
+      "coverImage": "/images/spring-batch-introduction.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "spring-batch-introduction",
+      "path": "/blogs/backend/spring-boot/batch/spring-batch-introduction"
+    },
+    {
+      "title": "Scheduling with Quartz in Spring Boot",
+      "description": "Master Quartz scheduler integration with Spring Boot: job scheduling, triggers, persistence, clustering, cron expressions, and dynamic scheduling",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "quartz",
+        "scheduling",
+        "batch"
+      ],
+      "coverImage": "/images/scheduling-with-quartz.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "scheduling-with-quartz",
+      "path": "/blogs/backend/spring-boot/batch/scheduling-with-quartz"
+    },
+    {
+      "title": "Item Readers, Writers, and Processors in Spring Batch",
+      "description": "Comprehensive guide to Spring Batch item processing: built-in readers/writers, custom implementations, composite processors, and multi-file processing",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-batch",
+        "item-reader",
+        "item-writer"
+      ],
+      "coverImage": "/images/item-readers-writers-processors.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "item-readers-writers-processors",
+      "path": "/blogs/backend/spring-boot/batch/item-readers-writers-processors"
+    },
+    {
+      "title": "Chunk-Oriented Processing in Spring Batch",
+      "description": "Deep dive into chunk-oriented processing: commit intervals, skip/retry within chunks, chunk listeners, multi-threaded steps, and partitioning",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "spring-boot",
+        "spring-batch",
+        "chunk-processing",
+        "batch-processing"
+      ],
+      "coverImage": "/images/chunk-oriented-processing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "spring-boot",
+        "batch"
+      ],
+      "slug": "chunk-oriented-processing",
+      "path": "/blogs/backend/spring-boot/batch/chunk-oriented-processing"
+    }
+  ]
+}

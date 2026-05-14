@@ -176,3 +176,7 @@ spring:
 
 - [HikariCP GitHub](https://github.com/brettwooldridge/HikariCP)
 - [Spring Boot DataSource Configuration](https://docs.spring.io/spring-boot/docs/current/reference/html/data.html#data.sql.datasource)
+
+---
+
+Happy Coding 👨‍💻

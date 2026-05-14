@@ -28,31 +28,32 @@ The API Gateway acts as a single entry point for all clients, handling cross-cut
 
 The API Gateway sits between clients and backend services:
 
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                         Client Applications                       │
-│  (Web App, Mobile App, External API Consumers)                  │
-└──────────────────────────┬───────────────────────────────────────┘
-                           │ Single Request
-                           ▼
-┌──────────────────────────────────────────────────────────────────┐
-│                         API Gateway                               │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐                 │
-│  │  Routing    │ │  Auth       │ │  Rate       │                 │
-│  │  Engine     │ │  Handler    │ │  Limiter    │                 │
-│  └─────────────┘ └─────────────┘ └─────────────┘                 │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐                 │
-│  │  Circuit    │ │  Response   │ │  Logging    │                 │
-│  │  Breaker    │ │  Transform  │ │  & Metrics  │                 │
-│  └─────────────┘ └─────────────┘ └─────────────┘                 │
-└──────────────────────────┬───────────────────────────────────────┘
-                           │
-         ┌─────────────────┼─────────────────┐
-         │                 │                 │
-         ▼                 ▼                 ▼
-┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
-│ User Service    │ │ Order Service   │ │ Product Service │
-└─────────────────┘ └─────────────────┘ └─────────────────┘
+```mermaid
+flowchart TB
+
+    Clients[Client Apps<br/>Web/Mobile/External] --> Gateway[API Gateway]
+
+    Gateway --> Routing[Routing]
+    Gateway --> Auth[Auth Handler]
+    Gateway --> RateLimiter[Rate Limiter]
+    Gateway --> CircuitBreaker[Circuit Breaker]
+    Gateway --> ResponseTransform[Response Transform]
+    Gateway --> Logging[Logging & Metrics]
+
+    Routing --> UserService[User Service]
+    Routing --> OrderService[Order Service]
+    Routing --> ProductService[Product Service]
+
+    linkStyle default stroke:#278ea5
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+    classDef yellow fill:#FFA213,stroke:#333,stroke-width:2px,color:#000
+
+    class UserService,OrderService,ProductService green
+    class Clients,Gateway blue
+    class Routing,Auth,RateLimiter,CircuitBreaker,ResponseTransform,Logging yellow
 ```
 
 ### Spring Cloud Gateway Internals
@@ -799,3 +800,7 @@ The API Gateway is a critical component—invest in making it robust and observa
 - [API Gateway Patterns](https://docs.microsoft.com/en-us/azure/architecture/microservices/design/gateway)
 - [Baeldung - Spring Cloud Gateway](https://www.baeldung.com/spring-cloud-gateway)
 - [Circuit Breaker Pattern](https://martinfowler.com/bliki/CircuitBreaker.html)
+
+---
+
+Happy Coding 👨‍💻

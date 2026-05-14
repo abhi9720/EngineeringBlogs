@@ -1,0 +1,94 @@
+{
+  "name": "01 Resilience Patterns",
+  "path": "/blogs/system-design/05-architecture-patterns/01-resilience-patterns",
+  "blogs": [
+    {
+      "title": "Bulkhead & Retry Patterns",
+      "description": "A comprehensive guide to bulkhead isolation and retry patterns for building resilient microservices using Resilience4j, thread pool isolation, exponential backoff, and timeout patterns",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "bulkhead",
+        "retry",
+        "resilience",
+        "resilience4j",
+        "patterns"
+      ],
+      "coverImage": "/images/bulkhead-retry.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "05-architecture-patterns",
+        "01-resilience-patterns"
+      ],
+      "slug": "76. bulkhead-retry-patterns",
+      "path": "/blogs/system-design/05-architecture-patterns/01-resilience-patterns/76. bulkhead-retry-patterns"
+    },
+    {
+      "title": "Saga Pattern",
+      "description": "A comprehensive guide to the saga pattern for distributed transactions, covering choreography vs orchestration, compensating transactions, and failure handling",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "saga",
+        "distributed-transactions",
+        "microservices",
+        "system-design",
+        "patterns"
+      ],
+      "coverImage": "/images/saga-pattern.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "05-architecture-patterns",
+        "01-resilience-patterns"
+      ],
+      "slug": "73. saga-pattern",
+      "path": "/blogs/system-design/05-architecture-patterns/01-resilience-patterns/73. saga-pattern"
+    },
+    {
+      "title": "Circuit Breaker Pattern",
+      "description": "A comprehensive guide to the circuit breaker pattern in system design, covering failure handling, resilience strategies, and implementation for distributed systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "circuit-breaker",
+        "system-design",
+        "resilience",
+        "fault-tolerance",
+        "patterns"
+      ],
+      "coverImage": "/images/circuit-breaker.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "05-architecture-patterns",
+        "01-resilience-patterns"
+      ],
+      "slug": "51. circuit-breaker",
+      "path": "/blogs/system-design/05-architecture-patterns/01-resilience-patterns/51. circuit-breaker"
+    },
+    {
+      "title": "Rate Limiting",
+      "description": "A comprehensive guide to rate limiting in system design, covering token bucket algorithms, distributed rate limiting, and implementation strategies for API protection",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rate-limiting",
+        "system-design",
+        "api",
+        "scalability",
+        "patterns"
+      ],
+      "coverImage": "/images/rate-limiting.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "05-architecture-patterns",
+        "01-resilience-patterns"
+      ],
+      "slug": "50. rate-limiting",
+      "path": "/blogs/system-design/05-architecture-patterns/01-resilience-patterns/50. rate-limiting"
+    }
+  ]
+}

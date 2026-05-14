@@ -3,151 +3,48 @@
   "path": "/blogs/system-design",
   "blogs": [
     {
-      "title": "Blob vs Block Storage",
-      "description": "A comprehensive guide comparing blob storage and block storage in system design, covering use cases, performance characteristics, and implementation strategies",
-      "date": "2026-05-11",
+      "title": "System Design Interview Framework",
+      "description": "A step-by-step framework for acing system design interviews: requirements gathering, estimation, data modeling, API design, high-level design, deep dive, and trade-offs",
+      "date": "2026-05-14",
       "author": "Abhishek Tiwari",
       "tags": [
-        "blob-storage",
-        "block-storage",
         "system-design",
-        "storage",
-        "cloud"
-      ],
-      "coverImage": "/images/blob-vs-block-storage.png",
-      "draft": false,
-      "category": "system-design",
-      "hierarchy": [
-        "storage"
-      ],
-      "slug": "56. blob-vs-block-storage",
-      "path": "/blogs/system-design/storage/56. blob-vs-block-storage"
-    },
-    {
-      "title": "File Storage Systems",
-      "description": "A comprehensive guide to file storage systems in system design, covering NFS, SMB/CIFS, distributed file systems, and implementation for enterprise applications",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "file-storage",
-        "nfs",
-        "system-design",
-        "storage",
-        "enterprise"
-      ],
-      "coverImage": "/images/file-storage-systems.png",
-      "draft": false,
-      "category": "system-design",
-      "hierarchy": [
-        "storage"
-      ],
-      "slug": "55. file-storage-systems",
-      "path": "/blogs/system-design/storage/55. file-storage-systems"
-    },
-    {
-      "title": "Object Storage with S3",
-      "description": "A comprehensive guide to object storage with Amazon S3, covering bucket operations, access control, versioning, lifecycle management, and implementation for scalable storage",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "object-storage",
-        "s3",
-        "aws",
-        "system-design",
-        "storage"
-      ],
-      "coverImage": "/images/object-storage-s3.png",
-      "draft": false,
-      "category": "system-design",
-      "hierarchy": [
-        "storage"
-      ],
-      "slug": "54. object-storage-s3",
-      "path": "/blogs/system-design/storage/54. object-storage-s3"
-    },
-    {
-      "title": "CQRS Pattern",
-      "description": "A comprehensive guide to the Command Query Responsibility Segregation pattern in system design, covering read/write separation, event sourcing, and implementation for high-performance applications",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "cqrs",
-        "system-design",
-        "patterns",
+        "interview-preparation",
+        "framework",
         "architecture",
-        "event-sourcing"
+        "distributed-systems"
       ],
-      "coverImage": "/images/cqrs.png",
+      "coverImage": "/images/system-design-interview-framework.png",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
-        "patterns"
+        "11-advanced-topics",
+        "04-interview-preparation"
       ],
-      "slug": "53. cqrs",
-      "path": "/blogs/system-design/patterns/53. cqrs"
+      "slug": "88. system-design-interview-framework",
+      "path": "/blogs/system-design/11-advanced-topics/04-interview-preparation/88. system-design-interview-framework"
     },
     {
-      "title": "Pub-Sub Model",
-      "description": "A comprehensive guide to the publish-subscribe pattern in system design, covering message brokers, event-driven architecture, and implementation strategies for decoupled systems",
+      "title": "URL Shortener System Design",
+      "description": "A comprehensive guide to designing a URL shortener service like bit.ly, covering API design, storage, encoding, and implementation of scalable redirect systems",
       "date": "2026-05-11",
       "author": "Abhishek Tiwari",
       "tags": [
-        "pub-sub",
-        "messaging",
         "system-design",
-        "event-driven",
-        "patterns"
-      ],
-      "coverImage": "/images/pub-sub-model.png",
-      "draft": false,
-      "category": "system-design",
-      "hierarchy": [
-        "patterns"
-      ],
-      "slug": "52. pub-sub-model",
-      "path": "/blogs/system-design/patterns/52. pub-sub-model"
-    },
-    {
-      "title": "Circuit Breaker Pattern",
-      "description": "A comprehensive guide to the circuit breaker pattern in system design, covering failure handling, resilience strategies, and implementation for distributed systems",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "circuit-breaker",
-        "system-design",
-        "resilience",
-        "fault-tolerance",
-        "patterns"
-      ],
-      "coverImage": "/images/circuit-breaker.png",
-      "draft": false,
-      "category": "system-design",
-      "hierarchy": [
-        "patterns"
-      ],
-      "slug": "51. circuit-breaker",
-      "path": "/blogs/system-design/patterns/51. circuit-breaker"
-    },
-    {
-      "title": "Rate Limiting",
-      "description": "A comprehensive guide to rate limiting in system design, covering token bucket algorithms, distributed rate limiting, and implementation strategies for API protection",
-      "date": "2026-05-11",
-      "author": "Abhishek Tiwari",
-      "tags": [
-        "rate-limiting",
-        "system-design",
-        "api",
+        "url-shortener",
+        "api-design",
         "scalability",
-        "patterns"
+        "case-study"
       ],
-      "coverImage": "/images/rate-limiting.png",
+      "coverImage": "/images/url-shortener.png",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
-        "patterns"
+        "10-case-studies-hld",
+        "03-ecommerce-utility"
       ],
-      "slug": "50. rate-limiting",
-      "path": "/blogs/system-design/patterns/50. rate-limiting"
+      "slug": "45. url-shortener",
+      "path": "/blogs/system-design/10-case-studies-hld/03-ecommerce-utility/45. url-shortener"
     },
     {
       "title": "Netflix Streaming System Design",
@@ -166,10 +63,11 @@
       "draft": false,
       "category": "system-design",
       "hierarchy": [
-        "case-studies"
+        "10-case-studies-hld",
+        "02-media-streaming"
       ],
       "slug": "49. netflix-streaming",
-      "path": "/blogs/system-design/case-studies/49. netflix-streaming"
+      "path": "/blogs/system-design/10-case-studies-hld/02-media-streaming/49. netflix-streaming"
     },
     {
       "title": "YouTube System Design",
@@ -188,10 +86,35 @@
       "draft": false,
       "category": "system-design",
       "hierarchy": [
-        "case-studies"
+        "10-case-studies-hld",
+        "02-media-streaming"
       ],
       "slug": "48. youtube-system-design",
-      "path": "/blogs/system-design/case-studies/48. youtube-system-design"
+      "path": "/blogs/system-design/10-case-studies-hld/02-media-streaming/48. youtube-system-design"
+    },
+    {
+      "title": "Design Twitter (X) - System Design",
+      "description": "A comprehensive case study on designing a Twitter-scale social media platform covering tweet creation, timeline generation, search, trends, and caching strategies",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "case-study",
+        "twitter",
+        "social-media",
+        "timeline",
+        "caching",
+        "fanout"
+      ],
+      "coverImage": "/images/design-twitter-system.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "10-case-studies-hld",
+        "01-social-messaging"
+      ],
+      "slug": "87. design-twitter-system",
+      "path": "/blogs/system-design/10-case-studies-hld/01-social-messaging/87. design-twitter-system"
     },
     {
       "title": "Instagram Feed System Design",
@@ -210,10 +133,11 @@
       "draft": false,
       "category": "system-design",
       "hierarchy": [
-        "case-studies"
+        "10-case-studies-hld",
+        "01-social-messaging"
       ],
       "slug": "47. instagram-feed",
-      "path": "/blogs/system-design/case-studies/47. instagram-feed"
+      "path": "/blogs/system-design/10-case-studies-hld/01-social-messaging/47. instagram-feed"
     },
     {
       "title": "WhatsApp Architecture",
@@ -231,31 +155,1053 @@
       "draft": false,
       "category": "system-design",
       "hierarchy": [
-        "case-studies"
+        "10-case-studies-hld",
+        "01-social-messaging"
       ],
       "slug": "46. whatsapp-architecture",
-      "path": "/blogs/system-design/case-studies/46. whatsapp-architecture"
+      "path": "/blogs/system-design/10-case-studies-hld/01-social-messaging/46. whatsapp-architecture"
     },
     {
-      "title": "URL Shortener System Design",
-      "description": "A comprehensive guide to designing a URL shortener service like bit.ly, covering API design, storage, encoding, and implementation of scalable redirect systems",
-      "date": "2026-05-11",
+      "title": "Encryption at Rest & in Transit",
+      "description": "A comprehensive guide to TLS/SSL, mTLS, symmetric and asymmetric encryption, and key management for securing data in distributed systems",
+      "date": "2026-05-14",
       "author": "Abhishek Tiwari",
       "tags": [
         "system-design",
-        "url-shortener",
-        "api-design",
-        "scalability",
-        "case-study"
+        "security",
+        "encryption",
+        "tls",
+        "mtls",
+        "aws-kms",
+        "certificate-management"
       ],
-      "coverImage": "/images/url-shortener.png",
+      "coverImage": "/images/encryption-tls.png",
       "draft": false,
       "category": "system-design",
       "hierarchy": [
-        "case-studies"
+        "09-security-compliance",
+        "02-data-network-security"
       ],
-      "slug": "45. url-shortener",
-      "path": "/blogs/system-design/case-studies/45. url-shortener"
+      "slug": "86. encryption-tls",
+      "path": "/blogs/system-design/09-security-compliance/02-data-network-security/86. encryption-tls"
+    },
+    {
+      "title": "OAuth 2.0 & JWT Authentication",
+      "description": "A comprehensive guide to OAuth 2.0 authorization flows, JWT structure and validation, and Spring Security integration for modern applications",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "security",
+        "oauth2",
+        "jwt",
+        "authentication",
+        "spring-security",
+        "pkce"
+      ],
+      "coverImage": "/images/oauth2-jwt.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "09-security-compliance",
+        "01-authentication-authorization"
+      ],
+      "slug": "85. oauth2-jwt",
+      "path": "/blogs/system-design/09-security-compliance/01-authentication-authorization/85. oauth2-jwt"
+    },
+    {
+      "title": "Latency vs Throughput",
+      "description": "A deep dive into latency and throughput concepts, measurement techniques, Little's Law, queuing theory, and optimization trade-offs",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "performance-engineering",
+        "latency",
+        "throughput",
+        "queuing-theory",
+        "little-law",
+        "percentiles"
+      ],
+      "coverImage": "/images/latency-vs-throughput.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "08-performance-engineering",
+        "01-performance-fundamentals"
+      ],
+      "slug": "84. latency-vs-throughput",
+      "path": "/blogs/system-design/08-performance-engineering/01-performance-fundamentals/84. latency-vs-throughput"
+    },
+    {
+      "title": "Distributed Tracing (Jaeger & Zipkin)",
+      "description": "A comprehensive guide to distributed tracing with OpenTelemetry, Jaeger, and Zipkin for troubleshooting microservice interactions",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "observability",
+        "distributed-tracing",
+        "jaeger",
+        "zipkin",
+        "opentelemetry",
+        "spring-cloud-sleuth"
+      ],
+      "coverImage": "/images/distributed-tracing.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "07-observability-reliability",
+        "02-logging-tracing"
+      ],
+      "slug": "83. distributed-tracing",
+      "path": "/blogs/system-design/07-observability-reliability/02-logging-tracing/83. distributed-tracing"
+    },
+    {
+      "title": "Centralized Logging with ELK Stack",
+      "description": "A comprehensive guide to building a centralized logging pipeline using Elasticsearch, Logstash, Kibana, and Filebeat for log aggregation and analysis",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "observability",
+        "logging",
+        "elk-stack",
+        "elasticsearch",
+        "logstash",
+        "kibana"
+      ],
+      "coverImage": "/images/elk-stack.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "07-observability-reliability",
+        "02-logging-tracing"
+      ],
+      "slug": "82. elk-stack",
+      "path": "/blogs/system-design/07-observability-reliability/02-logging-tracing/82. elk-stack"
+    },
+    {
+      "title": "Monitoring with Prometheus & Grafana",
+      "description": "A comprehensive guide to setting up monitoring infrastructure with Prometheus for metrics collection and Grafana for visualization and alerting",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "observability",
+        "monitoring",
+        "prometheus",
+        "grafana",
+        "metrics",
+        "alerting"
+      ],
+      "coverImage": "/images/prometheus-grafana.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "07-observability-reliability",
+        "01-monitoring-alerting"
+      ],
+      "slug": "81. prometheus-grafana",
+      "path": "/blogs/system-design/07-observability-reliability/01-monitoring-alerting/81. prometheus-grafana"
+    },
+    {
+      "title": "Distributed Caching with Redis Cluster",
+      "description": "A comprehensive guide to Redis Cluster architecture, hash slot sharding, failover mechanisms, and client-side caching patterns",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "distributed-systems",
+        "caching",
+        "redis",
+        "redis-cluster",
+        "sharding"
+      ],
+      "coverImage": "/images/distributed-caching-redis-cluster.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "06-distributed-systems",
+        "02-distributed-data"
+      ],
+      "slug": "80. distributed-caching-redis-cluster",
+      "path": "/blogs/system-design/06-distributed-systems/02-distributed-data/80. distributed-caching-redis-cluster"
+    },
+    {
+      "title": "Distributed ID Generation",
+      "description": "A comprehensive comparison of distributed ID generation strategies including Twitter Snowflake, UUID variants, ULID, database sequences, and their trade-offs",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "distributed-systems",
+        "id-generation",
+        "snowflake",
+        "uuid",
+        "ulid",
+        "database"
+      ],
+      "coverImage": "/images/distributed-id-generation.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "06-distributed-systems",
+        "02-distributed-data"
+      ],
+      "slug": "79. distributed-id-generation",
+      "path": "/blogs/system-design/06-distributed-systems/02-distributed-data/79. distributed-id-generation"
+    },
+    {
+      "title": "Distributed Locks",
+      "description": "A comprehensive guide to distributed locking mechanisms including Redis Redlock, ZooKeeper locks, lease-based locking, and common pitfalls",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "distributed-systems",
+        "distributed-locks",
+        "redis",
+        "redlock",
+        "zookeeper",
+        "concurrency"
+      ],
+      "coverImage": "/images/distributed-locks.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "06-distributed-systems",
+        "01-consensus-coordination"
+      ],
+      "slug": "78. distributed-locks",
+      "path": "/blogs/system-design/06-distributed-systems/01-consensus-coordination/78. distributed-locks"
+    },
+    {
+      "title": "Raft & Paxos Consensus Algorithms",
+      "description": "A deep dive into the Raft and Paxos consensus algorithms, their inner workings, trade-offs, and practical use cases in distributed systems",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "distributed-systems",
+        "consensus",
+        "raft",
+        "paxos",
+        "algorithms"
+      ],
+      "coverImage": "/images/raft-paxos-algorithms.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "06-distributed-systems",
+        "01-consensus-coordination"
+      ],
+      "slug": "77. raft-paxos-algorithms",
+      "path": "/blogs/system-design/06-distributed-systems/01-consensus-coordination/77. raft-paxos-algorithms"
+    },
+    {
+      "title": "Monolith vs Microservices",
+      "description": "A comprehensive comparison of monolithic and microservices architectures, covering when to use each, migration strategies, DDD bounded contexts, and operational complexity",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "microservices",
+        "monolith",
+        "architecture",
+        "system-design",
+        "ddd"
+      ],
+      "coverImage": "/images/monolith-vs-microservices.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "05-architecture-patterns",
+        "03-architecture-styles"
+      ],
+      "slug": "75. monolith-vs-microservices",
+      "path": "/blogs/system-design/05-architecture-patterns/03-architecture-styles/75. monolith-vs-microservices"
+    },
+    {
+      "title": "Event Sourcing Pattern",
+      "description": "A comprehensive guide to event sourcing covering event stores, event replay, snapshots, CQRS integration, event versioning, and practical Java implementations",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "event-sourcing",
+        "cqrs",
+        "system-design",
+        "patterns",
+        "data"
+      ],
+      "coverImage": "/images/event-sourcing.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "05-architecture-patterns",
+        "02-data-patterns"
+      ],
+      "slug": "74. event-sourcing",
+      "path": "/blogs/system-design/05-architecture-patterns/02-data-patterns/74. event-sourcing"
+    },
+    {
+      "title": "CQRS Pattern",
+      "description": "A comprehensive guide to the Command Query Responsibility Segregation pattern in system design, covering read/write separation, event sourcing, and implementation for high-performance applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "cqrs",
+        "system-design",
+        "patterns",
+        "architecture",
+        "event-sourcing"
+      ],
+      "coverImage": "/images/cqrs.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "05-architecture-patterns",
+        "02-data-patterns"
+      ],
+      "slug": "53. cqrs",
+      "path": "/blogs/system-design/05-architecture-patterns/02-data-patterns/53. cqrs"
+    },
+    {
+      "title": "Bulkhead & Retry Patterns",
+      "description": "A comprehensive guide to bulkhead isolation and retry patterns for building resilient microservices using Resilience4j, thread pool isolation, exponential backoff, and timeout patterns",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "bulkhead",
+        "retry",
+        "resilience",
+        "resilience4j",
+        "patterns"
+      ],
+      "coverImage": "/images/bulkhead-retry.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "05-architecture-patterns",
+        "01-resilience-patterns"
+      ],
+      "slug": "76. bulkhead-retry-patterns",
+      "path": "/blogs/system-design/05-architecture-patterns/01-resilience-patterns/76. bulkhead-retry-patterns"
+    },
+    {
+      "title": "Saga Pattern",
+      "description": "A comprehensive guide to the saga pattern for distributed transactions, covering choreography vs orchestration, compensating transactions, and failure handling",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "saga",
+        "distributed-transactions",
+        "microservices",
+        "system-design",
+        "patterns"
+      ],
+      "coverImage": "/images/saga-pattern.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "05-architecture-patterns",
+        "01-resilience-patterns"
+      ],
+      "slug": "73. saga-pattern",
+      "path": "/blogs/system-design/05-architecture-patterns/01-resilience-patterns/73. saga-pattern"
+    },
+    {
+      "title": "Circuit Breaker Pattern",
+      "description": "A comprehensive guide to the circuit breaker pattern in system design, covering failure handling, resilience strategies, and implementation for distributed systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "circuit-breaker",
+        "system-design",
+        "resilience",
+        "fault-tolerance",
+        "patterns"
+      ],
+      "coverImage": "/images/circuit-breaker.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "05-architecture-patterns",
+        "01-resilience-patterns"
+      ],
+      "slug": "51. circuit-breaker",
+      "path": "/blogs/system-design/05-architecture-patterns/01-resilience-patterns/51. circuit-breaker"
+    },
+    {
+      "title": "Rate Limiting",
+      "description": "A comprehensive guide to rate limiting in system design, covering token bucket algorithms, distributed rate limiting, and implementation strategies for API protection",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rate-limiting",
+        "system-design",
+        "api",
+        "scalability",
+        "patterns"
+      ],
+      "coverImage": "/images/rate-limiting.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "05-architecture-patterns",
+        "01-resilience-patterns"
+      ],
+      "slug": "50. rate-limiting",
+      "path": "/blogs/system-design/05-architecture-patterns/01-resilience-patterns/50. rate-limiting"
+    },
+    {
+      "title": "WebSockets & Real-Time Communication",
+      "description": "A comprehensive guide to WebSockets for real-time communication covering handshake, frames, Spring WebSocket, STOMP protocol, and scaling with Redis pub/sub",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "websocket",
+        "real-time",
+        "stomp",
+        "system-design",
+        "communication"
+      ],
+      "coverImage": "/images/websockets.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "04-communication-messaging",
+        "03-real-time-communication"
+      ],
+      "slug": "72. websockets-deep-dive",
+      "path": "/blogs/system-design/04-communication-messaging/03-real-time-communication/72. websockets-deep-dive"
+    },
+    {
+      "title": "Apache Kafka Deep Dive",
+      "description": "A comprehensive deep dive into Apache Kafka covering topics, partitions, consumer groups, offset management, exactly-once semantics, Kafka Connect, and Kafka Streams",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "kafka",
+        "streaming",
+        "messaging",
+        "system-design",
+        "event-driven"
+      ],
+      "coverImage": "/images/apache-kafka.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "04-communication-messaging",
+        "02-messaging-systems"
+      ],
+      "slug": "71. apache-kafka-deep-dive",
+      "path": "/blogs/system-design/04-communication-messaging/02-messaging-systems/71. apache-kafka-deep-dive"
+    },
+    {
+      "title": "Message Queues",
+      "description": "A deep dive into message queues covering RabbitMQ vs SQS, exchanges, bindings, consumer patterns, and delivery semantics for reliable asynchronous communication",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "message-queue",
+        "rabbitmq",
+        "sqs",
+        "system-design",
+        "messaging"
+      ],
+      "coverImage": "/images/message-queues.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "04-communication-messaging",
+        "02-messaging-systems"
+      ],
+      "slug": "70. message-queues-deep-dive",
+      "path": "/blogs/system-design/04-communication-messaging/02-messaging-systems/70. message-queues-deep-dive"
+    },
+    {
+      "title": "Pub-Sub Model",
+      "description": "A comprehensive guide to the publish-subscribe pattern in system design, covering message brokers, event-driven architecture, and implementation strategies for decoupled systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "pub-sub",
+        "messaging",
+        "system-design",
+        "event-driven",
+        "patterns"
+      ],
+      "coverImage": "/images/pub-sub-model.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "04-communication-messaging",
+        "02-messaging-systems"
+      ],
+      "slug": "52. pub-sub-model",
+      "path": "/blogs/system-design/04-communication-messaging/02-messaging-systems/52. pub-sub-model"
+    },
+    {
+      "title": "RESTful API Design",
+      "description": "A comprehensive guide to RESTful API design covering resource modeling, HTTP methods, status codes, pagination, HATEOAS, versioning, and OpenAPI specification",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rest",
+        "api-design",
+        "http",
+        "system-design",
+        "web-services"
+      ],
+      "coverImage": "/images/restful-api-design.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "04-communication-messaging",
+        "01-api-design"
+      ],
+      "slug": "69. restful-api-design",
+      "path": "/blogs/system-design/04-communication-messaging/01-api-design/69. restful-api-design"
+    },
+    {
+      "title": "Database Replication Strategies",
+      "description": "A comprehensive guide to database replication strategies covering leader-follower, multi-leader, quorum-based, conflict resolution, and handling replication lag",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "replication",
+        "database",
+        "system-design",
+        "high-availability",
+        "consistency"
+      ],
+      "coverImage": "/images/replication-strategies.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "03-database-patterns"
+      ],
+      "slug": "68. replication-strategies",
+      "path": "/blogs/system-design/03-storage-databases/03-database-patterns/68. replication-strategies"
+    },
+    {
+      "title": "Blob vs Block Storage",
+      "description": "A comprehensive guide comparing blob storage and block storage in system design, covering use cases, performance characteristics, and implementation strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "blob-storage",
+        "block-storage",
+        "system-design",
+        "storage",
+        "cloud"
+      ],
+      "coverImage": "/images/blob-vs-block-storage.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "02-storage-systems"
+      ],
+      "slug": "56. blob-vs-block-storage",
+      "path": "/blogs/system-design/03-storage-databases/02-storage-systems/56. blob-vs-block-storage"
+    },
+    {
+      "title": "File Storage Systems",
+      "description": "A comprehensive guide to file storage systems in system design, covering NFS, SMB/CIFS, distributed file systems, and implementation for enterprise applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "file-storage",
+        "nfs",
+        "system-design",
+        "storage",
+        "enterprise"
+      ],
+      "coverImage": "/images/file-storage-systems.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "02-storage-systems"
+      ],
+      "slug": "55. file-storage-systems",
+      "path": "/blogs/system-design/03-storage-databases/02-storage-systems/55. file-storage-systems"
+    },
+    {
+      "title": "Object Storage with S3",
+      "description": "A comprehensive guide to object storage with Amazon S3, covering bucket operations, access control, versioning, lifecycle management, and implementation for scalable storage",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "object-storage",
+        "s3",
+        "aws",
+        "system-design",
+        "storage"
+      ],
+      "coverImage": "/images/object-storage-s3.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "02-storage-systems"
+      ],
+      "slug": "54. object-storage-s3",
+      "path": "/blogs/system-design/03-storage-databases/02-storage-systems/54. object-storage-s3"
+    },
+    {
+      "title": "Document Stores (MongoDB)",
+      "description": "A comprehensive guide to document stores with MongoDB, covering the document model, indexing, aggregation pipeline, replication, sharding, and real-world use cases",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "mongodb",
+        "document-store",
+        "nosql",
+        "system-design",
+        "database"
+      ],
+      "coverImage": "/images/document-stores.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "01-database-types"
+      ],
+      "slug": "67. document-stores",
+      "path": "/blogs/system-design/03-storage-databases/01-database-types/67. document-stores"
+    },
+    {
+      "title": "Key-Value Stores (Redis)",
+      "description": "A deep dive into Redis key-value store covering data structures, persistence, clustering, pub/sub, and real-world use cases for caching and session management",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "redis",
+        "key-value",
+        "caching",
+        "system-design",
+        "storage"
+      ],
+      "coverImage": "/images/key-value-stores.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "01-database-types"
+      ],
+      "slug": "66. key-value-stores",
+      "path": "/blogs/system-design/03-storage-databases/01-database-types/66. key-value-stores"
+    },
+    {
+      "title": "SQL vs NoSQL Databases",
+      "description": "A comprehensive comparison of SQL and NoSQL databases, covering ACID vs BASE, schema types, use cases, and when to choose each for your system design",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "sql",
+        "nosql",
+        "database",
+        "system-design",
+        "storage"
+      ],
+      "coverImage": "/images/sql-vs-nosql.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "01-database-types"
+      ],
+      "slug": "65. sql-vs-nosql",
+      "path": "/blogs/system-design/03-storage-databases/01-database-types/65. sql-vs-nosql"
+    },
+    {
+      "title": "ATM Machine - LLD",
+      "description": "Low-level design of an ATM system covering card authentication, account management, transactions, withdrawal/deposit, balance inquiry, and security",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "lld",
+        "atm",
+        "java",
+        "banking",
+        "transaction",
+        "system-design"
+      ],
+      "coverImage": "/images/atm-machine-design.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "05-lld-case-studies"
+      ],
+      "slug": "65. atm-machine-design",
+      "path": "/blogs/system-design/02-low-level-design/05-lld-case-studies/65. atm-machine-design"
+    },
+    {
+      "title": "Meeting Scheduler - LLD",
+      "description": "Low-level design of a meeting scheduler system covering calendar management, conflict detection, room booking, and invite management with Java",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "lld",
+        "meeting-scheduler",
+        "java",
+        "calendar",
+        "conflict-detection",
+        "system-design"
+      ],
+      "coverImage": "/images/meeting-scheduler-design.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "05-lld-case-studies"
+      ],
+      "slug": "64. meeting-scheduler-design",
+      "path": "/blogs/system-design/02-low-level-design/05-lld-case-studies/64. meeting-scheduler-design"
+    },
+    {
+      "title": "Tic-Tac-Toe Game - LLD",
+      "description": "Low-level design of a Tic-Tac-Toe game with OOP covering board management, players, game state, move validation, and win detection",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "lld",
+        "tic-tac-toe",
+        "java",
+        "game-design",
+        "oop",
+        "object-oriented-design"
+      ],
+      "coverImage": "/images/tic-tac-toe-design.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "05-lld-case-studies"
+      ],
+      "slug": "63. tic-tac-toe-design",
+      "path": "/blogs/system-design/02-low-level-design/05-lld-case-studies/63. tic-tac-toe-design"
+    },
+    {
+      "title": "Elevator System - LLD",
+      "description": "Low-level design of an elevator system with multiple elevators, request handling, and scheduling algorithms including FCFS, SCAN, and LOOK",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "lld",
+        "elevator-system",
+        "oop",
+        "java",
+        "scheduling-algorithms",
+        "system-design"
+      ],
+      "coverImage": "/images/elevator-system-design.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "05-lld-case-studies"
+      ],
+      "slug": "62. elevator-system-design",
+      "path": "/blogs/system-design/02-low-level-design/05-lld-case-studies/62. elevator-system-design"
+    },
+    {
+      "title": "Parking Lot System - LLD",
+      "description": "Low-level design of a parking lot system with OOP principles covering vehicle types, parking spots, levels, payment processing, and entry/exit management",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "lld",
+        "parking-lot",
+        "oop",
+        "java",
+        "system-design",
+        "object-oriented-design"
+      ],
+      "coverImage": "/images/parking-lot-design.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "05-lld-case-studies"
+      ],
+      "slug": "61. parking-lot-design",
+      "path": "/blogs/system-design/02-low-level-design/05-lld-case-studies/61. parking-lot-design"
+    },
+    {
+      "title": "Concurrency Patterns in Java",
+      "description": "A comprehensive guide to concurrency patterns in Java covering thread safety, locks, semaphores, producer-consumer, reader-writer, and dining philosophers",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "concurrency",
+        "java",
+        "multithreading",
+        "thread-safety",
+        "synchronization",
+        "low-level-design"
+      ],
+      "coverImage": "/images/concurrency-patterns.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "04-concurrency-patterns"
+      ],
+      "slug": "60. concurrency-patterns",
+      "path": "/blogs/system-design/02-low-level-design/04-concurrency-patterns/60. concurrency-patterns"
+    },
+    {
+      "title": "GoF Design Patterns",
+      "description": "A comprehensive guide to Gang of Four design patterns covering Creational, Structural, and Behavioral patterns with Java examples and class diagrams",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "design-patterns",
+        "gof",
+        "java",
+        "creational",
+        "structural",
+        "behavioral",
+        "low-level-design"
+      ],
+      "coverImage": "/images/gof-design-patterns.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "03-gof-design-patterns"
+      ],
+      "slug": "59. gof-design-patterns",
+      "path": "/blogs/system-design/02-low-level-design/03-gof-design-patterns/59. gof-design-patterns"
+    },
+    {
+      "title": "UML Diagrams for System Design",
+      "description": "A comprehensive guide to UML diagrams for system design covering Class, Sequence, Activity, State, and Use Case diagrams with Mermaid examples",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "uml",
+        "diagrams",
+        "system-design",
+        "modeling",
+        "low-level-design"
+      ],
+      "coverImage": "/images/uml-diagrams.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "02-uml-modeling"
+      ],
+      "slug": "58. uml-diagrams",
+      "path": "/blogs/system-design/02-low-level-design/02-uml-modeling/58. uml-diagrams"
+    },
+    {
+      "title": "OOP & SOLID Principles",
+      "description": "A comprehensive guide to Object-Oriented Programming pillars and SOLID principles with Java examples for building maintainable software systems",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "oop",
+        "solid",
+        "java",
+        "low-level-design",
+        "design-patterns"
+      ],
+      "coverImage": "/images/oop-solid-principles.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "01-oop-principles"
+      ],
+      "slug": "57. oop-solid-principles",
+      "path": "/blogs/system-design/02-low-level-design/01-oop-principles/57. oop-solid-principles"
+    },
+    {
+      "title": "Back-of-the-Envelope Calculations",
+      "description": "A practical guide to back-of-the-envelope estimation for system design — traffic, storage, bandwidth, server capacity, and power-of-2 reference values",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "estimation",
+        "capacity-planning",
+        "system-design",
+        "scalability",
+        "performance"
+      ],
+      "coverImage": "/images/back-of-envelope-calculations.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "01-fundamentals",
+        "03-estimation-planning"
+      ],
+      "slug": "64. back-of-envelope-calculations",
+      "path": "/blogs/system-design/01-fundamentals/03-estimation-planning/64. back-of-envelope-calculations"
+    },
+    {
+      "title": "REST vs gRPC vs GraphQL",
+      "description": "A comprehensive comparison of REST, gRPC, and GraphQL API paradigms covering architecture, performance, tooling, and when to use each approach in modern system design",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rest",
+        "grpc",
+        "graphql",
+        "api",
+        "system-design",
+        "protocols"
+      ],
+      "coverImage": "/images/rest-vs-grpc-vs-graphql.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "01-fundamentals",
+        "02-networking-basics"
+      ],
+      "slug": "63. rest-vs-grpc-vs-graphql",
+      "path": "/blogs/system-design/01-fundamentals/02-networking-basics/63. rest-vs-grpc-vs-graphql"
+    },
+    {
+      "title": "TCP vs UDP",
+      "description": "A comprehensive comparison of TCP and UDP protocols covering the three-way handshake, flow control, congestion control, connectionless communication, and use cases for each",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "tcp",
+        "udp",
+        "networking",
+        "protocols",
+        "system-design",
+        "transport-layer"
+      ],
+      "coverImage": "/images/tcp-vs-udp.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "01-fundamentals",
+        "02-networking-basics"
+      ],
+      "slug": "62. tcp-vs-udp",
+      "path": "/blogs/system-design/01-fundamentals/02-networking-basics/62. tcp-vs-udp"
+    },
+    {
+      "title": "DNS & HTTP Fundamentals",
+      "description": "A deep dive into DNS resolution, record types, HTTP protocol evolution, caching strategies, and CDN fundamentals for system design interviews and real-world architecture",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "dns",
+        "http",
+        "networking",
+        "cdn",
+        "system-design",
+        "protocols"
+      ],
+      "coverImage": "/images/dns-http-deep-dive.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "01-fundamentals",
+        "02-networking-basics"
+      ],
+      "slug": "61. dns-http-deep-dive",
+      "path": "/blogs/system-design/01-fundamentals/02-networking-basics/61. dns-http-deep-dive"
+    },
+    {
+      "title": "Consistency Patterns",
+      "description": "An in-depth guide to consistency patterns in distributed systems — strong consistency, eventual consistency, read-after-write, monotonic reads, monotonic writes, and quorum-based approaches",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "consistency",
+        "distributed-systems",
+        "system-design",
+        "databases",
+        "data-integrity"
+      ],
+      "coverImage": "/images/consistency-patterns.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "01-fundamentals",
+        "01-core-concepts"
+      ],
+      "slug": "60. consistency-patterns",
+      "path": "/blogs/system-design/01-fundamentals/01-core-concepts/60. consistency-patterns"
+    },
+    {
+      "title": "ACID vs BASE",
+      "description": "A detailed comparison of ACID and BASE transaction models — understanding atomicity, consistency, isolation, durability versus basically available, soft state, and eventual consistency",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "acid",
+        "base",
+        "consistency",
+        "transactions",
+        "databases",
+        "system-design"
+      ],
+      "coverImage": "/images/acid-vs-base.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "01-fundamentals",
+        "01-core-concepts"
+      ],
+      "slug": "59. acid-vs-base",
+      "path": "/blogs/system-design/01-fundamentals/01-core-concepts/59. acid-vs-base"
+    },
+    {
+      "title": "CAP Theorem",
+      "description": "An in-depth exploration of the CAP theorem — Consistency, Availability, Partition Tolerance — with real-world examples of CP, AP, and CA systems and the PACELC extension",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "cap-theorem",
+        "consistency",
+        "availability",
+        "distributed-systems",
+        "system-design"
+      ],
+      "coverImage": "/images/cap-theorem.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "01-fundamentals",
+        "01-core-concepts"
+      ],
+      "slug": "58. cap-theorem",
+      "path": "/blogs/system-design/01-fundamentals/01-core-concepts/58. cap-theorem"
+    },
+    {
+      "title": "What is System Design?",
+      "description": "A comprehensive introduction to system design — understanding its goals, principles, and the step-by-step process for building scalable, reliable, and maintainable distributed systems",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "architecture",
+        "fundamentals",
+        "scalability",
+        "reliability"
+      ],
+      "coverImage": "/images/what-is-system-design.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "01-fundamentals",
+        "01-core-concepts"
+      ],
+      "slug": "57. what-is-system-design",
+      "path": "/blogs/system-design/01-fundamentals/01-core-concepts/57. what-is-system-design"
     },
     {
       "title": "Database Sharding",
@@ -273,10 +1219,11 @@
       "draft": false,
       "category": "system-design",
       "hierarchy": [
-        "basics"
+        "01-fundamentals",
+        "01-core-concepts"
       ],
       "slug": "44. database-sharding",
-      "path": "/blogs/system-design/basics/44. database-sharding"
+      "path": "/blogs/system-design/01-fundamentals/01-core-concepts/44. database-sharding"
     },
     {
       "title": "Caching Strategies",
@@ -294,10 +1241,11 @@
       "draft": false,
       "category": "system-design",
       "hierarchy": [
-        "basics"
+        "01-fundamentals",
+        "01-core-concepts"
       ],
       "slug": "43. caching-strategies",
-      "path": "/blogs/system-design/basics/43. caching-strategies"
+      "path": "/blogs/system-design/01-fundamentals/01-core-concepts/43. caching-strategies"
     },
     {
       "title": "Load Balancing",
@@ -314,10 +1262,11 @@
       "draft": false,
       "category": "system-design",
       "hierarchy": [
-        "basics"
+        "01-fundamentals",
+        "01-core-concepts"
       ],
       "slug": "42. load-balancing",
-      "path": "/blogs/system-design/basics/42. load-balancing"
+      "path": "/blogs/system-design/01-fundamentals/01-core-concepts/42. load-balancing"
     },
     {
       "title": "Scalability Introduction",
@@ -334,10 +1283,11 @@
       "draft": false,
       "category": "system-design",
       "hierarchy": [
-        "basics"
+        "01-fundamentals",
+        "01-core-concepts"
       ],
       "slug": "41. scalability-introduction",
-      "path": "/blogs/system-design/basics/41. scalability-introduction"
+      "path": "/blogs/system-design/01-fundamentals/01-core-concepts/41. scalability-introduction"
     }
   ]
 }

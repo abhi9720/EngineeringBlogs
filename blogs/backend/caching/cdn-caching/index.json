@@ -1,0 +1,49 @@
+{
+  "name": "CDN Caching",
+  "path": "/blogs/backend/caching/cdn-caching",
+  "blogs": [
+    {
+      "title": "CDN Strategies for Backend APIs",
+      "description": "Leverage CDNs for backend API caching: edge caching, API response caching, and geographic distribution patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "caching",
+        "cdn",
+        "api-caching",
+        "edge"
+      ],
+      "coverImage": "/images/cdn-strategies-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "caching",
+        "cdn-caching"
+      ],
+      "slug": "cdn-strategies-backend",
+      "path": "/blogs/backend/caching/cdn-caching/cdn-strategies-backend"
+    },
+    {
+      "title": "Cache-Control Headers",
+      "description": "Master HTTP caching headers: Cache-Control, ETag, Last-Modified, and conditional requests for backend APIs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "caching",
+        "cdn",
+        "cache-control",
+        "etag",
+        "http"
+      ],
+      "coverImage": "/images/cache-control-headers.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "caching",
+        "cdn-caching"
+      ],
+      "slug": "cache-control-headers",
+      "path": "/blogs/backend/caching/cdn-caching/cache-control-headers"
+    }
+  ]
+}

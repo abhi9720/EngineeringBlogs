@@ -1,0 +1,69 @@
+{
+  "name": "Distributed Tracing",
+  "path": "/blogs/backend/observability/distributed-tracing",
+  "blogs": [
+    {
+      "title": "Trace Context Propagation",
+      "description": "Understand trace context propagation across service boundaries: W3C TraceContext, B3 headers, and manual propagation",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "observability",
+        "tracing",
+        "context-propagation",
+        "distributed-tracing"
+      ],
+      "coverImage": "/images/trace-context-propagation.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "observability",
+        "distributed-tracing"
+      ],
+      "slug": "trace-context-propagation",
+      "path": "/blogs/backend/observability/distributed-tracing/trace-context-propagation"
+    },
+    {
+      "title": "OpenTelemetry Basics",
+      "description": "Implement distributed tracing with OpenTelemetry: spans, traces, context propagation, and integration with backends",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "observability",
+        "tracing",
+        "opentelemetry",
+        "distributed-tracing"
+      ],
+      "coverImage": "/images/opentelemetry-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "observability",
+        "distributed-tracing"
+      ],
+      "slug": "opentelemetry-basics",
+      "path": "/blogs/backend/observability/distributed-tracing/opentelemetry-basics"
+    },
+    {
+      "title": "Jaeger vs Zipkin Setup",
+      "description": "Compare Jaeger and Zipkin for distributed tracing: architecture, deployment, data storage, and feature comparison",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "observability",
+        "tracing",
+        "jaeger",
+        "zipkin"
+      ],
+      "coverImage": "/images/jaeger-zipkin-setup.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "observability",
+        "distributed-tracing"
+      ],
+      "slug": "jaeger-zipkin-setup",
+      "path": "/blogs/backend/observability/distributed-tracing/jaeger-zipkin-setup"
+    }
+  ]
+}

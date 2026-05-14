@@ -1,0 +1,90 @@
+{
+  "name": "API Security",
+  "path": "/blogs/backend/api-design/api-security",
+  "blogs": [
+    {
+      "title": "Rate Limiting",
+      "description": "Implement rate limiting in APIs: token bucket, leaky bucket, fixed window, sliding window algorithms, and distributed rate limiting",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rate-limiting",
+        "api-security",
+        "throttling",
+        "algorithms"
+      ],
+      "coverImage": "/images/backend/api-design/api-security/rate-limiting.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "api-security"
+      ],
+      "slug": "rate-limiting",
+      "path": "/blogs/backend/api-design/api-security/rate-limiting"
+    },
+    {
+      "title": "OpenAPI/Swagger Documentation",
+      "description": "Master OpenAPI 3.0 specification: API documentation, Swagger UI, SpringDoc, code generation, and documentation best practices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "openapi",
+        "swagger",
+        "api-documentation",
+        "springdoc"
+      ],
+      "coverImage": "/images/backend/api-design/api-security/openapi-swagger-documentation.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "api-security"
+      ],
+      "slug": "openapi-swagger-documentation",
+      "path": "/blogs/backend/api-design/api-security/openapi-swagger-documentation"
+    },
+    {
+      "title": "API Key Management",
+      "description": "Implement API key management: generation, validation, rotation, revocation, hashing strategies, and secure storage patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "api-keys",
+        "security",
+        "key-management",
+        "authentication"
+      ],
+      "coverImage": "/images/backend/api-design/api-security/api-key-management.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "api-security"
+      ],
+      "slug": "api-key-management",
+      "path": "/blogs/backend/api-design/api-security/api-key-management"
+    },
+    {
+      "title": "API Authentication Methods",
+      "description": "Compare API authentication methods: Basic Auth, API Keys, JWT, OAuth 2.0, OpenID Connect, and implementation patterns in Spring Boot",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "authentication",
+        "jwt",
+        "oauth2",
+        "api-security"
+      ],
+      "coverImage": "/images/backend/api-design/api-security/api-authentication-methods.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "api-security"
+      ],
+      "slug": "api-authentication-methods",
+      "path": "/blogs/backend/api-design/api-security/api-authentication-methods"
+    }
+  ]
+}

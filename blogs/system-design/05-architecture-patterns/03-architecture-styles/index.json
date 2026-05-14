@@ -1,0 +1,28 @@
+{
+  "name": "03 Architecture Styles",
+  "path": "/blogs/system-design/05-architecture-patterns/03-architecture-styles",
+  "blogs": [
+    {
+      "title": "Monolith vs Microservices",
+      "description": "A comprehensive comparison of monolithic and microservices architectures, covering when to use each, migration strategies, DDD bounded contexts, and operational complexity",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "microservices",
+        "monolith",
+        "architecture",
+        "system-design",
+        "ddd"
+      ],
+      "coverImage": "/images/monolith-vs-microservices.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "05-architecture-patterns",
+        "03-architecture-styles"
+      ],
+      "slug": "75. monolith-vs-microservices",
+      "path": "/blogs/system-design/05-architecture-patterns/03-architecture-styles/75. monolith-vs-microservices"
+    }
+  ]
+}

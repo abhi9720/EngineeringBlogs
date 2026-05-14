@@ -1,0 +1,90 @@
+{
+  "name": "JVM Ecosystem",
+  "path": "/blogs/backend/frameworks/jvm-ecosystem",
+  "blogs": [
+    {
+      "title": "Quarkus vs Spring Boot: A Comprehensive Comparison",
+      "description": "Compare Quarkus and Spring Boot frameworks: startup time, memory usage, developer experience, extensions ecosystem, and choosing the right Java framework",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "quarkus",
+        "spring-boot",
+        "comparison"
+      ],
+      "coverImage": "/images/quarkus-vs-spring-boot.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "jvm-ecosystem"
+      ],
+      "slug": "quarkus-vs-spring-boot",
+      "path": "/blogs/backend/frameworks/jvm-ecosystem/quarkus-vs-spring-boot"
+    },
+    {
+      "title": "Micronaut: Compile-Time DI Framework",
+      "description": "Master Micronaut framework: compile-time dependency injection, AOT optimization, reactive support, cloud-native features, and building efficient JVM microservices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "micronaut",
+        "dependency-injection",
+        "microservices"
+      ],
+      "coverImage": "/images/micronaut-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "jvm-ecosystem"
+      ],
+      "slug": "micronaut-basics",
+      "path": "/blogs/backend/frameworks/jvm-ecosystem/micronaut-basics"
+    },
+    {
+      "title": "Kotlin for Backend Development",
+      "description": "Master Kotlin for backend development: coroutines, Ktor, Spring Boot with Kotlin, null safety, data classes, and building modern JVM services",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "kotlin",
+        "jvm",
+        "coroutines",
+        "ktor"
+      ],
+      "coverImage": "/images/kotlin-for-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "jvm-ecosystem"
+      ],
+      "slug": "kotlin-for-backend",
+      "path": "/blogs/backend/frameworks/jvm-ecosystem/kotlin-for-backend"
+    },
+    {
+      "title": "GraalVM Native Images for Java Applications",
+      "description": "Master GraalVM native images: AOT compilation, reflection configuration, resource handling, native-image building, and deploying optimized JVM applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "java",
+        "graalvm",
+        "native-image",
+        "performance"
+      ],
+      "coverImage": "/images/graalvm-native-images.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "jvm-ecosystem"
+      ],
+      "slug": "graalvm-native-images",
+      "path": "/blogs/backend/frameworks/jvm-ecosystem/graalvm-native-images"
+    }
+  ]
+}

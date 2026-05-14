@@ -1,0 +1,28 @@
+{
+  "name": "02 Uml Modeling",
+  "path": "/blogs/system-design/02-low-level-design/02-uml-modeling",
+  "blogs": [
+    {
+      "title": "UML Diagrams for System Design",
+      "description": "A comprehensive guide to UML diagrams for system design covering Class, Sequence, Activity, State, and Use Case diagrams with Mermaid examples",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "uml",
+        "diagrams",
+        "system-design",
+        "modeling",
+        "low-level-design"
+      ],
+      "coverImage": "/images/uml-diagrams.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "02-low-level-design",
+        "02-uml-modeling"
+      ],
+      "slug": "58. uml-diagrams",
+      "path": "/blogs/system-design/02-low-level-design/02-uml-modeling/58. uml-diagrams"
+    }
+  ]
+}

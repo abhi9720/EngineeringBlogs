@@ -1,0 +1,90 @@
+{
+  "name": "Authentication",
+  "path": "/blogs/backend/security/authentication",
+  "blogs": [
+    {
+      "title": "SSO and SAML Basics",
+      "description": "Comprehensive guide to Single Sign-On, SAML protocol, identity federation, and implementation patterns in Java applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "sso",
+        "saml",
+        "identity-federation",
+        "authentication"
+      ],
+      "coverImage": "/images/sso-and-saml-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "authentication"
+      ],
+      "slug": "sso-and-saml-basics",
+      "path": "/blogs/backend/security/authentication/sso-and-saml-basics"
+    },
+    {
+      "title": "Session vs Token Authentication",
+      "description": "In-depth comparison of session-based and token-based authentication, including trade-offs, implementation patterns, and when to choose each",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "authentication",
+        "session",
+        "jwt",
+        "security"
+      ],
+      "coverImage": "/images/session-vs-token-auth.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "authentication"
+      ],
+      "slug": "session-vs-token-auth",
+      "path": "/blogs/backend/security/authentication/session-vs-token-auth"
+    },
+    {
+      "title": "Password Hashing and Storage",
+      "description": "Deep dive into password hashing algorithms (bcrypt, Argon2, PBKDF2), salting strategies, and secure storage patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "password-hashing",
+        "bcrypt",
+        "argon2",
+        "security"
+      ],
+      "coverImage": "/images/password-hashing-storage.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "authentication"
+      ],
+      "slug": "password-hashing-storage",
+      "path": "/blogs/backend/security/authentication/password-hashing-storage"
+    },
+    {
+      "title": "JWT Deep Dive",
+      "description": "Comprehensive deep dive into JWT structure, signing algorithms, token validation, and production security considerations",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "jwt",
+        "authentication",
+        "security",
+        "tokens"
+      ],
+      "coverImage": "/images/jwt-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "authentication"
+      ],
+      "slug": "jwt-deep-dive",
+      "path": "/blogs/backend/security/authentication/jwt-deep-dive"
+    }
+  ]
+}

@@ -430,3 +430,7 @@ The key is understanding when each approach shines and not forcing one to do wha
 - [JDBC Documentation](https://docs.oracle.com/javase/tutorial/jdbc/)
 - [JPA/Hibernate Documentation](https://jakarta.ee/specifications/persistence/)
 - [Baeldung - JDBC vs JPA](https://www.baeldung.com/jpa-vs-jdbc)
+
+---
+
+Happy Coding 👨‍💻

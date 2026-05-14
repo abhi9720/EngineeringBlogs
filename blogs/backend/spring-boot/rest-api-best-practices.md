@@ -1008,3 +1008,7 @@ API design is a contract with your consumers. Design it carefully, version it pr
 - [OpenAPI Specification](https://swagger.io/specification/)
 - [Spring REST Docs](https://spring.io/projects/spring-restdocs)
 - [Microsoft API Design Guide](https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design)
+
+---
+
+Happy Coding 👨‍💻

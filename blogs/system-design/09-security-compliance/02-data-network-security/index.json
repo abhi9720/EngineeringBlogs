@@ -1,0 +1,30 @@
+{
+  "name": "02 Data Network Security",
+  "path": "/blogs/system-design/09-security-compliance/02-data-network-security",
+  "blogs": [
+    {
+      "title": "Encryption at Rest & in Transit",
+      "description": "A comprehensive guide to TLS/SSL, mTLS, symmetric and asymmetric encryption, and key management for securing data in distributed systems",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "security",
+        "encryption",
+        "tls",
+        "mtls",
+        "aws-kms",
+        "certificate-management"
+      ],
+      "coverImage": "/images/encryption-tls.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "09-security-compliance",
+        "02-data-network-security"
+      ],
+      "slug": "86. encryption-tls",
+      "path": "/blogs/system-design/09-security-compliance/02-data-network-security/86. encryption-tls"
+    }
+  ]
+}

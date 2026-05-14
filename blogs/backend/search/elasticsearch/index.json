@@ -1,0 +1,111 @@
+{
+  "name": "Elasticsearch",
+  "path": "/blogs/backend/search/elasticsearch",
+  "blogs": [
+    {
+      "title": "Indexing, Mappings, and Analysis",
+      "description": "Deep dive into Elasticsearch index mappings, analyzers, tokenizers, and custom analysis pipelines",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "elasticsearch",
+        "indexing",
+        "mappings",
+        "analyzers"
+      ],
+      "coverImage": "/images/indexing-mappings-analysis.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "search",
+        "elasticsearch"
+      ],
+      "slug": "indexing-mappings-analysis",
+      "path": "/blogs/backend/search/elasticsearch/indexing-mappings-analysis"
+    },
+    {
+      "title": "Full-Text Search Queries",
+      "description": "Master Elasticsearch full-text search: match, term, bool queries, relevance scoring, and query optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "elasticsearch",
+        "full-text-search",
+        "queries",
+        "relevance"
+      ],
+      "coverImage": "/images/full-text-search-queries.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "search",
+        "elasticsearch"
+      ],
+      "slug": "full-text-search-queries",
+      "path": "/blogs/backend/search/elasticsearch/full-text-search-queries"
+    },
+    {
+      "title": "Elasticsearch vs Solr",
+      "description": "Compare Elasticsearch and Apache Solr: search capabilities, performance, operations, and ecosystem differences",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "elasticsearch",
+        "solr",
+        "comparison",
+        "search-engine"
+      ],
+      "coverImage": "/images/elasticsearch-vs-solr.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "search",
+        "elasticsearch"
+      ],
+      "slug": "elasticsearch-vs-solr",
+      "path": "/blogs/backend/search/elasticsearch/elasticsearch-vs-solr"
+    },
+    {
+      "title": "Elasticsearch Clustering",
+      "description": "Elasticsearch cluster architecture: sharding, replication, node roles, discovery, and production deployment",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "elasticsearch",
+        "clustering",
+        "sharding",
+        "production"
+      ],
+      "coverImage": "/images/elasticsearch-clustering.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "search",
+        "elasticsearch"
+      ],
+      "slug": "elasticsearch-clustering",
+      "path": "/blogs/backend/search/elasticsearch/elasticsearch-clustering"
+    },
+    {
+      "title": "Elasticsearch Basics",
+      "description": "Introduction to Elasticsearch: indexing, mappings, queries, aggregations, and building search applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "elasticsearch",
+        "indexing",
+        "mappings",
+        "search"
+      ],
+      "coverImage": "/images/elasticsearch-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "search",
+        "elasticsearch"
+      ],
+      "slug": "elasticsearch-basics",
+      "path": "/blogs/backend/search/elasticsearch/elasticsearch-basics"
+    }
+  ]
+}

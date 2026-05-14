@@ -219,3 +219,7 @@ public ResponseEntity<?> getUsers(
 
 - [Paging in REST APIs](https://docs.microsoft.com/en-us/azure/architecture/best-practices/api-design#pagination)
 - [Twitter API Pagination](https://developer.twitter.com/en/docs/tweets/timelines/guides/pagination)
+
+---
+
+Happy Coding 👨‍💻

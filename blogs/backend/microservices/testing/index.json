@@ -1,0 +1,90 @@
+{
+  "name": "Testing",
+  "path": "/blogs/backend/microservices/testing",
+  "blogs": [
+    {
+      "title": "Microservices Testing Strategies",
+      "description": "Comprehensive testing strategies for microservices: testing pyramid, unit tests, integration tests, contract tests, end-to-end tests, test containers, and Spring Boot testing",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "testing",
+        "microservices",
+        "integration-testing",
+        "spring-boot"
+      ],
+      "coverImage": "/images/microservices-testing-strategies.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "testing"
+      ],
+      "slug": "microservices-testing-strategies",
+      "path": "/blogs/backend/microservices/testing/microservices-testing-strategies"
+    },
+    {
+      "title": "Integration Testing with Spring Cloud",
+      "description": "Integration testing strategies for Spring Cloud microservices: Testcontainers for databases, Embedded Kafka, Spring Cloud Contract, @SpringBootTest slicing, and CI pipeline testing",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "integration-testing",
+        "spring-cloud",
+        "testcontainers",
+        "spring-boot"
+      ],
+      "coverImage": "/images/integration-testing-spring-cloud.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "testing"
+      ],
+      "slug": "integration-testing-spring-cloud",
+      "path": "/blogs/backend/microservices/testing/integration-testing-spring-cloud"
+    },
+    {
+      "title": "Contract Testing with Pact",
+      "description": "Implement consumer-driven contract testing with Pact for microservices: Pact JVM, consumer tests, provider tests, pact verification, CI/CD integration, and Spring Boot examples",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "pact",
+        "contract-testing",
+        "microservices",
+        "testing"
+      ],
+      "coverImage": "/images/contract-testing-pact.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "testing"
+      ],
+      "slug": "contract-testing-pact",
+      "path": "/blogs/backend/microservices/testing/contract-testing-pact"
+    },
+    {
+      "title": "Chaos Engineering Basics for Microservices",
+      "description": "Implement chaos engineering for microservices: Chaos Monkey, LitmusChaos, fault injection, resilience testing, steady-state hypothesis, and Spring Boot integration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "chaos-engineering",
+        "resilience",
+        "testing",
+        "microservices"
+      ],
+      "coverImage": "/images/chaos-engineering-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "testing"
+      ],
+      "slug": "chaos-engineering-basics",
+      "path": "/blogs/backend/microservices/testing/chaos-engineering-basics"
+    }
+  ]
+}

@@ -3,6 +3,69 @@
   "path": "/blogs/backend/api-design",
   "blogs": [
     {
+      "title": "WebSocket vs Server-Sent Events",
+      "description": "Compare WebSocket and Server-Sent Events: protocol differences, use cases, implementation patterns, and choosing the right real-time technology",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "websockets",
+        "server-sent-events",
+        "sse",
+        "real-time"
+      ],
+      "coverImage": "/images/backend/api-design/websockets/websocket-vs-sse.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "websockets"
+      ],
+      "slug": "websocket-vs-sse",
+      "path": "/blogs/backend/api-design/websockets/websocket-vs-sse"
+    },
+    {
+      "title": "WebSocket Basics",
+      "description": "Master WebSocket protocol: handshake, frame types, Java WebSocket API, Spring WebSocket support, and real-world implementation patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "websockets",
+        "real-time",
+        "spring-websocket",
+        "protocol"
+      ],
+      "coverImage": "/images/backend/api-design/websockets/websocket-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "websockets"
+      ],
+      "slug": "websocket-basics",
+      "path": "/blogs/backend/api-design/websockets/websocket-basics"
+    },
+    {
+      "title": "Scaling WebSockets",
+      "description": "Techniques for scaling WebSocket connections: sticky sessions, pub/sub backplane, Redis pub/sub, horizontal scaling, and connection management",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "websockets",
+        "scaling",
+        "redis",
+        "sticky-sessions"
+      ],
+      "coverImage": "/images/backend/api-design/websockets/scaling-websockets.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "websockets"
+      ],
+      "slug": "scaling-websockets",
+      "path": "/blogs/backend/api-design/websockets/scaling-websockets"
+    },
+    {
       "title": "API Versioning",
       "description": "Design API versioning strategies: URL paths, headers, and query parameters; maintaining backward compatibility",
       "date": "2026-05-11",
@@ -41,6 +104,90 @@
       "path": "/blogs/backend/api-design/rest-vs-graphql"
     },
     {
+      "title": "REST API Fundamentals",
+      "description": "Master REST API fundamentals: HTTP methods, status codes, resource design, and RESTful principles for building production-grade APIs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rest-api",
+        "http",
+        "api-design",
+        "fundamentals"
+      ],
+      "coverImage": "/images/backend/api-design/rest/rest-fundamentals.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "rest"
+      ],
+      "slug": "rest-fundamentals",
+      "path": "/blogs/backend/api-design/rest/rest-fundamentals"
+    },
+    {
+      "title": "HATEOAS and Hypermedia APIs",
+      "description": "Implement HATEOAS in REST APIs: hypermedia links, discoverability, Spring HATEOAS implementation, and consumer-driven contracts",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "hateoas",
+        "rest-api",
+        "hypermedia",
+        "spring-hateoas"
+      ],
+      "coverImage": "/images/backend/api-design/rest/hateoas.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "rest"
+      ],
+      "slug": "hateoas",
+      "path": "/blogs/backend/api-design/rest/hateoas"
+    },
+    {
+      "title": "Standardized Error Handling (RFC 7807)",
+      "description": "Implement RFC 7807 Problem Details for error responses: structured errors, Spring ErrorAttributes, and consistent API error handling",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "error-handling",
+        "rfc-7807",
+        "problem-details",
+        "rest-api"
+      ],
+      "coverImage": "/images/backend/api-design/rest/error-handling-standards.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "rest"
+      ],
+      "slug": "error-handling-standards",
+      "path": "/blogs/backend/api-design/rest/error-handling-standards"
+    },
+    {
+      "title": "Content Negotiation and Media Types",
+      "description": "Master content negotiation in REST APIs: media types, Accept headers, custom serialization, and versioning through content types",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "content-negotiation",
+        "rest-api",
+        "media-types",
+        "spring-boot"
+      ],
+      "coverImage": "/images/backend/api-design/rest/content-negotiation.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "rest"
+      ],
+      "slug": "content-negotiation",
+      "path": "/blogs/backend/api-design/rest/content-negotiation"
+    },
+    {
       "title": "Pagination Strategies",
       "description": "Implement effective pagination in REST APIs: offset vs cursor-based, handling large datasets, and performance optimization",
       "date": "2026-05-11",
@@ -77,6 +224,279 @@
       ],
       "slug": "idempotency",
       "path": "/blogs/backend/api-design/idempotency"
+    },
+    {
+      "title": "Protocol Buffers Deep Dive",
+      "description": "Master Protocol Buffers for gRPC: proto3 syntax, advanced features, field types, serialization internals, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "protobuf",
+        "grpc",
+        "serialization",
+        "protocol-buffers"
+      ],
+      "coverImage": "/images/backend/api-design/grpc/protobuf-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "grpc"
+      ],
+      "slug": "protobuf-deep-dive",
+      "path": "/blogs/backend/api-design/grpc/protobuf-deep-dive"
+    },
+    {
+      "title": "gRPC vs REST vs GraphQL",
+      "description": "Compare gRPC, REST, and GraphQL API paradigms: performance, developer experience, use cases, and when to choose each approach",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "grpc",
+        "rest",
+        "graphql",
+        "comparison"
+      ],
+      "coverImage": "/images/backend/api-design/grpc/grpc-vs-rest-vs-graphql.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "grpc"
+      ],
+      "slug": "grpc-vs-rest-vs-graphql",
+      "path": "/blogs/backend/api-design/grpc/grpc-vs-rest-vs-graphql"
+    },
+    {
+      "title": "gRPC Streaming",
+      "description": "Master gRPC streaming patterns: server streaming, client streaming, bidirectional streaming, backpressure handling, and real-time data pipelines",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "grpc",
+        "streaming",
+        "real-time",
+        "protobuf"
+      ],
+      "coverImage": "/images/backend/api-design/grpc/grpc-streaming.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "grpc"
+      ],
+      "slug": "grpc-streaming",
+      "path": "/blogs/backend/api-design/grpc/grpc-streaming"
+    },
+    {
+      "title": "gRPC Introduction",
+      "description": "Master gRPC concepts: Protocol Buffers, service definitions, server/client implementation in Java, streaming, and production deployment",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "grpc",
+        "protobuf",
+        "rpc",
+        "api-design"
+      ],
+      "coverImage": "/images/backend/api-design/grpc/grpc-introduction.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "grpc"
+      ],
+      "slug": "grpc-introduction",
+      "path": "/blogs/backend/api-design/grpc/grpc-introduction"
+    },
+    {
+      "title": "GraphQL Subscriptions",
+      "description": "Implement real-time GraphQL subscriptions: WebSocket transport, subscription resolvers, event-driven patterns, and production scaling",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "graphql",
+        "subscriptions",
+        "websockets",
+        "real-time"
+      ],
+      "coverImage": "/images/backend/api-design/graphql/graphql-subscriptions.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "graphql"
+      ],
+      "slug": "graphql-subscriptions",
+      "path": "/blogs/backend/api-design/graphql/graphql-subscriptions"
+    },
+    {
+      "title": "GraphQL Security",
+      "description": "Implement GraphQL API security: authentication, authorization, query depth limiting, rate limiting, batching attacks, and production hardening",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "graphql",
+        "security",
+        "authentication",
+        "rate-limiting"
+      ],
+      "coverImage": "/images/backend/api-design/graphql/graphql-security.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "graphql"
+      ],
+      "slug": "graphql-security",
+      "path": "/blogs/backend/api-design/graphql/graphql-security"
+    },
+    {
+      "title": "GraphQL Resolvers",
+      "description": "Deep dive into GraphQL resolver patterns: DataLoader batching, field-level resolvers, batch loading, and optimizing data fetching in GraphQL Java",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "graphql",
+        "resolvers",
+        "dataloader",
+        "graphql-java"
+      ],
+      "coverImage": "/images/backend/api-design/graphql/graphql-resolvers.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "graphql"
+      ],
+      "slug": "graphql-resolvers",
+      "path": "/blogs/backend/api-design/graphql/graphql-resolvers"
+    },
+    {
+      "title": "GraphQL Federation",
+      "description": "Implement federated GraphQL architecture: Apollo Federation, schema composition, gateway pattern, entity resolution, and cross-service queries",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "graphql",
+        "federation",
+        "microservices",
+        "apollo"
+      ],
+      "coverImage": "/images/backend/api-design/graphql/graphql-federation.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "graphql"
+      ],
+      "slug": "graphql-federation",
+      "path": "/blogs/backend/api-design/graphql/graphql-federation"
+    },
+    {
+      "title": "GraphQL Basics",
+      "description": "Master GraphQL schema design, queries, mutations, GraphQL Java implementation, and data fetching patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "graphql",
+        "graphql-java",
+        "api-design",
+        "schema"
+      ],
+      "coverImage": "/images/backend/api-design/graphql/graphql-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "graphql"
+      ],
+      "slug": "graphql-basics",
+      "path": "/blogs/backend/api-design/graphql/graphql-basics"
+    },
+    {
+      "title": "Rate Limiting",
+      "description": "Implement rate limiting in APIs: token bucket, leaky bucket, fixed window, sliding window algorithms, and distributed rate limiting",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rate-limiting",
+        "api-security",
+        "throttling",
+        "algorithms"
+      ],
+      "coverImage": "/images/backend/api-design/api-security/rate-limiting.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "api-security"
+      ],
+      "slug": "rate-limiting",
+      "path": "/blogs/backend/api-design/api-security/rate-limiting"
+    },
+    {
+      "title": "OpenAPI/Swagger Documentation",
+      "description": "Master OpenAPI 3.0 specification: API documentation, Swagger UI, SpringDoc, code generation, and documentation best practices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "openapi",
+        "swagger",
+        "api-documentation",
+        "springdoc"
+      ],
+      "coverImage": "/images/backend/api-design/api-security/openapi-swagger-documentation.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "api-security"
+      ],
+      "slug": "openapi-swagger-documentation",
+      "path": "/blogs/backend/api-design/api-security/openapi-swagger-documentation"
+    },
+    {
+      "title": "API Key Management",
+      "description": "Implement API key management: generation, validation, rotation, revocation, hashing strategies, and secure storage patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "api-keys",
+        "security",
+        "key-management",
+        "authentication"
+      ],
+      "coverImage": "/images/backend/api-design/api-security/api-key-management.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "api-security"
+      ],
+      "slug": "api-key-management",
+      "path": "/blogs/backend/api-design/api-security/api-key-management"
+    },
+    {
+      "title": "API Authentication Methods",
+      "description": "Compare API authentication methods: Basic Auth, API Keys, JWT, OAuth 2.0, OpenID Connect, and implementation patterns in Spring Boot",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "authentication",
+        "jwt",
+        "oauth2",
+        "api-security"
+      ],
+      "coverImage": "/images/backend/api-design/api-security/api-authentication-methods.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "api-security"
+      ],
+      "slug": "api-authentication-methods",
+      "path": "/blogs/backend/api-design/api-security/api-authentication-methods"
     }
   ]
 }

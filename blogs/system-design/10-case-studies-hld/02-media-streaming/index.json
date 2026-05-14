@@ -1,0 +1,52 @@
+{
+  "name": "02 Media Streaming",
+  "path": "/blogs/system-design/10-case-studies-hld/02-media-streaming",
+  "blogs": [
+    {
+      "title": "Netflix Streaming System Design",
+      "description": "A comprehensive guide to Netflix's streaming architecture, covering content delivery, recommendation systems, device adaptation, and global scaling for 200M+ subscribers",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "netflix",
+        "streaming",
+        "content-delivery",
+        "recommendations",
+        "case-study"
+      ],
+      "coverImage": "/images/netflix-streaming.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "10-case-studies-hld",
+        "02-media-streaming"
+      ],
+      "slug": "49. netflix-streaming",
+      "path": "/blogs/system-design/10-case-studies-hld/02-media-streaming/49. netflix-streaming"
+    },
+    {
+      "title": "YouTube System Design",
+      "description": "A comprehensive guide to YouTube's system design, covering video storage, transcoding, CDN distribution, recommendations, and streaming architecture at scale",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "youtube",
+        "video-streaming",
+        "cdn",
+        "transcoding",
+        "case-study"
+      ],
+      "coverImage": "/images/youtube-system-design.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "10-case-studies-hld",
+        "02-media-streaming"
+      ],
+      "slug": "48. youtube-system-design",
+      "path": "/blogs/system-design/10-case-studies-hld/02-media-streaming/48. youtube-system-design"
+    }
+  ]
+}

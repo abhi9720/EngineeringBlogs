@@ -1,0 +1,90 @@
+{
+  "name": "REST",
+  "path": "/blogs/backend/api-design/rest",
+  "blogs": [
+    {
+      "title": "REST API Fundamentals",
+      "description": "Master REST API fundamentals: HTTP methods, status codes, resource design, and RESTful principles for building production-grade APIs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rest-api",
+        "http",
+        "api-design",
+        "fundamentals"
+      ],
+      "coverImage": "/images/backend/api-design/rest/rest-fundamentals.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "rest"
+      ],
+      "slug": "rest-fundamentals",
+      "path": "/blogs/backend/api-design/rest/rest-fundamentals"
+    },
+    {
+      "title": "HATEOAS and Hypermedia APIs",
+      "description": "Implement HATEOAS in REST APIs: hypermedia links, discoverability, Spring HATEOAS implementation, and consumer-driven contracts",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "hateoas",
+        "rest-api",
+        "hypermedia",
+        "spring-hateoas"
+      ],
+      "coverImage": "/images/backend/api-design/rest/hateoas.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "rest"
+      ],
+      "slug": "hateoas",
+      "path": "/blogs/backend/api-design/rest/hateoas"
+    },
+    {
+      "title": "Standardized Error Handling (RFC 7807)",
+      "description": "Implement RFC 7807 Problem Details for error responses: structured errors, Spring ErrorAttributes, and consistent API error handling",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "error-handling",
+        "rfc-7807",
+        "problem-details",
+        "rest-api"
+      ],
+      "coverImage": "/images/backend/api-design/rest/error-handling-standards.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "rest"
+      ],
+      "slug": "error-handling-standards",
+      "path": "/blogs/backend/api-design/rest/error-handling-standards"
+    },
+    {
+      "title": "Content Negotiation and Media Types",
+      "description": "Master content negotiation in REST APIs: media types, Accept headers, custom serialization, and versioning through content types",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "content-negotiation",
+        "rest-api",
+        "media-types",
+        "spring-boot"
+      ],
+      "coverImage": "/images/backend/api-design/rest/content-negotiation.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "rest"
+      ],
+      "slug": "content-negotiation",
+      "path": "/blogs/backend/api-design/rest/content-negotiation"
+    }
+  ]
+}

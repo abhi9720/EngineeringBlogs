@@ -29,38 +29,51 @@ This guide covers the fundamental concepts, practical implementation patterns, a
 
 A monolith is a single deployable unit containing all application functionality:
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                      Monolithic Application                  │
-├─────────────────────────────────────────────────────────────┤
-│  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐         │
-│  │  User   │  │  Order  │  │  Product│  │ Payment │         │
-│  │ Module  │  │ Module  │  │ Module  │  │ Module  │         │
-│  └─────────┘  └─────────┘  └─────────┘  └─────────┘         │
-├─────────────────────────────────────────────────────────────┤
-│  ┌──────────────────────────────────────────────────────┐   │
-│  │              Shared Database                          │   │
-│  └──────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+
+    subgraph Monolith [Monolithic Application]
+        UserMod[User Module]
+        OrderMod[Order Module]
+        ProductMod[Product Module]
+        PaymentMod[Payment Module]
+        DB[(Shared Database)]
+        
+        UserMod --> DB
+        OrderMod --> DB
+        ProductMod --> DB
+        PaymentMod --> DB
+    end
+
+    linkStyle default stroke:#278ea5
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+
+    class DB green
+    class UserMod,OrderMod,ProductMod,PaymentMod blue
 ```
 
 Microservices split these into independently deployable services:
 
-```
-┌─────────────┐  ┌─────────────┐  ┌─────────────┐
-│  User       │  │  Order      │  │  Product    │
-│  Service    │  │  Service    │  │  Service    │
-│             │  │             │  │             │
-│  ┌───────┐  │  │  ┌───────┐  │  │  ┌───────┐  │
-│  │ DB    │  │  │  │ DB    │  │  │  │ DB    │  │
-│  └───────┘  │  │  └───────┘  │  │  └───────┘  │
-└──────┬──────┘  └──────┬──────┘  └──────┬──────┘
-       │                │                │
-       └────────────────┼────────────────┘
-                        │
-                 ┌──────┴──────┐
-                 │ API Gateway │
-                 └─────────────┘
+```mermaid
+flowchart TB
+
+    UserService[User Service] --> UserDB[(User DB)]
+    OrderService[Order Service] --> OrderDB[(Order DB)]
+    ProductService[Product Service] --> ProductDB[(Product DB)]
+    
+    UserService --> Gateway[API Gateway]
+    OrderService --> Gateway
+    ProductService --> Gateway
+
+    linkStyle default stroke:#278ea5
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+
+    class UserDB,OrderDB,ProductDB green
+    class UserService,OrderService,ProductService,Gateway blue
 ```
 
 ### Core Characteristics of Microservices
@@ -81,23 +94,31 @@ Microservices split these into independently deployable services:
 
 A typical e-commerce monolith broken into microservices:
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        API Gateway                              │
-└─────────────────────────────────────────────────────────────────┘
-         │            │            │            │
-    ┌────┴────┐   ┌────┴────┐  ┌────┴────┐  ┌────┴────┐
-    │         │   │         │  │         │  │         │
-┌───┴───┐ ┌───┴───┐┌───┴───┐ ┌───┴───┐ ┌───┴───┐ ┌───┴───┐
-│User   │ │Order  ││Product│ │Payment│ │Shipping│ │Review │
-│Service│ │Service││Service│ │Service│ │Service│ │Service│
-└───┬───┘ └───┬───┘└───┬───┘ └───┬───┘ └───┬───┘ └───┬───┘
-    │         │        │        │        │         │
-    ▼         ▼        ▼        ▼        ▼         ▼
-┌────────┐ ┌────────┐┌────────┐┌────────┐┌────────┐┌────────┐
-│Users   │ │Orders  ││Products││Payments││Ship-   ││Reviews │
-│DB      │ │DB      ││DB      ││DB      ││ping DB ││DB      │
-└────────┘ └────────┘└────────┘└────────┘└────────┘└────────┘
+```mermaid
+flowchart TB
+
+    Gateway[API Gateway] --> UserService[User Service]
+    Gateway --> OrderService[Order Service]
+    Gateway --> ProductService[Product Service]
+    Gateway --> PaymentService[Payment Service]
+    Gateway --> ShippingService[Shipping Service]
+    Gateway --> ReviewService[Review Service]
+
+    UserService --> UserDB[(Users DB)]
+    OrderService --> OrderDB[(Orders DB)]
+    ProductService --> ProductDB[(Products DB)]
+    PaymentService --> PaymentDB[(Payments DB)]
+    ShippingService --> ShippingDB[(Shipping DB)]
+    ReviewService --> ReviewDB[(Reviews DB)]
+
+    linkStyle default stroke:#278ea5
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+
+class UserDB,OrderDB,ProductDB,PaymentDB,ShippingDB,ReviewDB green
+    class Gateway,UserService,OrderService,ProductService,PaymentService,ShippingService,ReviewService blue
 ```
 
 ```java
@@ -623,3 +644,7 @@ The decision to adopt microservices should be driven by your team's size, the co
 - [Martin Fowler - Microservices](https://martinfowler.com/articles/microservices.html)
 - [Spring Cloud Documentation](https://spring.io/projects/spring-cloud)
 - [Domain-Driven Design](https://www.domainlanguage.com/ddd/)
+
+---
+
+Happy Coding 👨‍💻

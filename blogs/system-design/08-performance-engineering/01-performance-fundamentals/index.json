@@ -1,0 +1,30 @@
+{
+  "name": "01 Performance Fundamentals",
+  "path": "/blogs/system-design/08-performance-engineering/01-performance-fundamentals",
+  "blogs": [
+    {
+      "title": "Latency vs Throughput",
+      "description": "A deep dive into latency and throughput concepts, measurement techniques, Little's Law, queuing theory, and optimization trade-offs",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "performance-engineering",
+        "latency",
+        "throughput",
+        "queuing-theory",
+        "little-law",
+        "percentiles"
+      ],
+      "coverImage": "/images/latency-vs-throughput.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "08-performance-engineering",
+        "01-performance-fundamentals"
+      ],
+      "slug": "84. latency-vs-throughput",
+      "path": "/blogs/system-design/08-performance-engineering/01-performance-fundamentals/84. latency-vs-throughput"
+    }
+  ]
+}

@@ -952,3 +952,7 @@ Good exception handling is invisible when everything works and invaluable when t
 - [Spring Boot Error Handling](https://docs.spring.io/spring-boot/docs/current/reference/html/web.html#web.servlet.spring-mvc.error-handling)
 - [REST API Error Handling Best Practices](https://restfulapi.net/error-handling/)
 - [Baeldung - Exception Handling in Spring](https://www.baeldung.com/exception-handling-in-spring-mvc)
+
+---
+
+Happy Coding 👨‍💻

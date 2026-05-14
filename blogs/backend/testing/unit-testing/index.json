@@ -1,0 +1,90 @@
+{
+  "name": "Unit Testing",
+  "path": "/blogs/backend/testing/unit-testing",
+  "blogs": [
+    {
+      "title": "Test-Driven Development",
+      "description": "Master the TDD cycle (Red-Green-Refactor), real-world examples in Java, best practices, and common pitfalls",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "tdd",
+        "testing",
+        "methodology",
+        "java"
+      ],
+      "coverImage": "/images/test-driven-development.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing",
+        "unit-testing"
+      ],
+      "slug": "test-driven-development",
+      "path": "/blogs/backend/testing/unit-testing/test-driven-development"
+    },
+    {
+      "title": "Parameterized Tests",
+      "description": "Deep dive into JUnit 5 parameterized tests: @ValueSource, @CsvSource, @EnumSource, @MethodSource, and custom argument providers",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "junit",
+        "parameterized-tests",
+        "testing",
+        "java"
+      ],
+      "coverImage": "/images/parameterized-tests.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing",
+        "unit-testing"
+      ],
+      "slug": "parameterized-tests",
+      "path": "/blogs/backend/testing/unit-testing/parameterized-tests"
+    },
+    {
+      "title": "Mockito vs EasyMock",
+      "description": "In-depth comparison of Mockito and EasyMock mocking frameworks: API differences, verification, stubbing, and best practices",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "mockito",
+        "easymock",
+        "mocking",
+        "testing"
+      ],
+      "coverImage": "/images/mockito-vs-easymock.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing",
+        "unit-testing"
+      ],
+      "slug": "mockito-vs-easymock",
+      "path": "/blogs/backend/testing/unit-testing/mockito-vs-easymock"
+    },
+    {
+      "title": "JUnit 5 Deep Dive",
+      "description": "Comprehensive guide to JUnit 5: architecture, extensions, parameterized tests, assertions, and advanced features",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "junit",
+        "testing",
+        "java",
+        "unit-testing"
+      ],
+      "coverImage": "/images/junit-5-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing",
+        "unit-testing"
+      ],
+      "slug": "junit-5-deep-dive",
+      "path": "/blogs/backend/testing/unit-testing/junit-5-deep-dive"
+    }
+  ]
+}

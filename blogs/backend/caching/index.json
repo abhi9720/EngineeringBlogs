@@ -1,0 +1,238 @@
+{
+  "name": "Caching",
+  "path": "/blogs/backend/caching",
+  "blogs": [
+    {
+      "title": "Redis Pub/Sub",
+      "description": "Implement publish-subscribe patterns with Redis: channels, message distribution, and real-time event streaming",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "caching",
+        "redis",
+        "pub-sub",
+        "messaging"
+      ],
+      "coverImage": "/images/redis-pub-sub.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "caching",
+        "redis"
+      ],
+      "slug": "redis-pub-sub",
+      "path": "/blogs/backend/caching/redis/redis-pub-sub"
+    },
+    {
+      "title": "Redis Persistence Models",
+      "description": "Compare Redis persistence models: RDB snapshots, AOF logs, and hybrid persistence for data durability",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "caching",
+        "redis",
+        "persistence",
+        "rdb",
+        "aof"
+      ],
+      "coverImage": "/images/redis-persistence-models.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "caching",
+        "redis"
+      ],
+      "slug": "redis-persistence-models",
+      "path": "/blogs/backend/caching/redis/redis-persistence-models"
+    },
+    {
+      "title": "Redis Data Structures",
+      "description": "Master Redis data structures: strings, hashes, lists, sets, sorted sets, streams, and their optimal use cases",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "caching",
+        "redis",
+        "data-structures",
+        "database"
+      ],
+      "coverImage": "/images/redis-data-structures.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "caching",
+        "redis"
+      ],
+      "slug": "redis-data-structures",
+      "path": "/blogs/backend/caching/redis/redis-data-structures"
+    },
+    {
+      "title": "Redis Cluster and Sentinel",
+      "description": "Configure Redis Cluster and Sentinel for high availability: replication, failover, sharding, and production deployment",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "caching",
+        "redis",
+        "cluster",
+        "sentinel",
+        "high-availability"
+      ],
+      "coverImage": "/images/redis-cluster-sentinel.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "caching",
+        "redis"
+      ],
+      "slug": "redis-cluster-sentinel",
+      "path": "/blogs/backend/caching/redis/redis-cluster-sentinel"
+    },
+    {
+      "title": "Hazelcast vs Redis vs Memcached",
+      "description": "Compare Hazelcast, Redis, and Memcached for distributed caching: features, performance, clustering, and use cases",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "caching",
+        "hazelcast",
+        "redis",
+        "memcached"
+      ],
+      "coverImage": "/images/hazelcast-vs-redis-vs-memcached.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "caching",
+        "distributed-caching"
+      ],
+      "slug": "hazelcast-vs-redis-vs-memcached",
+      "path": "/blogs/backend/caching/distributed-caching/hazelcast-vs-redis-vs-memcached"
+    },
+    {
+      "title": "Distributed Cache Topologies",
+      "description": "Compare distributed cache topologies: replicated, partitioned, and hybrid approaches for scaling caches",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "caching",
+        "topologies",
+        "distributed-caching",
+        "scalability"
+      ],
+      "coverImage": "/images/distributed-cache-topologies.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "caching",
+        "distributed-caching"
+      ],
+      "slug": "distributed-cache-topologies",
+      "path": "/blogs/backend/caching/distributed-caching/distributed-cache-topologies"
+    },
+    {
+      "title": "Cache Invalidation Strategies",
+      "description": "Explore cache invalidation strategies: TTL, write-invalidate, write-update, and handling stale data",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "caching",
+        "invalidation",
+        "consistency"
+      ],
+      "coverImage": "/images/cache-invalidation-strategies.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "caching",
+        "distributed-caching"
+      ],
+      "slug": "cache-invalidation-strategies",
+      "path": "/blogs/backend/caching/distributed-caching/cache-invalidation-strategies"
+    },
+    {
+      "title": "Cache-Aside, Read-Through, Write-Through",
+      "description": "Deep dive into caching patterns: cache-aside, read-through, write-through, write-behind, and their trade-offs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "caching",
+        "patterns",
+        "cache-aside",
+        "read-through",
+        "write-through"
+      ],
+      "coverImage": "/images/cache-aside-read-through-write-through.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "caching",
+        "distributed-caching"
+      ],
+      "slug": "cache-aside-read-through-write-through",
+      "path": "/blogs/backend/caching/distributed-caching/cache-aside-read-through-write-through"
+    },
+    {
+      "title": "CDN Strategies for Backend APIs",
+      "description": "Leverage CDNs for backend API caching: edge caching, API response caching, and geographic distribution patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "caching",
+        "cdn",
+        "api-caching",
+        "edge"
+      ],
+      "coverImage": "/images/cdn-strategies-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "caching",
+        "cdn-caching"
+      ],
+      "slug": "cdn-strategies-backend",
+      "path": "/blogs/backend/caching/cdn-caching/cdn-strategies-backend"
+    },
+    {
+      "title": "Cache-Control Headers",
+      "description": "Master HTTP caching headers: Cache-Control, ETag, Last-Modified, and conditional requests for backend APIs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "caching",
+        "cdn",
+        "cache-control",
+        "etag",
+        "http"
+      ],
+      "coverImage": "/images/cache-control-headers.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "caching",
+        "cdn-caching"
+      ],
+      "slug": "cache-control-headers",
+      "path": "/blogs/backend/caching/cdn-caching/cache-control-headers"
+    },
+    {
+      "title": "Caching Strategies Overview",
+      "description": "Comprehensive overview of caching strategies: cache-aside, read-through, write-through, and hybrid approaches for backend systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "caching",
+        "performance",
+        "architecture"
+      ],
+      "coverImage": "/images/caching-strategies-overview.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "caching"
+      ],
+      "slug": "caching-strategies-overview",
+      "path": "/blogs/backend/caching/caching-strategies-overview"
+    }
+  ]
+}

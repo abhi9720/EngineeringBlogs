@@ -28,19 +28,22 @@ Resilience4j is the modern circuit breaker library for Java, providing a lightwe
 
 A circuit breaker has three states:
 
-```
-┌───────────────┐         ┌───────────────┐         ┌───────────────┐
-│    CLOSED     │────────▶│     OPEN      │────────▶│   HALF-OPEN   │
-│   (Normal)   │         │   (Blocking)  │         │  (Testing)    │
-└───────────────┘         └───────────────┘         └───────────────┘
-       ▲                       │                         │
-       │                       │                         │
-       │                       ▼                         ▼
-       │            Failure threshold              Request succeeds
-       │            reached or timeout              or failure
-       │                                                    │
-       └────────────────────────────────────────────────────┘
-                    Request succeeds threshold times
+```mermaid
+flowchart LR
+
+    Closed[CLOSED<br/>Normal] -->|Failure threshold<br/>reached| Open[OPEN<br/>Blocking]
+    Open -->|Wait duration<br/>elapsed| HalfOpen[HALF-OPEN<br/>Testing]
+    HalfOpen -->|Request succeeds<br/>threshold times| Closed
+    HalfOpen -->|Request fails| Open
+
+    linkStyle default stroke:#278ea5
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+
+    class Closed,HalfOpen green
+    class Open pink
 ```
 
 ### Resilience4j Architecture
@@ -653,3 +656,7 @@ The circuit breaker pattern is essential for building resilient distributed syst
 - [Circuit Breaker Pattern - Martin Fowler](https://martinfowler.com/bliki/CircuitBreaker.html)
 - [Spring Cloud Circuit Breaker](https://spring.io/projects/spring-cloud-circuitbreaker)
 - [Baeldung - Resilience4j Tutorial](https://www.baeldung.com/resilience4j)
+
+---
+
+Happy Coding 👨‍💻

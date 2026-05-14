@@ -693,3 +693,5 @@ Remember: JWTs are not a silver bullet. For applications requiring immediate tok
 - [Spring Security JWT Documentation](https://docs.spring.io/spring-security/reference/servlet/oauth2/resource-server/jwt.html)
 - [OWASP JWT Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_Cheat_Sheet_for_Developers.html)
 - [jjwt library documentation](https://github.com/jwtk/jjwt)
+
+Happy Coding

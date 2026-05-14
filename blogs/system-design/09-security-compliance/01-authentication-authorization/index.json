@@ -1,0 +1,30 @@
+{
+  "name": "01 Authentication Authorization",
+  "path": "/blogs/system-design/09-security-compliance/01-authentication-authorization",
+  "blogs": [
+    {
+      "title": "OAuth 2.0 & JWT Authentication",
+      "description": "A comprehensive guide to OAuth 2.0 authorization flows, JWT structure and validation, and Spring Security integration for modern applications",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "system-design",
+        "security",
+        "oauth2",
+        "jwt",
+        "authentication",
+        "spring-security",
+        "pkce"
+      ],
+      "coverImage": "/images/oauth2-jwt.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "09-security-compliance",
+        "01-authentication-authorization"
+      ],
+      "slug": "85. oauth2-jwt",
+      "path": "/blogs/system-design/09-security-compliance/01-authentication-authorization/85. oauth2-jwt"
+    }
+  ]
+}

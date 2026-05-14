@@ -1,0 +1,94 @@
+{
+  "name": "Tools Memory",
+  "path": "/blogs/ai-ml/06-ai-agents-systems/tools-memory",
+  "blogs": [
+    {
+      "title": "Tool Use in Agents",
+      "description": "Learn how agents use tools to extend their capabilities",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Tools",
+        "Function Calling",
+        "AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/tool-use-in-agents.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "tools-memory"
+      ],
+      "slug": "tool-use-in-agents",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/tools-memory/tool-use-in-agents"
+    },
+    {
+      "title": "Retrieval-Augmented Agents",
+      "description": "Combine RAG with agents for grounded, knowledgeable AI",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "AI Agents",
+        "Memory",
+        "AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/retrieval-augmented-agents.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "tools-memory"
+      ],
+      "slug": "retrieval-augmented-agents",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/tools-memory/retrieval-augmented-agents"
+    },
+    {
+      "title": "Agent Tool Orchestration",
+      "description": "Design patterns for orchestrating multiple tools in agents",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Tool Orchestration",
+        "AI",
+        "AI Agents",
+        "Production AI"
+      ],
+      "coverImage": "/images/orchestration-patterns.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "tools-memory"
+      ],
+      "slug": "orchestration-patterns",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/tools-memory/orchestration-patterns"
+    },
+    {
+      "title": "Memory Types",
+      "description": "Implement short-term, long-term, and semantic memory in agents",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Memory",
+        "Context",
+        "AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/memory-types.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "tools-memory"
+      ],
+      "slug": "memory-types",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/tools-memory/memory-types"
+    }
+  ]
+}

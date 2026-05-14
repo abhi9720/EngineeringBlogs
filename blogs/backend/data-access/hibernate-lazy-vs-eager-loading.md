@@ -286,3 +286,7 @@ public class GoodController {
 
 - [Hibernate ORM - Fetching](https://docs.jboss.org/hibernate/orm/current/userguide/html_single/chapters/fetching/Fetching.html)
 - [Baeldung - JPA Fetch Types](https://www.baeldung.com/hibernate-lazy-eager-fetching)
+
+---
+
+Happy Coding 👨‍💻

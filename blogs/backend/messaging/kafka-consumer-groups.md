@@ -209,3 +209,7 @@ public void handle(
 
 - [Kafka Consumer Groups](https://kafka.apache.org/documentation/#intro_consumers)
 - [KIP-464: Rebalance Protocol](https://cwiki.apache.org/confluence/display/KAFKA/KIP-464%3A+Design+of+Consumer+Rebalance+Protocol)
+
+---
+
+Happy Coding 👨‍💻

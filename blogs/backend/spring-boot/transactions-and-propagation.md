@@ -256,34 +256,38 @@ public class TransferService {
 
 ### Visual Representation of Propagation
 
-```
-Scenario 1: REQUIRED (default)
-┌─────────────────────────────────────────────┐
-│  Transaction A                               │
-│  ┌───────────────────────────────────────┐  │
-│  │  method1() @Transactional            │  │
-│  │  ┌─────────────────────────────┐     │  │
-│  │  │  method2() @Transactional  │     │  │
-│  │  │  (same transaction)        │     │  │
-│  │  └─────────────────────────────┘     │  │
-│  └───────────────────────────────────────┘  │
-└─────────────────────────────────────────────┘
+**Scenario 1: REQUIRED (default)**
 
-Scenario 2: REQUIRES_NEW
-┌─────────────────────────────────────────────┐
-│  Transaction A                               │
-│  ┌───────────────────────────────────────┐  │
-│  │  method1() @Transactional            │  │
-│  └───────────────────────────────────────┘  │
-│         │                                     │
-└─────────┼─────────────────────────────────────┘
-          │ (suspends A)
-┌─────────┼─────────────────────────────────────┐
-│  Transaction B (new)                         │
-│  ┌───────────────────────────────────────┐  │
-│  │  method2() @Transactional(REQUIRES_NEW)│  │
-│  └───────────────────────────────────────┘  │
-└─────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+
+    TxA[Transaction A] --> M1[method1<br/>@Transactional]
+    M1 --> M2[method2<br/>@Transactional<br/>same transaction]
+
+    linkStyle default stroke:#278ea5
+
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+
+    class TxA,M1,M2 blue
+```
+
+**Scenario 2: REQUIRES_NEW**
+
+```mermaid
+flowchart TB
+
+    TxA[Transaction A] --> M1[method1<br/>@Transactional]
+    TxA -.->|suspends| M2
+    
+    TxB[Transaction B<br/>new] --> M2[method2<br/>@Transactional<br/>REQUIRES_NEW]
+
+    linkStyle default stroke:#278ea5
+
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+
+    class TxA,M1 blue
+    class TxB,M2 green
 ```
 
 ---
@@ -1115,3 +1119,7 @@ Understanding these concepts and their implications allows you to build applicat
 - [Spring @Transactional Explained](https://www.baeldung.com/spring-transactional-propagation-isolation)
 - [Hibernate Transaction Management](https://docs.jboss.org/hibernate/orm/current/userguide/html_single/Hibernate_User_Guide.html#transactions)
 - [Database Isolation Levels](https://en.wikipedia.org/wiki/Isolation_(database_systems))
+
+---
+
+Happy Coding 👨‍💻

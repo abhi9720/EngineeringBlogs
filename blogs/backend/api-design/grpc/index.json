@@ -1,0 +1,90 @@
+{
+  "name": "gRPC",
+  "path": "/blogs/backend/api-design/grpc",
+  "blogs": [
+    {
+      "title": "Protocol Buffers Deep Dive",
+      "description": "Master Protocol Buffers for gRPC: proto3 syntax, advanced features, field types, serialization internals, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "protobuf",
+        "grpc",
+        "serialization",
+        "protocol-buffers"
+      ],
+      "coverImage": "/images/backend/api-design/grpc/protobuf-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "grpc"
+      ],
+      "slug": "protobuf-deep-dive",
+      "path": "/blogs/backend/api-design/grpc/protobuf-deep-dive"
+    },
+    {
+      "title": "gRPC vs REST vs GraphQL",
+      "description": "Compare gRPC, REST, and GraphQL API paradigms: performance, developer experience, use cases, and when to choose each approach",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "grpc",
+        "rest",
+        "graphql",
+        "comparison"
+      ],
+      "coverImage": "/images/backend/api-design/grpc/grpc-vs-rest-vs-graphql.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "grpc"
+      ],
+      "slug": "grpc-vs-rest-vs-graphql",
+      "path": "/blogs/backend/api-design/grpc/grpc-vs-rest-vs-graphql"
+    },
+    {
+      "title": "gRPC Streaming",
+      "description": "Master gRPC streaming patterns: server streaming, client streaming, bidirectional streaming, backpressure handling, and real-time data pipelines",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "grpc",
+        "streaming",
+        "real-time",
+        "protobuf"
+      ],
+      "coverImage": "/images/backend/api-design/grpc/grpc-streaming.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "grpc"
+      ],
+      "slug": "grpc-streaming",
+      "path": "/blogs/backend/api-design/grpc/grpc-streaming"
+    },
+    {
+      "title": "gRPC Introduction",
+      "description": "Master gRPC concepts: Protocol Buffers, service definitions, server/client implementation in Java, streaming, and production deployment",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "grpc",
+        "protobuf",
+        "rpc",
+        "api-design"
+      ],
+      "coverImage": "/images/backend/api-design/grpc/grpc-introduction.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "api-design",
+        "grpc"
+      ],
+      "slug": "grpc-introduction",
+      "path": "/blogs/backend/api-design/grpc/grpc-introduction"
+    }
+  ]
+}

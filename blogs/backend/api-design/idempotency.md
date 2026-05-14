@@ -270,3 +270,7 @@ public ResponseEntity<Payment> createPayment(
 - [RFC 7231 - Idempotent Methods](https://tools.ietf.org/html/rfc7231)
 - [Stripe API Idempotency](https://stripe.com/blog/idempotency)
 - [REST API Design Best Practices](https://restfulapi.net/idempotency/)
+
+---
+
+Happy Coding 👨‍💻

@@ -21,31 +21,37 @@ Apache Kafka is a distributed event streaming platform that handles trillions of
 
 ## Kafka Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                            Kafka Cluster                                 │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │                     Zookeeper (metadata)                         │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
-│           │                    │                    │                  │
-│           ▼                    ▼                    ▼                  │
-│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐   │
-│  │    Broker 1      │  │    Broker 2      │  │    Broker 3      │   │
-│  │  topic-part-0   │  │  topic-part-1   │  │  topic-part-0   │   │
-│  │  topic-part-1   │  │  topic-part-0   │  │  topic-part-1   │   │
-│  └──────────────────┘  └──────────────────┘  └──────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────┘
-         │                        │                        │
-         ▼                        ▼                        ▼
-┌──────────────┐           ┌──────────────┐           ┌──────────────┐
-│  Producer    │           │  Producer    │           │  Producer    │
-└──────────────┘           └──────────────┘           └──────────────┘
+```mermaid
+flowchart TB
 
-         │                        │                        │
-         ▼                        ▼                        ▼
-┌──────────────┐           ┌──────────────┐           ┌──────────────┐
-│  Consumer    │           │  Consumer    │           │  Consumer    │
-└──────────────┘           └──────────────┘           └──────────────┘
+    Zookeeper[Zookeeper<br/>Metadata] --> Broker1[Broker 1]
+    Zookeeper --> Broker2[Broker 2]
+    Zookeeper --> Broker3[Broker 3]
+
+    Broker1 --- P1[part-0]
+    Broker1 --- P2[part-1]
+    Broker2 --- P3[part-0]
+    Broker2 --- P4[part-1]
+    Broker3 --- P5[part-0]
+    Broker3 --- P6[part-1]
+
+    Producer1[Producer] --> Broker1
+    Producer2[Producer] --> Broker2
+    Producer3[Producer] --> Broker3
+
+    Broker1 --> Consumer1[Consumer]
+    Broker2 --> Consumer2[Consumer]
+    Broker3 --> Consumer3[Consumer]
+
+    linkStyle default stroke:#278ea5
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+
+    class Zookeeper green
+    class Broker1,Broker2,Broker3 blue
+    class Producer1,Producer2,Producer3,Consumer1,Consumer2,Consumer3 pink
 ```
 
 ### Core Concepts
@@ -256,3 +262,7 @@ public void handleOrder(
 - [Apache Kafka Documentation](https://kafka.apache.org/documentation/)
 - [Spring Kafka Reference](https://docs.spring.io/spring-kafka/reference/)
 - [Kafka: The Definitive Guide](https://www.confluent.io/resources/kafka-the-definitive-guide/)
+
+---
+
+Happy Coding 👨‍💻

@@ -24,6 +24,28 @@
       "path": "/blogs/ai-ml/03-llm-foundations/vector-similarity"
     },
     {
+      "title": "Vector Databases Intro",
+      "description": "Introduction to vector databases - storing and searching embeddings at scale",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "LLM",
+        "Vector Database",
+        "ChromaDB",
+        "Pinecone",
+        "Embeddings",
+        "AI"
+      ],
+      "coverImage": "/images/vector-databases-intro.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "03-llm-foundations"
+      ],
+      "slug": "vector-databases-intro",
+      "path": "/blogs/ai-ml/03-llm-foundations/vector-databases-intro"
+    },
+    {
       "title": "Tokenization and Context Windows",
       "description": "Understand how LLMs process text - tokenization, subword algorithms, and context window limits",
       "date": "2026-05-11",
@@ -43,6 +65,27 @@
       ],
       "slug": "tokenization-context-windows",
       "path": "/blogs/ai-ml/03-llm-foundations/tokenization-context-windows"
+    },
+    {
+      "title": "Semantic Search Basics",
+      "description": "Learn semantic search - finding information by meaning, not keywords",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "LLM",
+        "Semantic Search",
+        "Information Retrieval",
+        "Embeddings",
+        "AI"
+      ],
+      "coverImage": "/images/semantic-search-basics.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "03-llm-foundations"
+      ],
+      "slug": "semantic-search-basics",
+      "path": "/blogs/ai-ml/03-llm-foundations/semantic-search-basics"
     },
     {
       "title": "Introduction to LLMs",

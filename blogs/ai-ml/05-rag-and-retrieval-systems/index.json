@@ -1,0 +1,201 @@
+{
+  "name": "05 Rag And Retrieval Systems",
+  "path": "/blogs/ai-ml/05-rag-and-retrieval-systems",
+  "blogs": [
+    {
+      "title": "Vector Databases Deep Dive",
+      "description": "Compare and choose vector databases - Pinecone, Weaviate, Qdrant, Chroma, and pgvector",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "Vector Database",
+        "Pinecone",
+        "ChromaDB",
+        "AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/vector-databases-deep-dive.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "vector-databases-deep-dive",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/vector-databases-deep-dive"
+    },
+    {
+      "title": "Reranking Techniques",
+      "description": "Improve RAG accuracy with reranking - from simple to advanced reranking strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "Reranking",
+        "Cross-Encoder",
+        "AI",
+        "AI Agents",
+        "Production AI"
+      ],
+      "coverImage": "/images/reranking-techniques.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "reranking-techniques",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/reranking-techniques"
+    },
+    {
+      "title": "RAG Optimization",
+      "description": "Optimize RAG systems for better accuracy, speed, and cost",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "Optimization",
+        "AI",
+        "AI Agents",
+        "Production AI"
+      ],
+      "coverImage": "/images/rag-optimization.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "rag-optimization",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/rag-optimization"
+    },
+    {
+      "title": "RAG Introduction",
+      "description": "Learn what RAG is and why it matters - connecting LLMs to your data",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "LLM",
+        "Retrieval",
+        "AI",
+        "AI Agents",
+        "Production AI"
+      ],
+      "coverImage": "/images/rag-introduction.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "rag-introduction",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/rag-introduction"
+    },
+    {
+      "title": "RAG Fundamentals",
+      "description": "Master RAG fundamentals - retrieval, augmentation, and generation",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "LLM",
+        "AI",
+        "AI Agents",
+        "Production AI"
+      ],
+      "coverImage": "/images/rag-fundamentals.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "rag-fundamentals",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/rag-fundamentals"
+    },
+    {
+      "title": "RAG Architecture",
+      "description": "Deep dive into RAG architecture - components, data flow, and implementation patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "LLM",
+        "Architecture",
+        "AI",
+        "Production AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/rag-architecture.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "rag-architecture",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/rag-architecture"
+    },
+    {
+      "title": "Embedding Pipelines",
+      "description": "Build robust embedding pipelines for RAG systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "Embeddings",
+        "Pipeline",
+        "AI",
+        "AI Agents",
+        "Production AI"
+      ],
+      "coverImage": "/images/embedding-pipelines.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "embedding-pipelines",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/embedding-pipelines"
+    },
+    {
+      "title": "Chunking Strategies",
+      "description": "Master document chunking - how to split documents for optimal retrieval",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "Chunking",
+        "Document Processing",
+        "AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/chunking-strategies.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "chunking-strategies",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/chunking-strategies"
+    },
+    {
+      "title": "Advanced RAG Patterns",
+      "description": "Advanced RAG techniques - multi-modal, agentic RAG, and production patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "Advanced",
+        "Agentic RAG",
+        "Multi-modal",
+        "AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/advanced-rag-patterns.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "advanced-rag-patterns",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/advanced-rag-patterns"
+    }
+  ]
+}

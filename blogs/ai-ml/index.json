@@ -3,6 +3,879 @@
   "path": "/blogs/ai-ml",
   "blogs": [
     {
+      "tags": [],
+      "coverImage": "",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "08-advanced-topics"
+      ],
+      "slug": "reinforcement-learning-basics",
+      "path": "/blogs/ai-ml/08-advanced-topics/reinforcement-learning-basics"
+    },
+    {
+      "tags": [],
+      "coverImage": "",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "08-advanced-topics"
+      ],
+      "slug": "multimodal-models",
+      "path": "/blogs/ai-ml/08-advanced-topics/multimodal-models"
+    },
+    {
+      "tags": [],
+      "coverImage": "",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "08-advanced-topics"
+      ],
+      "slug": "llm-evaluation-frameworks",
+      "path": "/blogs/ai-ml/08-advanced-topics/llm-evaluation-frameworks"
+    },
+    {
+      "tags": [],
+      "coverImage": "",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "08-advanced-topics"
+      ],
+      "slug": "future-of-ai-systems",
+      "path": "/blogs/ai-ml/08-advanced-topics/future-of-ai-systems"
+    },
+    {
+      "tags": [],
+      "coverImage": "",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "08-advanced-topics"
+      ],
+      "slug": "diffusion-models",
+      "path": "/blogs/ai-ml/08-advanced-topics/diffusion-models"
+    },
+    {
+      "title": "Scaling AI Systems",
+      "description": "Scale AI systems for high throughput and low latency",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Scaling",
+        "Production AI",
+        "AI",
+        "Performance"
+      ],
+      "coverImage": "/images/scaling-ai-systems.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "07-production-ai-systems"
+      ],
+      "slug": "scaling-ai-systems",
+      "path": "/blogs/ai-ml/07-production-ai-systems/scaling-ai-systems"
+    },
+    {
+      "title": "Observability for AI",
+      "description": "Monitor AI systems - metrics, logging, and tracing",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Observability",
+        "Monitoring",
+        "Production AI",
+        "AI",
+        "MLOps"
+      ],
+      "coverImage": "/images/observability-for-ai.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "07-production-ai-systems"
+      ],
+      "slug": "observability-for-ai",
+      "path": "/blogs/ai-ml/07-production-ai-systems/observability-for-ai"
+    },
+    {
+      "title": "MLOps Introduction",
+      "description": "Learn MLOps practices for deploying and maintaining AI systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "MLOps",
+        "Production AI",
+        "AI",
+        "Deployment",
+        "Operations"
+      ],
+      "coverImage": "/images/mlops-introduction.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "07-production-ai-systems"
+      ],
+      "slug": "mlops-introduction",
+      "path": "/blogs/ai-ml/07-production-ai-systems/mlops-introduction"
+    },
+    {
+      "tags": [],
+      "coverImage": "",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "07-production-ai-systems"
+      ],
+      "slug": "guardrails-safety",
+      "path": "/blogs/ai-ml/07-production-ai-systems/guardrails-safety"
+    },
+    {
+      "tags": [],
+      "coverImage": "",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "07-production-ai-systems"
+      ],
+      "slug": "fine-tuning-llms",
+      "path": "/blogs/ai-ml/07-production-ai-systems/fine-tuning-llms"
+    },
+    {
+      "title": "Deploying LLM Apps",
+      "description": "Best practices for deploying LLM applications in production",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "LLM",
+        "Deployment",
+        "Production AI",
+        "AI",
+        "MLOps"
+      ],
+      "coverImage": "/images/deploying-llm-apps.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "07-production-ai-systems"
+      ],
+      "slug": "deploying-llm-apps",
+      "path": "/blogs/ai-ml/07-production-ai-systems/deploying-llm-apps"
+    },
+    {
+      "title": "Cost Optimization",
+      "description": "Reduce costs for running LLM applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Cost",
+        "Optimization",
+        "Production AI",
+        "AI",
+        "Budgeting"
+      ],
+      "coverImage": "/images/cost-optimization.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "07-production-ai-systems"
+      ],
+      "slug": "cost-optimization",
+      "path": "/blogs/ai-ml/07-production-ai-systems/cost-optimization"
+    },
+    {
+      "title": "Caching Strategies",
+      "description": "Implement caching to reduce LLM costs and improve latency",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Caching",
+        "Cost Optimization",
+        "Production AI",
+        "AI"
+      ],
+      "coverImage": "/images/caching-strategies.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "07-production-ai-systems"
+      ],
+      "slug": "caching-strategies",
+      "path": "/blogs/ai-ml/07-production-ai-systems/caching-strategies"
+    },
+    {
+      "title": "What are AI Agents",
+      "description": "Understand AI agents - autonomous systems that can plan, reason, and take actions",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Autonomous AI",
+        "AI",
+        "LLM",
+        "AI Agents"
+      ],
+      "coverImage": "/images/what-are-ai-agents.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems"
+      ],
+      "slug": "what-are-ai-agents",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/what-are-ai-agents"
+    },
+    {
+      "title": "Tool Use in Agents",
+      "description": "Learn how agents use tools to extend their capabilities",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Tools",
+        "Function Calling",
+        "AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/tool-use-in-agents.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "tools-memory"
+      ],
+      "slug": "tool-use-in-agents",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/tools-memory/tool-use-in-agents"
+    },
+    {
+      "title": "Retrieval-Augmented Agents",
+      "description": "Combine RAG with agents for grounded, knowledgeable AI",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "AI Agents",
+        "Memory",
+        "AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/retrieval-augmented-agents.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "tools-memory"
+      ],
+      "slug": "retrieval-augmented-agents",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/tools-memory/retrieval-augmented-agents"
+    },
+    {
+      "title": "Agent Tool Orchestration",
+      "description": "Design patterns for orchestrating multiple tools in agents",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Tool Orchestration",
+        "AI",
+        "AI Agents",
+        "Production AI"
+      ],
+      "coverImage": "/images/orchestration-patterns.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "tools-memory"
+      ],
+      "slug": "orchestration-patterns",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/tools-memory/orchestration-patterns"
+    },
+    {
+      "title": "Memory Types",
+      "description": "Implement short-term, long-term, and semantic memory in agents",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Memory",
+        "Context",
+        "AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/memory-types.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "tools-memory"
+      ],
+      "slug": "memory-types",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/tools-memory/memory-types"
+    },
+    {
+      "title": "Reasoning Loops",
+      "description": "Master agent reasoning - chain-of-thought, ReAct, and planning strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Reasoning",
+        "Chain-of-Thought",
+        "ReAct",
+        "AI"
+      ],
+      "coverImage": "/images/reasoning-loops.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems"
+      ],
+      "slug": "reasoning-loops",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/reasoning-loops"
+    },
+    {
+      "title": "Planning and Execution",
+      "description": "Learn how agents plan and execute tasks to achieve goals",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Planning",
+        "Execution",
+        "AI"
+      ],
+      "coverImage": "/images/planning-execution.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems"
+      ],
+      "slug": "planning-execution",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/planning-execution"
+    },
+    {
+      "title": "Swarm vs Decentralized Agents",
+      "description": "Compare swarm intelligence and decentralized agent architectures",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Multi-Agent",
+        "Swarm",
+        "Decentralized",
+        "AI Agents",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/swarm-vs-decentralized.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "multi-agent-systems"
+      ],
+      "slug": "swarm-vs-decentralized",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/multi-agent-systems/swarm-vs-decentralized"
+    },
+    {
+      "title": "Role-Based Agents",
+      "description": "Design agents with specialized roles for effective collaboration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Multi-Agent",
+        "Role-Based",
+        "AI Agents",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/role-based-agents.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "multi-agent-systems"
+      ],
+      "slug": "role-based-agents",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/multi-agent-systems/role-based-agents"
+    },
+    {
+      "title": "Multi-Agent Overview",
+      "description": "Understand multi-agent systems - when and why to use multiple agents",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Multi-Agent",
+        "AI Agents",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/multi-agent-overview.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "multi-agent-systems"
+      ],
+      "slug": "multi-agent-overview",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/multi-agent-systems/multi-agent-overview"
+    },
+    {
+      "title": "Coordination Strategies",
+      "description": "Learn strategies for coordinating multiple agents effectively",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Multi-Agent",
+        "Coordination",
+        "AI Agents",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/coordination-strategies.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "multi-agent-systems"
+      ],
+      "slug": "coordination-strategies",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/multi-agent-systems/coordination-strategies"
+    },
+    {
+      "title": "Memory in Agents",
+      "description": "Implement memory systems for agents - short-term, long-term, and semantic memory",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Memory",
+        "Context",
+        "AI"
+      ],
+      "coverImage": "/images/memory-in-agents.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems"
+      ],
+      "slug": "memory-in-agents",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/memory-in-agents"
+    },
+    {
+      "title": "Semantic Kernel Overview",
+      "description": "Introduction to Microsoft's Semantic Kernel for AI orchestration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "Semantic Kernel",
+        "AI Agents",
+        "Microsoft",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/semantic-kernel-overview.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "frameworks"
+      ],
+      "slug": "semantic-kernel-overview",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/frameworks/semantic-kernel-overview"
+    },
+    {
+      "title": "LangGraph State Machines",
+      "description": "Build complex agent workflows with LangGraph state machines",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "LangGraph",
+        "State Machines",
+        "AI Agents",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/langgraph-state-machines.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "frameworks"
+      ],
+      "slug": "langgraph-state-machines",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/frameworks/langgraph-state-machines"
+    },
+    {
+      "title": "LangChain Introduction",
+      "description": "Get started with LangChain - the framework for building LLM applications and agents",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "LangChain",
+        "AI Agents",
+        "Framework",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/langchain-introduction.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "frameworks"
+      ],
+      "slug": "langchain-introduction",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/frameworks/langchain-introduction"
+    },
+    {
+      "title": "CrewAI Role-Based Agents",
+      "description": "Build role-based agent teams with CrewAI framework",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "CrewAI",
+        "Role-Based",
+        "AI Agents",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/crewai-role-based-agents.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "frameworks"
+      ],
+      "slug": "crewai-role-based-agents",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/frameworks/crewai-role-based-agents"
+    },
+    {
+      "title": "AutoGen Multi-Agent Systems",
+      "description": "Build multi-agent systems with Microsoft's AutoGen framework",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AutoGen",
+        "Multi-Agent",
+        "AI Agents",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/autogen-multi-agent-systems.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "frameworks"
+      ],
+      "slug": "autogen-multi-agent-systems",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/frameworks/autogen-multi-agent-systems"
+    },
+    {
+      "title": "Agents vs LLMs vs Chatbots",
+      "description": "Understand the differences between LLMs, chatbots, and AI agents",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "LLMs",
+        "Chatbots",
+        "AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/agents-vs-llms-vs-chatbots.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems"
+      ],
+      "slug": "agents-vs-llms-vs-chatbots",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/agents-vs-llms-vs-chatbots"
+    },
+    {
+      "title": "Safety and Guardrails",
+      "description": "Implement safety guardrails for AI agents",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Safety",
+        "Guardrails",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/safety-guardrails.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "agent-evaluation"
+      ],
+      "slug": "safety-guardrails",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/agent-evaluation/safety-guardrails"
+    },
+    {
+      "title": "Hallucination Control",
+      "description": "Reduce hallucinations in AI agents - grounding and verification strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Hallucination",
+        "Safety",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/hallucination-control.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "agent-evaluation"
+      ],
+      "slug": "hallucination-control",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/agent-evaluation/hallucination-control"
+    },
+    {
+      "title": "Evaluating Agent Performance",
+      "description": "Learn how to evaluate AI agents - metrics, benchmarks, and testing strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Evaluation",
+        "Testing",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/evaluating-agents.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "agent-evaluation"
+      ],
+      "slug": "evaluating-agents",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/agent-evaluation/evaluating-agents"
+    },
+    {
+      "title": "Debugging Agent Systems",
+      "description": "Strategies for debugging and monitoring AI agent systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Debugging",
+        "Monitoring",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/debugging-agents.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "agent-evaluation"
+      ],
+      "slug": "debugging-agents",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/agent-evaluation/debugging-agents"
+    },
+    {
+      "title": "Vector Databases Deep Dive",
+      "description": "Compare and choose vector databases - Pinecone, Weaviate, Qdrant, Chroma, and pgvector",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "Vector Database",
+        "Pinecone",
+        "ChromaDB",
+        "AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/vector-databases-deep-dive.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "vector-databases-deep-dive",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/vector-databases-deep-dive"
+    },
+    {
+      "title": "Reranking Techniques",
+      "description": "Improve RAG accuracy with reranking - from simple to advanced reranking strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "Reranking",
+        "Cross-Encoder",
+        "AI",
+        "AI Agents",
+        "Production AI"
+      ],
+      "coverImage": "/images/reranking-techniques.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "reranking-techniques",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/reranking-techniques"
+    },
+    {
+      "title": "RAG Optimization",
+      "description": "Optimize RAG systems for better accuracy, speed, and cost",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "Optimization",
+        "AI",
+        "AI Agents",
+        "Production AI"
+      ],
+      "coverImage": "/images/rag-optimization.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "rag-optimization",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/rag-optimization"
+    },
+    {
+      "title": "RAG Introduction",
+      "description": "Learn what RAG is and why it matters - connecting LLMs to your data",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "LLM",
+        "Retrieval",
+        "AI",
+        "AI Agents",
+        "Production AI"
+      ],
+      "coverImage": "/images/rag-introduction.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "rag-introduction",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/rag-introduction"
+    },
+    {
+      "title": "RAG Fundamentals",
+      "description": "Master RAG fundamentals - retrieval, augmentation, and generation",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "LLM",
+        "AI",
+        "AI Agents",
+        "Production AI"
+      ],
+      "coverImage": "/images/rag-fundamentals.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "rag-fundamentals",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/rag-fundamentals"
+    },
+    {
+      "title": "RAG Architecture",
+      "description": "Deep dive into RAG architecture - components, data flow, and implementation patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "LLM",
+        "Architecture",
+        "AI",
+        "Production AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/rag-architecture.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "rag-architecture",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/rag-architecture"
+    },
+    {
+      "title": "Embedding Pipelines",
+      "description": "Build robust embedding pipelines for RAG systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "Embeddings",
+        "Pipeline",
+        "AI",
+        "AI Agents",
+        "Production AI"
+      ],
+      "coverImage": "/images/embedding-pipelines.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "embedding-pipelines",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/embedding-pipelines"
+    },
+    {
+      "title": "Chunking Strategies",
+      "description": "Master document chunking - how to split documents for optimal retrieval",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "Chunking",
+        "Document Processing",
+        "AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/chunking-strategies.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "chunking-strategies",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/chunking-strategies"
+    },
+    {
+      "title": "Advanced RAG Patterns",
+      "description": "Advanced RAG techniques - multi-modal, agentic RAG, and production patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "RAG",
+        "Advanced",
+        "Agentic RAG",
+        "Multi-modal",
+        "AI",
+        "AI Agents"
+      ],
+      "coverImage": "/images/advanced-rag-patterns.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "05-rag-and-retrieval-systems"
+      ],
+      "slug": "advanced-rag-patterns",
+      "path": "/blogs/ai-ml/05-rag-and-retrieval-systems/advanced-rag-patterns"
+    },
+    {
       "title": "Tool Calling",
       "description": "Enable LLMs to use external tools and APIs to extend their capabilities",
       "date": "2026-05-11",
@@ -86,6 +959,27 @@
       ],
       "slug": "prompt-engineering",
       "path": "/blogs/ai-ml/04-llm-applications/prompt-engineering"
+    },
+    {
+      "title": "LLM Application Architecture",
+      "description": "Design robust LLM applications - from simple chains to complex multi-agent systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "LLM",
+        "Application Architecture",
+        "System Design",
+        "AI",
+        "Applications"
+      ],
+      "coverImage": "/images/llm-application-architecture.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "04-llm-applications"
+      ],
+      "slug": "llm-application-architecture",
+      "path": "/blogs/ai-ml/04-llm-applications/llm-application-architecture"
     },
     {
       "title": "Function Calling",

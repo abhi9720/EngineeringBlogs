@@ -1,0 +1,90 @@
+{
+  "name": "Go",
+  "path": "/blogs/backend/frameworks/go",
+  "blogs": [
+    {
+      "title": "HTTP Request Routing in Go",
+      "description": "Deep dive into HTTP request routing in Go: standard library patterns, path parameters, middleware chaining, custom routers, and performance optimization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "http",
+        "routing",
+        "net-http"
+      ],
+      "coverImage": "/images/go-http-request-routing.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "go"
+      ],
+      "slug": "go-http-request-routing",
+      "path": "/blogs/backend/frameworks/go/go-http-request-routing"
+    },
+    {
+      "title": "Go Concurrency Patterns",
+      "description": "Master Go concurrency: goroutines, channels, select, sync primitives, worker pools, pipeline patterns, and building concurrent applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "concurrency",
+        "goroutines",
+        "channels"
+      ],
+      "coverImage": "/images/go-concurrency-patterns.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "go"
+      ],
+      "slug": "go-concurrency-patterns",
+      "path": "/blogs/backend/frameworks/go/go-concurrency-patterns"
+    },
+    {
+      "title": "Gin Framework Basics",
+      "description": "Master the Gin web framework for Go: routing, middleware, request binding, validation, error handling, and building high-performance REST APIs",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "gin",
+        "rest-api",
+        "web-framework"
+      ],
+      "coverImage": "/images/gin-framework-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "go"
+      ],
+      "slug": "gin-framework-basics",
+      "path": "/blogs/backend/frameworks/go/gin-framework-basics"
+    },
+    {
+      "title": "Echo vs Gin vs Fiber: Go Web Framework Comparison",
+      "description": "Compare Echo, Gin, and Fiber Go web frameworks: performance, features, middleware, routing, and choosing the right framework for your project",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "go",
+        "gin",
+        "echo",
+        "fiber"
+      ],
+      "coverImage": "/images/echo-vs-gin-vs-fiber.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "go"
+      ],
+      "slug": "echo-vs-gin-vs-fiber",
+      "path": "/blogs/backend/frameworks/go/echo-vs-gin-vs-fiber"
+    }
+  ]
+}

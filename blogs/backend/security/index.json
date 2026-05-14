@@ -1,0 +1,299 @@
+{
+  "name": "Security",
+  "path": "/blogs/backend/security",
+  "blogs": [
+    {
+      "title": "Backend Security Landscape",
+      "description": "A comprehensive overview of the backend security landscape: authentication, authorization, application security, and operational security",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "security",
+        "overview",
+        "authentication",
+        "authorization"
+      ],
+      "coverImage": "/images/backend-security-overview.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security"
+      ],
+      "slug": "backend-security-overview",
+      "path": "/blogs/backend/security/backend-security-overview"
+    },
+    {
+      "title": "RBAC vs ABAC",
+      "description": "Deep dive into Role-Based Access Control and Attribute-Based Access Control: models, implementation patterns, and when to use each",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "rbac",
+        "abac",
+        "authorization",
+        "access-control"
+      ],
+      "coverImage": "/images/rbac-vs-abac.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "authorization"
+      ],
+      "slug": "rbac-vs-abac",
+      "path": "/blogs/backend/security/authorization/rbac-vs-abac"
+    },
+    {
+      "title": "Permission Checking Strategies",
+      "description": "Explore different permission evaluation patterns: method security, AOP, policy engines, and centralized authorization",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "authorization",
+        "permissions",
+        "spring-security",
+        "access-control"
+      ],
+      "coverImage": "/images/permission-checking-strategies.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "authorization"
+      ],
+      "slug": "permission-checking-strategies",
+      "path": "/blogs/backend/security/authorization/permission-checking-strategies"
+    },
+    {
+      "title": "OpenID Connect Basics",
+      "description": "Deep dive into OpenID Connect: ID tokens, discovery, userinfo endpoint, and authentication layer on top of OAuth2",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "oidc",
+        "openid-connect",
+        "authentication",
+        "identity"
+      ],
+      "coverImage": "/images/openid-connect-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "authorization"
+      ],
+      "slug": "openid-connect-basics",
+      "path": "/blogs/backend/security/authorization/openid-connect-basics"
+    },
+    {
+      "title": "OAuth2 Authorization Code Flow",
+      "description": "Comprehensive guide to OAuth2 authorization code flow with PKCE, token exchange, and Spring Security implementation",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "oauth2",
+        "authorization",
+        "security",
+        "spring-security"
+      ],
+      "coverImage": "/images/oauth2-authorization-code-flow.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "authorization"
+      ],
+      "slug": "oauth2-authorization-code-flow",
+      "path": "/blogs/backend/security/authorization/oauth2-authorization-code-flow"
+    },
+    {
+      "title": "SSO and SAML Basics",
+      "description": "Comprehensive guide to Single Sign-On, SAML protocol, identity federation, and implementation patterns in Java applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "sso",
+        "saml",
+        "identity-federation",
+        "authentication"
+      ],
+      "coverImage": "/images/sso-and-saml-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "authentication"
+      ],
+      "slug": "sso-and-saml-basics",
+      "path": "/blogs/backend/security/authentication/sso-and-saml-basics"
+    },
+    {
+      "title": "Session vs Token Authentication",
+      "description": "In-depth comparison of session-based and token-based authentication, including trade-offs, implementation patterns, and when to choose each",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "authentication",
+        "session",
+        "jwt",
+        "security"
+      ],
+      "coverImage": "/images/session-vs-token-auth.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "authentication"
+      ],
+      "slug": "session-vs-token-auth",
+      "path": "/blogs/backend/security/authentication/session-vs-token-auth"
+    },
+    {
+      "title": "Password Hashing and Storage",
+      "description": "Deep dive into password hashing algorithms (bcrypt, Argon2, PBKDF2), salting strategies, and secure storage patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "password-hashing",
+        "bcrypt",
+        "argon2",
+        "security"
+      ],
+      "coverImage": "/images/password-hashing-storage.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "authentication"
+      ],
+      "slug": "password-hashing-storage",
+      "path": "/blogs/backend/security/authentication/password-hashing-storage"
+    },
+    {
+      "title": "JWT Deep Dive",
+      "description": "Comprehensive deep dive into JWT structure, signing algorithms, token validation, and production security considerations",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "jwt",
+        "authentication",
+        "security",
+        "tokens"
+      ],
+      "coverImage": "/images/jwt-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "authentication"
+      ],
+      "slug": "jwt-deep-dive",
+      "path": "/blogs/backend/security/authentication/jwt-deep-dive"
+    },
+    {
+      "title": "SQL Injection Prevention",
+      "description": "Comprehensive guide to SQL injection prevention: parameterized queries, ORM safety, stored procedures, and defense-in-depth strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "sql-injection",
+        "database",
+        "security",
+        "jpa"
+      ],
+      "coverImage": "/images/sql-injection-prevention.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "application-security"
+      ],
+      "slug": "sql-injection-prevention",
+      "path": "/blogs/backend/security/application-security/sql-injection-prevention"
+    },
+    {
+      "title": "Secure API Design",
+      "description": "Principles and patterns for designing secure REST APIs: authentication, authorization, rate limiting, input validation, and threat modeling",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "api-security",
+        "rest",
+        "design-patterns",
+        "spring-boot"
+      ],
+      "coverImage": "/images/secure-api-design.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "application-security"
+      ],
+      "slug": "secure-api-design",
+      "path": "/blogs/backend/security/application-security/secure-api-design"
+    },
+    {
+      "title": "Secrets Management with Vault",
+      "description": "Comprehensive guide to HashiCorp Vault for secrets management: dynamic secrets, secret rotation, and Spring Boot integration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "vault",
+        "secrets-management",
+        "security",
+        "spring-boot"
+      ],
+      "coverImage": "/images/secrets-management-vault.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "application-security"
+      ],
+      "slug": "secrets-management-vault",
+      "path": "/blogs/backend/security/application-security/secrets-management-vault"
+    },
+    {
+      "title": "OWASP Top 10 for Backend",
+      "description": "Comprehensive guide to the OWASP Top 10 web application security risks from a backend perspective, with Spring Boot mitigation strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "owasp",
+        "security",
+        "vulnerabilities",
+        "spring-boot"
+      ],
+      "coverImage": "/images/owasp-top-10-backend.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "application-security"
+      ],
+      "slug": "owasp-top-10-backend",
+      "path": "/blogs/backend/security/application-security/owasp-top-10-backend"
+    },
+    {
+      "title": "Dependency Vulnerability Scanning",
+      "description": "Automated dependency vulnerability scanning with OWASP Dependency Check, Snyk, Dependabot, and integration into CI/CD pipelines",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "dependency-check",
+        "snyk",
+        "security",
+        "devsecops"
+      ],
+      "coverImage": "/images/dependency-vulnerability-scanning.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "security",
+        "application-security"
+      ],
+      "slug": "dependency-vulnerability-scanning",
+      "path": "/blogs/backend/security/application-security/dependency-vulnerability-scanning"
+    }
+  ]
+}

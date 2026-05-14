@@ -1,0 +1,111 @@
+{
+  "name": "Node.js",
+  "path": "/blogs/backend/frameworks/nodejs",
+  "blogs": [
+    {
+      "title": "Node.js Event Loop Deep Dive",
+      "description": "Deep dive into the Node.js event loop: phases, timers, microtasks, nextTick, libuv, and understanding asynchronous execution order",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "event-loop",
+        "libuv",
+        "asynchronous"
+      ],
+      "coverImage": "/images/nodejs-event-loop-deep-dive.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "nodejs"
+      ],
+      "slug": "nodejs-event-loop-deep-dive",
+      "path": "/blogs/backend/frameworks/nodejs/nodejs-event-loop-deep-dive"
+    },
+    {
+      "title": "NestJS Architecture",
+      "description": "Master NestJS framework architecture: modules, decorators, providers, guards, interceptors, pipes, and building scalable server-side applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "nestjs",
+        "typescript",
+        "architecture"
+      ],
+      "coverImage": "/images/nestjs-architecture.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "nodejs"
+      ],
+      "slug": "nestjs-architecture",
+      "path": "/blogs/backend/frameworks/nodejs/nestjs-architecture"
+    },
+    {
+      "title": "Fastify vs Express: A Comprehensive Comparison",
+      "description": "Compare Fastify and Express.js frameworks: performance, developer experience, plugin systems, serialization, and choosing the right framework for your project",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "express",
+        "fastify",
+        "performance"
+      ],
+      "coverImage": "/images/fastify-vs-express.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "nodejs"
+      ],
+      "slug": "fastify-vs-express",
+      "path": "/blogs/backend/frameworks/nodejs/fastify-vs-express"
+    },
+    {
+      "title": "Express.js Basics",
+      "description": "Master Express.js framework: routing, middleware, error handling, request/response objects, and building production-ready REST APIs with Node.js",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "express",
+        "rest-api",
+        "javascript"
+      ],
+      "coverImage": "/images/express-js-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "nodejs"
+      ],
+      "slug": "express-js-basics",
+      "path": "/blogs/backend/frameworks/nodejs/express-js-basics"
+    },
+    {
+      "title": "Dependency Injection in NestJS",
+      "description": "Deep dive into NestJS dependency injection system: providers, custom providers, injection scopes, circular dependencies, and advanced DI patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "nodejs",
+        "nestjs",
+        "dependency-injection",
+        "typescript"
+      ],
+      "coverImage": "/images/dependency-injection-in-nestjs.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "frameworks",
+        "nodejs"
+      ],
+      "slug": "dependency-injection-in-nestjs",
+      "path": "/blogs/backend/frameworks/nodejs/dependency-injection-in-nestjs"
+    }
+  ]
+}

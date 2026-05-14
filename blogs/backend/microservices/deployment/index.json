@@ -1,0 +1,90 @@
+{
+  "name": "Deployment",
+  "path": "/blogs/backend/microservices/deployment",
+  "blogs": [
+    {
+      "title": "Service Mesh with Istio",
+      "description": "Implement Istio service mesh for microservices: traffic management, mTLS security, observability with Kiali and Jaeger, canary deployments, and fault injection",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "istio",
+        "service-mesh",
+        "kubernetes",
+        "microservices"
+      ],
+      "coverImage": "/images/service-mesh-istio.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "deployment"
+      ],
+      "slug": "service-mesh-istio",
+      "path": "/blogs/backend/microservices/deployment/service-mesh-istio"
+    },
+    {
+      "title": "Containerization Strategies for Microservices",
+      "description": "Docker best practices for microservices: multi-stage builds, layer optimization, JVM tuning, health checks, Docker Compose, and Kubernetes deployment strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "docker",
+        "containerization",
+        "spring-boot",
+        "kubernetes"
+      ],
+      "coverImage": "/images/containerization-strategies.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "deployment"
+      ],
+      "slug": "containerization-strategies",
+      "path": "/blogs/backend/microservices/deployment/containerization-strategies"
+    },
+    {
+      "title": "Canary Deployments",
+      "description": "Implement canary deployments for microservices: gradual traffic shifting, metrics-based rollback, Kubernetes ingress, Istio weighted routing, and feature flag integration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "canary",
+        "deployment",
+        "kubernetes",
+        "traffic-shifting"
+      ],
+      "coverImage": "/images/canary-deployments.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "deployment"
+      ],
+      "slug": "canary-deployments",
+      "path": "/blogs/backend/microservices/deployment/canary-deployments"
+    },
+    {
+      "title": "Blue-Green Deployment",
+      "description": "Implement blue-green deployments for microservices: Kubernetes strategies, Istio traffic switching, zero-downtime deployments, database migrations, and rollback procedures",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "blue-green",
+        "deployment",
+        "kubernetes",
+        "zero-downtime"
+      ],
+      "coverImage": "/images/blue-green-deployment.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "microservices",
+        "deployment"
+      ],
+      "slug": "blue-green-deployment",
+      "path": "/blogs/backend/microservices/deployment/blue-green-deployment"
+    }
+  ]
+}

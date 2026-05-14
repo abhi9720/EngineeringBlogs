@@ -31,22 +31,25 @@ Eureka consists of two main components:
 1. **Eureka Server**: The service registry where services register themselves
 2. **Eureka Client**: Embedded in each service to register and discover other services
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      Eureka Server (Registry)                    │
-│  ┌───────────────┬───────────────┬───────────────┐             │
-│  │ user-service  │ order-service │ product-service│             │
-│  │ 192.168.1.10  │ 192.168.1.11  │ 192.168.1.12  │             │
-│  │ 192.168.1.20  │               │ 192.168.1.22  │             │
-│  └───────────────┴───────────────┴───────────────┘             │
-└─────────────────────────────────────────────────────────────────┘
-         │                    │                    │
-         │ Heartbeat          │ Heartbeat          │
-         ▼                    ▼                    ▼
-┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
-│ User Service    │  │ Order Service   │  │ Product Service │
-│ (Eureka Client) │  │ (Eureka Client) │  │ (Eureka Client)  │
-└─────────────────┘  └─────────────────┘  └─────────────────┘
+```mermaid
+flowchart TB
+
+    EurekaServer[Eureka Server<br/>Registry] --> UserService[User Service<br/>Eureka Client]
+    EurekaServer --> OrderService[Order Service<br/>Eureka Client]
+    EurekaServer --> ProductService[Product Service<br/>Eureka Client]
+
+    UserService -.->|Heartbeat| EurekaServer
+    OrderService -.->|Heartbeat| EurekaServer
+    ProductService -.->|Heartbeat| EurekaServer
+
+    linkStyle default stroke:#278ea5
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+    classDef pink fill:#f3558e,stroke:#333,stroke-width:2px,color:#fff
+
+    class EurekaServer green
+    class UserService,OrderService,ProductService blue
 ```
 
 ### Registration Process
@@ -648,3 +651,7 @@ Key considerations for production:
 - [Spring Cloud Netflix Documentation](https://spring.io/projects/spring-cloud-netflix)
 - [Baeldung - Service Discovery with Eureka](https://www.baeldung.com/spring-cloud-eureka)
 - [Eureka Wiki](https://github.com/Netflix/eureka/wiki)
+
+---
+
+Happy Coding 👨‍💻

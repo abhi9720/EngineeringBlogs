@@ -27,13 +27,24 @@ In a microservices architecture, a single user request can span multiple service
 ```
 Trace: A complete end-to-end request flow
 Span: An individual operation within the trace
-         ┌─────────────────────────────────────────────────────┐
-Trace   │  Span A (service A)                                │
-         │  ├─ Span B (service B)                             │
-         │  │  ├─ Span C (service C)                          │
-         │  │  └─ Span D (service C)                          │
-         │  └─ Span E (service B)                             │
-         └─────────────────────────────────────────────────────┘
+```
+
+```mermaid
+flowchart TB
+
+    SpanA[Span A<br/>service A] --> SpanB[Span B<br/>service B]
+    SpanA --> SpanE[Span E<br/>service B]
+    SpanB --> SpanC[Span C<br/>service C]
+    SpanB --> SpanD[Span D<br/>service C]
+
+    linkStyle default stroke:#278ea5
+
+    classDef green fill:#17b978,stroke:#333,stroke-width:2px,color:#fff
+    classDef blue fill:#3d5af1,stroke:#333,stroke-width:2px,color:#fff
+
+    class SpanA blue
+    class SpanB,SpanE,SpanC,SpanD green
+```
 
 Each span contains:
 - Trace ID (unique to request)
@@ -43,7 +54,6 @@ Each span contains:
 - Operation name
 - Start/end timestamps
 - Tags (metadata)
-```
 
 ### Spring Cloud Sleuth Integration
 
@@ -465,3 +475,7 @@ Integrate Zipkin or Jaeger early—retrofitting tracing is much harder than buil
 - [Zipkin Documentation](https://zipkin.io/pages/)
 - [OpenTelemetry](https://opentelemetry.io/)
 - [Baeldung - Spring Cloud Sleuth Guide](https://www.baeldung.com/spring-cloud-sleuth)
+
+---
+
+Happy Coding 👨‍💻

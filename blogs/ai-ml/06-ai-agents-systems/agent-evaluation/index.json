@@ -1,0 +1,94 @@
+{
+  "name": "Agent Evaluation",
+  "path": "/blogs/ai-ml/06-ai-agents-systems/agent-evaluation",
+  "blogs": [
+    {
+      "title": "Safety and Guardrails",
+      "description": "Implement safety guardrails for AI agents",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Safety",
+        "Guardrails",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/safety-guardrails.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "agent-evaluation"
+      ],
+      "slug": "safety-guardrails",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/agent-evaluation/safety-guardrails"
+    },
+    {
+      "title": "Hallucination Control",
+      "description": "Reduce hallucinations in AI agents - grounding and verification strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Hallucination",
+        "Safety",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/hallucination-control.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "agent-evaluation"
+      ],
+      "slug": "hallucination-control",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/agent-evaluation/hallucination-control"
+    },
+    {
+      "title": "Evaluating Agent Performance",
+      "description": "Learn how to evaluate AI agents - metrics, benchmarks, and testing strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Evaluation",
+        "Testing",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/evaluating-agents.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "agent-evaluation"
+      ],
+      "slug": "evaluating-agents",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/agent-evaluation/evaluating-agents"
+    },
+    {
+      "title": "Debugging Agent Systems",
+      "description": "Strategies for debugging and monitoring AI agent systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "AI Agents",
+        "Debugging",
+        "Monitoring",
+        "AI",
+        "Production AI"
+      ],
+      "coverImage": "/images/debugging-agents.png",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "06-ai-agents-systems",
+        "agent-evaluation"
+      ],
+      "slug": "debugging-agents",
+      "path": "/blogs/ai-ml/06-ai-agents-systems/agent-evaluation/debugging-agents"
+    }
+  ]
+}

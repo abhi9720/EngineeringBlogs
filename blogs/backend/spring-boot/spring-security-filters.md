@@ -1031,3 +1031,5 @@ The filter chain is your interface to Spring Security's request processing. Mast
 - [Spring Security Reference - Filter Chain](https://docs.spring.io/spring-security/reference/servlet/configuration/java.html)
 - [Understanding Security Filter Chain in Spring](https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter)
 - [Baeldung - Spring Security Filters](https://www.baeldung.com/spring-security-custom-filter)
+
+Happy Coding

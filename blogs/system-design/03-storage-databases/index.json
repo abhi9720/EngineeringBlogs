@@ -1,0 +1,160 @@
+{
+  "name": "03 Storage Databases",
+  "path": "/blogs/system-design/03-storage-databases",
+  "blogs": [
+    {
+      "title": "Database Replication Strategies",
+      "description": "A comprehensive guide to database replication strategies covering leader-follower, multi-leader, quorum-based, conflict resolution, and handling replication lag",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "replication",
+        "database",
+        "system-design",
+        "high-availability",
+        "consistency"
+      ],
+      "coverImage": "/images/replication-strategies.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "03-database-patterns"
+      ],
+      "slug": "68. replication-strategies",
+      "path": "/blogs/system-design/03-storage-databases/03-database-patterns/68. replication-strategies"
+    },
+    {
+      "title": "Blob vs Block Storage",
+      "description": "A comprehensive guide comparing blob storage and block storage in system design, covering use cases, performance characteristics, and implementation strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "blob-storage",
+        "block-storage",
+        "system-design",
+        "storage",
+        "cloud"
+      ],
+      "coverImage": "/images/blob-vs-block-storage.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "02-storage-systems"
+      ],
+      "slug": "56. blob-vs-block-storage",
+      "path": "/blogs/system-design/03-storage-databases/02-storage-systems/56. blob-vs-block-storage"
+    },
+    {
+      "title": "File Storage Systems",
+      "description": "A comprehensive guide to file storage systems in system design, covering NFS, SMB/CIFS, distributed file systems, and implementation for enterprise applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "file-storage",
+        "nfs",
+        "system-design",
+        "storage",
+        "enterprise"
+      ],
+      "coverImage": "/images/file-storage-systems.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "02-storage-systems"
+      ],
+      "slug": "55. file-storage-systems",
+      "path": "/blogs/system-design/03-storage-databases/02-storage-systems/55. file-storage-systems"
+    },
+    {
+      "title": "Object Storage with S3",
+      "description": "A comprehensive guide to object storage with Amazon S3, covering bucket operations, access control, versioning, lifecycle management, and implementation for scalable storage",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "object-storage",
+        "s3",
+        "aws",
+        "system-design",
+        "storage"
+      ],
+      "coverImage": "/images/object-storage-s3.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "02-storage-systems"
+      ],
+      "slug": "54. object-storage-s3",
+      "path": "/blogs/system-design/03-storage-databases/02-storage-systems/54. object-storage-s3"
+    },
+    {
+      "title": "Document Stores (MongoDB)",
+      "description": "A comprehensive guide to document stores with MongoDB, covering the document model, indexing, aggregation pipeline, replication, sharding, and real-world use cases",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "mongodb",
+        "document-store",
+        "nosql",
+        "system-design",
+        "database"
+      ],
+      "coverImage": "/images/document-stores.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "01-database-types"
+      ],
+      "slug": "67. document-stores",
+      "path": "/blogs/system-design/03-storage-databases/01-database-types/67. document-stores"
+    },
+    {
+      "title": "Key-Value Stores (Redis)",
+      "description": "A deep dive into Redis key-value store covering data structures, persistence, clustering, pub/sub, and real-world use cases for caching and session management",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "redis",
+        "key-value",
+        "caching",
+        "system-design",
+        "storage"
+      ],
+      "coverImage": "/images/key-value-stores.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "01-database-types"
+      ],
+      "slug": "66. key-value-stores",
+      "path": "/blogs/system-design/03-storage-databases/01-database-types/66. key-value-stores"
+    },
+    {
+      "title": "SQL vs NoSQL Databases",
+      "description": "A comprehensive comparison of SQL and NoSQL databases, covering ACID vs BASE, schema types, use cases, and when to choose each for your system design",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "sql",
+        "nosql",
+        "database",
+        "system-design",
+        "storage"
+      ],
+      "coverImage": "/images/sql-vs-nosql.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "01-database-types"
+      ],
+      "slug": "65. sql-vs-nosql",
+      "path": "/blogs/system-design/03-storage-databases/01-database-types/65. sql-vs-nosql"
+    }
+  ]
+}

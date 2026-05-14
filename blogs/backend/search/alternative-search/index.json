@@ -1,0 +1,70 @@
+{
+  "name": "Alternative Search",
+  "path": "/blogs/backend/search/alternative-search",
+  "blogs": [
+    {
+      "title": "Typesense vs Meilisearch",
+      "description": "Compare Typesense and Meilisearch: performance, features, typo tolerance, filtering, and deployment considerations",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "typesense",
+        "meilisearch",
+        "comparison",
+        "search-engine"
+      ],
+      "coverImage": "/images/typesense-vs-meilisearch.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "search",
+        "alternative-search"
+      ],
+      "slug": "typesense-vs-meilisearch",
+      "path": "/blogs/backend/search/alternative-search/typesense-vs-meilisearch"
+    },
+    {
+      "title": "pgvector Similarity Search",
+      "description": "Building vector similarity search with PostgreSQL pgvector: embeddings, nearest neighbor, hybrid search, and RAG pipelines",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "pgvector",
+        "postgresql",
+        "vector-search",
+        "embeddings",
+        "rag"
+      ],
+      "coverImage": "/images/pgvector-similarity-search.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "search",
+        "alternative-search"
+      ],
+      "slug": "pgvector-similarity-search",
+      "path": "/blogs/backend/search/alternative-search/pgvector-similarity-search"
+    },
+    {
+      "title": "Meilisearch Getting Started",
+      "description": "Getting started with Meilisearch: installation, indexing, typo-tolerant search, and filtering for modern applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "meilisearch",
+        "search",
+        "typo-tolerance",
+        "getting-started"
+      ],
+      "coverImage": "/images/meilisearch-getting-started.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "search",
+        "alternative-search"
+      ],
+      "slug": "meilisearch-getting-started",
+      "path": "/blogs/backend/search/alternative-search/meilisearch-getting-started"
+    }
+  ]
+}

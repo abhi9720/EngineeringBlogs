@@ -1,0 +1,90 @@
+{
+  "name": "Monitoring",
+  "path": "/blogs/backend/observability/monitoring",
+  "blogs": [
+    {
+      "title": "Spring Boot Actuator Metrics",
+      "description": "Configure Spring Boot Actuator with Micrometer for exporting JVM, application, and custom metrics to monitoring systems",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "observability",
+        "monitoring",
+        "micrometer",
+        "actuator"
+      ],
+      "coverImage": "/images/spring-boot-actuator-metrics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "observability",
+        "monitoring"
+      ],
+      "slug": "spring-boot-actuator-metrics",
+      "path": "/blogs/backend/observability/monitoring/spring-boot-actuator-metrics"
+    },
+    {
+      "title": "Prometheus and Grafana",
+      "description": "Set up Prometheus metrics collection and Grafana dashboards for comprehensive application monitoring",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "observability",
+        "monitoring",
+        "prometheus",
+        "grafana"
+      ],
+      "coverImage": "/images/prometheus-and-grafana.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "observability",
+        "monitoring"
+      ],
+      "slug": "prometheus-and-grafana",
+      "path": "/blogs/backend/observability/monitoring/prometheus-and-grafana"
+    },
+    {
+      "title": "Custom Metrics with Micrometer",
+      "description": "Create custom business metrics using Micrometer: counters, gauges, timers, and distribution summaries",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "observability",
+        "monitoring",
+        "micrometer",
+        "custom-metrics"
+      ],
+      "coverImage": "/images/custom-metrics-micrometer.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "observability",
+        "monitoring"
+      ],
+      "slug": "custom-metrics-micrometer",
+      "path": "/blogs/backend/observability/monitoring/custom-metrics-micrometer"
+    },
+    {
+      "title": "Alerting Strategies",
+      "description": "Design effective alerting rules: thresholds, notification channels, on-call rotation, and incident response patterns",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "observability",
+        "monitoring",
+        "alerting",
+        "incident-response"
+      ],
+      "coverImage": "/images/alerting-strategies.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "observability",
+        "monitoring"
+      ],
+      "slug": "alerting-strategies",
+      "path": "/blogs/backend/observability/monitoring/alerting-strategies"
+    }
+  ]
+}

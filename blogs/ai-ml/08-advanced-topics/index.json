@@ -1,0 +1,61 @@
+{
+  "name": "08 Advanced Topics",
+  "path": "/blogs/ai-ml/08-advanced-topics",
+  "blogs": [
+    {
+      "tags": [],
+      "coverImage": "",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "08-advanced-topics"
+      ],
+      "slug": "reinforcement-learning-basics",
+      "path": "/blogs/ai-ml/08-advanced-topics/reinforcement-learning-basics"
+    },
+    {
+      "tags": [],
+      "coverImage": "",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "08-advanced-topics"
+      ],
+      "slug": "multimodal-models",
+      "path": "/blogs/ai-ml/08-advanced-topics/multimodal-models"
+    },
+    {
+      "tags": [],
+      "coverImage": "",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "08-advanced-topics"
+      ],
+      "slug": "llm-evaluation-frameworks",
+      "path": "/blogs/ai-ml/08-advanced-topics/llm-evaluation-frameworks"
+    },
+    {
+      "tags": [],
+      "coverImage": "",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "08-advanced-topics"
+      ],
+      "slug": "future-of-ai-systems",
+      "path": "/blogs/ai-ml/08-advanced-topics/future-of-ai-systems"
+    },
+    {
+      "tags": [],
+      "coverImage": "",
+      "draft": false,
+      "category": "ai-ml",
+      "hierarchy": [
+        "08-advanced-topics"
+      ],
+      "slug": "diffusion-models",
+      "path": "/blogs/ai-ml/08-advanced-topics/diffusion-models"
+    }
+  ]
+}

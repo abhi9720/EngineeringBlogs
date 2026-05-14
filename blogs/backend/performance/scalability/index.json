@@ -1,0 +1,92 @@
+{
+  "name": "Scalability",
+  "path": "/blogs/backend/performance/scalability",
+  "blogs": [
+    {
+      "title": "Load Balancing Algorithms",
+      "description": "Explore load balancing algorithms: round-robin, least connections, consistent hashing, and weighted distribution",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "performance",
+        "scalability",
+        "load-balancing",
+        "algorithms"
+      ],
+      "coverImage": "/images/load-balancing-algorithms.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "performance",
+        "scalability"
+      ],
+      "slug": "load-balancing-algorithms",
+      "path": "/blogs/backend/performance/scalability/load-balancing-algorithms"
+    },
+    {
+      "title": "Horizontal vs Vertical Scaling",
+      "description": "Compare horizontal and vertical scaling strategies: trade-offs, costs, and when to use each approach",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "performance",
+        "scalability",
+        "horizontal-scaling",
+        "vertical-scaling"
+      ],
+      "coverImage": "/images/horizontal-vs-vertical-scaling.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "performance",
+        "scalability"
+      ],
+      "slug": "horizontal-vs-vertical-scaling",
+      "path": "/blogs/backend/performance/scalability/horizontal-vs-vertical-scaling"
+    },
+    {
+      "title": "Database Read Replicas and Sharding",
+      "description": "Scale databases with read replicas and sharding: replication lag, consistency models, and partitioning strategies",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "performance",
+        "scalability",
+        "database",
+        "replicas",
+        "sharding"
+      ],
+      "coverImage": "/images/database-read-replicas-sharding.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "performance",
+        "scalability"
+      ],
+      "slug": "database-read-replicas-sharding",
+      "path": "/blogs/backend/performance/scalability/database-read-replicas-sharding"
+    },
+    {
+      "title": "Auto-Scaling Strategies",
+      "description": "Implement auto-scaling: horizontal pod autoscaler, metrics-based scaling, predictive scaling, and Kubernetes HPA",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "performance",
+        "scalability",
+        "auto-scaling",
+        "kubernetes",
+        "hpa"
+      ],
+      "coverImage": "/images/auto-scaling-strategies.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "performance",
+        "scalability"
+      ],
+      "slug": "auto-scaling-strategies",
+      "path": "/blogs/backend/performance/scalability/auto-scaling-strategies"
+    }
+  ]
+}

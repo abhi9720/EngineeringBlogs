@@ -1,0 +1,50 @@
+{
+  "name": "02 Data Patterns",
+  "path": "/blogs/system-design/05-architecture-patterns/02-data-patterns",
+  "blogs": [
+    {
+      "title": "Event Sourcing Pattern",
+      "description": "A comprehensive guide to event sourcing covering event stores, event replay, snapshots, CQRS integration, event versioning, and practical Java implementations",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "event-sourcing",
+        "cqrs",
+        "system-design",
+        "patterns",
+        "data"
+      ],
+      "coverImage": "/images/event-sourcing.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "05-architecture-patterns",
+        "02-data-patterns"
+      ],
+      "slug": "74. event-sourcing",
+      "path": "/blogs/system-design/05-architecture-patterns/02-data-patterns/74. event-sourcing"
+    },
+    {
+      "title": "CQRS Pattern",
+      "description": "A comprehensive guide to the Command Query Responsibility Segregation pattern in system design, covering read/write separation, event sourcing, and implementation for high-performance applications",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "cqrs",
+        "system-design",
+        "patterns",
+        "architecture",
+        "event-sourcing"
+      ],
+      "coverImage": "/images/cqrs.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "05-architecture-patterns",
+        "02-data-patterns"
+      ],
+      "slug": "53. cqrs",
+      "path": "/blogs/system-design/05-architecture-patterns/02-data-patterns/53. cqrs"
+    }
+  ]
+}

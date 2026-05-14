@@ -1,0 +1,48 @@
+{
+  "name": "Contract Testing",
+  "path": "/blogs/backend/testing/contract-testing",
+  "blogs": [
+    {
+      "title": "Pact Framework Basics",
+      "description": "Getting started with Pact for contract testing: setup, DSL usage, verification, and integration with Spring Boot",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "pact",
+        "contract-testing",
+        "testing",
+        "spring-boot"
+      ],
+      "coverImage": "/images/pact-framework-basics.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing",
+        "contract-testing"
+      ],
+      "slug": "pact-framework-basics",
+      "path": "/blogs/backend/testing/contract-testing/pact-framework-basics"
+    },
+    {
+      "title": "Consumer-Driven Contracts",
+      "description": "Comprehensive guide to consumer-driven contract testing: Pact, contract definition, verification, and CI/CD integration",
+      "date": "2026-05-11",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "contract-testing",
+        "pact",
+        "microservices",
+        "testing"
+      ],
+      "coverImage": "/images/consumer-driven-contracts.png",
+      "draft": false,
+      "category": "backend",
+      "hierarchy": [
+        "testing",
+        "contract-testing"
+      ],
+      "slug": "consumer-driven-contracts",
+      "path": "/blogs/backend/testing/contract-testing/consumer-driven-contracts"
+    }
+  ]
+}

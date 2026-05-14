@@ -1,0 +1,72 @@
+{
+  "name": "01 Database Types",
+  "path": "/blogs/system-design/03-storage-databases/01-database-types",
+  "blogs": [
+    {
+      "title": "Document Stores (MongoDB)",
+      "description": "A comprehensive guide to document stores with MongoDB, covering the document model, indexing, aggregation pipeline, replication, sharding, and real-world use cases",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "mongodb",
+        "document-store",
+        "nosql",
+        "system-design",
+        "database"
+      ],
+      "coverImage": "/images/document-stores.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "01-database-types"
+      ],
+      "slug": "67. document-stores",
+      "path": "/blogs/system-design/03-storage-databases/01-database-types/67. document-stores"
+    },
+    {
+      "title": "Key-Value Stores (Redis)",
+      "description": "A deep dive into Redis key-value store covering data structures, persistence, clustering, pub/sub, and real-world use cases for caching and session management",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "redis",
+        "key-value",
+        "caching",
+        "system-design",
+        "storage"
+      ],
+      "coverImage": "/images/key-value-stores.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "01-database-types"
+      ],
+      "slug": "66. key-value-stores",
+      "path": "/blogs/system-design/03-storage-databases/01-database-types/66. key-value-stores"
+    },
+    {
+      "title": "SQL vs NoSQL Databases",
+      "description": "A comprehensive comparison of SQL and NoSQL databases, covering ACID vs BASE, schema types, use cases, and when to choose each for your system design",
+      "date": "2026-05-14",
+      "author": "Abhishek Tiwari",
+      "tags": [
+        "sql",
+        "nosql",
+        "database",
+        "system-design",
+        "storage"
+      ],
+      "coverImage": "/images/sql-vs-nosql.png",
+      "draft": false,
+      "category": "system-design",
+      "hierarchy": [
+        "03-storage-databases",
+        "01-database-types"
+      ],
+      "slug": "65. sql-vs-nosql",
+      "path": "/blogs/system-design/03-storage-databases/01-database-types/65. sql-vs-nosql"
+    }
+  ]
+}
