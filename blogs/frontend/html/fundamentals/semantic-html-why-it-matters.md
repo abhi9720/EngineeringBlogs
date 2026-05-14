@@ -1,18 +1,20 @@
 ---
-title: "Semantic HTML: Why It Matters"
-description: "Learn how semantic HTML improves accessibility, SEO, and code maintainability with practical examples."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: 'Semantic HTML: Why It Matters'
+description: >-
+  Learn how semantic HTML improves accessibility, SEO, and code maintainability
+  with practical examples.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - html
   - semantic
   - accessibility
   - seo
   - frontend
-coverImage: "/images/frontend/html/semantic-html.png"
+coverImage: /images/frontend/html/semantic-html.png
 draft: false
+order: 20
 ---
-
 # Semantic HTML: Why It Matters
 
 ## Overview

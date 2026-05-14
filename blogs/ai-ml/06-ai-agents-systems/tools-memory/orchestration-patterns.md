@@ -1,18 +1,18 @@
 ---
-title: "Agent Tool Orchestration"
-description: "Design patterns for orchestrating multiple tools in agents"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Agent Tool Orchestration
+description: Design patterns for orchestrating multiple tools in agents
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI Agents
   - Tool Orchestration
   - AI
   - AI Agents
   - Production AI
-coverImage: "/images/orchestration-patterns.png"
+coverImage: /images/orchestration-patterns.png
 draft: false
+order: 20
 ---
-
 # Agent Tool Orchestration
 
 ## Overview

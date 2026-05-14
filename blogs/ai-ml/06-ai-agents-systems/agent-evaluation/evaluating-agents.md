@@ -1,18 +1,18 @@
 ---
-title: "Evaluating Agent Performance"
-description: "Learn how to evaluate AI agents - metrics, benchmarks, and testing strategies"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Evaluating Agent Performance
+description: 'Learn how to evaluate AI agents - metrics, benchmarks, and testing strategies'
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI Agents
   - Evaluation
   - Testing
   - AI
   - Production AI
-coverImage: "/images/evaluating-agents.png"
+coverImage: /images/evaluating-agents.png
 draft: false
+order: 20
 ---
-
 # Evaluating Agent Performance
 
 ## Overview

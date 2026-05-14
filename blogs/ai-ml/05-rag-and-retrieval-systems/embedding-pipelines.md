@@ -1,8 +1,8 @@
 ---
-title: "Embedding Pipelines"
-description: "Build robust embedding pipelines for RAG systems"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Embedding Pipelines
+description: Build robust embedding pipelines for RAG systems
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - RAG
   - Embeddings
@@ -10,10 +10,10 @@ tags:
   - AI
   - AI Agents
   - Production AI
-coverImage: "/images/embedding-pipelines.png"
+coverImage: /images/embedding-pipelines.png
 draft: false
+order: 30
 ---
-
 # Embedding Pipelines
 
 ## Overview

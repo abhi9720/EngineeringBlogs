@@ -1,18 +1,20 @@
 ---
-title: "useMemo & useCallback Real Use Cases"
-description: "Practical examples of when and how to use useMemo and useCallback for performance optimization."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: useMemo & useCallback Real Use Cases
+description: >-
+  Practical examples of when and how to use useMemo and useCallback for
+  performance optimization.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - hooks
   - usememo
   - usecallback
   - frontend
-coverImage: "/images/frontend/react/usememo-usecallback.png"
+coverImage: /images/frontend/react/usememo-usecallback.png
 draft: false
+order: 30
 ---
-
 # useMemo & useCallback Real Use Cases: The Complete Guide
 
 ## Overview

@@ -1,18 +1,21 @@
 ---
-title: "Props vs State Decision Guide"
-description: "When to use props vs state - making the right architectural decisions in React components."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Props vs State Decision Guide
+description: >-
+  When to use props vs state - making the right architectural decisions in React
+  components.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - props
   - state
   - architecture
   - frontend
-coverImage: "/images/frontend/react/props-vs-state.png"
+coverImage: /images/frontend/react/props-vs-state.png
 draft: false
+order: 110
+type: comparison
 ---
-
 # Props vs State Decision Guide: The Complete Guide
 
 ## Overview

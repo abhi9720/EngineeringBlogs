@@ -1,18 +1,18 @@
 ---
-title: "Safety and Guardrails"
-description: "Implement safety guardrails for AI agents"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Safety and Guardrails
+description: Implement safety guardrails for AI agents
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI Agents
   - Safety
   - Guardrails
   - AI
   - Production AI
-coverImage: "/images/safety-guardrails.png"
+coverImage: /images/safety-guardrails.png
 draft: false
+order: 40
 ---
-
 # Safety and Guardrails
 
 ## Overview

@@ -1,18 +1,18 @@
 ---
-title: "RAG Fundamentals"
-description: "Master RAG fundamentals - retrieval, augmentation, and generation"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: RAG Fundamentals
+description: 'Master RAG fundamentals - retrieval, augmentation, and generation'
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - RAG
   - LLM
   - AI
   - AI Agents
   - Production AI
-coverImage: "/images/rag-fundamentals.png"
+coverImage: /images/rag-fundamentals.png
 draft: false
+order: 50
 ---
-
 # RAG Fundamentals
 
 ## Overview

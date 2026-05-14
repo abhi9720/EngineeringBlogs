@@ -1,18 +1,21 @@
 ---
-title: "Multimodal Models"
-description: "Understand multimodal AI: early/late fusion architectures, CLIP, vision-language models, audio processing, video understanding, and production applications"
-date: "2026-05-14"
-author: "Abhishek Tiwari"
+title: Multimodal Models
+description: >-
+  Understand multimodal AI: early/late fusion architectures, CLIP,
+  vision-language models, audio processing, video understanding, and production
+  applications
+date: '2026-05-14'
+author: Abhishek Tiwari
 tags:
   - multimodal
   - vision-language
   - clip
   - deep-learning
   - ai-architecture
-coverImage: "/images/multimodal-models.png"
+coverImage: /images/multimodal-models.png
 draft: false
+order: 40
 ---
-
 # Multimodal Models
 
 Multimodal models process and generate content across multiple data types: text, images, audio, video, and more.

@@ -1,18 +1,20 @@
 ---
-title: "The Future of AI Systems"
-description: "Explore emerging AI trends: agentic systems, multimodal integration, specialized models, infrastructure evolution, and predictions for 2025-2030"
-date: "2026-05-14"
-author: "Abhishek Tiwari"
+title: The Future of AI Systems
+description: >-
+  Explore emerging AI trends: agentic systems, multimodal integration,
+  specialized models, infrastructure evolution, and predictions for 2025-2030
+date: '2026-05-14'
+author: Abhishek Tiwari
 tags:
   - ai
   - future-tech
   - agents
   - multimodal
   - trends
-coverImage: "/images/future-of-ai-systems.png"
+coverImage: /images/future-of-ai-systems.png
 draft: false
+order: 20
 ---
-
 # The Future of AI Systems
 
 Where is AI heading? This post explores emerging trends, research directions, and predictions for the next era of AI.

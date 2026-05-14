@@ -1,18 +1,18 @@
 ---
-title: "LangGraph State Machines"
-description: "Build complex agent workflows with LangGraph state machines"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: LangGraph State Machines
+description: Build complex agent workflows with LangGraph state machines
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LangGraph
   - State Machines
   - AI Agents
   - AI
   - Production AI
-coverImage: "/images/langgraph-state-machines.png"
+coverImage: /images/langgraph-state-machines.png
 draft: false
+order: 40
 ---
-
 # LangGraph State Machines
 
 ## Overview

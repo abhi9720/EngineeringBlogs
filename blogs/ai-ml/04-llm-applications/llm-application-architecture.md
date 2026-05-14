@@ -1,18 +1,20 @@
 ---
-title: "LLM Application Architecture"
-description: "Design robust LLM applications - from simple chains to complex multi-agent systems"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: LLM Application Architecture
+description: >-
+  Design robust LLM applications - from simple chains to complex multi-agent
+  systems
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LLM
   - Application Architecture
   - System Design
   - AI
   - Applications
-coverImage: "/images/llm-application-architecture.png"
+coverImage: /images/llm-application-architecture.png
 draft: false
+order: 30
 ---
-
 # LLM Application Architecture
 
 ## Overview

@@ -1,18 +1,20 @@
 ---
-title: "LLM Evaluation Frameworks"
-description: "Master LLM evaluation: benchmarks, LLM-as-judge, custom evaluation suites, continuous evaluation, and production monitoring for AI systems"
-date: "2026-05-14"
-author: "Abhishek Tiwari"
+title: LLM Evaluation Frameworks
+description: >-
+  Master LLM evaluation: benchmarks, LLM-as-judge, custom evaluation suites,
+  continuous evaluation, and production monitoring for AI systems
+date: '2026-05-14'
+author: Abhishek Tiwari
 tags:
   - llm
   - evaluation
   - benchmarks
   - testing
   - ai-quality
-coverImage: "/images/llm-evaluation-frameworks.png"
+coverImage: /images/llm-evaluation-frameworks.png
 draft: false
+order: 30
 ---
-
 # LLM Evaluation Frameworks
 
 Evaluating LLMs is challenging due to their open-ended capabilities. This guide covers frameworks, metrics, and best practices.

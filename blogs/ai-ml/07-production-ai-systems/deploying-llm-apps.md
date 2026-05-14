@@ -1,18 +1,18 @@
 ---
-title: "Deploying LLM Apps"
-description: "Best practices for deploying LLM applications in production"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Deploying LLM Apps
+description: Best practices for deploying LLM applications in production
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LLM
   - Deployment
   - Production AI
   - AI
   - MLOps
-coverImage: "/images/deploying-llm-apps.png"
+coverImage: /images/deploying-llm-apps.png
 draft: false
+order: 30
 ---
-
 # Deploying LLM Apps
 
 ## Overview

@@ -1,18 +1,18 @@
 ---
-title: "Tool Use in Agents"
-description: "Learn how agents use tools to extend their capabilities"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Tool Use in Agents
+description: Learn how agents use tools to extend their capabilities
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI Agents
   - Tools
   - Function Calling
   - AI
   - AI Agents
-coverImage: "/images/tool-use-in-agents.png"
+coverImage: /images/tool-use-in-agents.png
 draft: false
+order: 40
 ---
-
 # Tool Use in Agents
 
 ## Overview

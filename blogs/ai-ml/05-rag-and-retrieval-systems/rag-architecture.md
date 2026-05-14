@@ -1,8 +1,10 @@
 ---
-title: "RAG Architecture"
-description: "Deep dive into RAG architecture - components, data flow, and implementation patterns"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: RAG Architecture
+description: >-
+  Deep dive into RAG architecture - components, data flow, and implementation
+  patterns
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - RAG
   - LLM
@@ -10,10 +12,10 @@ tags:
   - AI
   - Production AI
   - AI Agents
-coverImage: "/images/rag-architecture.png"
+coverImage: /images/rag-architecture.png
 draft: false
+order: 40
 ---
-
 # RAG Architecture
 
 ## Overview

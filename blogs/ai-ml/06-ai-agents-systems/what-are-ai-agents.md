@@ -1,18 +1,20 @@
 ---
-title: "What are AI Agents"
-description: "Understand AI agents - autonomous systems that can plan, reason, and take actions"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: What are AI Agents
+description: >-
+  Understand AI agents - autonomous systems that can plan, reason, and take
+  actions
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI Agents
   - Autonomous AI
   - AI
   - LLM
   - AI Agents
-coverImage: "/images/what-are-ai-agents.png"
+coverImage: /images/what-are-ai-agents.png
 draft: false
+order: 40
 ---
-
 # What are AI Agents
 
 ## Overview

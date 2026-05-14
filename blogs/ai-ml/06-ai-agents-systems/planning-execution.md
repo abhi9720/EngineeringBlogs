@@ -1,17 +1,17 @@
 ---
-title: "Planning and Execution"
-description: "Learn how agents plan and execute tasks to achieve goals"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Planning and Execution
+description: Learn how agents plan and execute tasks to achieve goals
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI Agents
   - Planning
   - Execution
   - AI
-coverImage: "/images/planning-execution.png"
+coverImage: /images/planning-execution.png
 draft: false
+order: 20
 ---
-
 # Planning and Execution
 
 ## Overview

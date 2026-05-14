@@ -1,17 +1,19 @@
 ---
-title: "How to Learn AI/ML"
-description: "Your complete guide to starting and mastering AI and Machine Learning - resources, strategies, and learning paths"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: How to Learn AI/ML
+description: >-
+  Your complete guide to starting and mastering AI and Machine Learning -
+  resources, strategies, and learning paths
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI
   - Machine Learning
   - Learning Guide
   - Getting Started
-coverImage: "/images/how-to-learn-ai-ml.png"
+coverImage: /images/how-to-learn-ai-ml.png
 draft: false
+order: 20
 ---
-
 # How to Learn AI/ML
 
 ## Overview

@@ -1,8 +1,10 @@
 ---
-title: "Model Evaluation Metrics"
-description: "Learn how to evaluate ML models with the right metrics for classification, regression, and ranking problems"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Model Evaluation Metrics
+description: >-
+  Learn how to evaluate ML models with the right metrics for classification,
+  regression, and ranking problems
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Machine Learning
   - Model Evaluation
@@ -11,10 +13,10 @@ tags:
   - Precision
   - Recall
   - Fundamentals
-coverImage: "/images/model-evaluation-metrics.png"
+coverImage: /images/model-evaluation-metrics.png
 draft: false
+order: 30
 ---
-
 # Model Evaluation Metrics
 
 ## Overview

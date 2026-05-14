@@ -1,18 +1,18 @@
 ---
-title: "Role-Based Agents"
-description: "Design agents with specialized roles for effective collaboration"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Role-Based Agents
+description: Design agents with specialized roles for effective collaboration
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Multi-Agent
   - Role-Based
   - AI Agents
   - AI
   - Production AI
-coverImage: "/images/role-based-agents.png"
+coverImage: /images/role-based-agents.png
 draft: false
+order: 30
 ---
-
 # Role-Based Agents
 
 ## Overview

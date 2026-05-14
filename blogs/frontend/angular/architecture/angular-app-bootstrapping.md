@@ -1,17 +1,19 @@
 ---
-title: "Angular App Bootstrapping"
-description: "Understand how Angular apps start - bootstrap process, platform, and module loading."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Angular App Bootstrapping
+description: >-
+  Understand how Angular apps start - bootstrap process, platform, and module
+  loading.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - angular
   - bootstrap
   - platform
   - frontend
-coverImage: "/images/frontend/angular/bootstrap.png"
+coverImage: /images/frontend/angular/bootstrap.png
 draft: false
+order: 10
 ---
-
 # Angular App Bootstrapping: The Complete Guide
 
 ## Overview

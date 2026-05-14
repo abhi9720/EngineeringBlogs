@@ -1,18 +1,20 @@
 ---
-title: "Embeddings Explained"
-description: "Understand text embeddings - converting text to vectors for similarity search and semantic understanding"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Embeddings Explained
+description: >-
+  Understand text embeddings - converting text to vectors for similarity search
+  and semantic understanding
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LLM
   - Embeddings
   - Vector Search
   - NLP
   - AI
-coverImage: "/images/embeddings-explained.png"
+coverImage: /images/embeddings-explained.png
 draft: false
+order: 10
 ---
-
 # Embeddings Explained
 
 ## Overview

@@ -1,18 +1,20 @@
 ---
-title: "LangChain Introduction"
-description: "Get started with LangChain - the framework for building LLM applications and agents"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: LangChain Introduction
+description: >-
+  Get started with LangChain - the framework for building LLM applications and
+  agents
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LangChain
   - AI Agents
   - Framework
   - AI
   - Production AI
-coverImage: "/images/langchain-introduction.png"
+coverImage: /images/langchain-introduction.png
 draft: false
+order: 30
 ---
-
 # LangChain Introduction
 
 ## Overview

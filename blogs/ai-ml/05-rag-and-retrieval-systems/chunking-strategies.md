@@ -1,18 +1,18 @@
 ---
-title: "Chunking Strategies"
-description: "Master document chunking - how to split documents for optimal retrieval"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Chunking Strategies
+description: Master document chunking - how to split documents for optimal retrieval
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - RAG
   - Chunking
   - Document Processing
   - AI
   - AI Agents
-coverImage: "/images/chunking-strategies.png"
+coverImage: /images/chunking-strategies.png
 draft: false
+order: 20
 ---
-
 # Chunking Strategies
 
 ## Overview

@@ -1,18 +1,18 @@
 ---
-title: "MLOps Introduction"
-description: "Learn MLOps practices for deploying and maintaining AI systems"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: MLOps Introduction
+description: Learn MLOps practices for deploying and maintaining AI systems
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - MLOps
   - Production AI
   - AI
   - Deployment
   - Operations
-coverImage: "/images/mlops-introduction.png"
+coverImage: /images/mlops-introduction.png
 draft: false
+order: 60
 ---
-
 # MLOps Introduction
 
 ## Overview

@@ -1,18 +1,21 @@
 ---
-title: "Controlled vs Uncontrolled Components"
-description: "Understand controlled (state-driven) vs uncontrolled (ref-driven) components in React."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Controlled vs Uncontrolled Components
+description: >-
+  Understand controlled (state-driven) vs uncontrolled (ref-driven) components
+  in React.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - forms
   - controlled
   - uncontrolled
   - frontend
-coverImage: "/images/frontend/react/controlled-uncontrolled.png"
+coverImage: /images/frontend/react/controlled-uncontrolled.png
 draft: false
+order: 100
+type: comparison
 ---
-
 # Controlled vs Uncontrolled Components: The Complete Guide
 
 ## Overview

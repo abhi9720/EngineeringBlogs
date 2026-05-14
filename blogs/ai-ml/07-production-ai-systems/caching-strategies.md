@@ -1,17 +1,17 @@
 ---
-title: "Caching Strategies"
-description: "Implement caching to reduce LLM costs and improve latency"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Caching Strategies
+description: Implement caching to reduce LLM costs and improve latency
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Caching
   - Cost Optimization
   - Production AI
   - AI
-coverImage: "/images/caching-strategies.png"
+coverImage: /images/caching-strategies.png
 draft: false
+order: 10
 ---
-
 # Caching Strategies
 
 ## Overview

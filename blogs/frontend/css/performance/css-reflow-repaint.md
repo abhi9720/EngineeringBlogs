@@ -1,18 +1,20 @@
 ---
-title: "CSS Reflow and Repaint"
-description: "Understand browser rendering performance - what causes reflows and repaints, and how to optimize."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: CSS Reflow and Repaint
+description: >-
+  Understand browser rendering performance - what causes reflows and repaints,
+  and how to optimize.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - css
   - performance
   - reflow
   - repaint
   - frontend
-coverImage: "/images/frontend/css/reflow-repaint.png"
+coverImage: /images/frontend/css/reflow-repaint.png
 draft: false
+order: 20
 ---
-
 # CSS Reflow and Repaint: The Complete Guide
 
 ## Overview

@@ -1,18 +1,18 @@
 ---
-title: "Memory Types"
-description: "Implement short-term, long-term, and semantic memory in agents"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Memory Types
+description: 'Implement short-term, long-term, and semantic memory in agents'
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI Agents
   - Memory
   - Context
   - AI
   - AI Agents
-coverImage: "/images/memory-types.png"
+coverImage: /images/memory-types.png
 draft: false
+order: 10
 ---
-
 # Memory Types
 
 ## Overview

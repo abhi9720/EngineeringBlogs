@@ -1,18 +1,20 @@
 ---
-title: "Event Delegation Pattern"
-description: "Master event delegation - handle many events with one listener, improve performance, and understand the pattern."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Event Delegation Pattern
+description: >-
+  Master event delegation - handle many events with one listener, improve
+  performance, and understand the pattern.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - javascript
   - events
   - delegation
   - performance
   - frontend
-coverImage: "/images/frontend/javascript/event-delegation.png"
+coverImage: /images/frontend/javascript/event-delegation.png
 draft: false
+order: 20
 ---
-
 # Event Delegation Pattern: The Complete Guide
 
 ## Overview

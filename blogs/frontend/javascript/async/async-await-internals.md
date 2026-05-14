@@ -1,18 +1,20 @@
 ---
-title: "async/await Internals"
-description: "Understand how async/await works - syntactic sugar over Promises, execution flow, and common pitfalls."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: async/await Internals
+description: >-
+  Understand how async/await works - syntactic sugar over Promises, execution
+  flow, and common pitfalls.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - javascript
   - async
   - await
   - promises
   - frontend
-coverImage: "/images/frontend/javascript/async-await.png"
+coverImage: /images/frontend/javascript/async-await.png
 draft: false
+order: 10
 ---
-
 # async/await Internals: The Complete Guide
 
 ## Overview

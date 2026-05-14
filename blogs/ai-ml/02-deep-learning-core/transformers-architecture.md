@@ -1,8 +1,10 @@
 ---
-title: "Transformers Architecture"
-description: "Master the transformer architecture - attention, positional encoding, and building transformer models"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Transformers Architecture
+description: >-
+  Master the transformer architecture - attention, positional encoding, and
+  building transformer models
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Deep Learning
   - Transformers
@@ -10,10 +12,10 @@ tags:
   - BERT
   - GPT
   - NLP
-coverImage: "/images/transformers-architecture.png"
+coverImage: /images/transformers-architecture.png
 draft: false
+order: 70
 ---
-
 # Transformers Architecture
 
 ## Overview

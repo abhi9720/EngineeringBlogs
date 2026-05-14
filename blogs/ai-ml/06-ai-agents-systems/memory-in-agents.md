@@ -1,17 +1,19 @@
 ---
-title: "Memory in Agents"
-description: "Implement memory systems for agents - short-term, long-term, and semantic memory"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Memory in Agents
+description: >-
+  Implement memory systems for agents - short-term, long-term, and semantic
+  memory
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI Agents
   - Memory
   - Context
   - AI
-coverImage: "/images/memory-in-agents.png"
+coverImage: /images/memory-in-agents.png
 draft: false
+order: 10
 ---
-
 # Memory in Agents
 
 ## Overview

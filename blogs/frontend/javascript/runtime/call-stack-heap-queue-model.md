@@ -1,18 +1,20 @@
 ---
-title: "Call Stack, Heap & Queue Model"
-description: "Understand JavaScript runtime - how call stack, memory heap, and task queue work together."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: 'Call Stack, Heap & Queue Model'
+description: >-
+  Understand JavaScript runtime - how call stack, memory heap, and task queue
+  work together.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - javascript
   - runtime
   - call stack
   - memory heap
   - frontend
-coverImage: "/images/frontend/javascript/call-stack-heap.png"
+coverImage: /images/frontend/javascript/call-stack-heap.png
 draft: false
+order: 10
 ---
-
 # Call Stack, Heap & Queue Model: The Complete Guide
 
 ## Overview

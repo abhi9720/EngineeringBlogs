@@ -1,18 +1,20 @@
 ---
-title: "What is AI and ML?"
-description: "Understand artificial intelligence and machine learning - the technologies transforming our world"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: What is AI and ML?
+description: >-
+  Understand artificial intelligence and machine learning - the technologies
+  transforming our world
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI
   - Machine Learning
   - Artificial Intelligence
   - Getting Started
   - Fundamentals
-coverImage: "/images/what-is-ai-ml.png"
+coverImage: /images/what-is-ai-ml.png
 draft: false
+order: 70
 ---
-
 # What is AI and ML?
 
 ## Overview

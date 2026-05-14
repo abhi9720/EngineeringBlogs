@@ -1,17 +1,19 @@
 ---
-title: "Media Queries & Breakpoints Strategy"
-description: "Learn responsive design strategies - breakpoints, media query syntax, and common patterns."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Media Queries & Breakpoints Strategy
+description: >-
+  Learn responsive design strategies - breakpoints, media query syntax, and
+  common patterns.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - css
   - responsive
   - media queries
   - frontend
-coverImage: "/images/frontend/css/media-queries.png"
+coverImage: /images/frontend/css/media-queries.png
 draft: false
+order: 10
 ---
-
 # Media Queries & Breakpoints Strategy: The Complete Guide
 
 ## Overview

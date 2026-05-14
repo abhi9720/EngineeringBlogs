@@ -1,8 +1,10 @@
 ---
-title: "Introduction to LLMs"
-description: "Understand large language models - how they work, key capabilities, and popular models"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Introduction to LLMs
+description: >-
+  Understand large language models - how they work, key capabilities, and
+  popular models
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LLM
   - Generative AI
@@ -10,10 +12,10 @@ tags:
   - Language Models
   - AI
   - Fundamentals
-coverImage: "/images/intro-to-llms.png"
+coverImage: /images/intro-to-llms.png
 draft: false
+order: 20
 ---
-
 # Introduction to LLMs
 
 ## Overview

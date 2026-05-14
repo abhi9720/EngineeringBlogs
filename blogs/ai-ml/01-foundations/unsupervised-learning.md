@@ -1,18 +1,20 @@
 ---
-title: "Unsupervised Learning"
-description: "Learn unsupervised learning - clustering, dimensionality reduction, and finding patterns without labeled data"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Unsupervised Learning
+description: >-
+  Learn unsupervised learning - clustering, dimensionality reduction, and
+  finding patterns without labeled data
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Machine Learning
   - Unsupervised Learning
   - Clustering
   - Dimensionality Reduction
   - Fundamentals
-coverImage: "/images/unsupervised-learning.png"
+coverImage: /images/unsupervised-learning.png
 draft: false
+order: 60
 ---
-
 # Unsupervised Learning
 
 ## Overview

@@ -1,18 +1,20 @@
 ---
-title: "HTML Document Lifecycle"
-description: "Understand how browsers parse HTML, build the DOM, and render pages - from network request to final paint."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: HTML Document Lifecycle
+description: >-
+  Understand how browsers parse HTML, build the DOM, and render pages - from
+  network request to final paint.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - html
   - parsing
   - dom
   - browser
   - frontend
-coverImage: "/images/frontend/html/document-lifecycle.png"
+coverImage: /images/frontend/html/document-lifecycle.png
 draft: false
+order: 10
 ---
-
 # HTML Document Lifecycle: How Browsers Build Web Pages
 
 ## Overview

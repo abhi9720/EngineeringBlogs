@@ -1,17 +1,19 @@
 ---
-title: "Injector Hierarchy"
-description: "Understanding Angular's injector hierarchy - how Angular resolves dependencies at different levels."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Injector Hierarchy
+description: >-
+  Understanding Angular's injector hierarchy - how Angular resolves dependencies
+  at different levels.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - angular
   - dependency injection
   - injectors
   - frontend
-coverImage: "/images/frontend/angular/injector-hierarchy.png"
+coverImage: /images/frontend/angular/injector-hierarchy.png
 draft: false
+order: 20
 ---
-
 # Injector Hierarchy: The Complete Guide
 
 ## Overview

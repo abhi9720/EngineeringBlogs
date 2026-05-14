@@ -1,17 +1,19 @@
 ---
-title: "Memoization Mistakes"
-description: "Common mistakes with React memoization - using React.memo, useMemo, and useCallback incorrectly."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Memoization Mistakes
+description: >-
+  Common mistakes with React memoization - using React.memo, useMemo, and
+  useCallback incorrectly.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - memoization
   - performance
   - frontend
-coverImage: "/images/frontend/react/memoization-mistakes.png"
+coverImage: /images/frontend/react/memoization-mistakes.png
 draft: false
+order: 20
 ---
-
 # Memoization Mistakes: The Complete Guide
 
 ## Overview

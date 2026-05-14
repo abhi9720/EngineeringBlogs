@@ -1,17 +1,19 @@
 ---
-title: "Positioning: Sticky, Absolute, Fixed"
-description: "Master CSS positioning - understand when to use static, relative, absolute, fixed, and sticky for different layouts."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: 'Positioning: Sticky, Absolute, Fixed'
+description: >-
+  Master CSS positioning - understand when to use static, relative, absolute,
+  fixed, and sticky for different layouts.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - css
   - positioning
   - layout
   - frontend
-coverImage: "/images/frontend/css/positioning.png"
+coverImage: /images/frontend/css/positioning.png
 draft: false
+order: 30
 ---
-
 # Positioning: Sticky, Absolute, Fixed - The Complete Guide
 
 ## Overview

@@ -1,17 +1,19 @@
 ---
-title: "this Binding Explained"
-description: "Master JavaScript 'this' - understand how 'this' is determined in different contexts and common pitfalls."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: this Binding Explained
+description: >-
+  Master JavaScript 'this' - understand how 'this' is determined in different
+  contexts and common pitfalls.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - javascript
   - this
   - binding
   - frontend
-coverImage: "/images/frontend/javascript/this-binding.png"
+coverImage: /images/frontend/javascript/this-binding.png
 draft: false
+order: 20
 ---
-
 # this Binding Explained: The Complete Guide
 
 ## Overview

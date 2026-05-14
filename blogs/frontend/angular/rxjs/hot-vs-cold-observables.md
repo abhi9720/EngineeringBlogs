@@ -1,8 +1,10 @@
 ---
-title: "Hot vs Cold Observables"
-description: "Understanding hot and cold observables in RxJS - how data producers work and when each applies."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Hot vs Cold Observables
+description: >-
+  Understanding hot and cold observables in RxJS - how data producers work and
+  when each applies.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - angular
   - rxjs
@@ -10,10 +12,11 @@ tags:
   - cold
   - observables
   - frontend
-coverImage: "/images/frontend/angular/hot-cold-observables.png"
+coverImage: /images/frontend/angular/hot-cold-observables.png
 draft: false
+order: 100
+type: comparison
 ---
-
 # Hot vs Cold Observables: The Complete Guide
 
 ## Overview

@@ -1,18 +1,20 @@
 ---
-title: "Backpropagation Explained"
-description: "Understand backpropagation - the core algorithm that trains neural networks by computing gradients"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Backpropagation Explained
+description: >-
+  Understand backpropagation - the core algorithm that trains neural networks by
+  computing gradients
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Deep Learning
   - Backpropagation
   - Gradient Descent
   - Neural Networks
   - AI
-coverImage: "/images/backpropagation-explained.png"
+coverImage: /images/backpropagation-explained.png
 draft: false
+order: 20
 ---
-
 # Backpropagation Explained
 
 ## Overview

@@ -1,17 +1,19 @@
 ---
-title: "AI/ML Learning Roadmap"
-description: "Your complete guide to mastering AI and Machine Learning - from fundamentals to production systems"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: AI/ML Learning Roadmap
+description: >-
+  Your complete guide to mastering AI and Machine Learning - from fundamentals
+  to production systems
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI
   - Machine Learning
   - Learning Path
   - Roadmap
-coverImage: "/images/ai-ml-roadmap.png"
+coverImage: /images/ai-ml-roadmap.png
 draft: false
+order: 10
 ---
-
 # AI/ML Learning Roadmap
 
 ## Overview

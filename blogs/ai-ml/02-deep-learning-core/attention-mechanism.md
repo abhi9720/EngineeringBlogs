@@ -1,18 +1,20 @@
 ---
-title: "Attention Mechanism"
-description: "Understand the attention mechanism - the core innovation behind transformers that enables modeling long-range dependencies"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Attention Mechanism
+description: >-
+  Understand the attention mechanism - the core innovation behind transformers
+  that enables modeling long-range dependencies
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Deep Learning
   - Attention
   - Transformers
   - NLP
   - AI
-coverImage: "/images/attention-mechanism.png"
+coverImage: /images/attention-mechanism.png
 draft: false
+order: 10
 ---
-
 # Attention Mechanism
 
 ## Overview

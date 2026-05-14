@@ -1,17 +1,19 @@
 ---
-title: "Flexbox Real-World Layouts"
-description: "Master Flexbox with practical examples - navigation, card grids, form layouts, and common patterns."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Flexbox Real-World Layouts
+description: >-
+  Master Flexbox with practical examples - navigation, card grids, form layouts,
+  and common patterns.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - css
   - flexbox
   - layouts
   - frontend
-coverImage: "/images/frontend/css/flexbox-layouts.png"
+coverImage: /images/frontend/css/flexbox-layouts.png
 draft: false
+order: 20
 ---
-
 # Flexbox Real-World Layouts: The Complete Guide
 
 ## Overview

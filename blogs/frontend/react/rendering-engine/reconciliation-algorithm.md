@@ -1,18 +1,20 @@
 ---
-title: "React Reconciliation Algorithm"
-description: "Understand how React compares and updates DOM - the reconciliation algorithm and diffing strategy."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: React Reconciliation Algorithm
+description: >-
+  Understand how React compares and updates DOM - the reconciliation algorithm
+  and diffing strategy.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - reconciliation
   - virtual dom
   - diffing
   - frontend
-coverImage: "/images/frontend/react/reconciliation.png"
+coverImage: /images/frontend/react/reconciliation.png
 draft: false
+order: 10
 ---
-
 # React Reconciliation Algorithm: The Complete Guide
 
 ## Overview

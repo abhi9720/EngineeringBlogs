@@ -1,18 +1,20 @@
 ---
-title: "How Browser Applies CSS"
-description: "Understand CSS selector specificity, the cascade, and how browsers match rules to elements."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: How Browser Applies CSS
+description: >-
+  Understand CSS selector specificity, the cascade, and how browsers match rules
+  to elements.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - css
   - specificity
   - cascade
   - browser
   - frontend
-coverImage: "/images/frontend/css/browser-applies-css.png"
+coverImage: /images/frontend/css/browser-applies-css.png
 draft: false
+order: 10
 ---
-
 # How Browser Applies CSS: The Complete Guide
 
 ## Overview

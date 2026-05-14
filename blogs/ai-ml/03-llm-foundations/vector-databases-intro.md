@@ -1,8 +1,8 @@
 ---
-title: "Vector Databases Intro"
-description: "Introduction to vector databases - storing and searching embeddings at scale"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Vector Databases Intro
+description: Introduction to vector databases - storing and searching embeddings at scale
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LLM
   - Vector Database
@@ -10,10 +10,10 @@ tags:
   - Pinecone
   - Embeddings
   - AI
-coverImage: "/images/vector-databases-intro.png"
+coverImage: /images/vector-databases-intro.png
 draft: false
+order: 50
 ---
-
 # Vector Databases Intro
 
 ## Overview

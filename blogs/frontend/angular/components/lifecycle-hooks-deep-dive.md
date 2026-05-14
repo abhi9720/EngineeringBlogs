@@ -1,17 +1,19 @@
 ---
-title: "Lifecycle Hooks Deep Dive"
-description: "Understanding Angular component lifecycle hooks - when each is called and what to do in each."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Lifecycle Hooks Deep Dive
+description: >-
+  Understanding Angular component lifecycle hooks - when each is called and what
+  to do in each.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - angular
   - lifecycle
   - components
   - frontend
-coverImage: "/images/frontend/angular/lifecycle-hooks.png"
+coverImage: /images/frontend/angular/lifecycle-hooks.png
 draft: false
+order: 20
 ---
-
 # Lifecycle Hooks Deep Dive: The Complete Guide
 
 ## Overview

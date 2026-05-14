@@ -1,18 +1,20 @@
 ---
-title: "Vector Similarity"
-description: "Master vector similarity measures - cosine, dot product, Euclidean distance for semantic search"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Vector Similarity
+description: >-
+  Master vector similarity measures - cosine, dot product, Euclidean distance
+  for semantic search
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LLM
   - Vector Similarity
   - Semantic Search
   - Embeddings
   - AI
-coverImage: "/images/vector-similarity.png"
+coverImage: /images/vector-similarity.png
 draft: false
+order: 60
 ---
-
 # Vector Similarity
 
 ## Overview

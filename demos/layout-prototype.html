@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content Tree UX Prototype</title>
+<style>
+  :root {
+    --green: #17b978; --blue: #3d5af1; --pink: #f3558e; --yellow: #FFA213;
+    --bg: #0f0f1a; --surface: #1a1a2e; --surface2: #232340;
+    --text: #e0e0f0; --text-muted: #8888aa; --border: #2a2a4a;
+    --sidebar-w: 300px; --header-h: 56px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg); color: var(--text); height: 100vh; overflow: hidden;
+  }
+  .app { display: flex; height: 100vh; }
+  .sidebar {
+    width: var(--sidebar-w); background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .sidebar-header {
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+    font-weight: 700; font-size: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .sidebar-header .logo { width: 22px; height: 22px; background: var(--green); border-radius: 5px; }
+  .sidebar-scroll { flex: 1; overflow-y: auto; padding: 6px 0; }
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .header {
+    height: var(--header-h); padding: 0 28px;
+    display: flex; align-items: center;
+    border-bottom: 1px solid var(--border); background: var(--surface);
+  }
+  .content { flex: 1; overflow-y: auto; padding: 28px; max-width: 960px; }
+
+  /* Sidebar tree */
+  .tree-item {
+    display: flex; align-items: center; gap: 5px;
+    padding: 5px 14px 5px 8px; cursor: pointer; user-select: none;
+    font-size: 13px; color: var(--text-muted);
+    transition: all .1s; white-space: nowrap;
+  }
+  .tree-item:hover { background: var(--surface2); color: var(--text); }
+  .tree-item.active { background: color-mix(in srgb, var(--blue) 18%, transparent); color: var(--blue); font-weight: 500; }
+  .tree-item .arrow { width: 14px; font-size: 10px; text-align: center; flex-shrink: 0; color: var(--text-muted); }
+  .tree-item .dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .tree-item .badge { margin-left: auto; font-size: 10px; color: var(--text-muted); background: var(--surface2); padding: 1px 6px; border-radius: 8px; flex-shrink: 0; }
+  .tree-children { display: none; }
+  .tree-children.open { display: block; }
+
+  /* Breadcrumb */
+  .breadcrumb { display: flex; align-items: center; gap: 5px; font-size: 13px; color: var(--text-muted); flex-wrap: wrap; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; cursor: pointer; }
+  .breadcrumb a:hover { color: var(--blue); }
+  .breadcrumb .sep { color: var(--border); }
+  .breadcrumb .current { color: var(--text); font-weight: 500; }
+
+  /* Content grid */
+  .page-title { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+  .page-desc { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
+  .section-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--yellow); margin-bottom: 12px; margin-top: 28px; }
+  .section-label:first-child { margin-top: 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px; cursor: pointer; transition: all .15s;
+  }
+  .card:hover { border-color: var(--blue); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(61,90,241,.1); }
+  .card.cat-card { border-left: 3px solid var(--yellow); }
+  .card.blog-card { border-left: 3px solid var(--green); }
+  .card .type-badge {
+    font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+    padding: 2px 7px; border-radius: 3px; display: inline-block; margin-bottom: 8px;
+  }
+  .card .type-badge.tutorial { background: color-mix(in srgb, var(--green) 18%, transparent); color: var(--green); }
+  .card .type-badge.comparison { background: color-mix(in srgb, var(--pink) 18%, transparent); color: var(--pink); }
+  .card .name { font-size: 15px; font-weight: 600; margin-bottom: 5px; line-height: 1.3; }
+  .card .desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .card .meta { display: flex; gap: 6px; margin-top: 10px; font-size: 11px; color: var(--text-muted); flex-wrap: wrap; }
+  .card .meta .tag { background: var(--surface2); padding: 1px 7px; border-radius: 3px; }
+  .card .blog-count { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+
+  /* Blog reader */
+  .back-link { color: var(--blue); cursor: pointer; font-size: 14px; display: inline-block; margin-bottom: 18px; }
+  .back-link:hover { text-decoration: underline; }
+  .article-title { font-size: 30px; font-weight: 700; margin-bottom: 6px; line-height: 1.2; }
+  .article-meta { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; }
+  .article-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 22px; }
+  .article-tags span { background: var(--surface2); padding: 2px 9px; border-radius: 4px; font-size: 12px; color: var(--text-muted); }
+  .article-desc { font-size: 15px; line-height: 1.7; color: var(--text-muted); }
+  .article-placeholder { margin-top: 28px; padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; text-align: center; color: var(--text-muted); font-size: 14px; }
+  .nav-links { display: flex; justify-content: space-between; margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--border); }
+  .nav-links a { color: var(--blue); cursor: pointer; font-size: 13px; max-width: 45%; }
+  .nav-links a:hover { text-decoration: underline; }
+
+  .loading { padding: 40px; text-align: center; color: var(--text-muted); font-size: 16px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-header"><div class="logo"></div><span>Engineering Blog</span></div>
+    <nav class="sidebar-scroll" id="sidebar"><div class="loading">Loading...</div></nav>
+  </aside>
+  <div class="main">
+    <header class="header"><div class="breadcrumb" id="breadcrumb"></div></header>
+    <main class="content" id="content"><div class="loading">Loading...</div></main>
+  </div>
+</div>
+
+<script>
+let tree = null;
+let activePath = "/blogs";
+
+function stripPrefix(id) { return id.replace(/^\d+-/, ""); }
+function formatName(id) {
+  return stripPrefix(id).split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+}
+
+function findNode(node, targetPath) {
+  if (!node) return null;
+  if (node.path === targetPath) return node;
+  for (const b of (node.blogs || [])) if (b.path === targetPath) return b;
+  for (const c of (node.categories || [])) { const f = findNode(c, targetPath); if (f) return f; }
+  return null;
+}
+
+function findParentPath(node, targetPath, parent = null) {
+  if (!node) return null;
+  if (node.path === targetPath) return parent ? parent.path : null;
+  for (const b of (node.blogs || [])) if (b.path === targetPath) return node.path;
+  for (const c of (node.categories || [])) { const p = findParentPath(c, targetPath, node); if (p !== undefined) return p; }
+  return undefined;
+}
+
+function countBlogsDeep(node) {
+  let n = node.blogs ? node.blogs.length : 0;
+  for (const c of (node.categories || [])) n += countBlogsDeep(c);
+  return n;
+}
+
+function flattenInOrder(node) {
+  const r = [];
+  for (const b of (node.blogs || [])) r.push({ path: b.path, title: b.title });
+  for (const c of (node.categories || [])) r.push(...flattenInOrder(c));
+  return r;
+}
+
+// ─── Sidebar ─────────────────────────────────────────────
+function renderSidebar(node, depth) {
+  const isRoot = node.path === "/blogs";
+  const isActive = node.path === activePath;
+  const kids = node.categories || [];
+  const blgs = node.blogs || [];
+  const hasKids = kids.length > 0 || blgs.length > 0;
+  const isOpen = isRoot || activePath.startsWith(node.path + "/") || activePath === node.path;
+  const indent = (depth || 0) * 14;
+  let h = "";
+
+  if (!isRoot) {
+    const arrow = hasKids ? (isOpen ? "▾" : "▸") : "";
+    h += `<div class="tree-item ${isActive ? 'active' : ''}" style="padding-left:${14 + indent}px" data-path="${node.path}">
+      <span class="arrow">${arrow}</span>
+      <span class="dot" style="background:var(--yellow)"></span>
+      <span>${formatName(node.id)}</span>
+      <span class="badge">${countBlogsDeep(node)}</span>
+    </div>`;
+  }
+
+  if (hasKids && (isRoot || isOpen)) {
+    h += `<div class="tree-children open">`;
+    for (const b of blgs) {
+      const ba = activePath === b.path;
+      h += `<div class="tree-item ${ba ? 'active' : ''}" style="padding-left:${14 + indent + (isRoot ? 0 : 14)}px" data-path="${b.path}">
+        <span class="arrow"></span>
+        <span class="dot" style="background:var(--green)"></span>
+        <span>${b.title}</span>
+      </div>`;
+    }
+    for (const c of kids) h += renderSidebar(c, depth + 1);
+    h += `</div>`;
+  }
+
+  return h;
+}
+
+// ─── Breadcrumb ──────────────────────────────────────────
+function renderBreadcrumb(path) {
+  const parts = path.split("/").filter(Boolean);
+  let cum = "", h = `<a data-path="/blogs">Home</a>`;
+  for (const p of parts) {
+    cum += "/" + p;
+    if (cum === "/blogs") continue;
+    h += `<span class="sep">/</span>`;
+    h += cum === path
+      ? `<span class="current">${formatName(p)}</span>`
+      : `<a data-path="${cum}">${formatName(p)}</a>`;
+  }
+  return h;
+}
+
+// ─── Content ─────────────────────────────────────────────
+function renderContent(path) {
+  const node = findNode(tree, path);
+  if (!node) return `<p style="color:var(--text-muted);padding:40px;text-align:center">Not found: ${path}</p>`;
+
+  if (node.kind === "blog") return renderBlogView(node, path);
+
+  const kids = node.categories || [];
+  const blgs = node.blogs || [];
+  let h = "";
+
+  h += path === "/blogs"
+    ? `<h1 class="page-title">Engineering Blog</h1><p class="page-desc">Backend, System Design, AI/ML, Databases, DevOps &amp; more</p>`
+    : `<h1 class="page-title">${formatName(node.id)}</h1>`;
+
+  if (blgs.length > 0) {
+    h += `<div class="section-label">Articles</div><div class="grid">`;
+    for (const b of blgs) h += renderCard(b);
+    h += `</div>`;
+  }
+
+  for (const cat of kids) {
+    const total = countBlogsDeep(cat);
+    h += `<div class="section-label">${formatName(cat.id)}</div><div class="grid">`;
+    h += `<div class="card cat-card" data-path="${cat.path}">
+      <div class="name">${formatName(cat.id)}</div>
+      <div class="blog-count">${total} article${total !== 1 ? 's' : ''} →</div>
+    </div>`;
+    for (const b of (cat.blogs || []).slice(0, 3)) h += renderCard(b);
+    h += `</div>`;
+  }
+
+  return h;
+}
+
+function renderCard(b) {
+  const isComp = b.type === "comparison";
+  return `<div class="card blog-card" data-path="${b.path}">
+    <div class="type-badge ${isComp ? 'comparison' : 'tutorial'}">${isComp ? 'Comparison' : 'Tutorial'}</div>
+    <div class="name">${b.title}</div>
+    <div class="desc">${b.description || ""}</div>
+    <div class="meta">${(b.tags || []).slice(0,3).map(t => `<span class="tag">${t}</span>`).join("")}${b.date ? `<span>${b.date}</span>` : ""}</div>
+  </div>`;
+}
+
+function renderBlogView(node, path) {
+  const parentPath = findParentPath(tree, path);
+  const all = flattenInOrder(tree);
+  const idx = all.findIndex(e => e.path === path);
+
+  let h = `<a class="back-link" data-path="${parentPath || '/blogs'}">← Back to ${parentPath ? formatName(parentPath.split('/').pop()) : 'Home'}</a>`;
+  h += `<article style="max-width:700px">
+    <h1 class="article-title">${node.title}</h1>
+    <div class="article-meta">${node.date || ""}${node.author ? ` · by ${node.author}` : ""}</div>
+    <div class="article-tags">${(node.tags || []).map(t => `<span>${t}</span>`).join("")}</div>
+    <p class="article-desc">${node.description || ""}</p>
+    <div class="article-placeholder">📄 Blog content renders here from ${node.file}</div>
+  </article>`;
+
+  if (idx >= 0) {
+    h += `<div class="nav-links">`;
+    h += idx > 0 ? `<a data-path="${all[idx-1].path}">← ${all[idx-1].title}</a>` : `<span></span>`;
+    h += idx < all.length - 1 ? `<a data-path="${all[idx+1].path}">${all[idx+1].title} →</a>` : `<span></span>`;
+    h += `</div>`;
+  }
+  return h;
+}
+
+// ─── Navigation ──────────────────────────────────────────
+function navigate(path) {
+  activePath = path;
+  document.getElementById("sidebar").innerHTML = renderSidebar(tree, 0);
+  document.getElementById("breadcrumb").innerHTML = renderBreadcrumb(path);
+  document.getElementById("content").innerHTML = renderContent(path);
+  document.getElementById("sidebar").scrollTop = 0;
+  document.getElementById("content").scrollTop = 0;
+}
+
+// ─── Init ────────────────────────────────────────────────
+fetch("content-tree.json")
+  .then(r => r.json())
+  .then(data => {
+    tree = data;
+    navigate("/blogs");
+
+    // Click delegation
+    document.addEventListener("click", e => {
+      const el = e.target.closest("[data-path]");
+      if (el) { e.preventDefault(); navigate(el.dataset.path); }
+    });
+  })
+  .catch(err => {
+    document.getElementById("sidebar").innerHTML = `<div class="loading">Error loading tree</div>`;
+    document.getElementById("content").innerHTML = `<div class="loading">${err.message}</div>`;
+  });
+</script>
+</body>
+</html>

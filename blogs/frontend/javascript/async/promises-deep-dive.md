@@ -1,17 +1,19 @@
 ---
-title: "Promises Deep Dive"
-description: "Master JavaScript Promises - states, chaining, error handling, and common patterns."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Promises Deep Dive
+description: >-
+  Master JavaScript Promises - states, chaining, error handling, and common
+  patterns.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - javascript
   - promises
   - async
   - frontend
-coverImage: "/images/frontend/javascript/promises-deep-dive.png"
+coverImage: /images/frontend/javascript/promises-deep-dive.png
 draft: false
+order: 20
 ---
-
 # Promises Deep Dive: The Complete Guide
 
 ## Overview

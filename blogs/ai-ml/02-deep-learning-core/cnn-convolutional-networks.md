@@ -1,18 +1,20 @@
 ---
-title: "CNN Convolutional Networks"
-description: "Master CNNs for image recognition - convolutional layers, pooling, and building image classifiers"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: CNN Convolutional Networks
+description: >-
+  Master CNNs for image recognition - convolutional layers, pooling, and
+  building image classifiers
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Deep Learning
   - CNN
   - Computer Vision
   - Image Classification
   - Neural Networks
-coverImage: "/images/cnn-convolutional-networks.png"
+coverImage: /images/cnn-convolutional-networks.png
 draft: false
+order: 30
 ---
-
 # CNN Convolutional Networks
 
 ## Overview

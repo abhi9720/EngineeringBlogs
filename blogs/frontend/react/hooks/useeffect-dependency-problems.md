@@ -1,17 +1,19 @@
 ---
-title: "useEffect Dependency Problems"
-description: "Common useEffect issues - infinite loops, missing dependencies, and how to fix them."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: useEffect Dependency Problems
+description: >-
+  Common useEffect issues - infinite loops, missing dependencies, and how to fix
+  them.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - hooks
   - useEffect
   - frontend
-coverImage: "/images/frontend/react/useeffect-problems.png"
+coverImage: /images/frontend/react/useeffect-problems.png
 draft: false
+order: 20
 ---
-
 # useEffect Dependency Problems: The Complete Guide
 
 ## Overview

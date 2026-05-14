@@ -1,18 +1,21 @@
 ---
-title: "Modules vs Standalone Components"
-description: "Understanding Angular modules vs standalone components - when to use each approach."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Modules vs Standalone Components
+description: >-
+  Understanding Angular modules vs standalone components - when to use each
+  approach.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - angular
   - modules
   - standalone
   - architecture
   - frontend
-coverImage: "/images/frontend/angular/modules-standalone.png"
+coverImage: /images/frontend/angular/modules-standalone.png
 draft: false
+order: 100
+type: comparison
 ---
-
 # Modules vs Standalone Components: The Complete Guide
 
 ## Overview

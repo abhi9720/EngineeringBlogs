@@ -1,8 +1,8 @@
 ---
-title: "Advanced RAG Patterns"
-description: "Advanced RAG techniques - multi-modal, agentic RAG, and production patterns"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Advanced RAG Patterns
+description: 'Advanced RAG techniques - multi-modal, agentic RAG, and production patterns'
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - RAG
   - Advanced
@@ -10,10 +10,10 @@ tags:
   - Multi-modal
   - AI
   - AI Agents
-coverImage: "/images/advanced-rag-patterns.png"
+coverImage: /images/advanced-rag-patterns.png
 draft: false
+order: 10
 ---
-
 # Advanced RAG Patterns
 
 ## Overview

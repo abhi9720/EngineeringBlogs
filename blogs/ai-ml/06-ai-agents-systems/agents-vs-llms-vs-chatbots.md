@@ -1,18 +1,19 @@
 ---
-title: "Agents vs LLMs vs Chatbots"
-description: "Understand the differences between LLMs, chatbots, and AI agents"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Agents vs LLMs vs Chatbots
+description: 'Understand the differences between LLMs, chatbots, and AI agents'
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI Agents
   - LLMs
   - Chatbots
   - AI
   - AI Agents
-coverImage: "/images/agents-vs-llms-vs-chatbots.png"
+coverImage: /images/agents-vs-llms-vs-chatbots.png
 draft: false
+order: 100
+type: comparison
 ---
-
 # Agents vs LLMs vs Chatbots
 
 ## Overview

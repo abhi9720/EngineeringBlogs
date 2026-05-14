@@ -1,17 +1,19 @@
 ---
-title: "Animation Performance Best Practices"
-description: "Create smooth 60fps animations - GPU acceleration, will-change, and avoiding layout thrashing."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Animation Performance Best Practices
+description: >-
+  Create smooth 60fps animations - GPU acceleration, will-change, and avoiding
+  layout thrashing.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - css
   - animation
   - performance
   - frontend
-coverImage: "/images/frontend/css/animation-performance.png"
+coverImage: /images/frontend/css/animation-performance.png
 draft: false
+order: 10
 ---
-
 # Animation Performance Best Practices: The Complete Guide
 
 ## Overview

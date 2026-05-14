@@ -1,18 +1,18 @@
 ---
-title: "Semantic Kernel Overview"
-description: "Introduction to Microsoft's Semantic Kernel for AI orchestration"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Semantic Kernel Overview
+description: Introduction to Microsoft's Semantic Kernel for AI orchestration
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Semantic Kernel
   - AI Agents
   - Microsoft
   - AI
   - Production AI
-coverImage: "/images/semantic-kernel-overview.png"
+coverImage: /images/semantic-kernel-overview.png
 draft: false
+order: 50
 ---
-
 # Semantic Kernel Overview
 
 ## Overview

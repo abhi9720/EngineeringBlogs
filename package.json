@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "update-indexes": "node scripts/update-indexes.js"
+    "build-tree": "node scripts/build-content-tree.js"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",

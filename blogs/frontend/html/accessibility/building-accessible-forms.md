@@ -1,17 +1,19 @@
 ---
-title: "Building Accessible Forms"
-description: "Create accessible forms that work for everyone - proper labeling, error handling, and navigation."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Building Accessible Forms
+description: >-
+  Create accessible forms that work for everyone - proper labeling, error
+  handling, and navigation.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - html
   - forms
   - accessibility
   - frontend
-coverImage: "/images/frontend/html/accessible-forms.png"
+coverImage: /images/frontend/html/accessible-forms.png
 draft: false
+order: 20
 ---
-
 # Building Accessible Forms: The Complete Guide
 
 ## Overview

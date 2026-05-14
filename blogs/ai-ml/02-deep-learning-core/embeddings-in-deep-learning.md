@@ -1,18 +1,20 @@
 ---
-title: "Embeddings in Deep Learning"
-description: "Understand word embeddings, vector representations, and how neural networks represent meaning"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Embeddings in Deep Learning
+description: >-
+  Understand word embeddings, vector representations, and how neural networks
+  represent meaning
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Deep Learning
   - Embeddings
   - NLP
   - Word Vectors
   - Representation Learning
-coverImage: "/images/embeddings-in-deep-learning.png"
+coverImage: /images/embeddings-in-deep-learning.png
 draft: false
+order: 40
 ---
-
 # Embeddings in Deep Learning
 
 ## Overview

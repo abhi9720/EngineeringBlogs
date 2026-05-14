@@ -1,18 +1,18 @@
 ---
-title: "Cost Optimization"
-description: "Reduce costs for running LLM applications"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Cost Optimization
+description: Reduce costs for running LLM applications
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Cost
   - Optimization
   - Production AI
   - AI
   - Budgeting
-coverImage: "/images/cost-optimization.png"
+coverImage: /images/cost-optimization.png
 draft: false
+order: 20
 ---
-
 # Cost Optimization
 
 ## Overview

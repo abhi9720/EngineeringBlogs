@@ -1,17 +1,19 @@
 ---
-title: "Redux Flow Explained"
-description: "Understanding Redux architecture - actions, reducers, store, and how data flows."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Redux Flow Explained
+description: >-
+  Understanding Redux architecture - actions, reducers, store, and how data
+  flows.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - redux
   - state management
   - frontend
-coverImage: "/images/frontend/react/redux-flow.png"
+coverImage: /images/frontend/react/redux-flow.png
 draft: false
+order: 30
 ---
-
 # Redux Flow Explained: The Complete Guide
 
 ## Overview

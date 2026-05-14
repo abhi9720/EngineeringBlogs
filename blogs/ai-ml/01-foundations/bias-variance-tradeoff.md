@@ -1,8 +1,10 @@
 ---
-title: "Bias-Variance Tradeoff"
-description: "Understand the bias-variance tradeoff - the fundamental concept behind model performance and generalization"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Bias-Variance Tradeoff
+description: >-
+  Understand the bias-variance tradeoff - the fundamental concept behind model
+  performance and generalization
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Machine Learning
   - Bias-Variance
@@ -10,10 +12,10 @@ tags:
   - Overfitting
   - Underfitting
   - Fundamentals
-coverImage: "/images/bias-variance-tradeoff.png"
+coverImage: /images/bias-variance-tradeoff.png
 draft: false
+order: 10
 ---
-
 # Bias-Variance Tradeoff
 
 ## Overview

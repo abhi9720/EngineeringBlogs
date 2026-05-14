@@ -1,18 +1,21 @@
 ---
-title: "OnPush vs Default Strategy"
-description: "Understanding Angular change detection strategies - when to use OnPush for performance."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: OnPush vs Default Strategy
+description: >-
+  Understanding Angular change detection strategies - when to use OnPush for
+  performance.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - angular
   - change detection
   - onpush
   - performance
   - frontend
-coverImage: "/images/frontend/angular/change-detection-strategy.png"
+coverImage: /images/frontend/angular/change-detection-strategy.png
 draft: false
+order: 100
+type: comparison
 ---
-
 # OnPush vs Default Strategy: The Complete Guide
 
 ## Overview

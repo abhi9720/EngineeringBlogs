@@ -1,17 +1,19 @@
 ---
-title: "Diffusion Models Explained"
-description: "Understand diffusion models: forward/reverse process, U-Net architecture, classifier-free guidance, latent diffusion, sampling strategies, and training"
-date: "2026-05-14"
-author: "Abhishek Tiwari"
+title: Diffusion Models Explained
+description: >-
+  Understand diffusion models: forward/reverse process, U-Net architecture,
+  classifier-free guidance, latent diffusion, sampling strategies, and training
+date: '2026-05-14'
+author: Abhishek Tiwari
 tags:
   - diffusion-models
   - generative-ai
   - stable-diffusion
   - deep-learning
-coverImage: "/images/diffusion-models.png"
+coverImage: /images/diffusion-models.png
 draft: false
+order: 10
 ---
-
 # Diffusion Models Explained
 
 Diffusion models generate data by learning to reverse a gradual noising process. They're the foundation of modern image generators like Stable Diffusion and DALL-E 3.

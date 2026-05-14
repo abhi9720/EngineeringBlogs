@@ -1,17 +1,19 @@
 ---
-title: "Prop Drilling Problem"
-description: "Understanding and solving the prop drilling issue - when data needs to pass through many component levels."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Prop Drilling Problem
+description: >-
+  Understanding and solving the prop drilling issue - when data needs to pass
+  through many component levels.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - state management
   - props
   - frontend
-coverImage: "/images/frontend/react/prop-drilling.png"
+coverImage: /images/frontend/react/prop-drilling.png
 draft: false
+order: 20
 ---
-
 # Prop Drilling Problem: The Complete Guide
 
 ## Overview

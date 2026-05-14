@@ -1,18 +1,20 @@
 ---
-title: "List Virtualization"
-description: "Rendering large lists efficiently - windowing and virtualization techniques in React."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: List Virtualization
+description: >-
+  Rendering large lists efficiently - windowing and virtualization techniques in
+  React.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - performance
   - virtualization
   - lists
   - frontend
-coverImage: "/images/frontend/react/virtualization.png"
+coverImage: /images/frontend/react/virtualization.png
 draft: false
+order: 10
 ---
-
 # List Virtualization: The Complete Guide
 
 ## Overview

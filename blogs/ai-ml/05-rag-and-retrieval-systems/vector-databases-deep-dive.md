@@ -1,8 +1,10 @@
 ---
-title: "Vector Databases Deep Dive"
-description: "Compare and choose vector databases - Pinecone, Weaviate, Qdrant, Chroma, and pgvector"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Vector Databases Deep Dive
+description: >-
+  Compare and choose vector databases - Pinecone, Weaviate, Qdrant, Chroma, and
+  pgvector
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - RAG
   - Vector Database
@@ -10,10 +12,10 @@ tags:
   - ChromaDB
   - AI
   - AI Agents
-coverImage: "/images/vector-databases-deep-dive.png"
+coverImage: /images/vector-databases-deep-dive.png
 draft: false
+order: 90
 ---
-
 # Vector Databases Deep Dive
 
 ## Overview

@@ -1,18 +1,18 @@
 ---
-title: "CrewAI Role-Based Agents"
-description: "Build role-based agent teams with CrewAI framework"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: CrewAI Role-Based Agents
+description: Build role-based agent teams with CrewAI framework
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - CrewAI
   - Role-Based
   - AI Agents
   - AI
   - Production AI
-coverImage: "/images/crewai-role-based-agents.png"
+coverImage: /images/crewai-role-based-agents.png
 draft: false
+order: 20
 ---
-
 # CrewAI Role-Based Agents
 
 ## Overview

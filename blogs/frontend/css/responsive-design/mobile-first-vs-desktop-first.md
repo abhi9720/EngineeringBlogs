@@ -1,17 +1,20 @@
 ---
-title: "Mobile-First vs Desktop-First"
-description: "Compare mobile-first and desktop-first approaches - when to use each and how to implement them."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Mobile-First vs Desktop-First
+description: >-
+  Compare mobile-first and desktop-first approaches - when to use each and how
+  to implement them.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - css
   - responsive
   - mobile-first
   - frontend
-coverImage: "/images/frontend/css/mobile-vs-desktop-first.png"
+coverImage: /images/frontend/css/mobile-vs-desktop-first.png
 draft: false
+order: 100
+type: comparison
 ---
-
 # Mobile-First vs Desktop-First: The Complete Guide
 
 ## Overview

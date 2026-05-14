@@ -1,17 +1,19 @@
 ---
-title: "HTML Forms Validation Model"
-description: "Master HTML5 form validation - built-in constraints, custom validation, and the Constraint Validation API."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: HTML Forms Validation Model
+description: >-
+  Master HTML5 form validation - built-in constraints, custom validation, and
+  the Constraint Validation API.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - html
   - forms
   - validation
   - frontend
-coverImage: "/images/frontend/html/forms-validation.png"
+coverImage: /images/frontend/html/forms-validation.png
 draft: false
+order: 10
 ---
-
 # HTML Forms Validation Model: The Complete Guide
 
 ## Overview

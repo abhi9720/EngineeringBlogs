@@ -1,18 +1,20 @@
 ---
-title: "Guardrails and Safety in AI Systems"
-description: "Build safe AI systems: input/output guardrails, jailbreak prevention, safety pipelines, monitoring, and production safety patterns"
-date: "2026-05-14"
-author: "Abhishek Tiwari"
+title: Guardrails and Safety in AI Systems
+description: >-
+  Build safe AI systems: input/output guardrails, jailbreak prevention, safety
+  pipelines, monitoring, and production safety patterns
+date: '2026-05-14'
+author: Abhishek Tiwari
 tags:
   - ai-safety
   - guardrails
   - security
   - llm
   - production
-coverImage: "/images/guardrails-safety.png"
+coverImage: /images/guardrails-safety.png
 draft: false
+order: 50
 ---
-
 # Guardrails and Safety in AI Systems
 
 Building AI systems that are safe, responsible, and reliable is critical. This post covers the essential guardrails every production AI system needs.

@@ -1,18 +1,18 @@
 ---
-title: "Retrieval-Augmented Agents"
-description: "Combine RAG with agents for grounded, knowledgeable AI"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Retrieval-Augmented Agents
+description: 'Combine RAG with agents for grounded, knowledgeable AI'
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - RAG
   - AI Agents
   - Memory
   - AI
   - AI Agents
-coverImage: "/images/retrieval-augmented-agents.png"
+coverImage: /images/retrieval-augmented-agents.png
 draft: false
+order: 30
 ---
-
 # Retrieval-Augmented Agents
 
 ## Overview

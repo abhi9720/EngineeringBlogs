@@ -1,17 +1,19 @@
 ---
-title: "Hoisting Behavior"
-description: "Understand JavaScript hoisting - how var, let, const, and function declarations are hoisted differently."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Hoisting Behavior
+description: >-
+  Understand JavaScript hoisting - how var, let, const, and function
+  declarations are hoisted differently.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - javascript
   - hoisting
   - scope
   - frontend
-coverImage: "/images/frontend/javascript/hoisting.png"
+coverImage: /images/frontend/javascript/hoisting.png
 draft: false
+order: 10
 ---
-
 # Hoisting Behavior: The Complete Guide
 
 ## Overview

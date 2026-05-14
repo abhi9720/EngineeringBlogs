@@ -1,8 +1,11 @@
 ---
-title: "Reinforcement Learning Basics"
-description: "Understand reinforcement learning: RL framework, Q-learning, DQN, policy gradients, actor-critic, PPO, exploration vs exploitation, and real-world applications"
-date: "2026-05-14"
-author: "Abhishek Tiwari"
+title: Reinforcement Learning Basics
+description: >-
+  Understand reinforcement learning: RL framework, Q-learning, DQN, policy
+  gradients, actor-critic, PPO, exploration vs exploitation, and real-world
+  applications
+date: '2026-05-14'
+author: Abhishek Tiwari
 tags:
   - reinforcement-learning
   - rl
@@ -10,10 +13,10 @@ tags:
   - dqn
   - ppo
   - deep-learning
-coverImage: "/images/reinforcement-learning-basics.png"
+coverImage: /images/reinforcement-learning-basics.png
 draft: false
+order: 50
 ---
-
 # Reinforcement Learning Basics
 
 Reinforcement Learning (RL) is a paradigm where agents learn by interacting with an environment, receiving rewards or penalties for their actions.

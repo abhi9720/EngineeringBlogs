@@ -1,18 +1,18 @@
 ---
-title: "Debugging Agent Systems"
-description: "Strategies for debugging and monitoring AI agent systems"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Debugging Agent Systems
+description: Strategies for debugging and monitoring AI agent systems
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI Agents
   - Debugging
   - Monitoring
   - AI
   - Production AI
-coverImage: "/images/debugging-agents.png"
+coverImage: /images/debugging-agents.png
 draft: false
+order: 10
 ---
-
 # Debugging Agent Systems
 
 ## Overview

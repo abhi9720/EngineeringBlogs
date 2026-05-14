@@ -1,18 +1,18 @@
 ---
-title: "Semantic Search Basics"
-description: "Learn semantic search - finding information by meaning, not keywords"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Semantic Search Basics
+description: 'Learn semantic search - finding information by meaning, not keywords'
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LLM
   - Semantic Search
   - Information Retrieval
   - Embeddings
   - AI
-coverImage: "/images/semantic-search-basics.png"
+coverImage: /images/semantic-search-basics.png
 draft: false
+order: 30
 ---
-
 # Semantic Search Basics
 
 ## Overview

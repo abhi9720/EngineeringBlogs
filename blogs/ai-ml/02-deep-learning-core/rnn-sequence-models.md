@@ -1,8 +1,10 @@
 ---
-title: "RNN Sequence Models"
-description: "Master RNNs, LSTMs, and GRUs for processing sequential data - text, time series, and more"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: RNN Sequence Models
+description: >-
+  Master RNNs, LSTMs, and GRUs for processing sequential data - text, time
+  series, and more
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Deep Learning
   - RNN
@@ -10,10 +12,10 @@ tags:
   - GRU
   - Sequence Models
   - NLP
-coverImage: "/images/rnn-sequence-models.png"
+coverImage: /images/rnn-sequence-models.png
 draft: false
+order: 60
 ---
-
 # RNN Sequence Models
 
 ## Overview

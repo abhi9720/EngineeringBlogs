@@ -1,18 +1,18 @@
 ---
-title: "Structured Outputs"
-description: "Get consistent, typed outputs from LLMs using structured response formats"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Structured Outputs
+description: 'Get consistent, typed outputs from LLMs using structured response formats'
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LLM
   - Structured Output
   - JSON Mode
   - AI
   - Applications
-coverImage: "/images/structured-outputs.png"
+coverImage: /images/structured-outputs.png
 draft: false
+order: 60
 ---
-
 # Structured Outputs
 
 ## Overview

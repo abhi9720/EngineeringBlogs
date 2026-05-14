@@ -1,18 +1,18 @@
 ---
-title: "Coordination Strategies"
-description: "Learn strategies for coordinating multiple agents effectively"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Coordination Strategies
+description: Learn strategies for coordinating multiple agents effectively
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Multi-Agent
   - Coordination
   - AI Agents
   - AI
   - Production AI
-coverImage: "/images/coordination-strategies.png"
+coverImage: /images/coordination-strategies.png
 draft: false
+order: 10
 ---
-
 # Coordination Strategies
 
 ## Overview

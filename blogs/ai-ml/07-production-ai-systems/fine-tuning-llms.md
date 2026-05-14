@@ -1,8 +1,10 @@
 ---
-title: "Fine-Tuning Large Language Models"
-description: "Master LLM fine-tuning: full fine-tuning, LoRA, QLoRA, adapter methods, data preparation, training pipelines, evaluation, and production deployment"
-date: "2026-05-14"
-author: "Abhishek Tiwari"
+title: Fine-Tuning Large Language Models
+description: >-
+  Master LLM fine-tuning: full fine-tuning, LoRA, QLoRA, adapter methods, data
+  preparation, training pipelines, evaluation, and production deployment
+date: '2026-05-14'
+author: Abhishek Tiwari
 tags:
   - llm
   - fine-tuning
@@ -10,10 +12,10 @@ tags:
   - qlora
   - transformers
   - deep-learning
-coverImage: "/images/fine-tuning-llms.png"
+coverImage: /images/fine-tuning-llms.png
 draft: false
+order: 40
 ---
-
 # Fine-Tuning Large Language Models
 
 Fine-tuning adapts pre-trained LLMs to specific tasks or domains. This guide covers when to fine-tune, common methods, and practical implementation.

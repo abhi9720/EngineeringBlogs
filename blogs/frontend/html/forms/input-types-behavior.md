@@ -1,17 +1,19 @@
 ---
-title: "Input Types Behavior"
-description: "Deep dive into HTML input types - behavior differences, browser support, and practical usage."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Input Types Behavior
+description: >-
+  Deep dive into HTML input types - behavior differences, browser support, and
+  practical usage.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - html
   - forms
   - input
   - frontend
-coverImage: "/images/frontend/html/input-types.png"
+coverImage: /images/frontend/html/input-types.png
 draft: false
+order: 20
 ---
-
 # Input Types Behavior: The Complete Guide
 
 ## Overview

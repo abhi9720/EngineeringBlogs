@@ -1,17 +1,19 @@
 ---
-title: "Context API Limitations"
-description: "Understanding React Context API limitations - when it's appropriate and when to use other solutions."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Context API Limitations
+description: >-
+  Understanding React Context API limitations - when it's appropriate and when
+  to use other solutions.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - context
   - state management
   - frontend
-coverImage: "/images/frontend/react/context-limitations.png"
+coverImage: /images/frontend/react/context-limitations.png
 draft: false
+order: 10
 ---
-
 # Context API Limitations: The Complete Guide
 
 ## Overview

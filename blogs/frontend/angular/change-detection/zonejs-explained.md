@@ -1,17 +1,17 @@
 ---
-title: "Zone.js Explained"
-description: "Understanding how Zone.js works with Angular for automatic change detection."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Zone.js Explained
+description: Understanding how Zone.js works with Angular for automatic change detection.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - angular
   - zonejs
   - change detection
   - frontend
-coverImage: "/images/frontend/angular/zonejs.png"
+coverImage: /images/frontend/angular/zonejs.png
 draft: false
+order: 10
 ---
-
 # Zone.js Explained: The Complete Guide
 
 ## Overview

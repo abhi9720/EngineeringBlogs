@@ -1,18 +1,21 @@
 ---
-title: "Microtasks vs Macrotasks"
-description: "Understand JavaScript task queues - microtasks (promises) vs macrotasks (setTimeout), execution order."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Microtasks vs Macrotasks
+description: >-
+  Understand JavaScript task queues - microtasks (promises) vs macrotasks
+  (setTimeout), execution order.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - javascript
   - async
   - microtasks
   - macrotasks
   - frontend
-coverImage: "/images/frontend/javascript/microtasks-macrotasks.png"
+coverImage: /images/frontend/javascript/microtasks-macrotasks.png
 draft: false
+order: 100
+type: comparison
 ---
-
 # Microtasks vs Macrotasks: The Complete Guide
 
 ## Overview

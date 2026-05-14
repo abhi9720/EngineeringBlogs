@@ -1,18 +1,20 @@
 ---
-title: "Debounce & Throttle: Use Cases"
-description: "Master debounce and throttle - when to use each, implementation, and real-world patterns."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: 'Debounce & Throttle: Use Cases'
+description: >-
+  Master debounce and throttle - when to use each, implementation, and
+  real-world patterns.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - javascript
   - performance
   - debounce
   - throttle
   - frontend
-coverImage: "/images/frontend/javascript/debounce-throttle.png"
+coverImage: /images/frontend/javascript/debounce-throttle.png
 draft: false
+order: 10
 ---
-
 # Debounce & Throttle: The Complete Guide
 
 ## Overview

@@ -1,8 +1,10 @@
 ---
-title: "Reranking Techniques"
-description: "Improve RAG accuracy with reranking - from simple to advanced reranking strategies"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Reranking Techniques
+description: >-
+  Improve RAG accuracy with reranking - from simple to advanced reranking
+  strategies
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - RAG
   - Reranking
@@ -10,10 +12,10 @@ tags:
   - AI
   - AI Agents
   - Production AI
-coverImage: "/images/reranking-techniques.png"
+coverImage: /images/reranking-techniques.png
 draft: false
+order: 80
 ---
-
 # Reranking Techniques
 
 ## Overview

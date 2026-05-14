@@ -1,17 +1,19 @@
 ---
-title: "Angular DI How It Works"
-description: "Understanding Angular's dependency injection system - providers, injectors, and tokens."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Angular DI How It Works
+description: >-
+  Understanding Angular's dependency injection system - providers, injectors,
+  and tokens.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - angular
   - dependency injection
   - di
   - frontend
-coverImage: "/images/frontend/angular/di-explained.png"
+coverImage: /images/frontend/angular/di-explained.png
 draft: false
+order: 10
 ---
-
 # Angular DI How It Works: The Complete Guide
 
 ## Overview

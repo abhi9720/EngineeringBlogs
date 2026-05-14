@@ -1,18 +1,20 @@
 ---
-title: "Function Calling"
-description: "Master structured function calling for reliable LLM interactions with typed outputs"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Function Calling
+description: >-
+  Master structured function calling for reliable LLM interactions with typed
+  outputs
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LLM
   - Function Calling
   - Structured Output
   - AI
   - Applications
-coverImage: "/images/function-calling.png"
+coverImage: /images/function-calling.png
 draft: false
+order: 20
 ---
-
 # Function Calling
 
 ## Overview

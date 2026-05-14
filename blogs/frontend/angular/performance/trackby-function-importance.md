@@ -1,18 +1,20 @@
 ---
-title: "trackBy Function Importance"
-description: "Understanding Angular's trackBy function - why it matters for ngFor performance."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: trackBy Function Importance
+description: >-
+  Understanding Angular's trackBy function - why it matters for ngFor
+  performance.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - angular
   - performance
   - ngfor
   - trackby
   - frontend
-coverImage: "/images/frontend/angular/trackby.png"
+coverImage: /images/frontend/angular/trackby.png
 draft: false
+order: 20
 ---
-
 # trackBy Function Importance: The Complete Guide
 
 ## Overview

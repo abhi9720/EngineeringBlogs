@@ -1,18 +1,20 @@
 ---
-title: "Input Output Patterns"
-description: "Angular component communication - @Input, @Output, and alternative patterns for parent-child communication."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Input Output Patterns
+description: >-
+  Angular component communication - @Input, @Output, and alternative patterns
+  for parent-child communication.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - angular
   - components
   - input
   - output
   - frontend
-coverImage: "/images/frontend/angular/input-output.png"
+coverImage: /images/frontend/angular/input-output.png
 draft: false
+order: 10
 ---
-
 # Input Output Patterns: The Complete Guide
 
 ## Overview

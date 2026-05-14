@@ -1,17 +1,19 @@
 ---
-title: "Memory Leaks in JavaScript"
-description: "Identify and prevent memory leaks - common causes, detection, and best practices."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Memory Leaks in JavaScript
+description: >-
+  Identify and prevent memory leaks - common causes, detection, and best
+  practices.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - javascript
   - memory
   - performance
   - frontend
-coverImage: "/images/frontend/javascript/memory-leaks.png"
+coverImage: /images/frontend/javascript/memory-leaks.png
 draft: false
+order: 20
 ---
-
 # Memory Leaks in JavaScript: The Complete Guide
 
 ## Overview

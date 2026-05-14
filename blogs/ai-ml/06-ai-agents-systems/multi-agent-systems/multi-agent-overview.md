@@ -1,17 +1,17 @@
 ---
-title: "Multi-Agent Overview"
-description: "Understand multi-agent systems - when and why to use multiple agents"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Multi-Agent Overview
+description: Understand multi-agent systems - when and why to use multiple agents
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Multi-Agent
   - AI Agents
   - AI
   - Production AI
-coverImage: "/images/multi-agent-overview.png"
+coverImage: /images/multi-agent-overview.png
 draft: false
+order: 20
 ---
-
 # Multi-Agent Overview
 
 ## Overview

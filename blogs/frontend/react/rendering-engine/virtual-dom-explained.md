@@ -1,17 +1,19 @@
 ---
-title: "Virtual DOM Explained"
-description: "Understand the Virtual DOM - how React maintains an in-memory representation of the real DOM."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Virtual DOM Explained
+description: >-
+  Understand the Virtual DOM - how React maintains an in-memory representation
+  of the real DOM.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - virtual dom
   - rendering
   - frontend
-coverImage: "/images/frontend/react/virtual-dom.png"
+coverImage: /images/frontend/react/virtual-dom.png
 draft: false
+order: 20
 ---
-
 # Virtual DOM Explained: The Complete Guide
 
 ## Overview

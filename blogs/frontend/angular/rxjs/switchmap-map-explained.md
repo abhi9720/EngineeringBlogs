@@ -1,18 +1,20 @@
 ---
-title: "switchMap, map Explained"
-description: "Master RxJS switchMap and map operators - flattening streams and transforming data."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: 'switchMap, map Explained'
+description: >-
+  Master RxJS switchMap and map operators - flattening streams and transforming
+  data.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - angular
   - rxjs
   - switchmap
   - map
   - frontend
-coverImage: "/images/frontend/angular/rxjs-switchmap.png"
+coverImage: /images/frontend/angular/rxjs-switchmap.png
 draft: false
+order: 10
 ---
-
 # switchMap, map Explained: The Complete Guide
 
 ## Overview

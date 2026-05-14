@@ -1,8 +1,10 @@
 ---
-title: "Building LLM Apps"
-description: "Build production-ready LLM applications - from architecture to deployment and monitoring"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Building LLM Apps
+description: >-
+  Build production-ready LLM applications - from architecture to deployment and
+  monitoring
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LLM
   - Application Development
@@ -10,10 +12,10 @@ tags:
   - FastAPI
   - AI
   - Applications
-coverImage: "/images/building-llm-apps.png"
+coverImage: /images/building-llm-apps.png
 draft: false
+order: 10
 ---
-
 # Building LLM Apps
 
 ## Overview

@@ -1,8 +1,10 @@
 ---
-title: "Types of Machine Learning"
-description: "Understand the three main types of machine learning - supervised, unsupervised, and reinforcement learning"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Types of Machine Learning
+description: >-
+  Understand the three main types of machine learning - supervised,
+  unsupervised, and reinforcement learning
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Machine Learning
   - Types of ML
@@ -10,10 +12,10 @@ tags:
   - Unsupervised
   - Reinforcement
   - Fundamentals
-coverImage: "/images/types-of-ml.png"
+coverImage: /images/types-of-ml.png
 draft: false
+order: 50
 ---
-
 # Types of Machine Learning
 
 ## Overview

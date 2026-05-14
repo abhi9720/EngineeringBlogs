@@ -1,18 +1,20 @@
 ---
-title: "How the Web Works"
-description: "Understanding the web from URL to page render - DNS, HTTP, browsers, and the rendering pipeline."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: How the Web Works
+description: >-
+  Understanding the web from URL to page render - DNS, HTTP, browsers, and the
+  rendering pipeline.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - web
   - http
   - dns
   - browser
   - frontend
-coverImage: "/images/frontend/how-web-works.png"
+coverImage: /images/frontend/how-web-works.png
 draft: false
+order: 20
 ---
-
 # How the Web Works: The Complete Guide
 
 ## Overview

@@ -1,8 +1,8 @@
 ---
-title: "Swarm vs Decentralized Agents"
-description: "Compare swarm intelligence and decentralized agent architectures"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Swarm vs Decentralized Agents
+description: Compare swarm intelligence and decentralized agent architectures
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Multi-Agent
   - Swarm
@@ -10,10 +10,11 @@ tags:
   - AI Agents
   - AI
   - Production AI
-coverImage: "/images/swarm-vs-decentralized.png"
+coverImage: /images/swarm-vs-decentralized.png
 draft: false
+order: 100
+type: comparison
 ---
-
 # Swarm vs Decentralized Agents
 
 ## Overview

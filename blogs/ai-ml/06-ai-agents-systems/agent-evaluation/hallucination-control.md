@@ -1,18 +1,18 @@
 ---
-title: "Hallucination Control"
-description: "Reduce hallucinations in AI agents - grounding and verification strategies"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Hallucination Control
+description: Reduce hallucinations in AI agents - grounding and verification strategies
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI Agents
   - Hallucination
   - Safety
   - AI
   - Production AI
-coverImage: "/images/hallucination-control.png"
+coverImage: /images/hallucination-control.png
 draft: false
+order: 30
 ---
-
 # Hallucination Control
 
 ## Overview

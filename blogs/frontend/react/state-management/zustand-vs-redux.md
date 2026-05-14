@@ -1,18 +1,19 @@
 ---
-title: "Zustand vs Redux"
-description: "Comparing Zustand and Redux - when to use each for React state management."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Zustand vs Redux
+description: Comparing Zustand and Redux - when to use each for React state management.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - zustand
   - redux
   - state management
   - frontend
-coverImage: "/images/frontend/react/zustand-vs-redux.png"
+coverImage: /images/frontend/react/zustand-vs-redux.png
 draft: false
+order: 100
+type: comparison
 ---
-
 # Zustand vs Redux: The Complete Guide
 
 ## Overview

@@ -1,18 +1,18 @@
 ---
-title: "Prompt Engineering"
-description: "Master prompt engineering - crafting effective prompts for better LLM outputs"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Prompt Engineering
+description: Master prompt engineering - crafting effective prompts for better LLM outputs
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LLM
   - Prompt Engineering
   - AI
   - Applications
   - Generative AI
-coverImage: "/images/prompt-engineering.png"
+coverImage: /images/prompt-engineering.png
 draft: false
+order: 40
 ---
-
 # Prompt Engineering
 
 ## Overview

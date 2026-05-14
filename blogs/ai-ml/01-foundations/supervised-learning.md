@@ -1,18 +1,20 @@
 ---
-title: "Supervised Learning"
-description: "Master supervised learning - the most common type of ML for classification and regression problems"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Supervised Learning
+description: >-
+  Master supervised learning - the most common type of ML for classification and
+  regression problems
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Machine Learning
   - Supervised Learning
   - Classification
   - Regression
   - Fundamentals
-coverImage: "/images/supervised-learning.png"
+coverImage: /images/supervised-learning.png
 draft: false
+order: 40
 ---
-
 # Supervised Learning
 
 ## Overview

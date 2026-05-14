@@ -1,17 +1,19 @@
 ---
-title: "Custom Hooks Design Patterns"
-description: "Creating reusable custom hooks - patterns for extracting logic and state from components."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Custom Hooks Design Patterns
+description: >-
+  Creating reusable custom hooks - patterns for extracting logic and state from
+  components.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - hooks
   - custom hooks
   - frontend
-coverImage: "/images/frontend/react/custom-hooks.png"
+coverImage: /images/frontend/react/custom-hooks.png
 draft: false
+order: 10
 ---
-
 # Custom Hooks Design Patterns: The Complete Guide
 
 ## Overview

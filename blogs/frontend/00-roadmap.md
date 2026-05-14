@@ -1,17 +1,19 @@
 ---
-title: "Frontend Developer Roadmap"
-description: "Complete roadmap for becoming a frontend developer - from basics to advanced topics."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Frontend Developer Roadmap
+description: >-
+  Complete roadmap for becoming a frontend developer - from basics to advanced
+  topics.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - roadmap
   - frontend
   - learning
   - beginner
-coverImage: "/images/frontend/roadmap.png"
+coverImage: /images/frontend/roadmap.png
 draft: false
+order: 10
 ---
-
 # Frontend Developer Roadmap
 
 ## Overview

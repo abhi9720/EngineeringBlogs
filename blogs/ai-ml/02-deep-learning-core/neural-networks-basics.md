@@ -1,18 +1,20 @@
 ---
-title: "Neural Networks Basics"
-description: "Understand neural networks from scratch - neurons, layers, activation functions, and building your first ANN"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Neural Networks Basics
+description: >-
+  Understand neural networks from scratch - neurons, layers, activation
+  functions, and building your first ANN
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Deep Learning
   - Neural Networks
   - AI
   - Fundamentals
   - Perceptron
-coverImage: "/images/neural-networks-basics.png"
+coverImage: /images/neural-networks-basics.png
 draft: false
+order: 50
 ---
-
 # Neural Networks Basics
 
 ## Overview

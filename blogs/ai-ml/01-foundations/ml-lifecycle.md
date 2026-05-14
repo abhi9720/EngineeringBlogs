@@ -1,18 +1,20 @@
 ---
-title: "ML Lifecycle"
-description: "Learn the complete machine learning lifecycle - from problem definition to deployment and monitoring"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: ML Lifecycle
+description: >-
+  Learn the complete machine learning lifecycle - from problem definition to
+  deployment and monitoring
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Machine Learning
   - ML Lifecycle
   - ML Pipeline
   - Data Science
   - Fundamentals
-coverImage: "/images/ml-lifecycle.png"
+coverImage: /images/ml-lifecycle.png
 draft: false
+order: 20
 ---
-
 # ML Lifecycle
 
 ## Overview

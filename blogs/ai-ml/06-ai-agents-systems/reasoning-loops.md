@@ -1,18 +1,18 @@
 ---
-title: "Reasoning Loops"
-description: "Master agent reasoning - chain-of-thought, ReAct, and planning strategies"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Reasoning Loops
+description: 'Master agent reasoning - chain-of-thought, ReAct, and planning strategies'
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AI Agents
   - Reasoning
   - Chain-of-Thought
   - ReAct
   - AI
-coverImage: "/images/reasoning-loops.png"
+coverImage: /images/reasoning-loops.png
 draft: false
+order: 30
 ---
-
 # Reasoning Loops
 
 ## Overview

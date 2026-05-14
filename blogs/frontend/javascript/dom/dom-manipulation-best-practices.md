@@ -1,17 +1,19 @@
 ---
-title: "DOM Manipulation Best Practices"
-description: "Optimize DOM operations - minimize reflows, use DocumentFragment, batch updates, and more."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: DOM Manipulation Best Practices
+description: >-
+  Optimize DOM operations - minimize reflows, use DocumentFragment, batch
+  updates, and more.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - javascript
   - dom
   - performance
   - frontend
-coverImage: "/images/frontend/javascript/dom-manipulation.png"
+coverImage: /images/frontend/javascript/dom-manipulation.png
 draft: false
+order: 10
 ---
-
 # DOM Manipulation Best Practices: The Complete Guide
 
 ## Overview

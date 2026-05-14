@@ -1,17 +1,19 @@
 ---
-title: "CSS Grid Architecture"
-description: "Master CSS Grid for complex two-dimensional layouts - page layouts, card systems, and responsive grids."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: CSS Grid Architecture
+description: >-
+  Master CSS Grid for complex two-dimensional layouts - page layouts, card
+  systems, and responsive grids.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - css
   - grid
   - layouts
   - frontend
-coverImage: "/images/frontend/css/css-grid.png"
+coverImage: /images/frontend/css/css-grid.png
 draft: false
+order: 10
 ---
-
 # CSS Grid Architecture: The Complete Guide
 
 ## Overview

@@ -1,18 +1,20 @@
 ---
-title: "Tokenization and Context Windows"
-description: "Understand how LLMs process text - tokenization, subword algorithms, and context window limits"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Tokenization and Context Windows
+description: >-
+  Understand how LLMs process text - tokenization, subword algorithms, and
+  context window limits
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LLM
   - Tokenization
   - Context Window
   - NLP
   - AI
-coverImage: "/images/tokenization-context-windows.png"
+coverImage: /images/tokenization-context-windows.png
 draft: false
+order: 40
 ---
-
 # Tokenization and Context Windows
 
 ## Overview

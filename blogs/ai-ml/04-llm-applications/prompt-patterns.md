@@ -1,18 +1,20 @@
 ---
-title: "Prompt Patterns"
-description: "Advanced prompting patterns - chain-of-thought, ReAct, tree-of-thought, and more"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Prompt Patterns
+description: >-
+  Advanced prompting patterns - chain-of-thought, ReAct, tree-of-thought, and
+  more
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LLM
   - Prompt Engineering
   - Patterns
   - AI
   - Applications
-coverImage: "/images/prompt-patterns.png"
+coverImage: /images/prompt-patterns.png
 draft: false
+order: 50
 ---
-
 # Prompt Patterns
 
 ## Overview

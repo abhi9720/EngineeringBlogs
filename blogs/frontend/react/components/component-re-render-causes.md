@@ -1,17 +1,19 @@
 ---
-title: "Component Re-render Causes"
-description: "Understanding why React components re-render - state changes, props, context, and how to optimize."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Component Re-render Causes
+description: >-
+  Understanding why React components re-render - state changes, props, context,
+  and how to optimize.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - re-render
   - performance
   - frontend
-coverImage: "/images/frontend/react/re-render-causes.png"
+coverImage: /images/frontend/react/re-render-causes.png
 draft: false
+order: 10
 ---
-
 # Component Re-render Causes: The Complete Guide
 
 ## Overview

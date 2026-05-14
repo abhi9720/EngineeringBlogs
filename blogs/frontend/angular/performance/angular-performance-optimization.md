@@ -1,17 +1,19 @@
 ---
-title: "Angular Performance Optimization"
-description: "Optimizing Angular applications - change detection, lazy loading, bundle size, and more."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Angular Performance Optimization
+description: >-
+  Optimizing Angular applications - change detection, lazy loading, bundle size,
+  and more.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - angular
   - performance
   - optimization
   - frontend
-coverImage: "/images/frontend/angular/performance-optimization.png"
+coverImage: /images/frontend/angular/performance-optimization.png
 draft: false
+order: 10
 ---
-
 # Angular Performance Optimization: The Complete Guide
 
 ## Overview

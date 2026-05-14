@@ -1,17 +1,19 @@
 ---
-title: "React Performance Profiling"
-description: "Profiling React applications - using React DevTools to find and fix performance issues."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: React Performance Profiling
+description: >-
+  Profiling React applications - using React DevTools to find and fix
+  performance issues.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - react
   - performance
   - profiling
   - frontend
-coverImage: "/images/frontend/react/profiling.png"
+coverImage: /images/frontend/react/profiling.png
 draft: false
+order: 30
 ---
-
 # React Performance Profiling: The Complete Guide
 
 ## Overview

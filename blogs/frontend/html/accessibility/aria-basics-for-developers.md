@@ -1,17 +1,19 @@
 ---
-title: "ARIA Basics for Developers"
-description: "Learn ARIA fundamentals - when to use it, common patterns, and accessibility best practices."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: ARIA Basics for Developers
+description: >-
+  Learn ARIA fundamentals - when to use it, common patterns, and accessibility
+  best practices.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - html
   - aria
   - accessibility
   - frontend
-coverImage: "/images/frontend/html/aria-basics.png"
+coverImage: /images/frontend/html/aria-basics.png
 draft: false
+order: 10
 ---
-
 # ARIA Basics for Developers
 
 ## Overview

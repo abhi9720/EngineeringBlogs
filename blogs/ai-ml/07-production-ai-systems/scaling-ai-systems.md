@@ -1,17 +1,17 @@
 ---
-title: "Scaling AI Systems"
-description: "Scale AI systems for high throughput and low latency"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Scaling AI Systems
+description: Scale AI systems for high throughput and low latency
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Scaling
   - Production AI
   - AI
   - Performance
-coverImage: "/images/scaling-ai-systems.png"
+coverImage: /images/scaling-ai-systems.png
 draft: false
+order: 80
 ---
-
 # Scaling AI Systems
 
 ## Overview

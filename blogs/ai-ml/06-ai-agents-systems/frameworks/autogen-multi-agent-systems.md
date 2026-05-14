@@ -1,18 +1,18 @@
 ---
-title: "AutoGen Multi-Agent Systems"
-description: "Build multi-agent systems with Microsoft's AutoGen framework"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: AutoGen Multi-Agent Systems
+description: Build multi-agent systems with Microsoft's AutoGen framework
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - AutoGen
   - Multi-Agent
   - AI Agents
   - AI
   - Production AI
-coverImage: "/images/autogen-multi-agent-systems.png"
+coverImage: /images/autogen-multi-agent-systems.png
 draft: false
+order: 10
 ---
-
 # AutoGen Multi-Agent Systems
 
 ## Overview

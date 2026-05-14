@@ -1,18 +1,18 @@
 ---
-title: "Observability for AI"
-description: "Monitor AI systems - metrics, logging, and tracing"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Observability for AI
+description: 'Monitor AI systems - metrics, logging, and tracing'
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - Observability
   - Monitoring
   - Production AI
   - AI
   - MLOps
-coverImage: "/images/observability-for-ai.png"
+coverImage: /images/observability-for-ai.png
 draft: false
+order: 70
 ---
-
 # Observability for AI
 
 ## Overview

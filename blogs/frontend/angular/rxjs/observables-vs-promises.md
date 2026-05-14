@@ -1,18 +1,21 @@
 ---
-title: "Observables vs Promises"
-description: "Understanding the difference between RxJS Observables and JavaScript Promises for async operations."
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Observables vs Promises
+description: >-
+  Understanding the difference between RxJS Observables and JavaScript Promises
+  for async operations.
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - angular
   - rxjs
   - observables
   - promises
   - frontend
-coverImage: "/images/frontend/angular/observables-promises.png"
+coverImage: /images/frontend/angular/observables-promises.png
 draft: false
+order: 110
+type: comparison
 ---
-
 # Observables vs Promises: The Complete Guide
 
 ## Overview

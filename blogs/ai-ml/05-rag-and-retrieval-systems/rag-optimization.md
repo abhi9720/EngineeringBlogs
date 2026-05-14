@@ -1,18 +1,18 @@
 ---
-title: "RAG Optimization"
-description: "Optimize RAG systems for better accuracy, speed, and cost"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: RAG Optimization
+description: 'Optimize RAG systems for better accuracy, speed, and cost'
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - RAG
   - Optimization
   - AI
   - AI Agents
   - Production AI
-coverImage: "/images/rag-optimization.png"
+coverImage: /images/rag-optimization.png
 draft: false
+order: 70
 ---
-
 # RAG Optimization
 
 ## Overview

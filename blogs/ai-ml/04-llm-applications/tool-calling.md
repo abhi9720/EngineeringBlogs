@@ -1,8 +1,8 @@
 ---
-title: "Tool Calling"
-description: "Enable LLMs to use external tools and APIs to extend their capabilities"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: Tool Calling
+description: Enable LLMs to use external tools and APIs to extend their capabilities
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - LLM
   - Tool Calling
@@ -10,10 +10,10 @@ tags:
   - Function Calling
   - AI
   - Applications
-coverImage: "/images/tool-calling.png"
+coverImage: /images/tool-calling.png
 draft: false
+order: 70
 ---
-
 # Tool Calling
 
 ## Overview

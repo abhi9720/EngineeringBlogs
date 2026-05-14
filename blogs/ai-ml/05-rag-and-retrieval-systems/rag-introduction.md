@@ -1,8 +1,8 @@
 ---
-title: "RAG Introduction"
-description: "Learn what RAG is and why it matters - connecting LLMs to your data"
-date: "2026-05-11"
-author: "Abhishek Tiwari"
+title: RAG Introduction
+description: Learn what RAG is and why it matters - connecting LLMs to your data
+date: '2026-05-11'
+author: Abhishek Tiwari
 tags:
   - RAG
   - LLM
@@ -10,10 +10,10 @@ tags:
   - AI
   - AI Agents
   - Production AI
-coverImage: "/images/rag-introduction.png"
+coverImage: /images/rag-introduction.png
 draft: false
+order: 60
 ---
-
 # RAG Introduction
 
 ## Overview
