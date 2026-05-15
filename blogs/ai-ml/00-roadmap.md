@@ -10,7 +10,8 @@ tags:
   - Machine Learning
   - Learning Path
   - Roadmap
-coverImage: /images/ai-ml-roadmap.png
+coverImage: "https://github.com/user-attachments/assets/08b97450-f6b2-4a16-a2c1-f34379ec6e95"
+
 draft: false
 order: 10
 ---
