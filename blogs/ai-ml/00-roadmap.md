@@ -10,7 +10,7 @@ tags:
   - Machine Learning
   - Learning Path
   - Roadmap
-coverImage: "https://github.com/user-attachments/assets/08b97450-f6b2-4a16-a2c1-f34379ec6e95"
+coverImage: "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
 draft: false
 order: 10
